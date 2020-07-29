@@ -21,16 +21,10 @@
 
 #include <string>
 #include <vector>
+#include "Constants.h"
 
 namespace xpilot
 {
-    struct LabelColor
-    {
-        float r;
-        float g;
-        float b;
-    };
-
     struct CslPackage
     {
         std::string path;
@@ -85,55 +79,32 @@ namespace xpilot
         bool SetOverrideContactAtcCommand(bool status);
         bool GetOverrideContactAtcCommand() const { return mOverrideContactAtcCommand; }
 
-        bool SetAircraftLabelColor(float r, float g, float b);
-        LabelColor GetAircraftLabelColor() { return mAircraftLabelColor; }
-
-        inline  bool IsYellow() const {
-            return mAircraftLabelColor.r == 1.0f
-                && mAircraftLabelColor.g == 1.0f
-                && mAircraftLabelColor.b == 0.0f;
-        }
-        inline  bool IsRed() const {
-            return mAircraftLabelColor.r == 1.0f
-                && mAircraftLabelColor.g == 0.0f
-                && mAircraftLabelColor.b == 0.0f;
-        }
-        inline bool IsGreen() const {
-            return mAircraftLabelColor.r == 0.0f
-                && mAircraftLabelColor.g == 1.0f
-                && mAircraftLabelColor.b == 0.0f;
-        }
-        inline bool IsBlue() const {
-            return mAircraftLabelColor.r == 0.0f
-                && mAircraftLabelColor.g == 0.94f
-                && mAircraftLabelColor.b == 0.94f;
-        }
-        inline bool IsBlack() const {
-            return mAircraftLabelColor.r == 0.0f
-                && mAircraftLabelColor.g == 0.0f
-                && mAircraftLabelColor.b == 0.0f;
-        }
-        inline bool IsWhite() const {
-            return mAircraftLabelColor.r == 1.0f
-                && mAircraftLabelColor.g == 1.0f
-                && mAircraftLabelColor.b == 1.0f;
-        }
+        bool SetAircraftLabelColor(int c);
+        int GetAircraftLabelColor() { return mLabelColor; }
 
         bool SetDisableTcas(bool status);
         bool GetDisableTcas()const { return mDisableTcas; }
+
+        bool SetMaxLabelDistance(int d);
+        bool GetMaxLabelDistance()const { return mMaxLabelDist; }
+
+        bool SetLabelCutoffVis(bool b);
+        bool GetLabelCutoffVis()const { return mLabelCutoffVis; }
     private:
         Config() = default;
         std::vector<CslPackage> mCslPackages;
         std::string mDefaultAcIcaoType = "A320";
-        bool mShowHideLabels = false;
+        bool mShowHideLabels = true;
         bool mDebugModelMatching = false;
         bool mDefaultAtis = false;
         int mTcpPort = 45001;
         bool mOverrideContactAtcCommand = false;
-        LabelColor mAircraftLabelColor;
+        int mLabelColor = COLOR_YELLOW;
         bool mDisableTcas = false;
         bool mShowNotificationBar = true;
         int mNotificationBarDisappearTime = 10;
+        int mMaxLabelDist = 3;
+        bool mLabelCutoffVis = true;
     };
 }
 

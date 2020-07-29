@@ -32,21 +32,11 @@ namespace xpilot
     {
         j = json{ {"Path", RemoveSystemPath(p.path)},{"Enabled",p.enabled} };
     }
+
     void from_json(const json& j, CslPackage& p) 
     {
         j.at("Path").get_to(p.path);
         j.at("Enabled").get_to(p.enabled);
-    }
-
-    void to_json(json& j, const LabelColor& l) 
-    {
-        j = json{ {"r",l.r},{"g",l.g},{"b",l.b} };
-    }
-    void from_json(const json& j, LabelColor& label) 
-    {
-        j.at("r").get_to(label.r);
-        j.at("g").get_to(label.g);
-        j.at("b").get_to(label.b);
     }
 
     Config& Config::Instance()
@@ -105,17 +95,17 @@ namespace xpilot
                 {
                     SetDisableTcas(jf["DisableTcas"]);
                 }
-                if (jf.contains("AircraftLabelColor"))
+                if (jf.contains("LabelColor"))
                 {
-                    if (jf["AircraftLabelColor"].is_object())
-                    {
-                        auto label = jf["AircraftLabelColor"].get<LabelColor>();
-                        SetAircraftLabelColor(label.r, label.g, label.b);
-                    }
-                    else
-                    {
-                        SetAircraftLabelColor(1.0f, 1.0f, 0.0f);
-                    }
+                    SetAircraftLabelColor(jf["LabelColor"]);
+                }
+                if (jf.contains("MaxLabelDist"))
+                {
+                    SetMaxLabelDistance(jf["MaxLabelDist"]);
+                }
+                if (jf.contains("LabelCutoffVis"))
+                {
+                    SetLabelCutoffVis(jf["LabelCutoffVis"]);
                 }
                 if (jf.contains("CSL"))
                 {
@@ -158,8 +148,10 @@ namespace xpilot
         j["ShowNotificationBar"] = GetShowNotificationBar();
         j["NotificationBarDisappearTime"] = GetNotificationBarDisappaerTime();
         j["OverrideContactAtc"] = GetOverrideContactAtcCommand();
-        j["AircraftLabelColor"] = GetAircraftLabelColor();
+        j["LabelColor"] = GetAircraftLabelColor();
         j["DisableTcas"] = GetDisableTcas();
+        j["MaxLabelDist"] = GetMaxLabelDistance();
+        j["LabelCutoffVis"] = GetLabelCutoffVis();
 
         if (!mCslPackages.empty())
         {
@@ -280,11 +272,16 @@ namespace xpilot
         return true;
     }
 
-    bool Config::SetAircraftLabelColor(float r, float g, float b)
+    bool Config::SetAircraftLabelColor(int c)
     {
-        mAircraftLabelColor.r = r;
-        mAircraftLabelColor.g = g;
-        mAircraftLabelColor.b = b;
+        if (c > 0 && c <= 0xFFFFFF)
+        {
+            mLabelColor = c;
+        }
+        else
+        {
+            mLabelColor = COLOR_YELLOW;
+        }
         return true;
     }
 
@@ -303,6 +300,18 @@ namespace xpilot
     bool Config::SetNotificationPanelDisappearTime(int timeout)
     {
         mNotificationBarDisappearTime = timeout;
+        return true;
+    }
+    
+    bool Config::SetMaxLabelDistance(int v)
+    {
+        mMaxLabelDist = v;
+        return true;
+    }
+
+    bool Config::SetLabelCutoffVis(bool b)
+    {
+        mLabelCutoffVis = b;
         return true;
     }
 }

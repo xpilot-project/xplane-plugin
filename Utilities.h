@@ -168,6 +168,14 @@ inline float GetNetworkTime()
 	return XPLMGetDataf(drNetworkTime);
 }
 
+inline void HexToRgb(int inCol, float outColor[4])
+{
+	outColor[0] = float((inCol & 0xFF0000) >> 16) / 255.0f;
+	outColor[1] = float((inCol & 0x00FF00) >> 8) / 255.0f;
+	outColor[2] = float((inCol & 0x0000FF)) / 255.0f;
+	outColor[3] = 1.0f;
+}
+
 enum logLevel
 {
 	logDEBUG,

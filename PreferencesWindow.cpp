@@ -37,13 +37,16 @@ namespace xpilot {
 	static bool overrideContactAtcCommand;
 	static bool showNotificationPanel = true;
 	static int notificationPanelTimeoutSeconds = 10;
+	static int labelMaxDistance = 3;
+	static bool labelVisibilityCutoff = true;
+	static float lblCol[4];
 	ImGui::FileBrowser fileBrowser(ImGuiFileBrowserFlags_SelectDirectory);
 
 	PreferencesWindow::PreferencesWindow(WndMode _mode) :
-		XPImgWindow(_mode, WND_STYLE_SOLID, WndRect(0, 415, 600, 0))
+		XPImgWindow(_mode, WND_STYLE_SOLID, WndRect(0, 445, 600, 0))
 	{
 		SetWindowTitle(string_format("xPilot %s Preferences", PLUGIN_VERSION_STRING));
-		SetWindowResizingLimits(600, 415, 600, 415);
+		SetWindowResizingLimits(600, 445, 600, 445);
 
 		fileBrowser.SetTitle("Browse...");
 		fileBrowser.SetWindowSize(450, 250);
@@ -71,6 +74,7 @@ namespace xpilot {
 		showNotificationPanel = xpilot::Config::Instance().GetShowNotificationBar();
 		notificationPanelTimeoutSeconds = xpilot::Config::Instance().GetNotificationBarDisappaerTime();
 		overrideContactAtcCommand = xpilot::Config::Instance().GetOverrideContactAtcCommand();
+		HexToRgb(xpilot::Config::Instance().GetAircraftLabelColor(), lblCol);
 	}
 
 	void Save() 
@@ -118,42 +122,72 @@ namespace xpilot {
 			Save();
 		}
 		ImGui::SameLine();
-		if (ImGui::RadioButton("Yellow", Config::Instance().IsYellow()))
-		{
-			xpilot::Config::Instance().SetAircraftLabelColor(1.0f, 1.0f, 0.0f);
-			Save();
-		}
+		ImGui::TextUnformatted("Label Color:");
 		ImGui::SameLine();
-		if (ImGui::RadioButton("Red", Config::Instance().IsRed()))
+		if (ImGui::ColorButton("Pick Label Color", ImVec4(lblCol[0], lblCol[1], lblCol[2], lblCol[3]), ImGuiColorEditFlags_NoAlpha))
 		{
-			xpilot::Config::Instance().SetAircraftLabelColor(1.0f, 0.0f, 0.0f);
-			Save();
+			ImGui::OpenPopup("Label Color Picker");
 		}
-		ImGui::SameLine();
-		if (ImGui::RadioButton("Green", Config::Instance().IsGreen()))
+		if (ImGui::BeginPopup("Label Color Picker"))
 		{
-			xpilot::Config::Instance().SetAircraftLabelColor(0.0f, 1.0f, 0.0f);
-			Save();
-		}
-		ImGui::SameLine();
-		if (ImGui::RadioButton("Blue", Config::Instance().IsBlue()))
-		{
-			xpilot::Config::Instance().SetAircraftLabelColor(0.0f, 0.94f, 0.94f);
-			Save();
-		}
-		ImGui::SameLine();
-		if (ImGui::RadioButton("Black", Config::Instance().IsBlack()))
-		{
-			xpilot::Config::Instance().SetAircraftLabelColor(0.0f, 0.0f, 0.0f);
-			Save();
-		}
-		ImGui::SameLine();
-		if (ImGui::RadioButton("White", Config::Instance().IsWhite()))
-		{
-			xpilot::Config::Instance().SetAircraftLabelColor(1.0f, 1.0f, 1.0f);
-			Save();
-		}
+			if (ImGui::ColorPicker3("Label Color Picker", lblCol,
+				ImGuiColorEditFlags_NoAlpha | ImGuiColorEditFlags_NoLabel |
+				ImGuiColorEditFlags_NoSmallPreview | ImGuiColorEditFlags_NoSidePreview))
+			{
+				const int col = (int)((std::lround(lblCol[0] * 255.0f) << 16)
+					+ (std::lround(lblCol[1] * 255.0f) << 8)
+					+ (std::lround(lblCol[2] * 255.0f) << 0));
 
+				xpilot::Config::Instance().SetAircraftLabelColor(col);
+				Save();
+			}
+			ImGui::EndPopup();
+		}
+		ImGui::SameLine();
+		ImGui::TextUnformatted("Or Choose Color:");
+		ImGui::SameLine();
+		if (ImGui::ColorButton("Yellow", ImVec4(1.0f, 1.0f, 0.0f, 1.0f), ImGuiColorEditFlags_NoTooltip))
+		{
+			HexToRgb(COLOR_YELLOW, lblCol);
+			xpilot::Config::Instance().SetAircraftLabelColor(COLOR_YELLOW);
+			Save();
+		}
+		ImGui::SameLine();
+		if (ImGui::ColorButton("Red", ImVec4(1.0f, 0.0f, 0.0f, 1.0f), ImGuiColorEditFlags_NoTooltip))
+		{
+			HexToRgb(COLOR_RED, lblCol);
+			xpilot::Config::Instance().SetAircraftLabelColor(COLOR_RED);
+			Save();
+		}
+		ImGui::SameLine();
+		if (ImGui::ColorButton("Green", ImVec4(0.0f, 1.0f, 0.0f, 1.0f), ImGuiColorEditFlags_NoTooltip))
+		{
+			HexToRgb(COLOR_GREEN, lblCol);
+			xpilot::Config::Instance().SetAircraftLabelColor(COLOR_GREEN);
+			Save();
+		}
+		ImGui::SameLine();
+		if (ImGui::ColorButton("Blue", ImVec4(0.0f, 0.94f, 0.94f, 1.0f), ImGuiColorEditFlags_NoTooltip))
+		{
+			HexToRgb(COLOR_BLUE, lblCol);
+			xpilot::Config::Instance().SetAircraftLabelColor(COLOR_BLUE);
+			Save();
+		}
+		ImGui::PushItemWidth(100);
+		if (ImGui::SliderInt("Max Label Distance", &labelMaxDistance, 1, 50, "%d nm"))
+		{
+			XPMPSetAircraftLabelDist(float(labelMaxDistance), labelVisibilityCutoff);
+			xpilot::Config::Instance().SetMaxLabelDistance(labelMaxDistance);
+			Save();
+		}
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+		if (ImGui::Checkbox("Cutoff at Visibility", &labelVisibilityCutoff))
+		{
+			XPMPSetAircraftLabelDist(float(labelMaxDistance), labelVisibilityCutoff);
+			xpilot::Config::Instance().SetLabelCutoffVis(labelVisibilityCutoff);
+			Save();
+		}
 		if (ImGui::Checkbox("Override \"Contact ATC\" Command", &overrideContactAtcCommand))
 		{
 			xpilot::Config::Instance().SetOverrideContactAtcCommand(overrideContactAtcCommand);

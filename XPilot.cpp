@@ -568,6 +568,7 @@ namespace xpilot {
 		}
 
 		XPMPEnableAircraftLabels(Config::Instance().GetShowHideLabels());
+		XPMPSetAircraftLabelDist(Config::Instance().GetMaxLabelDistance(), Config::Instance().GetLabelCutoffVis());
 		LOG_INFO("XPMP2 successfully initialized");
 		return true;
 	}

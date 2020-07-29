@@ -55,12 +55,7 @@ namespace xpilot
         strScpy(acInfoTexts.icaoAcType, acIcaoType.c_str(), sizeof(acInfoTexts.icaoAcType));
         strScpy(acInfoTexts.icaoAirline, acIcaoAirline.c_str(), sizeof(acInfoTexts.icaoAirline));
 
-        LabelColor labels = Config::Instance().GetAircraftLabelColor();
-
-        colLabel[0] = labels.r;
-        colLabel[1] = labels.g;
-        colLabel[2] = labels.b;
-        colLabel[3] = 1.0f;
+        HexToRgb(Config::Instance().GetAircraftLabelColor(), colLabel);
 
         SetLocation(Position.lat, Position.lon, Position.elevation);
 

@@ -19,6 +19,11 @@
 #ifndef Constants_h
 #define Constants_h
 
+constexpr int COLOR_YELLOW = 0xFFFF00;
+constexpr int COLOR_RED = 0xFF0000;
+constexpr int COLOR_GREEN = 0x00FF00;
+constexpr int COLOR_BLUE = 0x00F0F0;
+
 #define PLUGIN_NAME "xPilot"
 #define PLUGIN_VERSION 1320
 #define PLUGIN_VERSION_STRING "1.3.20+004"
