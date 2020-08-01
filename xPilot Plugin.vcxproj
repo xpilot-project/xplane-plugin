@@ -125,7 +125,8 @@
       <ImportLibrary>$(IntDir)$(TargetName).lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(TargetDir)$(TargetName)$(TargetExt)" "C:\X-Plane 11.50\Resources\plugins\xPilot\win_x64"</Command>
+      <Command>copy /Y "$(TargetDir)$(TargetName)$(TargetExt)" "C:\X-Plane 11.50\Resources\plugins\xPilot\win_x64"
+CertUtil -hashfile "$(TargetDir)$(TargetName)$(TargetExt)" sha512</Command>
       <Message>Copying xPilot.xpl into X-Plane plugin folder</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
