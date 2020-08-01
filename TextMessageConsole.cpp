@@ -253,10 +253,8 @@ namespace xpilot
 					}
 				}
 				ImGui::EndChild();
-				ImGui::PushItemWidth(-45);
-				ImGui::InputTextStd("##MessagesInput", &InputValue, ImGuiInputTextFlags_None);
-				ImGui::SameLine();
-				if (ImGui::Button("Send"))
+				ImGui::PushItemWidth(-1.0f);
+				if (ImGui::InputTextStd("##MessagesInput", &InputValue, ImGuiInputTextFlags_EnterReturnsTrue))
 				{
 					if (!InputValue.empty())
 					{
@@ -337,7 +335,10 @@ namespace xpilot
 						}
 					}
 				}
-				ImGui::PopItemWidth();
+				if (ImGui::IsItemDeactivated() && ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
+				{
+					InputValue = "";
+				}
 				ImGui::EndTabItem();
 			}
 
@@ -371,14 +372,9 @@ namespace xpilot
 						}
 					}
 					ImGui::EndChild();
-					ImGui::PushItemWidth(-45);
-
 					ImGui::PushID(key.c_str());
-					ImGui::InputTextStd("##Input", &it->InputValue, ImGuiInputTextFlags_None);
-					ImGui::PopID();
-					ImGui::SameLine();
-					ImGui::PushID(it->TabName.c_str());
-					if (ImGui::Button("Send"))
+					ImGui::PushItemWidth(-1.0f);
+					if (ImGui::InputTextStd("##Input", &it->InputValue, ImGuiInputTextFlags_EnterReturnsTrue))
 					{
 						if (!it->InputValue.empty())
 						{
@@ -411,8 +407,11 @@ namespace xpilot
 							}
 						}
 					}
+					if (ImGui::IsItemDeactivated() && ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
+					{
+						InputValue = "";
+					}
 					ImGui::PopID();
-					ImGui::PopItemWidth();
 					ImGui::EndTabItem();
 				}
 			}
