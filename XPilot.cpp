@@ -300,7 +300,7 @@ namespace xpilot {
 									pos.heading = static_cast<float>(j["Data"]["Heading"]);
 									pos.pitch = static_cast<float>(j["Data"]["Pitch"]);
 									pos.roll = static_cast<float>(j["Data"]["Bank"]);
-									pos.groundSpeed = static_cast<float>(j["Data"]["GroundSpeed"]);
+									float gs = static_cast<float>(j["Data"]["GroundSpeed"]);
 
 									XPMPPlaneRadar_t radar;
 									radar.code = static_cast<int>(j["Data"]["TransponderCode"]);
@@ -313,7 +313,7 @@ namespace xpilot {
 									{
 										QueueCallback([=]()
 										{
-											aircraftManager->SetPlanePosition(callsign, pos, radar);
+											aircraftManager->SetPlanePosition(callsign, pos, radar, gs);
 											aircraftManager->SetFlightPlan(callsign, origin, destination);
 										});
 									}
