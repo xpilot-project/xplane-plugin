@@ -447,14 +447,7 @@ namespace xpilot {
 		if (!strcmp(item, "model_matching"))
 			return Config::Instance().GetDebugModelMatching();
 		if (!strcmp(item, "log_level"))
-		{
-			//if (config.GetLogLevel() == "Debug") return 0;
-			//if (config.GetLogLevel() == "Info") return 1;
-			//if (config.GetLogLevel() == "Warning") return 2;
-			//if (config.GetLogLevel() == "Error") return 3;
-			//if (config.GetLogLevel() == "Fatal") return 4;
-			return 2;
-		}
+			return 0;
 		return defaultVal;
 	}
 
