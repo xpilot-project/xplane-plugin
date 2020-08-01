@@ -50,6 +50,7 @@ namespace xpilot
         XPMPPlaneRadar_t Radar;
         std::deque<InterpolatedState> InterpolationStack;
         TerrainProbe terrainProbe;
+        float GroundSpeed;
         double TerrainAltitude;
         float TargetGearPosition;
         float TargetFlapPosition;

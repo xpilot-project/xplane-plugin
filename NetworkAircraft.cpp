@@ -179,7 +179,7 @@ namespace xpilot
         pOut->pitch = (float)Position.pitch;
         pOut->roll = (float)Position.roll;
         pOut->terrainAlt_ft = (float)TerrainAltitude;
-        pOut->speed_kt = (float)Position.groundSpeed;
+        pOut->speed_kt = (float)GroundSpeed;
         pOut->heading = (float)Position.heading;
         pOut->flaps = (float)Surfaces.flapRatio;
         pOut->gear = (float)Surfaces.gearPosition;

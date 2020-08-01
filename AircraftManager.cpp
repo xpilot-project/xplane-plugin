@@ -107,7 +107,7 @@ namespace xpilot
 					plane.second->Position.heading = static_cast<float>(interpolated.Heading);
 					plane.second->Position.roll = static_cast<float>(interpolated.Bank);
 					plane.second->Position.pitch = static_cast<float>(interpolated.Pitch);
-					plane.second->Position.groundSpeed = static_cast<float>(interpolated.GroundSpeed);
+					plane.second->GroundSpeed = static_cast<float>(interpolated.GroundSpeed);
 				}
 			}
 			catch (std::exception& e)
@@ -129,7 +129,7 @@ namespace xpilot
 		}
 	}
 
-	void AircraftManager::SetPlanePosition(const std::string& callsign, XPMPPlanePosition_t pos, XPMPPlaneRadar_t radar)
+	void AircraftManager::SetPlanePosition(const std::string& callsign, XPMPPlanePosition_t pos, XPMPPlaneRadar_t radar, float groundSpeed)
 	{
 		auto it = mapPlanes.find(callsign);
 		if (it != mapPlanes.end())
@@ -141,7 +141,7 @@ namespace xpilot
 			state.Bank = pos.roll;
 			state.Pitch = pos.pitch;
 			state.Heading = pos.heading;
-			state.GroundSpeed = pos.groundSpeed;
+			state.GroundSpeed = groundSpeed;
 
 			const double latDeg = pos.lat;
 			const double lonDeg = pos.lon;
@@ -163,7 +163,7 @@ namespace xpilot
 				it->second->Position.heading = static_cast<float>(state.Heading);
 				it->second->Position.roll = static_cast<float>(state.Bank);
 				it->second->Position.pitch = static_cast<float>(state.Pitch);
-				it->second->Position.groundSpeed = static_cast<float>(state.GroundSpeed);
+				it->second->GroundSpeed = static_cast<float>(state.GroundSpeed);
 			}
 
 			std::lock_guard<std::mutex> lock(deque_lock);

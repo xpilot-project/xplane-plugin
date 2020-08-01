@@ -90,7 +90,6 @@ struct XPMPPlanePosition_t {
     int     aiPrio          = 1;                        ///< Priority for AI/TCAS consideration, the lower the earlier
     float   label_color[4]  = {1.0f,1.0f,0.0f,1.0f};    ///< label base color (RGB), defaults to yellow
     int     multiIdx        = 0;                        ///< OUT: set by XPMP2 to inform application about TCAS target index in use [1..63], with [1..19] also being available via classic multiplayer dataRefs, `< 1` means 'none'
-    float   groundSpeed     = 0.0f;
 };
 
 
