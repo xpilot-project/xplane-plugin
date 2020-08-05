@@ -201,6 +201,17 @@ int ToggleTextMessageConsoleCommandHandler(XPLMCommandRef inCommand, XPLMCommand
     return 0;
 }
 
+int ToggleAircraftLabelsCommandHandler(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* inRefcon)
+{
+    if (inPhase == xplm_CommandEnd)
+    {
+        bool enabled = !xpilot::Config::Instance().GetShowHideLabels();
+        xpilot::Config::Instance().SetShowHideLabels(enabled);
+        XPMPEnableAircraftLabels(enabled);
+    }
+    return 0;
+}
+
 void RegisterMenuItems()
 {
     PttCommand = XPLMCreateCommand("xpilot/ptt", "xPilot: Radio Push-To-Talk (PTT)");
@@ -224,6 +235,9 @@ void RegisterMenuItems()
     ToggleTextMessageConsoleCommand = XPLMCreateCommand("xpilot/toggle_text_message_console", "xPilot: Toggle Text Message Console");
     XPLMRegisterCommandHandler(ToggleTextMessageConsoleCommand, ToggleTextMessageConsoleCommandHandler, 1, (void*)0);
 
+    ToggleAircraftLabelsCommand = XPLMCreateCommand("xpilot/toggle_aircraft_labels", "xPilot: Toggle Aircraft Labels");
+    XPLMRegisterCommandHandler(ToggleAircraftLabelsCommand, ToggleAircraftLabelsCommandHandler, 1, (void*)0);
+
     XPLMRegisterCommandHandler(ContactAtcCommand, ContactAtcCommandHandler, 1, (void*)0);
 
     PluginMenuIdx = XPLMAppendMenuItem(XPLMFindPluginsMenu(), "xPilot", nullptr, 0);
@@ -235,6 +249,7 @@ void RegisterMenuItems()
     MenuNotificationPanel = XPLMAppendMenuItemWithCommand(PluginMenu, "Notification Panel", ToggleNotificationPanelCommand);
     MenuDefaultAtis = XPLMAppendMenuItemWithCommand(PluginMenu, "Default ATIS", ToggleDefaultAtisCommand);
     MenuToggleTcas = XPLMAppendMenuItemWithCommand(PluginMenu, "Toggle TCAS", ToggleTcasCommand);
+    MenuToggleAircraftLabels = XPLMAppendMenuItemWithCommand(PluginMenu, "Toggle Aircraft Labels", ToggleAircraftLabelsCommand);
 }
 
 void UpdateMenuItems()
