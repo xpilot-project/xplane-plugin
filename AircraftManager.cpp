@@ -167,12 +167,14 @@ namespace xpilot
 			}
 
 			std::lock_guard<std::mutex> lock(deque_lock);
-			it->second->InterpolationStack.push_back(state);
-			while (it->second->InterpolationStack.size() > 2
-				&& it->second->InterpolationStack.at(1).Timestamp
-				<= std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count())
 			{
-				it->second->InterpolationStack.pop_front();
+				it->second->InterpolationStack.push_back(state);
+				while (it->second->InterpolationStack.size() > 2
+					&& it->second->InterpolationStack.at(1).Timestamp
+					<= std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count())
+				{
+					it->second->InterpolationStack.pop_front();
+				}
 			}
 
 			it->second->Radar = radar;

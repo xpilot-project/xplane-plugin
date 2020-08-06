@@ -173,9 +173,9 @@ namespace xpilot
     void NetworkAircraft::CopyBulkData(XPilotAPIAircraft::XPilotAPIBulkData* pOut, size_t size) const
     {
         pOut->keyNum = modeS_id;
-        pOut->lat = (float)Position.lat;
-        pOut->lon = (float)Position.lon;
-        pOut->alt_ft = (float)Position.elevation;
+        pOut->lat = Position.lat;
+        pOut->lon = Position.lon;
+        pOut->alt_ft = Position.elevation;
         pOut->pitch = (float)Position.pitch;
         pOut->roll = (float)Position.roll;
         pOut->terrainAlt_ft = (float)TerrainAltitude;
