@@ -172,24 +172,27 @@ namespace xpilot
 
     void NetworkAircraft::CopyBulkData(XPilotAPIAircraft::XPilotAPIBulkData* pOut, size_t size) const
     {
+        double lat, lon, alt;
+        GetLocation(lat, lon, alt);
+
         pOut->keyNum = modeS_id;
-        pOut->lat = Position.lat;
-        pOut->lon = Position.lon;
-        pOut->alt_ft = Position.elevation;
-        pOut->pitch = (float)Position.pitch;
-        pOut->roll = (float)Position.roll;
+        pOut->lat = lat;
+        pOut->lon = lon;
+        pOut->alt_ft = alt;
+        pOut->pitch = GetPitch();
+        pOut->roll = GetRoll();
         pOut->terrainAlt_ft = (float)TerrainAltitude;
         pOut->speed_kt = (float)GroundSpeed;
-        pOut->heading = (float)Position.heading;
+        pOut->heading = GetHeading();
         pOut->flaps = (float)Surfaces.flapRatio;
         pOut->gear = (float)Surfaces.gearPosition;
-        pOut->bearing = (float)camBearing;
-        pOut->dist_nm = (float)camDist;
-        pOut->bits.taxi = Surfaces.lights.taxiLights;
-        pOut->bits.land = Surfaces.lights.landLights;
-        pOut->bits.bcn = Surfaces.lights.bcnLights;
-        pOut->bits.strb = Surfaces.lights.strbLights;
-        pOut->bits.nav = Surfaces.lights.navLights;
+        pOut->bearing = GetCameraBearing();
+        pOut->dist_nm = GetCameraDist();
+        pOut->bits.taxi = GetLightsTaxi();
+        pOut->bits.land = GetLightsLanding();
+        pOut->bits.bcn = GetLightsBeacon();
+        pOut->bits.strb = GetLightsStrobe();
+        pOut->bits.nav = GetLightsNav();
         pOut->bits.onGnd = OnGround;
         pOut->bits.filler1 = 0;
         pOut->bits.multiIdx = GetTcasTargetIdx();

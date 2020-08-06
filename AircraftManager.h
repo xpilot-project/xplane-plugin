@@ -35,7 +35,6 @@ namespace xpilot
 		return std::find_if(std::next(iter), mapPlanes.end(), [](const mapPlanesTy::value_type& p) {return p.second.get(); });
 	}
 	mapPlanesTy::iterator mapGetAircraftByIndex(int idx);
-	extern std::mutex mapPlanesMutex;
 
 	inline double NormalizeHeading(double heading)
 	{
@@ -62,8 +61,6 @@ namespace xpilot
 		void ChangeModel(const std::string& callsign, const std::string& typeIcao, const std::string& airlineIcao);
 		void RemovePlane(const std::string& callsign);
 		void RemoveAllPlanes();
-	private:
-		std::mutex deque_lock;
 	};
 }
 
