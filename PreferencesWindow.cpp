@@ -74,6 +74,8 @@ namespace xpilot {
 		showNotificationPanel = xpilot::Config::Instance().GetShowNotificationBar();
 		notificationPanelTimeoutSeconds = xpilot::Config::Instance().GetNotificationBarDisappaerTime();
 		overrideContactAtcCommand = xpilot::Config::Instance().GetOverrideContactAtcCommand();
+		labelMaxDistance = xpilot::Config::Instance().GetMaxLabelDistance();
+		labelVisibilityCutoff = xpilot::Config::Instance().GetLabelCutoffVis();
 		HexToRgb(xpilot::Config::Instance().GetAircraftLabelColor(), lblCol);
 	}
 

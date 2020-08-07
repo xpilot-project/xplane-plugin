@@ -86,7 +86,7 @@ namespace xpilot
         bool GetDisableTcas()const { return mDisableTcas; }
 
         bool SetMaxLabelDistance(int d);
-        bool GetMaxLabelDistance()const { return mMaxLabelDist; }
+        int GetMaxLabelDistance()const { return mMaxLabelDist; }
 
         bool SetLabelCutoffVis(bool b);
         bool GetLabelCutoffVis()const { return mLabelCutoffVis; }
