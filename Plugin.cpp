@@ -207,6 +207,7 @@ int ToggleAircraftLabelsCommandHandler(XPLMCommandRef inCommand, XPLMCommandPhas
     {
         bool enabled = !xpilot::Config::Instance().GetShowHideLabels();
         xpilot::Config::Instance().SetShowHideLabels(enabled);
+        xpilot::Config::Instance().SaveConfig();
         XPMPEnableAircraftLabels(enabled);
     }
     return 0;
