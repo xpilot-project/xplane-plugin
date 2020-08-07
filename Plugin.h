@@ -46,6 +46,9 @@ inline int ToggleTextMessageConsoleCommandHandler(XPLMCommandRef inCommand, XPLM
 inline XPLMCommandRef ToggleTcasCommand = NULL;
 inline int ToggleTcasCommandHandler(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* inRefcon);
 
+inline XPLMCommandRef ToggleAircraftLabelsCommand = NULL;
+inline int ToggleAircraftLabelsCommandHandler(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* inRefcon);
+
 inline XPLMCommandRef ContactAtcCommand = XPLMFindCommand("sim/operation/contact_atc");
 inline int ContactAtcCommandHandler(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* inRefcon);
 
@@ -57,5 +60,6 @@ static int MenuDefaultAtis = 0;
 static int MenuTextMessageConsole = 0;
 static int MenuNotificationPanel = 0;
 static int MenuToggleTcas = 0;
+static int MenuToggleAircraftLabels = 0;
 
 #endif // !Plugin_h
