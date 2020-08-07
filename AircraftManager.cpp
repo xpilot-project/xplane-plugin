@@ -159,10 +159,8 @@ namespace xpilot
 				state.Heading = pos.heading;
 				state.GroundSpeed = groundSpeed;
 
-				const double latDeg = pos.lat;
-				const double lonDeg = pos.lon;
 				double groundElevation = 0.0;
-				groundElevation = it->second->terrainProbe.GetTerrainElevation(latDeg, lonDeg);
+				groundElevation = it->second->terrainProbe.GetTerrainElevation(pos.lat, pos.lon);
 				if (std::isnan(groundElevation))
 				{
 					groundElevation = 0.0;
@@ -170,17 +168,8 @@ namespace xpilot
 
 				it->second->TerrainAltitude = groundElevation;
 				state.Altitude = it->second->OnGround ? groundElevation : pos.elevation;
-
-				if (it->second->RenderCount <= 2)
-				{
-					it->second->Position.lat = state.Latitude;
-					it->second->Position.lon = state.Longitude;
-					it->second->Position.elevation = state.Altitude;
-					it->second->Position.heading = static_cast<float>(state.Heading);
-					it->second->Position.roll = static_cast<float>(state.Bank);
-					it->second->Position.pitch = static_cast<float>(state.Pitch);
-					it->second->GroundSpeed = static_cast<float>(state.GroundSpeed);
-				}
+				it->second->Radar = radar;
+				it->second->RenderCount++;
 
 				std::lock_guard<std::mutex> lock(interpolation_stack_mutex);
 				{
@@ -192,9 +181,6 @@ namespace xpilot
 						it->second->InterpolationStack.pop_front();
 					}
 				}
-
-				it->second->Radar = radar;
-				it->second->RenderCount++;
 			}
 		}
 	}
