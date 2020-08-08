@@ -414,6 +414,15 @@ namespace xpilot {
 									j["Timestamp"] = UtcTimestamp();
 									SendSocketMsg(j.dump());
 								}
+
+								else if (type == "XplanePath")
+								{
+									json j;
+									j["Type"] = "XplanePath";
+									j["Data"]["Path"] = GetXPlanePath().c_str();
+									j["Timestamp"] = UtcTimestamp();
+									SendSocketMsg(j.dump());
+								}
 							}
 						}
 					}
