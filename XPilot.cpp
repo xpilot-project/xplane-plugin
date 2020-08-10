@@ -30,6 +30,7 @@
 #include "NotificationPanel.h"
 #include "TextMessageConsole.h"
 #include "Lib/json.hpp"
+#include "sha512.hh"
 
 using json = nlohmann::json;
 
@@ -109,6 +110,7 @@ namespace xpilot {
 		preferencesWindow = std::make_unique<PreferencesWindow>();
 		frameRateMonitor = std::make_unique<FrameRateMonitor>(this);
 		aircraftManager = std::make_unique<AircraftManager>();
+		pluginHash = sw::sha512::file(GetTruePluginPath().c_str());
 
 		XPMPRegisterPlaneNotifierFunc(CBPlaneNotifier, this);
 		XPLMRegisterFlightLoopCallback(deferredStartup, -1.0f, this);
@@ -169,8 +171,9 @@ namespace xpilot {
 		zmqThread = std::make_unique<std::thread>(&XPilot::ZmqListener, this);
 		LOG_INFO("TCP socket thread started on port %i", Config::Instance().GetTcpPort());
 		AddNotification(string_format("TCP socket thread started on port %i", Config::Instance().GetTcpPort()));
-	}
+		
 
+	}
 	void XPilot::StopZmqServer()
 	{
 		try
@@ -375,6 +378,15 @@ namespace xpilot {
 									reply["Timestamp"] = UtcTimestamp();
 									reply["Data"]["Version"] = PLUGIN_VERSION;
 									SendSocketMsg(reply.dump());
+								}
+
+								else if (type == "PluginHash")
+								{
+									json j;
+									j["Type"] = "PluginHash";
+									j["Data"]["Hash"] = pluginHash;
+									j["Timestamp"] = UtcTimestamp();
+									SendSocketMsg(j.dump());
 								}
 
 								else if (type == "RadioMessage") {

@@ -143,6 +143,7 @@ CertUtil -hashfile "$(TargetDir)$(TargetName)$(TargetExt)" sha512</Command>
     <ClInclude Include="NotificationPanel.h" />
     <ClInclude Include="Plugin.h" />
     <ClInclude Include="PreferencesWindow.h" />
+    <ClInclude Include="sha512.hh" />
     <ClInclude Include="Stopwatch.h" />
     <ClInclude Include="TerrainProbe.h" />
     <ClInclude Include="TextMessageConsole.h" />

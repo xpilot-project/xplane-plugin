@@ -126,6 +126,15 @@ inline std::string GetPluginPath()
 	return std::string(buffer, 0, path - buffer) + "/../";
 }
 
+inline std::string GetTruePluginPath()
+{
+	XPLMPluginID myId = XPLMGetMyID();
+	char buffer[2048];
+	XPLMGetPluginInfo(myId, nullptr, buffer, nullptr, nullptr);
+	
+	return std::string(buffer);
+}
+
 inline std::string RemoveSystemPath(std::string path)
 {
 	if (begins_with<std::string>(path, GetXPlanePath()))
