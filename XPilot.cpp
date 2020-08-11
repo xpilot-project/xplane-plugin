@@ -171,9 +171,8 @@ namespace xpilot {
 		zmqThread = std::make_unique<std::thread>(&XPilot::ZmqListener, this);
 		LOG_INFO("TCP socket thread started on port %i", Config::Instance().GetTcpPort());
 		AddNotification(string_format("TCP socket thread started on port %i", Config::Instance().GetTcpPort()));
-		
-
 	}
+
 	void XPilot::StopZmqServer()
 	{
 		try
@@ -261,7 +260,6 @@ namespace xpilot {
 
 							if (!type.empty())
 							{
-
 								if (type == "AddPlane")
 								{
 									std::string callsign(j["Data"]["Callsign"]);
@@ -423,15 +421,6 @@ namespace xpilot {
 									json j;
 									j["Type"] = "ValidateCslPaths";
 									j["Data"]["Result"] = Config::Instance().HasValidPaths() && XPMPGetNumberOfInstalledModels() > 0;
-									j["Timestamp"] = UtcTimestamp();
-									SendSocketMsg(j.dump());
-								}
-
-								else if (type == "XplanePath")
-								{
-									json j;
-									j["Type"] = "XplanePath";
-									j["Data"]["Path"] = GetXPlanePath().c_str();
 									j["Timestamp"] = UtcTimestamp();
 									SendSocketMsg(j.dump());
 								}
