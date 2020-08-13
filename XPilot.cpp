@@ -146,9 +146,10 @@ namespace xpilot {
 
 		try
 		{
-			zmqContext = std::make_unique < zmq::context_t>(1);
-			zmqSocket = std::make_unique<zmq::socket_t>(*zmqContext.get(), ZMQ_PAIR);
-			zmqSocket->set(zmq::sockopt::linger, 0);
+			zmqContext = std::make_unique<zmq::context_t>(1);
+			zmqSocket = std::make_unique<zmq::socket_t>(*zmqContext.get(), ZMQ_ROUTER);
+			zmqSocket->setsockopt(ZMQ_IDENTITY, "PLUGIN", 6);
+			zmqSocket->setsockopt(ZMQ_LINGER, 0);
 			zmqSocket->bind("tcp://*:" + std::to_string(Config::Instance().GetTcpPort()));
 		}
 		catch (zmq::error_t& e)
@@ -200,27 +201,27 @@ namespace xpilot {
 		}
 	}
 
-	bool XPilot::SendSocketMsg(const std::string& msg)
+	void XPilot::SendSocketMsg(const std::string& msg)
 	{
 		try
 		{
 			if (IsSocketConnected() && !msg.empty())
 			{
+				std::string identity = "CLIENT";
+				zmq::message_t msg1(identity.size());
+				std::memcpy(msg1.data(), identity.data(), identity.size());
+				zmqSocket->send(msg1, zmq::send_flags::sndmore);
+
 				zmq::message_t message(msg.size());
 				std::memcpy(message.data(), msg.data(), msg.size());
-				return zmqSocket->send(message, ZMQ_NOBLOCK);
+				zmqSocket->send(message, ZMQ_NOBLOCK);
 			}
-			return false;
 		}
 		catch (zmq::error_t& e)
 		{
 			LOG_ERROR("Error sending socket message: %s", e.what());
-			return false;
 		}
-		catch (...)
-		{
-			return false;
-		}
+		catch (...) {}
 	}
 
 	float XPilot::onFlightLoop(float, float, int, void* ref)

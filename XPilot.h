@@ -74,7 +74,7 @@ namespace xpilot
 		void AddNotificationPanelMessage(const std::string& msg, double red = 255, double green = 255, double blue = 255);
 		void AddNotification(const std::string& msg, double red = 255, double green = 255, double blue = 255); // add notification to console and notification panel
 
-		bool SendSocketMsg(const std::string& string);
+		void SendSocketMsg(const std::string& string);
 
 		void OnNetworkDisconnected();
 		void OnNetworkConnected();
