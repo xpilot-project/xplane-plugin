@@ -30,6 +30,7 @@
 #include "NotificationPanel.h"
 #include "TextMessageConsole.h"
 #include "Lib/json.hpp"
+#include "sha512.hh"
 
 using json = nlohmann::json;
 
@@ -109,6 +110,7 @@ namespace xpilot {
 		preferencesWindow = std::make_unique<PreferencesWindow>();
 		frameRateMonitor = std::make_unique<FrameRateMonitor>(this);
 		aircraftManager = std::make_unique<AircraftManager>();
+		pluginHash = sw::sha512::file(GetTruePluginPath().c_str());
 
 		XPMPRegisterPlaneNotifierFunc(CBPlaneNotifier, this);
 		XPLMRegisterFlightLoopCallback(deferredStartup, -1.0f, this);
@@ -259,7 +261,6 @@ namespace xpilot {
 
 							if (!type.empty())
 							{
-
 								if (type == "AddPlane")
 								{
 									std::string callsign(j["Data"]["Callsign"]);
@@ -378,6 +379,15 @@ namespace xpilot {
 									SendSocketMsg(reply.dump());
 								}
 
+								else if (type == "PluginHash")
+								{
+									json j;
+									j["Type"] = "PluginHash";
+									j["Data"]["Hash"] = pluginHash;
+									j["Timestamp"] = UtcTimestamp();
+									SendSocketMsg(j.dump());
+								}
+
 								else if (type == "RadioMessage") {
 									std::string msg(j["Data"]["Message"]);
 
@@ -412,15 +422,6 @@ namespace xpilot {
 									json j;
 									j["Type"] = "ValidateCslPaths";
 									j["Data"]["Result"] = Config::Instance().HasValidPaths() && XPMPGetNumberOfInstalledModels() > 0;
-									j["Timestamp"] = UtcTimestamp();
-									SendSocketMsg(j.dump());
-								}
-
-								else if (type == "XplanePath")
-								{
-									json j;
-									j["Type"] = "XplanePath";
-									j["Data"]["Path"] = GetXPlanePath().c_str();
 									j["Timestamp"] = UtcTimestamp();
 									SendSocketMsg(j.dump());
 								}

@@ -126,6 +126,8 @@ namespace xpilot
 		std::unique_ptr<zmq::context_t> zmqContext;
 		std::unique_ptr<zmq::socket_t> zmqSocket;
 
+		std::string pluginHash;
+
 		void ZmqListener();
 		bool IsSocketConnected()const { return zmqSocket && zmqSocket->connected(); }
 		bool IsSocketReady()const { return keepAlive && IsSocketConnected(); }
