@@ -137,6 +137,8 @@ namespace xpilot {
 
 	void XPilot::StartZmqServer()
 	{
+		LOG_INFO("Initializing xPilot... Version %s", PLUGIN_VERSION_STRING);
+		
 		InitializeXPMP();
 
 		if (zmqThread)
