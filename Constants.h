@@ -25,7 +25,7 @@ constexpr int COLOR_GREEN = 0x00FF00;
 constexpr int COLOR_BLUE = 0x00F0F0;
 
 #define PLUGIN_NAME "xPilot"
-#define PLUGIN_VERSION 1329
-#define PLUGIN_VERSION_STRING "1.3.29"
+#define PLUGIN_VERSION 1330
+#define PLUGIN_VERSION_STRING "1.3.30"
 
 #endif // !Constants_h
