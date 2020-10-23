@@ -357,6 +357,35 @@ ImgWindow::updateImgui()
 	ImGui::SetCurrentContext(mImGuiContext);
 	auto& io = ImGui::GetIO();
 
+	// We need to handle key presses on a que because the X-Plane VR backspace key has an up / down
+	// action that occurs in the same frame and imgui will miss it because there is no time difference between the
+	// up and down
+	if (!mKeyQueue.empty())
+	{
+		KeyPress press = mKeyQueue.front();
+		mKeyQueue.pop();
+
+		if (io.WantCaptureKeyboard)
+		{
+			// If you press and hold a key, the flags will actually be down, 0, 0, ..., up
+			// So the key always has to be considered as pressed unless the up flag is set
+			auto vk = static_cast<unsigned char>(press.inVirtualKey);
+			io.KeysDown[vk] = (press.inFlags & xplm_UpFlag) != xplm_UpFlag;
+			io.KeyShift = (press.inFlags & xplm_ShiftFlag) != 0;
+			io.KeyAlt = (press.inFlags & xplm_OptionAltFlag) != 0;
+			io.KeyCtrl = (press.inFlags & xplm_ControlFlag) != 0;
+
+			if ((press.inFlags & xplm_UpFlag) != xplm_UpFlag
+				&& !io.KeyCtrl
+				&& !io.KeyAlt
+				&& std::isprint(press.inKey))
+			{
+				char smallStr[] = { press.inKey, 0 };
+				io.AddInputCharactersUTF8(smallStr);
+			}
+		}
+	}
+
 	// transfer the window geometry to ImGui
 	XPLMGetWindowGeometry(mWindowID, &mLeft, &mTop, &mRight, &mBottom);
 
@@ -545,6 +574,13 @@ ImgWindow::HandleKeyFuncCB(
 	int                  /*losingFocus*/)
 {
 	auto* thisWindow = reinterpret_cast<ImgWindow*>(inRefcon);
+
+	KeyPress press;
+	press.inFlags = inFlags;
+	press.inKey = inKey;
+	press.inVirtualKey = inVirtualKey;
+	thisWindow->mKeyQueue.push(press);
+
 	ImGui::SetCurrentContext(thisWindow->mImGuiContext);
 	ImGuiIO& io = ImGui::GetIO();
 	if (io.WantCaptureKeyboard) {

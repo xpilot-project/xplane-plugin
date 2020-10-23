@@ -73,7 +73,8 @@
  *     translated and mapped in the DrawWindowCB and constructor.
  */
 class
-    ImgWindow {
+    ImgWindow
+{
 public:
     /** sFontAtlas is the global shared font-atlas.
      *
@@ -143,13 +144,22 @@ public:
     bool GetVisible() const;
 
     /** Is Window popped out */
-    bool IsPoppedOut() const { return XPLMWindowIsPoppedOut(mWindowID) != 0; }
+    bool IsPoppedOut() const
+    {
+        return XPLMWindowIsPoppedOut(mWindowID) != 0;
+    }
 
     /** Is Window in VR? */
-    bool IsInVR() const { return XPLMWindowIsInVR(mWindowID) != 0; }
+    bool IsInVR() const
+    {
+        return XPLMWindowIsInVR(mWindowID) != 0;
+    }
 
     /** Is Window inside the sim? */
-    bool IsInsideSim() const { return !IsPoppedOut() && !IsInVR(); }
+    bool IsInsideSim() const
+    {
+        return !IsPoppedOut() && !IsInVR();
+    }
 
     /** Set the positioning mode
      * @see https://developer.x-plane.com/sdk/XPLMDisplay/#XPLMWindowPositioningMode */
@@ -160,10 +170,16 @@ public:
     }
 
     /** Bring window to front of Z-order */
-    void BringWindowToFront() { XPLMBringWindowToFront(mWindowID); }
+    void BringWindowToFront()
+    {
+        XPLMBringWindowToFront(mWindowID);
+    }
 
     /** Is Window in front of Z-order? */
-    bool IsWindowInFront() const { return XPLMIsWindowInFront(mWindowID) != 0; }
+    bool IsWindowInFront() const
+    {
+        return XPLMIsWindowInFront(mWindowID) != 0;
+    }
 
     /** @brief Define Window drag area, ie. an area in which dragging with the mouse
      * moves the entire window.
@@ -252,7 +268,10 @@ protected:
      * before interface building begins
      * @return addition flags to be passed to the imgui::begin() call,
      *         like for example ImGuiWindowFlags_MenuBar */
-    virtual ImGuiWindowFlags_ beforeBegin() { return ImGuiWindowFlags_None; }
+    virtual ImGuiWindowFlags_ beforeBegin()
+    {
+        return ImGuiWindowFlags_None;
+    }
 
     /** buildInterface() is the method where you can define your ImGui interface
      * and handle events.  It is called every frame the window is drawn.
@@ -265,7 +284,9 @@ protected:
     /** A hook called after all rendering is done, right before the
      * X-Plane window draw call back returns
      * in case you want to do something that otherwise would conflict with rendering. */
-    virtual void afterRendering() {}
+    virtual void afterRendering()
+    {
+    }
 
     /** onShow() is called before making the Window visible.  It provides an
      * opportunity to prevent the window being shown.
@@ -284,7 +305,10 @@ protected:
     void SafeDelete();
 
     /** Returns X-Plane's internal Window id */
-    XPLMWindowID GetWindowId() const { return mWindowID; }
+    XPLMWindowID GetWindowId() const
+    {
+        return mWindowID;
+    }
 
 private:
     std::shared_ptr<ImgFontAtlas> mFontAtlas;
@@ -388,17 +412,35 @@ private:
     int lastMouseDragY = -1;
 
     /** What are we dragging right now? */
-    struct DragTy {
+    struct DragTy
+    {
         bool wnd : 1;
         bool left : 1;
         bool top : 1;
         bool right : 1;
         bool bottom : 1;
 
-        DragTy() { clear(); }
-        void clear() { wnd = left = top = right = bottom = false; }
-        operator bool() const { return wnd || left || top || right || bottom; }
+        DragTy()
+        {
+            clear();
+        }
+        void clear()
+        {
+            wnd = left = top = right = bottom = false;
+        }
+        operator bool() const
+        {
+            return wnd || left || top || right || bottom;
+        }
     } dragWhat;
+
+    typedef struct
+    {
+        char inKey;
+        XPLMKeyFlags inFlags;
+        char inVirtualKey;
+    } KeyPress;
+    std::queue<KeyPress> mKeyQueue;
 };
 
 #endif // #ifndef IMGWINDOW_H
