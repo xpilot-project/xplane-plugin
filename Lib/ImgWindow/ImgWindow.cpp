@@ -580,25 +580,6 @@ ImgWindow::HandleKeyFuncCB(
 	press.inKey = inKey;
 	press.inVirtualKey = inVirtualKey;
 	thisWindow->mKeyQueue.push(press);
-
-	ImGui::SetCurrentContext(thisWindow->mImGuiContext);
-	ImGuiIO& io = ImGui::GetIO();
-	if (io.WantCaptureKeyboard) {
-		auto vk = static_cast<unsigned char>(inVirtualKey);
-		io.KeysDown[vk] = (inFlags & xplm_DownFlag) == xplm_DownFlag;
-		io.KeyShift = (inFlags & xplm_ShiftFlag) == xplm_ShiftFlag;
-		io.KeyAlt = (inFlags & xplm_OptionAltFlag) == xplm_OptionAltFlag;
-		io.KeyCtrl = (inFlags & xplm_ControlFlag) == xplm_ControlFlag;
-
-		// inKey will only includes printable characters,
-		// but also those created with key combinations like @ or {}
-		if ((inFlags & xplm_DownFlag) == xplm_DownFlag &&
-			inKey > '\0')
-		{
-			char smallStr[2] = { inKey, 0 };
-			io.AddInputCharactersUTF8(smallStr);
-		}
-	}
 }
 
 XPLMCursorStatus
