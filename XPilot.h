@@ -143,13 +143,13 @@ namespace xpilot
 		std::unique_ptr<zmq::socket_t> m_zmqSocket;
 
 		void zmqWorker();
-		bool IsSocketConnected()const
+		bool isSocketConnected()const
 		{
 			return m_zmqSocket && m_zmqSocket->connected();
 		}
-		bool IsSocketReady()const
+		bool isSocketReady()const
 		{
-			return m_keepAlive && IsSocketConnected();
+			return m_keepAlive && isSocketConnected();
 		}
 
 		std::mutex m_mutex;

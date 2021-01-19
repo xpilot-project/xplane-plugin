@@ -216,7 +216,7 @@ namespace xpilot
 	{
 		try
 		{
-			if (IsSocketConnected() && !msg.empty())
+			if (isSocketConnected() && !msg.empty())
 			{
 				std::string identity = "CLIENT";
 				zmq::message_t msg1(identity.size());
@@ -252,7 +252,7 @@ namespace xpilot
 
 	void XPilot::zmqWorker()
 	{
-		while (IsSocketReady())
+		while (isSocketReady())
 		{
 			try
 			{
