@@ -29,44 +29,46 @@
 #include "PreferencesWindow.h"
 #include "NotificationPanel.h"
 #include "TextMessageConsole.h"
-#include "Lib/json.hpp"
 #include "sha512.hh"
+#include "Lib/json.hpp"
 
 using json = nlohmann::json;
 
-namespace xpilot {
-
-	void CBPlaneNotifier(XPMPPlaneID inPlaneID, XPMPPlaneNotification inNotification, void* inRefcon)
+namespace xpilot
+{
+	void callbackPlaneNotifier(XPMPPlaneID inPlaneID, XPMPPlaneNotification inNotification, void* inRefcon)
 	{
 		auto* env = static_cast<XPilot*>(inRefcon);
 		XPMP2::Aircraft* pAc = XPMP2::AcFindByID(inPlaneID);
-		if (pAc) {
-			switch (inNotification) {
-			case xpmp_PlaneNotification_Created:
-				env->IncNumAc();
-				break;
-			case xpmp_PlaneNotification_Destroyed:
-				env->DecNumAc();
-				break;
+		if (pAc)
+		{
+			switch (inNotification)
+			{
+				case xpmp_PlaneNotification_Created:
+					env->incrementAircraftCount();
+					break;
+				case xpmp_PlaneNotification_Destroyed:
+					env->decrementAircraftCount();
+					break;
 			}
 		}
 	}
 
 	XPilot::XPilot() :
-		xplaneAtisEnabled("sim/atc/atis_enabled", ReadWrite),
-		pttPressed("xpilot/ptt", ReadWrite),
-		rxCom1("xpilot/audio/com1_rx", ReadWrite),
-		rxCom2("xpilot/audio/com2_rx", ReadWrite),
-		networkLoginStatus("xpilot/login/status", ReadOnly, true),
-		networkCallsign("xpilot/login/callsign", ReadOnly, true),
-		volumeSignalLevel("xpilot/audio/vu", ReadWrite),
-		aiControlled("xpilot/ai_controlled", ReadOnly),
-		numAircraft("xpilot/num_aircraft", ReadOnly),
-		pluginVersion("xpilot/version", ReadOnly)
+		m_xplaneAtisEnabled("sim/atc/atis_enabled", ReadWrite),
+		m_pttPressed("xpilot/ptt", ReadWrite),
+		m_rxCom1("xpilot/audio/com1_rx", ReadWrite),
+		m_rxCom2("xpilot/audio/com2_rx", ReadWrite),
+		m_networkLoginStatus("xpilot/login/status", ReadOnly, true),
+		m_networkCallsign("xpilot/login/callsign", ReadOnly, true),
+		m_volumeSignalLevel("xpilot/audio/vu", ReadWrite),
+		m_aiControlled("xpilot/ai_controlled", ReadOnly),
+		m_aircraftCount("xpilot/num_aircraft", ReadOnly),
+		m_pluginVersion("xpilot/version", ReadOnly)
 	{
-		ThisThreadIsXP();
+		thisThreadIsXP();
 
-		bulkDataQuick = XPLMRegisterDataAccessor("xpilot/bulk/quick",
+		m_bulkDataQuick = XPLMRegisterDataAccessor("xpilot/bulk/quick",
 			xplmType_Data,
 			false,
 			NULL,
@@ -76,13 +78,13 @@ namespace xpilot {
 			NULL, NULL,
 			NULL, NULL,
 			NULL, NULL,
-			GetBulkData,
+			getBulkData,
 			NULL,
 			(void*)DR_BULK_QUICK,
 			(void*)DR_BULK_QUICK
 		);
 
-		bulkDataExpensive = XPLMRegisterDataAccessor("xpilot/bulk/expensive",
+		m_bulkDataExpensive = XPLMRegisterDataAccessor("xpilot/bulk/expensive",
 			xplmType_Data,
 			false,
 			NULL,
@@ -92,7 +94,7 @@ namespace xpilot {
 			NULL, NULL,
 			NULL, NULL,
 			NULL, NULL,
-			GetBulkData,
+			getBulkData,
 			NULL,
 			(void*)DR_BULK_EXPENSIVE,
 			(void*)DR_BULK_EXPENSIVE
@@ -104,23 +106,23 @@ namespace xpilot {
 		top = screenTop - 35; /*width*/
 		left = screenRight - 800; /*padding top*/
 		bottom = top - 100; /*height*/
-		notificationPanel = std::make_unique<NotificationPanel>(left, top, right, bottom);
-		textMessageConsole = std::make_unique<TextMessageConsole>(this);
-		nearbyAtcWindow = std::make_unique<NearbyATCWindow>(this);
-		preferencesWindow = std::make_unique<PreferencesWindow>();
-		frameRateMonitor = std::make_unique<FrameRateMonitor>(this);
-		aircraftManager = std::make_unique<AircraftManager>();
+		m_notificationPanel = std::make_unique<NotificationPanel>(left, top, right, bottom);
+		m_textMessageConsole = std::make_unique<TextMessageConsole>(this);
+		m_nearbyAtcWindow = std::make_unique<NearbyATCWindow>(this);
+		m_preferencesWindow = std::make_unique<PreferencesWindow>();
+		m_frameRateMonitor = std::make_unique<FrameRateMonitor>(this);
+		m_aircraftManager = std::make_unique<AircraftManager>();
 		pluginHash = sw::sha512::file(GetTruePluginPath().c_str());
 
-		XPMPRegisterPlaneNotifierFunc(CBPlaneNotifier, this);
+		XPMPRegisterPlaneNotifierFunc(callbackPlaneNotifier, this);
 		XPLMRegisterFlightLoopCallback(deferredStartup, -1.0f, this);
 	}
 
 	XPilot::~XPilot()
 	{
-		XPLMUnregisterDataAccessor(bulkDataQuick);
-		XPLMUnregisterDataAccessor(bulkDataExpensive);
-		XPMPUnregisterPlaneNotifierFunc(CBPlaneNotifier, this);
+		XPLMUnregisterDataAccessor(m_bulkDataQuick);
+		XPLMUnregisterDataAccessor(m_bulkDataExpensive);
+		XPMPUnregisterPlaneNotifierFunc(callbackPlaneNotifier, this);
 		XPLMUnregisterFlightLoopCallback(deferredStartup, this);
 		XPLMUnregisterFlightLoopCallback(onFlightLoop, this);
 	}
@@ -130,60 +132,62 @@ namespace xpilot {
 		auto* instance = static_cast<XPilot*>(ref);
 		if (instance)
 		{
-			instance->StartZmqServer();
+			instance->startZmqServer();
 		}
 		return 0;
 	}
 
-	void XPilot::StartZmqServer()
+	void XPilot::startZmqServer()
 	{
 		LOG_INFO("Initializing xPilot... Version %s", PLUGIN_VERSION_STRING);
-		
-		InitializeXPMP();
 
-		if (zmqThread)
+		initializeXPMP();
+
+		if (m_zmqThread)
 		{
-			keepAlive = false;
-			zmqThread->join();
-			zmqThread.reset();
+			m_keepAlive = false;
+			m_zmqThread->join();
+			m_zmqThread.reset();
 		}
 
 		try
 		{
-			zmqContext = std::make_unique<zmq::context_t>(1);
-			zmqSocket = std::make_unique<zmq::socket_t>(*zmqContext.get(), ZMQ_ROUTER);
-			zmqSocket->setsockopt(ZMQ_IDENTITY, "PLUGIN", 6);
-			zmqSocket->setsockopt(ZMQ_LINGER, 0);
-			zmqSocket->bind("tcp://*:" + std::to_string(Config::Instance().GetTcpPort()));
+			m_zmqContext = std::make_unique<zmq::context_t>(1);
+			m_zmqSocket = std::make_unique<zmq::socket_t>(*m_zmqContext.get(), ZMQ_ROUTER);
+			m_zmqSocket->setsockopt(ZMQ_IDENTITY, "PLUGIN", 6);
+			m_zmqSocket->setsockopt(ZMQ_LINGER, 0);
+			m_zmqSocket->bind("tcp://*:" + std::to_string(Config::Instance().getTcpPort()));
 		}
 		catch (zmq::error_t& e)
 		{
 			LOG_ERROR("Error binding TCP socket port: %s", e.what());
-			AddNotification(string_format("Error binding TCP socket port: %s", e.what()));
+			addNotification(string_format("Error binding TCP socket port: %s", e.what()));
 		}
 		catch (const std::exception& e)
 		{
 			LOG_ERROR("Error binding TCP socket port: %s", e.what());
-			AddNotification(string_format("Error binding TCP socket port: %s", e.what()));
+			addNotification(string_format("Error binding TCP socket port: %s", e.what()));
 		}
-		catch (...) {}
+		catch (...)
+		{
+		}
 
 		XPLMRegisterFlightLoopCallback(onFlightLoop, -1.0f, this);
 
-		keepAlive = true;
-		zmqThread = std::make_unique<std::thread>(&XPilot::ZmqListener, this);
-		LOG_INFO("TCP socket thread started on port %i", Config::Instance().GetTcpPort());
-		AddNotification(string_format("TCP socket thread started on port %i", Config::Instance().GetTcpPort()));
+		m_keepAlive = true;
+		m_zmqThread = std::make_unique<std::thread>(&XPilot::zmqWorker, this);
+		LOG_INFO("TCP socket thread started on port %i", Config::Instance().getTcpPort());
+		addNotification(string_format("TCP socket thread started on port %i", Config::Instance().getTcpPort()));
 	}
 
-	void XPilot::StopZmqServer()
+	void XPilot::stopZmqServer()
 	{
 		try
 		{
-			if (zmqSocket)
+			if (m_zmqSocket)
 			{
-				zmqSocket->close();
-				zmqContext->close();
+				m_zmqSocket->close();
+				m_zmqContext->close();
 			}
 		}
 		catch (zmq::error_t& e)
@@ -194,18 +198,21 @@ namespace xpilot {
 		{
 			LOG_ERROR("Unknown TCP socket exception: %s", e.what());
 		}
-		catch (...) {}
-
-		keepAlive = false;
-		if (zmqThread)
+		catch (...)
 		{
-			zmqThread->join();
-			zmqThread.reset();
+		}
+
+		m_keepAlive = false;
+
+		if (m_zmqThread)
+		{
+			m_zmqThread->join();
+			m_zmqThread.reset();
 			LOG_INFO("TCP server successfully stopped");
 		}
 	}
 
-	void XPilot::SendSocketMsg(const std::string& msg)
+	void XPilot::sendSocketMsg(const std::string& msg)
 	{
 		try
 		{
@@ -214,18 +221,20 @@ namespace xpilot {
 				std::string identity = "CLIENT";
 				zmq::message_t msg1(identity.size());
 				std::memcpy(msg1.data(), identity.data(), identity.size());
-				zmqSocket->send(msg1, zmq::send_flags::sndmore);
+				m_zmqSocket->send(msg1, zmq::send_flags::sndmore);
 
 				zmq::message_t message(msg.size());
 				std::memcpy(message.data(), msg.data(), msg.size());
-				zmqSocket->send(message, ZMQ_NOBLOCK);
+				m_zmqSocket->send(message, ZMQ_NOBLOCK);
 			}
 		}
 		catch (zmq::error_t& e)
 		{
 			LOG_ERROR("Error sending socket message: %s", e.what());
 		}
-		catch (...) {}
+		catch (...)
+		{
+		}
 	}
 
 	float XPilot::onFlightLoop(float, float, int, void* ref)
@@ -233,27 +242,27 @@ namespace xpilot {
 		auto* instance = static_cast<XPilot*>(ref);
 		if (instance)
 		{
-			instance->aiControlled = XPMPHasControlOfAIAircraft();
-			instance->aircraftManager->InterpolateAirplanes();
-			instance->ProcessQueuedCallbacks();
+			instance->invokeQueuedCallbacks();
+			instance->m_aiControlled = XPMPHasControlOfAIAircraft();
+			instance->m_aircraftManager->interpolateAirplanes();
 			UpdateMenuItems();
 		}
 		return -1.0;
 	}
 
-	void XPilot::ZmqListener()
+	void XPilot::zmqWorker()
 	{
 		while (IsSocketReady())
 		{
 			try
 			{
 				zmq::message_t msg;
-				zmqSocket->recv(msg, zmq::recv_flags::none);
+				m_zmqSocket->recv(msg, zmq::recv_flags::none);
 				std::string data(static_cast<char*>(msg.data()), msg.size());
 
 				if (!data.empty())
 				{
-					try
+					if (json::accept(data.c_str()))
 					{
 						json j = json::parse(data.c_str());
 
@@ -271,9 +280,9 @@ namespace xpilot {
 
 									if (!callsign.empty() && !typeCode.empty())
 									{
-										QueueCallback([=]()
+										queueCallback([=]()
 										{
-											aircraftManager->AddNewPlane(callsign, typeCode, airline);
+											m_aircraftManager->addNewPlane(callsign, typeCode, airline);
 										});
 									}
 								}
@@ -286,9 +295,9 @@ namespace xpilot {
 
 									if (!callsign.empty() && !typeCode.empty())
 									{
-										QueueCallback([=]()
+										queueCallback([=]()
 										{
-											aircraftManager->ChangeModel(callsign, typeCode, airline);
+											m_aircraftManager->changeModel(callsign, typeCode, airline);
 										});
 									}
 								}
@@ -315,10 +324,9 @@ namespace xpilot {
 
 									if (!callsign.empty())
 									{
-										QueueCallback([=]()
+										queueCallback([=]()
 										{
-											aircraftManager->SetPlanePosition(callsign, pos, radar, gs);
-											aircraftManager->SetFlightPlan(callsign, origin, destination);
+											m_aircraftManager->setPlanePosition(callsign, pos, radar, gs, origin, destination);
 										});
 									}
 								}
@@ -326,9 +334,9 @@ namespace xpilot {
 								else if (type == "SurfaceUpdate")
 								{
 									auto acconfig = j.get<NetworkAircraftConfig>();
-									QueueCallback([=]()
+									queueCallback([=]()
 									{
-										aircraftManager->UpdateAircraftConfig(acconfig.Data.Callsign, acconfig);
+										m_aircraftManager->updateAircraftConfig(acconfig.data.callsign, acconfig);
 									});
 								}
 
@@ -337,38 +345,44 @@ namespace xpilot {
 									std::string callsign(j["Data"]["Callsign"]);
 									if (!callsign.empty())
 									{
-										QueueCallback([=]()
+										queueCallback([=]()
 										{
-											aircraftManager->RemovePlane(callsign);
+											m_aircraftManager->removePlane(callsign);
 										});
 									}
 								}
 
 								else if (type == "RemoveAllPlanes")
 								{
-									QueueCallback([=]()
+									queueCallback([=]()
 									{
-										aircraftManager->RemoveAllPlanes();
+										m_aircraftManager->removeAllPlanes();
 									});
 								}
 
 								else if (type == "NetworkConnected")
 								{
-									networkCallsign = j["Data"]["OurCallsign"];
-									OnNetworkConnected();
+									m_networkCallsign = j["Data"]["OurCallsign"];
+									queueCallback([=]()
+									{
+										onNetworkConnected();
+									});
 								}
 
 								else if (type == "NetworkDisconnected")
 								{
-									networkCallsign = "";
-									OnNetworkDisconnected();
+									m_networkCallsign = "";
+									queueCallback([=]()
+									{
+										onNetworkDisconnected();
+									});
 								}
 
 								else if (type == "WhosOnline")
 								{
-									QueueCallback([=]()
+									queueCallback([=]()
 									{
-										nearbyAtcWindow->UpdateList(j);
+										m_nearbyAtcWindow->UpdateList(j);
 									});
 								}
 
@@ -378,7 +392,7 @@ namespace xpilot {
 									reply["Type"] = "PluginVersion";
 									reply["Timestamp"] = UtcTimestamp();
 									reply["Data"]["Version"] = PLUGIN_VERSION;
-									SendSocketMsg(reply.dump());
+									sendSocketMsg(reply.dump());
 								}
 
 								else if (type == "PluginHash")
@@ -387,10 +401,11 @@ namespace xpilot {
 									j["Type"] = "PluginHash";
 									j["Data"]["Hash"] = pluginHash;
 									j["Timestamp"] = UtcTimestamp();
-									SendSocketMsg(j.dump());
+									sendSocketMsg(j.dump());
 								}
 
-								else if (type == "RadioMessage") {
+								else if (type == "RadioMessage")
+								{
 									std::string msg(j["Data"]["Message"]);
 
 									int red = static_cast<int>(j["Data"]["R"]);
@@ -398,7 +413,7 @@ namespace xpilot {
 									int blue = static_cast<int>(j["Data"]["B"]);
 									bool direct = static_cast<bool>(j["Data"]["Direct"]);
 
-									AddNotification(msg, red, green, blue);
+									addNotification(msg, red, green, blue);
 								}
 
 								else if (type == "PrivateMessageReceived")
@@ -406,8 +421,8 @@ namespace xpilot {
 									std::string msg(j["Data"]["Message"]);
 									std::string from(j["Data"]["From"]);
 
-									AddConsoleMessageTab(from, msg, ConsoleTabType::Incoming);
-									AddNotificationPanelMessage(string_format("%s [pvt]:  %s", from, msg.c_str()), 230, 94, 230);
+									addConsoleMessageTab(from, msg, ConsoleTabType::Incoming);
+									addNotificationPanelMessage(string_format("%s [pvt]:  %s", from, msg.c_str()), 230, 94, 230);
 								}
 
 								else if (type == "PrivateMessageSent")
@@ -415,24 +430,21 @@ namespace xpilot {
 									std::string msg(j["Data"]["Message"]);
 									std::string from(j["Data"]["To"]);
 
-									AddConsoleMessageTab(from, msg, ConsoleTabType::Outgoing);
-									AddNotificationPanelMessage(string_format("%s [pvt: %s]:  %s", networkCallsign.value().c_str(), from.c_str(), msg.c_str()), 50, 205, 50);
+									addConsoleMessageTab(from, msg, ConsoleTabType::Outgoing);
+									addNotificationPanelMessage(string_format("%s [pvt: %s]:  %s", m_networkCallsign.value().c_str(), from.c_str(), msg.c_str()), 50, 205, 50);
 								}
 
 								else if (type == "ValidateCslPaths")
 								{
 									json j;
 									j["Type"] = "ValidateCslPaths";
-									j["Data"]["Result"] = Config::Instance().HasValidPaths() && XPMPGetNumberOfInstalledModels() > 0;
+									j["Data"]["Result"] = Config::Instance().hasValidPaths() && XPMPGetNumberOfInstalledModels() > 0;
 									j["Timestamp"] = UtcTimestamp();
-									SendSocketMsg(j.dump());
+									sendSocketMsg(j.dump());
 								}
 							}
 						}
 					}
-					catch (json::exception& e) {}
-					catch (std::exception& e) {}
-					catch (...) {}
 				}
 			}
 			catch (zmq::error_t& e)
@@ -446,70 +458,66 @@ namespace xpilot {
 			{
 				LOG_ERROR("TCP socket exception: %s", e.what());
 			}
-			catch (...) {}
+			catch (...)
+			{
+			}
 		}
 	}
 
-	void XPilot::DisableDefaultAtis(bool disabled)
+	void XPilot::disableDefaultAtis(bool disabled)
 	{
-		xplaneAtisEnabled = (int)disabled;
+		m_xplaneAtisEnabled = (int)disabled;
 	}
 
 	int CBIntPrefsFunc(const char*, [[maybe_unused]] const char* item, int defaultVal)
 	{
 		if (!strcmp(item, "model_matching"))
-			return Config::Instance().GetDebugModelMatching();
+			return Config::Instance().getDebugModelMatching();
 		if (!strcmp(item, "log_level"))
 			return 0;
 		return defaultVal;
 	}
 
-	void XPilot::OnNetworkConnected()
+	void XPilot::onNetworkConnected()
 	{
-		QueueCallback([=]()
-		{
-			aircraftManager->RemoveAllPlanes();
-			frameRateMonitor->StartMonitoring();
-			TryGetTcasControl();
-			xplaneAtisEnabled = 0;
-			networkLoginStatus = 1;
-		});
+		m_aircraftManager->removeAllPlanes();
+		m_frameRateMonitor->startMonitoring();
+		tryGetTcasControl();
+		m_xplaneAtisEnabled = 0;
+		m_networkLoginStatus = 1;
 	}
 
-	void XPilot::OnNetworkDisconnected()
+	void XPilot::onNetworkDisconnected()
 	{
-		QueueCallback([=]() 
-		{
-			aircraftManager->RemoveAllPlanes();
-			frameRateMonitor->StopMonitoring();
-			ReleaseTcasControl();
-			xplaneAtisEnabled = 1;
-			networkLoginStatus = 0;
-		});
+		m_aircraftManager->removeAllPlanes();
+		m_frameRateMonitor->stopMonitoring();
+		releaseTcasControl();
+		m_xplaneAtisEnabled = 1;
+		m_networkLoginStatus = 0;
 	}
 
-	void XPilot::ForceDisconnect(std::string reason)
+	void XPilot::forceDisconnect(std::string reason)
 	{
 		json j;
 		j["Type"] = "ForceDisconnect";
 		j["Data"]["Reason"] = reason;
 		j["Timestamp"] = UtcTimestamp();
-		SendSocketMsg(j.dump());
+		sendSocketMsg(j.dump());
 	}
 
-	void XPilot::OnPluginDisabled()
+	void XPilot::onPluginDisabled()
 	{
 		json j;
 		j["Type"] = "PluginDisabled";
 		j["Timestamp"] = UtcTimestamp();
-		SendSocketMsg(j.dump());
+		sendSocketMsg(j.dump());
 	}
 
-	void XPilot::RequestControllerAtis(std::string callsign)
+	void XPilot::requestControllerAtis(std::string callsign)
 	{
 		try
 		{
-			AddNotification(string_format("Requesting controller ATIS for: %s", callsign), 149, 165, 166);
+			addNotification(string_format("Requesting controller ATIS for: %s", callsign), 149, 165, 166);
 			LOG_INFO("Requesting controller ATIS for %s", callsign.c_str());
 
 			json j;
@@ -517,7 +525,7 @@ namespace xpilot {
 			j["Timestamp"] = UtcTimestamp();
 			j["Data"]["Callsign"] = callsign;
 
-			SendSocketMsg(j.dump());
+			sendSocketMsg(j.dump());
 		}
 		catch (zmq::error_t& e)
 		{
@@ -527,10 +535,12 @@ namespace xpilot {
 		{
 			LOG_ERROR("Error requesting controller ATIS for %s: %s", callsign.c_str(), e.what());
 		}
-		catch (...) {}
+		catch (...)
+		{
+		}
 	}
 
-	bool XPilot::InitializeXPMP()
+	bool XPilot::initializeXPMP()
 	{
 		const std::string pathResources(GetPluginPath() + "Resources");
 		LOG_INFO("Resources path initialized: %s", pathResources.c_str());
@@ -544,15 +554,15 @@ namespace xpilot {
 			return false;
 		}
 
-		if (!Config::Instance().HasValidPaths())
+		if (!Config::Instance().hasValidPaths())
 		{
 			std::string err = "No valid CSL paths are configured or the paths are disabled. Verify the CSL configuration in X-Plane (Plugins > xPilot > Settings > CSL Packages).";
-			AddNotification(err.c_str(), 192, 57, 43);
+			addNotification(err.c_str(), 192, 57, 43);
 			LOG_ERROR(err.c_str());
 		}
 		else
 		{
-			for (const CslPackage& p : Config::Instance().GetCslPackages())
+			for (const CslPackage& p : Config::Instance().getCSLPackages())
 			{
 				if (!p.path.empty() && p.enabled && CountFilesInPath(p.path) > 0)
 				{
@@ -561,7 +571,7 @@ namespace xpilot {
 						err = XPMPLoadCSLPackage(p.path.c_str());
 						if (*err)
 						{
-							AddNotification(string_format("Error loading CSL package %s: %s", p.path.c_str(), err), 231, 76, 60);
+							addNotification(string_format("Error loading CSL package %s: %s", p.path.c_str(), err), 231, 76, 60);
 							LOG_ERROR("Error loading CSL package %s: %s", p.path.c_str(), err);
 						}
 					}
@@ -573,148 +583,143 @@ namespace xpilot {
 			}
 		}
 
-		XPMPEnableAircraftLabels(Config::Instance().GetShowHideLabels());
-		XPMPSetAircraftLabelDist(Config::Instance().GetMaxLabelDistance(), Config::Instance().GetLabelCutoffVis());
+		XPMPEnableAircraftLabels(Config::Instance().getShowHideLabels());
+		XPMPSetAircraftLabelDist(Config::Instance().getMaxLabelDistance(), Config::Instance().getLabelCutoffVis());
 		LOG_INFO("XPMP2 successfully initialized");
 		return true;
 	}
 
-	void XPilot::AddConsoleMessageTab(const std::string& recipient, const std::string& msg, ConsoleTabType tabType)
+	void XPilot::addConsoleMessageTab(const std::string& recipient, const std::string& msg, ConsoleTabType tabType)
 	{
 		if (!recipient.empty() && !msg.empty())
 		{
-			QueueCallback([=]()
+			queueCallback([=]()
 			{
-				textMessageConsole->AddMessageToTab(recipient, msg, tabType);
+				m_textMessageConsole->addMessageToTab(recipient, msg, tabType);
 			});
 		}
 	}
 
-	void XPilot::AddConsoleMessage(const std::string& msg, double red, double green, double blue)
+	void XPilot::addConsoleMessage(const std::string& msg, double red, double green, double blue)
 	{
 		if (!msg.empty())
 		{
-			QueueCallback([=]()
+			queueCallback([=]()
 			{
-				textMessageConsole->AddIncomingMessage(msg.c_str(), red, green, blue);
+				m_textMessageConsole->addIncomingMessage(msg.c_str(), red, green, blue);
 			});
 		}
 	}
 
-	void XPilot::AddNotificationPanelMessage(const std::string& msg, double red, double green, double blue)
+	void XPilot::addNotificationPanelMessage(const std::string& msg, double red, double green, double blue)
 	{
-		if (!msg.empty()) 
+		if (!msg.empty())
 		{
-			QueueCallback([=]() 
+			queueCallback([=]()
 			{
-				notificationPanel->AddNotificationPanelMessage(msg, red, green, blue);
+				m_notificationPanel->addNotificationPanelMessage(msg, red, green, blue);
 			});
 		}
 	}
 
-	void XPilot::AddNotification(const std::string& msg, double red, double green, double blue)
+	void XPilot::addNotification(const std::string& msg, double red, double green, double blue)
 	{
-		AddConsoleMessage(msg, red, green, blue);
-		AddNotificationPanelMessage(msg, red, green, blue);
+		addConsoleMessage(msg, red, green, blue);
+		addNotificationPanelMessage(msg, red, green, blue);
 	}
 
-	void XPilot::QueueCallback(std::function<void()> cb)
+	void XPilot::queueCallback(std::function<void()> cb)
 	{
-		if (IsXPThread())
+		std::lock_guard<std::mutex> lck(m_mutex);
+		m_queuedCallbacks.push_back(cb);
+	}
+
+	void XPilot::invokeQueuedCallbacks()
+	{
+		std::deque<std::function<void()>> temp;
 		{
+			std::lock_guard<std::mutex> lck(m_mutex);
+			std::swap(temp, m_queuedCallbacks);
+		}
+		while (!temp.empty())
+		{
+			auto cb = temp.front();
+			temp.pop_front();
 			cb();
 		}
-		else
-		{
-			std::lock_guard<std::mutex> lock(queueMutex);
-			queuedCallbacks.push_back(cb);
-		}
 	}
 
-	void XPilot::ProcessQueuedCallbacks()
+	void XPilot::togglePreferencesWindow()
 	{
-		std::lock_guard<std::mutex> lock(queueMutex);
-		if (!queuedCallbacks.empty())
-		{
-			for (auto& cb : queuedCallbacks)
-			{
-				cb();
-			}
-			queuedCallbacks.clear();
-		}
+		m_preferencesWindow->SetVisible(!m_preferencesWindow->GetVisible());
 	}
 
-	void XPilot::TogglePreferencesWindow()
+	void XPilot::toggleNearbyAtcWindow()
 	{
-		preferencesWindow->SetVisible(!preferencesWindow->GetVisible());
+		m_nearbyAtcWindow->SetVisible(!m_nearbyAtcWindow->GetVisible());
 	}
 
-	void XPilot::ToggleNearbyAtcWindow()
+	void XPilot::toggleTextMessageConsole()
 	{
-		nearbyAtcWindow->SetVisible(!nearbyAtcWindow->GetVisible());
+		m_textMessageConsole->SetVisible(!m_textMessageConsole->GetVisible());
 	}
 
-	void XPilot::ToggleTextMessageConsole()
+	void XPilot::setNotificationPanelAlwaysVisible(bool visible)
 	{
-		textMessageConsole->SetVisible(!textMessageConsole->GetVisible());
+		m_notificationPanel->setAlwaysVisible(visible);
 	}
 
-	void XPilot::SetNotificationPanelAlwaysVisible(bool visible)
+	bool XPilot::setNotificationPanelAlwaysVisible()const
 	{
-		notificationPanel->SetAlwaysVisible(visible);
+		return m_notificationPanel->isAlwaysVisible();
 	}
 
-	bool XPilot::IsNotificationPanelAlwaysVisible()const
+	void XPilot::incrementAircraftCount()
 	{
-		return notificationPanel->IsAlwaysVisible();
+		++m_currentAircraftCount;
+		m_aircraftCount = m_currentAircraftCount;
 	}
 
-	void XPilot::IncNumAc()
+	void XPilot::decrementAircraftCount()
 	{
-		++aircraftCount;
-		numAircraft = aircraftCount;
+		--m_currentAircraftCount;
+		m_aircraftCount = m_currentAircraftCount;
 	}
 
-	void XPilot::DecNumAc()
+	void callbackRequestTcasAgain(void*)
 	{
-		--aircraftCount;
-		numAircraft = aircraftCount;
+		XPMPMultiplayerEnable(callbackRequestTcasAgain);
 	}
 
-	void CBRequestTcasAgain(void*)
-	{
-		XPMPMultiplayerEnable(CBRequestTcasAgain);
-	}
-
-	void XPilot::TryGetTcasControl()
+	void XPilot::tryGetTcasControl()
 	{
 		if (!XPMPHasControlOfAIAircraft())
 		{
-			auto err = XPMPMultiplayerEnable(CBRequestTcasAgain);
+			auto err = XPMPMultiplayerEnable(callbackRequestTcasAgain);
 			if (*err)
 			{
-				AddNotification(err, 231, 76, 60);
+				addNotification(err, 231, 76, 60);
 				LOG_ERROR(err);
 			}
 			else
 			{
-				AddNotification("xPilot has TCAS control");
+				addNotification("xPilot has TCAS control");
 				LOG_INFO("xPilot has TCAS control");
 			}
 		}
 	}
 
-	void XPilot::ReleaseTcasControl()
+	void XPilot::releaseTcasControl()
 	{
 		if (XPMPHasControlOfAIAircraft())
 		{
 			XPMPMultiplayerDisable();
-			AddNotification("xPilot released TCAS control");
+			addNotification("xPilot released TCAS control");
 			LOG_INFO("xPilot released TCAS control");
 		}
 	}
 
-	int XPilot::GetBulkData(void* inRefcon, void* outData, int inStartPos, int inNumBytes)
+	int XPilot::getBulkData(void* inRefcon, void* outData, int inStartPos, int inNumBytes)
 	{
 		dataRefs dr = (dataRefs)reinterpret_cast<long long>(inRefcon);
 		assert(dr == DR_BULK_QUICK || dr == DR_BULK_EXPENSIVE);
@@ -722,12 +727,12 @@ namespace xpilot {
 		static int size_quick = 0, size_expensive = 0;
 		if (!outData)
 		{
-			if (dr == DR_BULK_QUICK) 
+			if (dr == DR_BULK_QUICK)
 			{
 				size_quick = inNumBytes;
 				return (int)sizeof(XPilotAPIAircraft::XPilotAPIBulkData);
 			}
-			else 
+			else
 			{
 				size_expensive = inNumBytes;
 				return (int)sizeof(XPilotAPIAircraft::XPilotAPIBulkInfoTexts);
@@ -751,9 +756,9 @@ namespace xpilot {
 		{
 			const NetworkAircraft& ac = *pIter->second.get();
 			if (dr == DR_BULK_QUICK)
-				ac.CopyBulkData((XPilotAPIAircraft::XPilotAPIBulkData*)pOut, size);
+				ac.copyBulkData((XPilotAPIAircraft::XPilotAPIBulkData*)pOut, size);
 			else
-				ac.CopyBulkData((XPilotAPIAircraft::XPilotAPIBulkInfoTexts*)pOut, size);
+				ac.copyBulkData((XPilotAPIAircraft::XPilotAPIBulkInfoTexts*)pOut, size);
 		}
 
 		return (iAc - startAc) * size;

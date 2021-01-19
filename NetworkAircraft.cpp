@@ -25,137 +25,138 @@ namespace xpilot
     NetworkAircraft::NetworkAircraft(const std::string& _icaoType, const std::string& _icaoAirline, const std::string& _livery,
         XPMPPlaneID _modeS_id = 0, const std::string& _modelName = "") :
         XPMP2::Aircraft(_icaoType, _icaoAirline, _livery, _modeS_id, _modelName),
-        EnginesRunning(false),
-        GearDown(false),
-        OnGround(false),
-        RenderCount(0),
-        ReverseThrust(false),
-        SpoilersDeployed(false),
-        TargetFlapPosition(0.0f),
-        TargetGearPosition(0.0f),
-        TargetSpoilerPosition(0.0f),
-        TargetReversersPosition(0.0f),
-        TerrainAltitude(0.0)
+        enginesRunning(false),
+        gearDown(false),
+        onGround(false),
+        renderCount(0),
+        reverseThrust(false),
+        spoilersDeployed(false),
+        targetFlapPosition(0.0f),
+        targetGearPosition(0.0f),
+        targetSpoilerPosition(0.0f),
+        targetReversersPosition(0.0f),
+        terrainAltitude(0.0),
+        groundSpeed(0.0)
     {
 
     }
 
     void NetworkAircraft::UpdatePosition(float, int)
     {
-        label = Callsign;
-
-        if (Callsign.length() > 7) 
+        label = callsign;
+        if (callsign.length() > 7)
         {
-            strScpy(acInfoTexts.tailNum, Callsign.substr(0, 7).c_str(), sizeof(acInfoTexts.tailNum));
+            strScpy(acInfoTexts.tailNum, callsign.substr(0, 7).c_str(), sizeof(acInfoTexts.tailNum));
         }
-        else 
+        else
         {
-            strScpy(acInfoTexts.tailNum, Callsign.c_str(), sizeof(acInfoTexts.tailNum));
+            strScpy(acInfoTexts.tailNum, callsign.c_str(), sizeof(acInfoTexts.tailNum));
         }
         strScpy(acInfoTexts.icaoAcType, acIcaoType.c_str(), sizeof(acInfoTexts.icaoAcType));
         strScpy(acInfoTexts.icaoAirline, acIcaoAirline.c_str(), sizeof(acInfoTexts.icaoAirline));
 
-        HexToRgb(Config::Instance().GetAircraftLabelColor(), colLabel);
+        HexToRgb(Config::Instance().getAircraftLabelColor(), colLabel);
 
-        SetLocation(Position.lat, Position.lon, Position.elevation);
+        SetLocation(position.lat, position.lon, position.elevation);
 
-        SetHeading(Position.heading);
-        SetPitch(Position.pitch);
-        SetRoll(Position.roll);
+        SetHeading(position.heading);
+        SetPitch(position.pitch);
+        SetRoll(position.roll);
 
         const auto now = std::chrono::system_clock::now();
         static const float epsilon = std::numeric_limits<float>::epsilon();
-        const auto diffMs = std::chrono::duration_cast<std::chrono::milliseconds>(now - PreviousSurfaceUpdateTime);
+        const auto diffMs = std::chrono::duration_cast<std::chrono::milliseconds>(now - previousSurfaceUpdateTime);
 
-        TargetGearPosition = GearDown ? 1.0f : 0.0f;
-        TargetSpoilerPosition = SpoilersDeployed ? 1.0f : 0.0f;
-        TargetReversersPosition = ReverseThrust ? 1.0f : 0.0f;
+        targetGearPosition = gearDown ? 1.0f : 0.0f;
+        targetSpoilerPosition = spoilersDeployed ? 1.0f : 0.0f;
+        targetReversersPosition = reverseThrust ? 1.0f : 0.0f;
 
-        if (RenderCount <= 2) 
+        if (renderCount <= 2)
         {
             // we don't want to wait for the animation on first load...
             // looks particular funny with the gear extending after the aircraft
             // loads on the ground
-            Surfaces.gearPosition = TargetGearPosition;
-            Surfaces.flapRatio = TargetFlapPosition;
-            Surfaces.spoilerRatio = TargetSpoilerPosition;
-            Surfaces.reversRatio = TargetReversersPosition;
+            surfaces.gearPosition = targetGearPosition;
+            surfaces.flapRatio = targetFlapPosition;
+            surfaces.spoilerRatio = targetSpoilerPosition;
+            surfaces.reversRatio = targetReversersPosition;
         }
-        else 
+        else
         {
-            const float f = Surfaces.gearPosition - TargetGearPosition;
-            if (std::abs(f) > epsilon) {
+            const float f = surfaces.gearPosition - targetGearPosition;
+            if (std::abs(f) > epsilon)
+            {
                 // interpolate gear position
                 constexpr float gearMoveTimeMs = 10000;
-                const auto gearPositionDiffRemaining = TargetGearPosition - Surfaces.gearPosition;
+                const auto gearPositionDiffRemaining = targetGearPosition - surfaces.gearPosition;
 
                 const auto gearPositionDiffThisFrame = (diffMs.count()) / gearMoveTimeMs;
-                Surfaces.gearPosition += std::copysign(gearPositionDiffThisFrame, gearPositionDiffRemaining);
-                Surfaces.gearPosition = (std::max)(0.0f, (std::min)(Surfaces.gearPosition, 1.0f));
+                surfaces.gearPosition += std::copysign(gearPositionDiffThisFrame, gearPositionDiffRemaining);
+                surfaces.gearPosition = (std::max)(0.0f, (std::min)(surfaces.gearPosition, 1.0f));
             }
 
-            const float f2 = Surfaces.flapRatio - TargetFlapPosition;
+            const float f2 = surfaces.flapRatio - targetFlapPosition;
             if (std::abs(f2) > epsilon)
             {
                 // interpolate flap position
                 constexpr float flapMoveTimeMs = 10000;
-                const auto flapPositionDiffRemaining = TargetFlapPosition - Surfaces.flapRatio;
+                const auto flapPositionDiffRemaining = targetFlapPosition - surfaces.flapRatio;
 
                 const auto flapPositionDiffThisFrame = (diffMs.count()) / flapMoveTimeMs;
-                Surfaces.flapRatio += std::copysign(flapPositionDiffThisFrame, flapPositionDiffRemaining);
-                Surfaces.flapRatio = (std::max)(0.0f, (std::min)(Surfaces.flapRatio, 1.0f));
+                surfaces.flapRatio += std::copysign(flapPositionDiffThisFrame, flapPositionDiffRemaining);
+                surfaces.flapRatio = (std::max)(0.0f, (std::min)(surfaces.flapRatio, 1.0f));
             }
 
-            const float f3 = Surfaces.spoilerRatio - TargetSpoilerPosition;
+            const float f3 = surfaces.spoilerRatio - targetSpoilerPosition;
             if (std::abs(f3) > epsilon)
             {
                 // interpolate spoiler position
                 constexpr float spoilerMoveTimeMs = 2000;
-                const auto spoilerPositionDiffRemaining = TargetSpoilerPosition - Surfaces.spoilerRatio;
+                const auto spoilerPositionDiffRemaining = targetSpoilerPosition - surfaces.spoilerRatio;
 
                 const auto spoilerPositionDiffThisFrame = (diffMs.count()) / spoilerMoveTimeMs;
-                Surfaces.spoilerRatio += std::copysign(spoilerPositionDiffThisFrame, spoilerPositionDiffRemaining);
-                Surfaces.spoilerRatio = (std::max)(0.0f, (std::min)(Surfaces.spoilerRatio, 1.0f));
+                surfaces.spoilerRatio += std::copysign(spoilerPositionDiffThisFrame, spoilerPositionDiffRemaining);
+                surfaces.spoilerRatio = (std::max)(0.0f, (std::min)(surfaces.spoilerRatio, 1.0f));
             }
 
-            const float f4 = Surfaces.reversRatio - TargetReversersPosition;
+            const float f4 = surfaces.reversRatio - targetReversersPosition;
             if (std::abs(f4) > epsilon)
             {
                 constexpr float reversersMoveTimeMs = 4000;
-                const auto reverserPositionDiffRemaining = TargetReversersPosition - Surfaces.reversRatio;
+                const auto reverserPositionDiffRemaining = targetReversersPosition - surfaces.reversRatio;
 
                 const auto reverserPositionDiffThisFrame = (diffMs.count()) / reversersMoveTimeMs;
-                Surfaces.reversRatio += std::copysign(reverserPositionDiffThisFrame, reverserPositionDiffRemaining);
-                Surfaces.reversRatio = (std::max)(0.0f, (std::min)(Surfaces.reversRatio, 1.0f));
+                surfaces.reversRatio += std::copysign(reverserPositionDiffThisFrame, reverserPositionDiffRemaining);
+                surfaces.reversRatio = (std::max)(0.0f, (std::min)(surfaces.reversRatio, 1.0f));
             }
 
-            PreviousSurfaceUpdateTime = now;
+            previousSurfaceUpdateTime = now;
         }
 
-        SetGearRatio(Surfaces.gearPosition);
-        SetFlapRatio(Surfaces.flapRatio);
-        if (Surfaces.flapRatio <= 0.25f) 
+        SetGearRatio(surfaces.gearPosition);
+        SetFlapRatio(surfaces.flapRatio);
+        if (surfaces.flapRatio <= 0.25f)
         {
-            SetSlatRatio((std::min)(Surfaces.flapRatio / 4, 0.0f));
+            SetSlatRatio((std::min)(surfaces.flapRatio / 4, 0.0f));
         }
-        else 
+        else
         {
-            SetSlatRatio(Surfaces.flapRatio);
+            SetSlatRatio(surfaces.flapRatio);
         }
-        SetSpoilerRatio(Surfaces.spoilerRatio);
-        SetSpeedbrakeRatio(Surfaces.spoilerRatio);
+        SetSpoilerRatio(surfaces.spoilerRatio);
+        SetSpeedbrakeRatio(surfaces.spoilerRatio);
         SetWingSweepRatio(0.0f);
-        SetThrustRatio(EnginesRunning ? 1.0f : 0.0f);
+        SetThrustRatio(enginesRunning ? 1.0f : 0.0f);
         SetYokePitchRatio(0.0f);
         SetYokeHeadingRatio(0.0f);
         SetYokeRollRatio(0.0f);
-        SetThrustReversRatio(Surfaces.reversRatio * -1);
+        SetThrustReversRatio(surfaces.reversRatio * -1);
 
-        SetLightsTaxi(Surfaces.lights.taxiLights);
-        SetLightsLanding(Surfaces.lights.landLights);
-        SetLightsBeacon(Surfaces.lights.bcnLights);
-        SetLightsStrobe(Surfaces.lights.strbLights);
-        SetLightsNav(Surfaces.lights.navLights);
+        SetLightsTaxi(surfaces.lights.taxiLights);
+        SetLightsLanding(surfaces.lights.landLights);
+        SetLightsBeacon(surfaces.lights.bcnLights);
+        SetLightsStrobe(surfaces.lights.strbLights);
+        SetLightsNav(surfaces.lights.navLights);
 
         SetTireDeflection(0.0f);
         SetTireRotAngle(0.0f);
@@ -170,7 +171,7 @@ namespace xpilot
         SetTouchDown(false);
     }
 
-    void NetworkAircraft::CopyBulkData(XPilotAPIAircraft::XPilotAPIBulkData* pOut, size_t size) const
+    void NetworkAircraft::copyBulkData(XPilotAPIAircraft::XPilotAPIBulkData* pOut, size_t size) const
     {
         double lat, lon, alt;
         GetLocation(lat, lon, alt);
@@ -181,11 +182,11 @@ namespace xpilot
         pOut->alt_ft = alt;
         pOut->pitch = GetPitch();
         pOut->roll = GetRoll();
-        pOut->terrainAlt_ft = (float)TerrainAltitude;
-        pOut->speed_kt = (float)GroundSpeed;
+        pOut->terrainAlt_ft = (float)terrainAltitude;
+        pOut->speed_kt = (float)groundSpeed;
         pOut->heading = GetHeading();
-        pOut->flaps = (float)Surfaces.flapRatio;
-        pOut->gear = (float)Surfaces.gearPosition;
+        pOut->flaps = (float)surfaces.flapRatio;
+        pOut->gear = (float)surfaces.gearPosition;
         pOut->bearing = GetCameraBearing();
         pOut->dist_nm = GetCameraDist();
         pOut->bits.taxi = GetLightsTaxi();
@@ -193,28 +194,28 @@ namespace xpilot
         pOut->bits.bcn = GetLightsBeacon();
         pOut->bits.strb = GetLightsStrobe();
         pOut->bits.nav = GetLightsNav();
-        pOut->bits.onGnd = OnGround;
+        pOut->bits.onGnd = onGround;
         pOut->bits.filler1 = 0;
         pOut->bits.multiIdx = GetTcasTargetIdx();
         pOut->bits.filler2 = 0;
         pOut->bits.filler3 = 0;
     }
 
-    void NetworkAircraft::CopyBulkData(XPilotAPIAircraft::XPilotAPIBulkInfoTexts* pOut, size_t size) const
+    void NetworkAircraft::copyBulkData(XPilotAPIAircraft::XPilotAPIBulkInfoTexts* pOut, size_t size) const
     {
         pOut->keyNum = modeS_id;
-        STRCPY_ATMOST(pOut->callSign, Callsign);
+        STRCPY_ATMOST(pOut->callSign, callsign);
         STRCPY_ATMOST(pOut->modelIcao, acIcaoType);
         STRCPY_ATMOST(pOut->cslModel, GetModelName());
         STRCPY_ATMOST(pOut->acClass, GetModelInfo().doc8643Classification);
         STRCPY_ATMOST(pOut->wtc, GetModelInfo().doc8643WTC);
-        if (Radar.code > 0 || Radar.code <= 9999) 
+        if (radar.code > 0 || radar.code <= 9999)
         {
             char s[10];
-            snprintf(s, sizeof(s), "%04ld", Radar.code);
+            snprintf(s, sizeof(s), "%04ld", radar.code);
             STRCPY_ATMOST(pOut->squawk, std::string(s));
         }
-        STRCPY_ATMOST(pOut->origin, Origin);
-        STRCPY_ATMOST(pOut->destination, Destination);
+        STRCPY_ATMOST(pOut->origin, origin);
+        STRCPY_ATMOST(pOut->destination, destination);
     }
 }

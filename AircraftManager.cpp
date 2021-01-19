@@ -34,8 +34,10 @@ namespace xpilot
 		{
 			for (mapPlanesTy::iterator iter = mapPlanes.begin(); iter != mapPlanes.end(); ++iter)
 			{
-				if (iter->second.get()) {
-					if (++i == idx) {
+				if (iter->second.get())
+				{
+					if (++i == idx)
+					{
 						return iter;
 					}
 				}
@@ -44,7 +46,7 @@ namespace xpilot
 		}
 	}
 
-	void AircraftManager::InterpolateAirplanes()
+	void AircraftManager::interpolateAirplanes()
 	{
 		std::lock_guard<std::mutex> plane_map_lock(plane_map_mutex);
 		{
@@ -54,82 +56,83 @@ namespace xpilot
 				{
 					std::lock_guard<std::mutex> interpolation_stack_lock(interpolation_stack_mutex);
 					{
-						if (plane.second->InterpolationStack.size() > 0)
+						if (plane.second->interpolationStack.size() > 0)
 						{
 							InterpolatedState interpolated;
 							long long currentTimestamp = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
-							if (plane.second->InterpolationStack.size() == 1)
+							if (plane.second->interpolationStack.size() == 1)
 							{
-								interpolated = plane.second->InterpolationStack.front();
+								interpolated = plane.second->interpolationStack.front();
 							}
-							else if (currentTimestamp <= plane.second->InterpolationStack.front().Timestamp)
+							else if (currentTimestamp <= plane.second->interpolationStack.front().timestamp)
 							{
-								interpolated = plane.second->InterpolationStack.front();
+								interpolated = plane.second->interpolationStack.front();
 							}
 							else
 							{
 								InterpolatedState start{};
 								InterpolatedState end{};
 
-								for (int i = 0; i < plane.second->InterpolationStack.size() - 1; i++)
+								for (int i = 0; i < plane.second->interpolationStack.size() - 1; i++)
 								{
-									start = plane.second->InterpolationStack.at(i);
-									end = plane.second->InterpolationStack.at(i + 1);
-									if ((start.Timestamp < currentTimestamp) && (end.Timestamp >= currentTimestamp))
+									start = plane.second->interpolationStack.at(i);
+									end = plane.second->interpolationStack.at(i + 1);
+									if ((start.timestamp < currentTimestamp) && (end.timestamp >= currentTimestamp))
 									{
 										break;
 									}
 								}
 
-								if (currentTimestamp <= start.Timestamp)
+								if (currentTimestamp <= start.timestamp)
 								{
 									interpolated = start;
 								}
-								else if (currentTimestamp >= end.Timestamp)
+								else if (currentTimestamp >= end.timestamp)
 								{
 									interpolated = end;
 								}
 								else
 								{
-									long long timeDelta = end.Timestamp - start.Timestamp;
-									double pct = (currentTimestamp - start.Timestamp) / (double)timeDelta;
-									double startHeaing = start.Heading;
-									double endHeading = end.Heading;
+									long long timeDelta = end.timestamp - start.timestamp;
+									double pct = (currentTimestamp - start.timestamp) / (double)timeDelta;
+									double startHeaing = start.heading;
+									double endHeading = end.heading;
 									if (abs(endHeading - startHeaing) > 180.0)
 									{
 										endHeading += (endHeading > startHeaing ? -360.0 : 360.0);
 									}
-									interpolated.Timestamp = currentTimestamp;
-									interpolated.Latitude = start.Latitude + ((end.Latitude - start.Latitude) * pct);
-									interpolated.Longitude = start.Longitude + ((end.Longitude - start.Longitude) * pct);
-									interpolated.Altitude = start.Altitude + ((end.Altitude - start.Altitude) * pct);
-									interpolated.Pitch = start.Pitch + ((end.Pitch - start.Pitch) * pct);
-									interpolated.Bank = start.Bank + ((end.Bank - start.Bank) * pct);
-									interpolated.Heading = NormalizeHeading(startHeaing + ((endHeading - startHeaing) * pct));
-									interpolated.GroundSpeed = start.GroundSpeed + ((end.GroundSpeed - start.GroundSpeed) * pct);
+									interpolated.timestamp = currentTimestamp;
+									interpolated.latitude = start.latitude + ((end.latitude - start.latitude) * pct);
+									interpolated.longitude = start.longitude + ((end.longitude - start.longitude) * pct);
+									interpolated.altitude = start.altitude + ((end.altitude - start.altitude) * pct);
+									interpolated.pitch = start.pitch + ((end.pitch - start.pitch) * pct);
+									interpolated.bank = start.bank + ((end.bank - start.bank) * pct);
+									interpolated.heading = NormalizeHeading(startHeaing + ((endHeading - startHeaing) * pct));
+									interpolated.groundSpeed = start.groundSpeed + ((end.groundSpeed - start.groundSpeed) * pct);
 								}
 							}
-							plane.second->Position.lat = interpolated.Latitude;
-							plane.second->Position.lon = interpolated.Longitude;
-							plane.second->Position.elevation = interpolated.Altitude;
-							plane.second->Position.heading = static_cast<float>(interpolated.Heading);
-							plane.second->Position.roll = static_cast<float>(interpolated.Bank);
-							plane.second->Position.pitch = static_cast<float>(interpolated.Pitch);
-							plane.second->GroundSpeed = static_cast<float>(interpolated.GroundSpeed);
+							plane.second->position.lat = interpolated.latitude;
+							plane.second->position.lon = interpolated.longitude;
+							plane.second->position.elevation = interpolated.altitude;
+							plane.second->position.heading = static_cast<float>(interpolated.heading);
+							plane.second->position.roll = static_cast<float>(interpolated.bank);
+							plane.second->position.pitch = static_cast<float>(interpolated.pitch);
+							plane.second->groundSpeed = static_cast<float>(interpolated.groundSpeed);
 						}
 					}
 				}
 				catch (std::exception& e)
 				{
-					//LOG_MSG(logERR, "Error interpolating airplane: %s", e.what());
 				}
-				catch (...) {}
+				catch (...)
+				{
+				}
 			}
 		}
 	}
 
-	void AircraftManager::AddNewPlane(const std::string& callsign, const std::string& typeIcao,
+	void AircraftManager::addNewPlane(const std::string& callsign, const std::string& typeIcao,
 		const std::string& airlineIcao, const std::string& livery, const std::string& model)
 	{
 		std::lock_guard<std::mutex> plane_map_lock(plane_map_mutex);
@@ -137,13 +140,13 @@ namespace xpilot
 			if (mapPlanes.count(callsign) == 0)
 			{
 				std::unique_ptr<NetworkAircraft> ac(new NetworkAircraft(typeIcao.c_str(), airlineIcao.c_str(), livery.c_str(), 0, model.c_str()));
-				ac->Callsign = callsign;
+				ac->callsign = callsign;
 				mapPlanes.try_emplace(callsign, std::move(ac));
 			}
 		}
 	}
 
-	void AircraftManager::SetPlanePosition(const std::string& callsign, XPMPPlanePosition_t pos, XPMPPlaneRadar_t radar, float groundSpeed)
+	void AircraftManager::setPlanePosition(const std::string& callsign, XPMPPlanePosition_t pos, XPMPPlaneRadar_t radar, float groundSpeed, const std::string& origin, const std::string& destination)
 	{
 		std::lock_guard<std::mutex> plane_map_lock(plane_map_mutex);
 		{
@@ -151,146 +154,136 @@ namespace xpilot
 			if (it != mapPlanes.end())
 			{
 				InterpolatedState state;
-				state.Timestamp = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count() + 5500000;
-				state.Latitude = pos.lat;
-				state.Longitude = pos.lon;
-				state.Bank = pos.roll;
-				state.Pitch = pos.pitch;
-				state.Heading = pos.heading;
-				state.GroundSpeed = groundSpeed;
+				state.timestamp = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count() + 5500000;
+				state.latitude = pos.lat;
+				state.longitude = pos.lon;
+				state.bank = pos.roll;
+				state.pitch = pos.pitch;
+				state.heading = pos.heading;
+				state.groundSpeed = groundSpeed;
 
 				double groundElevation = 0.0;
-				groundElevation = it->second->terrainProbe.GetTerrainElevation(pos.lat, pos.lon);
+				groundElevation = it->second->terrainProbe.getTerrainElevation(pos.lat, pos.lon);
 				if (std::isnan(groundElevation))
 				{
 					groundElevation = 0.0;
 				}
 
-				it->second->TerrainAltitude = groundElevation;
-				state.Altitude = it->second->OnGround ? groundElevation : pos.elevation;
-				it->second->Radar = radar;
-				it->second->RenderCount++;
+				it->second->origin = origin.empty() ? "" : origin;
+				it->second->destination = destination.empty() ? "" : destination;
+
+				it->second->terrainAltitude = groundElevation;
+				state.altitude = it->second->onGround ? groundElevation : pos.elevation;
+				it->second->radar = radar;
+				it->second->renderCount++;
 
 				std::lock_guard<std::mutex> lock(interpolation_stack_mutex);
 				{
-					it->second->InterpolationStack.push_back(state);
-					while (it->second->InterpolationStack.size() > 2
-						&& it->second->InterpolationStack.at(1).Timestamp
+					it->second->interpolationStack.push_back(state);
+					while (it->second->interpolationStack.size() > 2
+						&& it->second->interpolationStack.at(1).timestamp
 						<= std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count())
 					{
-						it->second->InterpolationStack.pop_front();
+						it->second->interpolationStack.pop_front();
 					}
 				}
 			}
 		}
 	}
 
-	void AircraftManager::UpdateAircraftConfig(const std::string& callsign, const NetworkAircraftConfig& config)
+	void AircraftManager::updateAircraftConfig(const std::string& callsign, const NetworkAircraftConfig& config)
 	{
 		std::lock_guard<std::mutex> plane_map_lock(plane_map_mutex);
 		{
 			auto it = mapPlanes.find(callsign);
 			if (it != mapPlanes.end())
 			{
-				if (config.Data.FlapsPct.has_value())
+				if (config.data.flapsPct.has_value())
 				{
-					if (config.Data.FlapsPct.value() != it->second->TargetFlapPosition)
+					if (config.data.flapsPct.value() != it->second->targetFlapPosition)
 					{
-						it->second->TargetFlapPosition = config.Data.FlapsPct.value();
+						it->second->targetFlapPosition = config.data.flapsPct.value();
 					}
 				}
-				if (config.Data.GearDown.has_value())
+				if (config.data.gearDown.has_value())
 				{
-					if (config.Data.GearDown.value() != it->second->GearDown)
+					if (config.data.gearDown.value() != it->second->gearDown)
 					{
-						it->second->GearDown = config.Data.GearDown.value();
+						it->second->gearDown = config.data.gearDown.value();
 					}
 				}
-				if (config.Data.SpoilersDeployed.has_value())
+				if (config.data.spoilersDeployed.has_value())
 				{
-					if (config.Data.SpoilersDeployed.value() != it->second->SpoilersDeployed)
+					if (config.data.spoilersDeployed.value() != it->second->spoilersDeployed)
 					{
-						it->second->SpoilersDeployed = config.Data.SpoilersDeployed.value();
+						it->second->spoilersDeployed = config.data.spoilersDeployed.value();
 					}
 				}
-				if (config.Data.Lights.has_value())
+				if (config.data.lights.has_value())
 				{
-					if (config.Data.Lights.value().StrobesOn.has_value())
+					if (config.data.lights.value().strobesOn.has_value())
 					{
-						if (config.Data.Lights.value().StrobesOn.value() != it->second->Surfaces.lights.strbLights)
+						if (config.data.lights.value().strobesOn.value() != it->second->surfaces.lights.strbLights)
 						{
-							it->second->Surfaces.lights.strbLights = config.Data.Lights.value().StrobesOn.value();
+							it->second->surfaces.lights.strbLights = config.data.lights.value().strobesOn.value();
 						}
 					}
-					if (config.Data.Lights.value().TaxiOn.has_value())
+					if (config.data.lights.value().taxiOn.has_value())
 					{
-						if (config.Data.Lights.value().TaxiOn.value() != it->second->Surfaces.lights.taxiLights)
+						if (config.data.lights.value().taxiOn.value() != it->second->surfaces.lights.taxiLights)
 						{
-							it->second->Surfaces.lights.taxiLights = config.Data.Lights.value().TaxiOn.value();
+							it->second->surfaces.lights.taxiLights = config.data.lights.value().taxiOn.value();
 						}
 					}
-					if (config.Data.Lights.value().NavOn.has_value())
+					if (config.data.lights.value().navOn.has_value())
 					{
-						if (config.Data.Lights.value().NavOn.value() != it->second->Surfaces.lights.navLights)
+						if (config.data.lights.value().navOn.value() != it->second->surfaces.lights.navLights)
 						{
-							it->second->Surfaces.lights.navLights = config.Data.Lights.value().NavOn.value();
+							it->second->surfaces.lights.navLights = config.data.lights.value().navOn.value();
 						}
 					}
-					if (config.Data.Lights.value().LandingOn.has_value())
+					if (config.data.lights.value().landingOn.has_value())
 					{
-						if (config.Data.Lights.value().LandingOn.value() != it->second->Surfaces.lights.landLights)
+						if (config.data.lights.value().landingOn.value() != it->second->surfaces.lights.landLights)
 						{
-							it->second->Surfaces.lights.landLights = config.Data.Lights.value().LandingOn.value();
+							it->second->surfaces.lights.landLights = config.data.lights.value().landingOn.value();
 						}
 					}
-					if (config.Data.Lights.value().BeaconOn.has_value())
+					if (config.data.lights.value().beaconOn.has_value())
 					{
-						if (config.Data.Lights.value().BeaconOn.value() != it->second->Surfaces.lights.bcnLights)
+						if (config.data.lights.value().beaconOn.value() != it->second->surfaces.lights.bcnLights)
 						{
-							it->second->Surfaces.lights.bcnLights = config.Data.Lights.value().BeaconOn.value();
+							it->second->surfaces.lights.bcnLights = config.data.lights.value().beaconOn.value();
 						}
 					}
 				}
-				if (config.Data.EnginesRunning.has_value())
+				if (config.data.enginesRunning.has_value())
 				{
-					if (config.Data.EnginesRunning.value() != it->second->EnginesRunning)
+					if (config.data.enginesRunning.value() != it->second->enginesRunning)
 					{
-						it->second->EnginesRunning = config.Data.EnginesRunning.value();
+						it->second->enginesRunning = config.data.enginesRunning.value();
 					}
 				}
-				if (config.Data.ReverseThrust.has_value())
+				if (config.data.reverseThrust.has_value())
 				{
-					if (config.Data.ReverseThrust.value() != it->second->ReverseThrust)
+					if (config.data.reverseThrust.value() != it->second->reverseThrust)
 					{
-						it->second->ReverseThrust = config.Data.ReverseThrust.value();
+						it->second->reverseThrust = config.data.reverseThrust.value();
 					}
 				}
-				if (config.Data.OnGround.has_value())
+				if (config.data.onGround.has_value())
 				{
-					if (config.Data.OnGround.value() != it->second->OnGround)
+					if (config.data.onGround.value() != it->second->onGround)
 					{
-						it->second->bClampToGround = (it->second->RenderCount <= 2) ? config.Data.OnGround.value() : false;
-						it->second->OnGround = config.Data.OnGround.value();
+						it->second->bClampToGround = (it->second->renderCount <= 2) ? config.data.onGround.value() : false;
+						it->second->onGround = config.data.onGround.value();
 					}
 				}
 			}
 		}
 	}
 
-	void AircraftManager::SetFlightPlan(const std::string& callsign, const std::string& origin, const std::string& destination)
-	{
-		std::lock_guard<std::mutex> plane_map_lock(plane_map_mutex);
-		{
-			auto it = mapPlanes.find(callsign);
-			if (it != mapPlanes.end())
-			{
-				it->second->Origin = origin;
-				it->second->Destination = destination;
-			}
-		}
-	}
-
-	void AircraftManager::RemovePlane(const std::string& _callsign)
+	void AircraftManager::removePlane(const std::string& _callsign)
 	{
 		std::lock_guard<std::mutex> plane_map_lock(plane_map_mutex);
 		{
@@ -305,12 +298,14 @@ namespace xpilot
 				{
 					LOG_ERROR("Error removing network aircraft (%s): %s", _callsign.c_str(), e.what());
 				}
-				catch (...) {}
+				catch (...)
+				{
+				}
 			}
 		}
 	}
 
-	void AircraftManager::RemoveAllPlanes()
+	void AircraftManager::removeAllPlanes()
 	{
 		std::lock_guard<std::mutex> plane_map_lock(plane_map_mutex);
 		{
@@ -322,11 +317,13 @@ namespace xpilot
 			{
 				LOG_ERROR("Error removing all network aircraft: %s", e.what());
 			}
-			catch (...) {}
+			catch (...)
+			{
+			}
 		}
 	}
 
-	void AircraftManager::ChangeModel(const std::string& callsign, const std::string& typeIcao, const std::string& airlineIcao)
+	void AircraftManager::changeModel(const std::string& callsign, const std::string& typeIcao, const std::string& airlineIcao)
 	{
 		std::lock_guard<std::mutex> plane_map_lock(plane_map_mutex);
 		{
@@ -341,7 +338,9 @@ namespace xpilot
 				{
 					LOG_ERROR("Error changing model for network aircraft (%s): %s", callsign.c_str(), e.what());
 				}
-				catch (...) {}
+				catch (...)
+				{
+				}
 			}
 		}
 	}

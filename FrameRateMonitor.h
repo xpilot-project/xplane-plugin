@@ -35,23 +35,23 @@ namespace xpilot
     {
 	public:
 		FrameRateMonitor(XPilot* env);
-		void StopMonitoring();
-		void StartMonitoring();
+		void stopMonitoring();
+		void startMonitoring();
 	protected:
-		DataRefAccess<float> drFrameRatePeriod;
-		DataRefAccess<float> drGroundSpeed;
-		DataRefAccess<int> drIsExternalVisual;
-		DataRefAccess<std::vector<int>> drOverridePlanePath;
-		DataRefAccess<int> drTimePaused;
+		DataRefAccess<float> m_frameRatePeriod;
+		DataRefAccess<float> m_groundSpeed;
+		DataRefAccess<int> m_isExternalVisual;
+		DataRefAccess<std::vector<int>> m_overridePlanePath;
+		DataRefAccess<int> m_timePaused;
 	private:
-		XPilot* environment;
-		Stopwatch mStopwatch;
-		bool mGaveFirstWarning;
-		bool mGaveSecondWarning;
-		bool mGaveDisconnectWarning;
-		bool mGaveHealthyWarning;
-		bool SkipMonitoring();
-		void ResetFrameRateDetection();
+		XPilot* m_environment;
+		Stopwatch m_stopwatch;
+		bool m_gaveFirstWarning;
+		bool m_gaveSecondWarning;
+		bool m_gaveDisconnectWarning;
+		bool m_gaveHealthyWarning;
+		bool skipMonitoring();
+		void resetFrameRateDetection();
 		static float flightLoopCallback(float, float, int, void* ref);
     };
 }

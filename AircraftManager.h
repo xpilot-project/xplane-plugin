@@ -52,15 +52,14 @@ namespace xpilot
 	public:
 		AircraftManager() {};
 		~AircraftManager() {};
-		void InterpolateAirplanes();
-		void AddNewPlane(const std::string& callsign, const std::string& typeIcao, const std::string& airlineIcao,
+		void interpolateAirplanes();
+		void addNewPlane(const std::string& callsign, const std::string& typeIcao, const std::string& airlineIcao,
 			const std::string& livery = "", const std::string& modelName = "");
-		void SetPlanePosition(const std::string& callsign, XPMPPlanePosition_t pos, XPMPPlaneRadar_t radar, float groundSpeed);
-		void SetFlightPlan(const std::string& callsign, const std::string& origin, const std::string& destination);
-		void UpdateAircraftConfig(const std::string& callsign, const NetworkAircraftConfig& config);
-		void ChangeModel(const std::string& callsign, const std::string& typeIcao, const std::string& airlineIcao);
-		void RemovePlane(const std::string& callsign);
-		void RemoveAllPlanes();
+		void setPlanePosition(const std::string& callsign, XPMPPlanePosition_t pos, XPMPPlaneRadar_t radar, float groundSpeed, const std::string& origin, const std::string& destination);
+		void updateAircraftConfig(const std::string& callsign, const NetworkAircraftConfig& config);
+		void changeModel(const std::string& callsign, const std::string& typeIcao, const std::string& airlineIcao);
+		void removePlane(const std::string& callsign);
+		void removeAllPlanes();
 	};
 }
 

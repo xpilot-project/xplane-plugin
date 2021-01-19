@@ -45,11 +45,11 @@ namespace xpilot {
 
 	struct Tab 
 	{
-		std::string TabName;
-		std::string InputValue;
-		bool Open;
-		bool ScrollToBottom;
-		std::list<ConsoleMessage> Messages;
+		std::string tabName;
+		std::string textInput;
+		bool isOpen;
+		bool scrollToBottom;
+		std::list<ConsoleMessage> messageHistory;
 	};
 
 	enum class ConsoleTabType
@@ -62,18 +62,18 @@ namespace xpilot {
 	{
 	public:
 		TextMessageConsole(XPilot* instance);
-		void CreateTabIfNotExists(const std::string& tabName);
-		void AddMessageToTab(const std::string& msg, const std::string& recipient, ConsoleTabType tabType);
-		void AddIncomingMessage(std::string message, double red = 255, double green = 255, double blue = 255);
-		void AddOutgoingMessage(std::string message);
-		void SendSocketMsg(const std::string& msg);
-		void SendPrivateMessage(const std::string& tabName, const std::string& msg);
+		void createTabIfNotExists(const std::string& tabName);
+		void addMessageToTab(const std::string& msg, const std::string& recipient, ConsoleTabType tabType);
+		void addIncomingMessage(std::string message, double red = 255, double green = 255, double blue = 255);
+		void addOutgoingMessage(std::string message);
+		void sendSocketMessage(const std::string& msg);
+		void sendPrivateMessage(const std::string& tabName, const std::string& msg);
 	protected:
 		void buildInterface() override;
 		void errorMessage(std::string error);
 	private:
-		bool mScrollToBottom;
-		XPilot* env;
+		bool m_scrollToBottom;
+		XPilot* m_env;
 	};
 
 }

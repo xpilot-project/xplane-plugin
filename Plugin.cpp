@@ -60,9 +60,9 @@ PLUGIN_API int XPluginEnable(void)
     try
     {
         XPImgWindowInit();
-        Config::Instance().LoadConfig();
+        Config::Instance().loadConfig();
         environment = std::make_unique<xpilot::XPilot>();
-        XPLMCheckMenuItem(PluginMenu, MenuDefaultAtis, xpilot::Config::Instance().GetDefaultAtisEnabled() ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+        XPLMCheckMenuItem(PluginMenu, MenuDefaultAtis, xpilot::Config::Instance().getDefaultAtisEnabled() ? xplm_Menu_Checked : xplm_Menu_Unchecked);
     }
     catch (std::exception& e)
     {
@@ -78,8 +78,8 @@ PLUGIN_API void XPluginDisable(void)
 {
     try
     {
-        environment->OnPluginDisabled();
-        environment->StopZmqServer();
+        environment->onPluginDisabled();
+        environment->stopZmqServer();
         XPMPMultiplayerDisable();
         XPMPMultiplayerCleanup();
     }
@@ -119,7 +119,7 @@ PLUGIN_API void XPluginReceiveMessage(XPLMPluginID from, int msg, void* inParam)
 
 int ContactAtcCommandHandler(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* inRefcon)
 {
-    if (xpilot::Config::Instance().GetOverrideContactAtcCommand())
+    if (xpilot::Config::Instance().getOverrideContactAtcCommand())
     {
         return 0;
     }
@@ -130,11 +130,11 @@ int  PttCommandHandler(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void*
 {
     if (inPhase == xplm_CommandContinue)
     {
-        environment->SetPttActive(1);
+        environment->setPttActive(1);
     }
     if (inPhase == xplm_CommandEnd)
     {
-        environment->SetPttActive(0);
+        environment->setPttActive(0);
     }
     return 0;
 }
@@ -143,7 +143,7 @@ int TogglePreferencesCommandHandler(XPLMCommandRef inCommand, XPLMCommandPhase i
 {
     if (inPhase == xplm_CommandEnd)
     {
-        environment->TogglePreferencesWindow();
+        environment->togglePreferencesWindow();
     }
     return 0;
 }
@@ -152,7 +152,7 @@ int ToggleNearbyATCWindowCommandHandler(XPLMCommandRef inCommand, XPLMCommandPha
 {
     if (inPhase == xplm_CommandEnd)
     {
-        environment->ToggleNearbyAtcWindow();
+        environment->toggleNearbyAtcWindow();
     }
     return 0;
 }
@@ -161,7 +161,7 @@ int ToggleNotificationPanelCommandHandler(XPLMCommandRef inCommand, XPLMCommandP
 {
     if (inPhase == xplm_CommandEnd)
     {
-        environment->SetNotificationPanelAlwaysVisible(!environment->IsNotificationPanelAlwaysVisible());
+        environment->setNotificationPanelAlwaysVisible(!environment->setNotificationPanelAlwaysVisible());
     }
     return 0;
 }
@@ -170,9 +170,9 @@ int ToggleDefaultAtisCommandHandler(XPLMCommandRef inCommand, XPLMCommandPhase i
 {
     if (inPhase == xplm_CommandEnd)
     {
-        environment->DisableDefaultAtis(environment->IsDefaultAtisDisabled());
+        environment->disableDefaultAtis(environment->isDefaultAtisDisabled());
     }
-    XPLMSetMenuItemName(PluginMenu, MenuDefaultAtis, environment->IsDefaultAtisDisabled() ? "Default ATIS: Disabled" : "Default ATIS: Enabled", 0);
+    XPLMSetMenuItemName(PluginMenu, MenuDefaultAtis, environment->isDefaultAtisDisabled() ? "Default ATIS: Disabled" : "Default ATIS: Enabled", 0);
     return 0;
 }
 
@@ -182,11 +182,11 @@ int ToggleTcasCommandHandler(XPLMCommandRef inCommand, XPLMCommandPhase inPhase,
     {
         if (XPMPHasControlOfAIAircraft())
         {
-            environment->ReleaseTcasControl();
+            environment->releaseTcasControl();
         }
         else
         {
-            environment->TryGetTcasControl();
+            environment->tryGetTcasControl();
         }
     }
     return 0;
@@ -196,7 +196,7 @@ int ToggleTextMessageConsoleCommandHandler(XPLMCommandRef inCommand, XPLMCommand
 {
     if (inPhase == xplm_CommandEnd)
     {
-        environment->ToggleTextMessageConsole();
+        environment->toggleTextMessageConsole();
     }
     return 0;
 }
@@ -205,9 +205,9 @@ int ToggleAircraftLabelsCommandHandler(XPLMCommandRef inCommand, XPLMCommandPhas
 {
     if (inPhase == xplm_CommandEnd)
     {
-        bool enabled = !xpilot::Config::Instance().GetShowHideLabels();
-        xpilot::Config::Instance().SetShowHideLabels(enabled);
-        xpilot::Config::Instance().SaveConfig();
+        bool enabled = !xpilot::Config::Instance().getShowHideLabels();
+        xpilot::Config::Instance().setShowHideLabels(enabled);
+        xpilot::Config::Instance().saveConfig();
         XPMPEnableAircraftLabels(enabled);
     }
     return 0;
