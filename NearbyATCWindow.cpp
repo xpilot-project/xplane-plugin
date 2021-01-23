@@ -80,28 +80,13 @@ namespace xpilot {
 			for (auto& e : NearbyList)
 			{
 				ImGui::Selectable(e.getCallsign().c_str(), false, ImGuiSelectableFlags_SpanAllColumns);
+				if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(0))
+				{
+					m_env->requestControllerAtis(e.getCallsign());
+				}
 				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0))
 				{
 					m_com1Frequency = e.getXplaneFrequency();
-				}
-				if (ImGui::BeginPopupContextItem())
-				{
-					if (ImGui::MenuItem("Request ATIS"))
-					{
-						try
-						{
-							m_env->requestControllerAtis(e.getCallsign());
-						}
-						catch (std::exception& e)
-						{
-							//LOG_MSG(logERR, "Error requesting ATIS: %s", e.what());
-						}
-						catch (...)
-						{
-							//LOG_MSG(logERR, "An unknown error occurred while trying to fetch the ATIS");
-						}
-					}
-					ImGui::EndPopup();
 				}
 				ImGui::NextColumn();
 				ImGui::Text(e.getRealName().c_str());
