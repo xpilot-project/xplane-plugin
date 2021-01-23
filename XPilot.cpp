@@ -628,7 +628,7 @@ namespace xpilot
 		addNotificationPanelMessage(msg, red, green, blue);
 	}
 
-	void XPilot::queueCallback(std::function<void()> cb)
+	void XPilot::queueCallback(const std::function<void()> &cb)
 	{
 		std::lock_guard<std::mutex> lck(m_mutex);
 		m_queuedCallbacks.push_back(cb);
@@ -754,7 +754,7 @@ namespace xpilot
 			pIter != mapPlanes.end() && iAc < endAc;
 			pIter = mapGetNextAircraft(pIter), iAc++, pOut += size)
 		{
-			const NetworkAircraft& ac = *pIter->second.get();
+			const NetworkAircraft& ac = *pIter->second;
 			if (dr == DR_BULK_QUICK)
 				ac.copyBulkData((XPilotAPIAircraft::XPilotAPIBulkData*)pOut, size);
 			else

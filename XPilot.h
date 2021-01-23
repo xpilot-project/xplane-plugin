@@ -155,7 +155,7 @@ namespace xpilot
 		std::mutex m_mutex;
 		std::deque<std::function<void()>> m_queuedCallbacks;
 		void invokeQueuedCallbacks();
-		void queueCallback(std::function<void()> cb);
+		void queueCallback(const std::function<void()> &cb);
 
 		XPLMDataRef m_bulkDataQuick{}, m_bulkDataExpensive{};
 		static int getBulkData(void* inRefcon, void* outData, int inStartPos, int inNumBytes);

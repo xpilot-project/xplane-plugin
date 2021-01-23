@@ -32,7 +32,10 @@ namespace xpilot
 	extern mapPlanesTy mapPlanes;
 	inline mapPlanesTy::iterator mapGetNextAircraft(mapPlanesTy::iterator iter)
 	{
-		return std::find_if(std::next(iter), mapPlanes.end(), [](const mapPlanesTy::value_type& p) {return p.second.get(); });
+		return std::find_if(std::next(iter), mapPlanes.end(), [](const mapPlanesTy::value_type& p)
+		{
+			return p.second.get();
+		});
 	}
 	mapPlanesTy::iterator mapGetAircraftByIndex(int idx);
 
