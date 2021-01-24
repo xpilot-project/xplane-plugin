@@ -45,13 +45,13 @@ namespace xpilot
         return config;
     }
 
-    bool Config::LoadConfig()
+    bool Config::loadConfig()
     {
         std::string configPath(GetPluginPath() + "Resources/Config.json");
         std::ifstream ifs(configPath);
         if (!ifs)
         {
-            SaveConfig();
+            saveConfig();
         }
 
         try
@@ -61,51 +61,51 @@ namespace xpilot
             {
                 if (jf.contains("ShowAircraftLabels"))
                 {
-                    SetShowHideLabels(jf["ShowAircraftLabels"]);
+                    setShowHideLabels(jf["ShowAircraftLabels"]);
                 }
                 if (jf.contains("DefaultIcaoType"))
                 {
-                    SetDefaultAcIcaoType(jf["DefaultIcaoType"]);
+                    setDefaultAcIcaoType(jf["DefaultIcaoType"]);
                 }
                 if (jf.contains("PluginPort"))
                 {
-                    SetTcpPort(jf["PluginPort"]);
+                    setTcpPort(jf["PluginPort"]);
                 }
                 if (jf.contains("DebugModelMatching"))
                 {
-                    SetDebugModelMatching(jf["DebugModelMatching"]);
+                    setDebugModelMatching(jf["DebugModelMatching"]);
                 }
                 if (jf.contains("EnableDefaultAtis"))
                 {
-                    SetDefaultAtisEnabled(jf["EnableDefaultAtis"]);
+                    setDefaultAtisEnabled(jf["EnableDefaultAtis"]);
                 }
                 if (jf.contains("ShowNotificationBar"))
                 {
-                    SetShowNotificationPanel(jf["ShowNotificationBar"]);
+                    setShowNotificationPanel(jf["ShowNotificationBar"]);
                 }
                 if (jf.contains("NotificationBarDisappearTime"))
                 {
-                    SetNotificationPanelDisappearTime(jf["NotificationBarDisappearTime"]);
+                    setNotificationPanelDisappearTime(jf["NotificationBarDisappearTime"]);
                 }
                 if (jf.contains("OverrideContactAtc"))
                 {
-                    SetOverrideContactAtcCommand(jf["OverrideContactAtc"]);
+                    setOverrideContactAtcCommand(jf["OverrideContactAtc"]);
                 }
                 if (jf.contains("DisableTcas"))
                 {
-                    SetDisableTcas(jf["DisableTcas"]);
+                    setDisableTcas(jf["DisableTcas"]);
                 }
                 if (jf.contains("LabelColor"))
                 {
-                    SetAircraftLabelColor(jf["LabelColor"]);
+                    setAircraftLabelColor(jf["LabelColor"]);
                 }
                 if (jf.contains("MaxLabelDist"))
                 {
-                    SetMaxLabelDistance(jf["MaxLabelDist"]);
+                    setMaxLabelDistance(jf["MaxLabelDist"]);
                 }
                 if (jf.contains("LabelCutoffVis"))
                 {
-                    SetLabelCutoffVis(jf["LabelCutoffVis"]);
+                    setLabelCutoffVis(jf["LabelCutoffVis"]);
                 }
                 if (jf.contains("CSL"))
                 {
@@ -113,13 +113,13 @@ namespace xpilot
                     for (auto& p : cslpackages)
                     {
                         auto csl = p.get<CslPackage>();
-                        if (std::find(mCslPackages.begin(), mCslPackages.end(), csl.path) == mCslPackages.end())
+                        if (std::find(m_cslPackages.begin(), m_cslPackages.end(), csl.path) == m_cslPackages.end())
                         {
-                            mCslPackages.emplace_back(csl);
+                            m_cslPackages.emplace_back(csl);
                         }
                     }
                 }
-                SaveConfig();
+                saveConfig();
             }
         }
         catch (const std::string& e)
@@ -133,30 +133,30 @@ namespace xpilot
         return true;
     }
 
-    bool Config::SaveConfig()
+    bool Config::saveConfig()
     {
         std::string configPath(GetPluginPath() + "Resources/Config.json");
         std::ofstream file(configPath);
 
         json j;
 
-        j["ShowAircraftLabels"] = GetShowHideLabels();
-        j["DefaultIcaoType"] = GetDefaultAcIcaoType();
-        j["PluginPort"] = GetTcpPort();
-        j["DebugModelMatching"] = GetDebugModelMatching();
-        j["EnableDefaultAtis"] = GetDefaultAtisEnabled();
-        j["ShowNotificationBar"] = GetShowNotificationBar();
-        j["NotificationBarDisappearTime"] = GetNotificationBarDisappaerTime();
-        j["OverrideContactAtc"] = GetOverrideContactAtcCommand();
-        j["LabelColor"] = GetAircraftLabelColor();
-        j["DisableTcas"] = GetDisableTcas();
-        j["MaxLabelDist"] = GetMaxLabelDistance();
-        j["LabelCutoffVis"] = GetLabelCutoffVis();
+        j["ShowAircraftLabels"] = getShowHideLabels();
+        j["DefaultIcaoType"] = getDefaultAcIcaoType();
+        j["PluginPort"] = getTcpPort();
+        j["DebugModelMatching"] = getDebugModelMatching();
+        j["EnableDefaultAtis"] = getDefaultAtisEnabled();
+        j["ShowNotificationBar"] = getShowNotificationBar();
+        j["NotificationBarDisappearTime"] = getNotificationBarDisappaerTime();
+        j["OverrideContactAtc"] = getOverrideContactAtcCommand();
+        j["LabelColor"] = getAircraftLabelColor();
+        j["DisableTcas"] = getDisableTcas();
+        j["MaxLabelDist"] = getMaxLabelDistance();
+        j["LabelCutoffVis"] = getLabelCutoffVis();
 
-        if (!mCslPackages.empty())
+        if (!m_cslPackages.empty())
         {
             auto jsonObjects = json::array();
-            for (CslPackage& p : mCslPackages)
+            for (CslPackage& p : m_cslPackages)
             {
                 if (!p.path.empty())
                 {
@@ -177,38 +177,38 @@ namespace xpilot
         return true;
     }
 
-    bool Config::HasValidPaths() const
+    bool Config::hasValidPaths() const
     {
-        return (std::count_if(mCslPackages.begin(), mCslPackages.end(), [](const CslPackage& p) {
+        return (std::count_if(m_cslPackages.begin(), m_cslPackages.end(), [](const CslPackage& p) {
             return !p.path.empty() && p.enabled && CountFilesInPath(p.path) > 0;
         }) > 0);
     }
 
-    void Config::SaveCSLPath(int idx, std::string path)
+    void Config::saveCSLPath(int idx, std::string path)
     {
-        while (size_t(idx) >= mCslPackages.size()) 
+        while (size_t(idx) >= m_cslPackages.size()) 
         {
-            mCslPackages.push_back({});
+            m_cslPackages.push_back({});
         }
         std::replace(path.begin(), path.end(), '/', '\\');
-        mCslPackages[idx].path = path;
+        m_cslPackages[idx].path = path;
     }
 
-    void Config::SaveCSLEnabled(int idx, bool enabled)
+    void Config::saveCSLEnabled(int idx, bool enabled)
     {
-        while (size_t(idx) >= mCslPackages.size()) 
+        while (size_t(idx) >= m_cslPackages.size()) 
         {
-            mCslPackages.push_back({});
+            m_cslPackages.push_back({});
         }
-        mCslPackages[idx].enabled = enabled;
+        m_cslPackages[idx].enabled = enabled;
     }
 
     // Load a CSL package interactively
-    bool Config::LoadCSLPackage(int idx)
+    bool Config::loadCSLPackage(int idx)
     {
-        if (size_t(idx) < mCslPackages.size())
+        if (size_t(idx) < m_cslPackages.size())
         {
-            const std::string path = GetPluginPath() + mCslPackages[idx].path;
+            const std::string path = GetPluginPath() + m_cslPackages[idx].path;
 
             if (CountFilesInPath(path) > 1)
             {
@@ -235,83 +235,83 @@ namespace xpilot
         return false;
     }
 
-    bool Config::SetDefaultAcIcaoType(const std::string type)
+    bool Config::setDefaultAcIcaoType(const std::string type)
     {
-        mDefaultAcIcaoType = type;
+        m_defaultAcIcaoType = type;
         XPMPSetDefaultPlaneICAO(type.c_str());
         return true;
     }
 
-    bool Config::SetShowHideLabels(bool status)
+    bool Config::setShowHideLabels(bool status)
     {
-        mShowHideLabels = status;
+        m_showHideLabels = status;
         return true;
     }
 
-    bool Config::SetDebugModelMatching(bool status)
+    bool Config::setDebugModelMatching(bool status)
     {
-        mDebugModelMatching = status;
+        m_debugModelMatching = status;
         return true;
     }
 
-    bool Config::SetTcpPort(int port)
+    bool Config::setTcpPort(int port)
     {
-        mTcpPort = port;
+        m_tcpPort = port;
         return true;
     }
 
-    bool Config::SetDefaultAtisEnabled(bool status)
+    bool Config::setDefaultAtisEnabled(bool status)
     {
-        mDefaultAtis = status;
+        m_defaultAtis = status;
         return true;
     }
 
-    bool Config::SetOverrideContactAtcCommand(bool status)
+    bool Config::setOverrideContactAtcCommand(bool status)
     {
-        mOverrideContactAtcCommand = status;
+        m_overrideContactAtcCommand = status;
         return true;
     }
 
-    bool Config::SetAircraftLabelColor(int c)
+    bool Config::setAircraftLabelColor(int c)
     {
         if (c > 0 && c <= 0xFFFFFF)
         {
-            mLabelColor = c;
+            m_labelColor = c;
         }
         else
         {
-            mLabelColor = COLOR_YELLOW;
+            m_labelColor = COLOR_YELLOW;
         }
         return true;
     }
 
-    bool Config::SetDisableTcas(bool status)
+    bool Config::setDisableTcas(bool status)
     {
-        mDisableTcas = status;
+        m_disableTcas = status;
         return true;
     }
 
-    bool Config::SetShowNotificationPanel(bool show)
+    bool Config::setShowNotificationPanel(bool show)
     {
-        mShowNotificationBar = show;
+        m_showNotificationBar = show;
         return true;
     }
 
-    bool Config::SetNotificationPanelDisappearTime(int timeout)
+    bool Config::setNotificationPanelDisappearTime(int timeout)
     {
-        mNotificationBarDisappearTime = timeout;
+        m_notificationBarDisappearTime = timeout;
         return true;
     }
     
-    bool Config::SetMaxLabelDistance(int v)
+    bool Config::setMaxLabelDistance(int v)
     {
-        mMaxLabelDist = v;
+        m_maxLabelDist = v;
         return true;
     }
 
-    bool Config::SetLabelCutoffVis(bool b)
+    bool Config::setLabelCutoffVis(bool b)
     {
-        mLabelCutoffVis = b;
+        m_labelCutoffVis = b;
         return true;
     }
 }

@@ -21,14 +21,14 @@
 
 struct InterpolatedState
 {
-    long long Timestamp;
-    double Latitude;
-    double Longitude;
-    double Altitude;
-    double Pitch;
-    double Bank;
-    double Heading;
-    double GroundSpeed;
+    long long timestamp;
+    double latitude;
+    double longitude;
+    double altitude;
+    double pitch;
+    double bank;
+    double heading;
+    double groundSpeed;
 };
 
 #endif // !InterpolatedState_h

@@ -32,19 +32,19 @@ namespace xpilot
     public:
         NotificationPanel(int left, int top, int right, int bottom);
         ~NotificationPanel();
-        void AddNotificationPanelMessage(const std::string& message, float red = 255, float green = 255, float blue = 255);
-        void Toggle();
-        bool IsAlwaysVisible()const { return mAlwaysVisible; }
-        void SetAlwaysVisible(bool visible) { mAlwaysVisible = visible; }
+        void addNotificationPanelMessage(const std::string& message, float red = 255, float green = 255, float blue = 255);
+        void toggle();
+        bool isAlwaysVisible()const { return m_alwaysVisible; }
+        void setAlwaysVisible(bool visible) { m_alwaysVisible = visible; }
     protected:
         void buildInterface()override;
     private:
         static float onFlightLoop(float, float, int, void* refcon);
-        XPLMFlightLoopID flightLoopId;
-        std::chrono::system_clock::time_point mDisappearTime;
-        XplaneCommand mTogglePanelCommand;
-        bool mScrollToBottom;
-        bool mAlwaysVisible;
+        XPLMFlightLoopID m_flightLoopId;
+        std::chrono::system_clock::time_point m_disappearTime;
+        XplaneCommand m_togglePanelCommand;
+        bool m_scrollToBottom;
+        bool m_alwaysVisible;
     };
 }
 

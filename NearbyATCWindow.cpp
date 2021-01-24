@@ -28,8 +28,8 @@ namespace xpilot {
 
 	NearbyATCWindow::NearbyATCWindow(XPilot* instance) :
 		XPImgWindow(WND_MODE_FLOAT_CENTERED, WND_STYLE_SOLID, WndRect(0, 300, 500, 0)),
-		mCom1Freq("sim/cockpit2/radios/actuators/com1_frequency_hz_833", ReadWrite),
-		env(instance)
+		m_com1Frequency("sim/cockpit2/radios/actuators/com1_frequency_hz_833", ReadWrite),
+		m_env(instance)
 	{
 		SetWindowTitle("Nearby ATC");
 		SetWindowResizingLimits(500, 300, 500, 300);
@@ -37,7 +37,7 @@ namespace xpilot {
 
 	void NearbyATCWindow::UpdateList(const nlohmann::json& data)
 	{
-		std::lock_guard<std::mutex> lock(mListMutex);
+		std::lock_guard<std::mutex> lock(m_mutex);
 		{
 			NearbyList.clear();
 			if (data.find("Data") != data.end())
@@ -75,33 +75,18 @@ namespace xpilot {
 
 		ImGui::Separator();
 
-		std::lock_guard<std::mutex> lock(mListMutex);
+		std::lock_guard<std::mutex> lock(m_mutex);
 		{
 			for (auto& e : NearbyList)
 			{
 				ImGui::Selectable(e.getCallsign().c_str(), false, ImGuiSelectableFlags_SpanAllColumns);
+				if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(0))
+				{
+					m_env->requestControllerAtis(e.getCallsign());
+				}
 				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0))
 				{
-					mCom1Freq = e.getXplaneFrequency();
-				}
-				if (ImGui::BeginPopupContextItem())
-				{
-					if (ImGui::MenuItem("Request ATIS"))
-					{
-						try
-						{
-							env->RequestControllerAtis(e.getCallsign());
-						}
-						catch (std::exception& e)
-						{
-							//LOG_MSG(logERR, "Error requesting ATIS: %s", e.what());
-						}
-						catch (...)
-						{
-							//LOG_MSG(logERR, "An unknown error occurred while trying to fetch the ATIS");
-						}
-					}
-					ImGui::EndPopup();
+					m_com1Frequency = e.getXplaneFrequency();
 				}
 				ImGui::NextColumn();
 				ImGui::Text(e.getRealName().c_str());

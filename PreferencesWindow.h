@@ -28,7 +28,7 @@ namespace xpilot
 	protected:
 		void buildInterface() override;
 	private:
-		void LoadConfig();
+		void loadConfig();
 	};
 }
 

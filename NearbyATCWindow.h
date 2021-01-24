@@ -28,20 +28,20 @@ namespace xpilot
 
 	class NearbyATCList
 	{
-	private:
-		std::string mCallsign;
-		std::string mFrequency;
-		std::string mRealName;
-		int mXPFrequency;
 	public:
-		std::string getCallsign() { return mCallsign; }
-		std::string getFrequency() { return mFrequency; }
-		std::string getRealName() { return mRealName; }
-		int getXplaneFrequency() { return mXPFrequency; }
-		void setCallsign(std::string value) { mCallsign = value; }
-		void setFrequency(std::string value) { mFrequency = value; }
-		void setRealName(std::string value) { mRealName = value; }
-		void setXplaneFrequency(int value) { mXPFrequency = value; }
+		std::string getCallsign() { return m_callsign; }
+		std::string getFrequency() { return m_frequency; }
+		std::string getRealName() { return m_realName; }
+		int getXplaneFrequency() { return m_xplaneFrequency; }
+		void setCallsign(std::string value) { m_callsign = value; }
+		void setFrequency(std::string value) { m_frequency = value; }
+		void setRealName(std::string value) { m_realName = value; }
+		void setXplaneFrequency(int value) { m_xplaneFrequency = value; }
+	private:
+		std::string m_callsign;
+		std::string m_frequency;
+		std::string m_realName;
+		int m_xplaneFrequency;
 	};
 
 	class NearbyATCWindow : public XPImgWindow {
@@ -52,9 +52,9 @@ namespace xpilot
 	protected:
 		void buildInterface() override;
 	private:
-		XPilot* env;
-		std::mutex mListMutex;
-		DataRefAccess<int> mCom1Freq;
+		XPilot* m_env;
+		std::mutex m_mutex;
+		DataRefAccess<int> m_com1Frequency;
 	};
 
 }

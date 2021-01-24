@@ -58,28 +58,31 @@ namespace nlohmann
 
 namespace xpilot
 {
-    struct NetworkAircraftConfigLights {
-        std::optional<bool> StrobesOn;
-        std::optional<bool> LandingOn;
-        std::optional<bool> TaxiOn;
-        std::optional<bool> BeaconOn;
-        std::optional<bool> NavOn;
+    struct NetworkAircraftConfigLights
+    {
+        std::optional<bool> strobesOn;
+        std::optional<bool> landingOn;
+        std::optional<bool> taxiOn;
+        std::optional<bool> beaconOn;
+        std::optional<bool> navOn;
     };
 
-    struct NetworkAircraftConfigData {
-        std::string Callsign;
-        std::optional<NetworkAircraftConfigLights> Lights;
-        std::optional<bool> EnginesRunning;
-        std::optional<bool> ReverseThrust;
-        std::optional<bool> OnGround;
-        std::optional<bool> SpoilersDeployed;
-        std::optional<bool> GearDown;
-        std::optional<float> FlapsPct;
+    struct NetworkAircraftConfigData
+    {
+        std::string callsign;
+        std::optional<NetworkAircraftConfigLights> lights;
+        std::optional<bool> enginesRunning;
+        std::optional<bool> reverseThrust;
+        std::optional<bool> onGround;
+        std::optional<bool> spoilersDeployed;
+        std::optional<bool> gearDown;
+        std::optional<float> flapsPct;
     };
 
-    struct NetworkAircraftConfig {
-        std::string Type;
-        NetworkAircraftConfigData Data;
+    struct NetworkAircraftConfig
+    {
+        std::string type;
+        NetworkAircraftConfigData data;
     };
 
     void from_json(const json& j, NetworkAircraftConfigData& data);

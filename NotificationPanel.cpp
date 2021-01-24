@@ -33,9 +33,9 @@ namespace xpilot
     static std::list<NotificationTy> NotificationHistory;
 
     NotificationPanel::NotificationPanel(int left, int top, int right, int bottom) :
-        mScrollToBottom(false),
-        mAlwaysVisible(false),
-        mTogglePanelCommand("xpilot/toggle_notification_panel", "xPilot: Notification Panel", [this] { Toggle(); }),
+        m_scrollToBottom(false),
+        m_alwaysVisible(false),
+        m_togglePanelCommand("xpilot/toggle_notification_panel", "xPilot: Notification Panel", [this] { toggle(); }),
         ImgWindow(left, top, right, bottom, xplm_WindowDecorationSelfDecorated, xplm_WindowLayerFloatingWindows)
     {
         SetWindowTitle("Notification Panel");
@@ -47,8 +47,8 @@ namespace xpilot
             onFlightLoop,
             reinterpret_cast<void*>(this)
         };
-        flightLoopId = XPLMCreateFlightLoop(&flightLoopParams);
-        XPLMScheduleFlightLoop(flightLoopId, -1.0f, true);
+        m_flightLoopId = XPLMCreateFlightLoop(&flightLoopParams);
+        XPLMScheduleFlightLoop(m_flightLoopId, -1.0f, true);
     }
 
     NotificationPanel::~NotificationPanel()
@@ -68,19 +68,19 @@ namespace xpilot
             ImGui::TextWrapped(e.message.c_str());
             ImGui::PopStyleColor();
         }
-        if (mScrollToBottom)
+        if (m_scrollToBottom)
         {
             ImGui::SetScrollHere(1.0f);
-            mScrollToBottom = false;
+            m_scrollToBottom = false;
         }
 
-        if (!IsAlwaysVisible())
+        if (!isAlwaysVisible())
         {
-            if (mDisappearTime != std::chrono::system_clock::time_point()
-                && std::chrono::system_clock::now() > mDisappearTime)
+            if (m_disappearTime != std::chrono::system_clock::time_point()
+                && std::chrono::system_clock::now() > m_disappearTime)
             {
                 SetVisible(false);
-                mDisappearTime = std::chrono::system_clock::time_point();
+                m_disappearTime = std::chrono::system_clock::time_point();
             }
         }
     }
@@ -103,7 +103,7 @@ namespace xpilot
         return -1.0f;
     }
 
-    void NotificationPanel::AddNotificationPanelMessage(const std::string& message, float red, float green, float blue)
+    void NotificationPanel::addNotificationPanelMessage(const std::string& message, float red, float green, float blue)
     {
         if (!message.empty())
         {
@@ -113,21 +113,21 @@ namespace xpilot
             notification.green = green / 255;
             notification.blue = blue / 255;
             NotificationHistory.push_back(notification);
-            mScrollToBottom = true;
+            m_scrollToBottom = true;
 
-            if (Config::Instance().GetShowNotificationBar())
+            if (Config::Instance().getShowNotificationBar())
             {
                 SetVisible(true);
-                mDisappearTime = std::chrono::system_clock::now() +
-                    std::chrono::milliseconds(Config::Instance().GetNotificationBarDisappaerTime() * 1000);
+                m_disappearTime = std::chrono::system_clock::now() +
+                    std::chrono::milliseconds(Config::Instance().getNotificationBarDisappaerTime() * 1000);
             }
         }
     }
 
-    void NotificationPanel::Toggle()
+    void NotificationPanel::toggle()
     {
         SetVisible(!GetVisible());
-        mAlwaysVisible = !mAlwaysVisible;
-        mDisappearTime = std::chrono::system_clock::time_point();
+        m_alwaysVisible = !m_alwaysVisible;
+        m_disappearTime = std::chrono::system_clock::time_point();
     }
 }

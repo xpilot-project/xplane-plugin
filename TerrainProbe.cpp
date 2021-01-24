@@ -21,27 +21,27 @@
 namespace xpilot
 {
     TerrainProbe::TerrainProbe() :
-        mRef(XPLMCreateProbe(xplm_ProbeY))
+        m_probeRef(XPLMCreateProbe(xplm_ProbeY))
     {
 
     }
 
     TerrainProbe::~TerrainProbe()
     {
-        XPLMDestroyProbe(mRef);
+        XPLMDestroyProbe(m_probeRef);
     }
 
-    double TerrainProbe::GetTerrainElevation(double degLat, double degLon) const
+    double TerrainProbe::getTerrainElevation(double degLat, double degLon) const
     {
         double x, y, z, foo, alt;
         XPLMProbeInfo_t probeinfo;
         probeinfo.structSize = sizeof(XPLMProbeInfo_t);
 
         XPLMWorldToLocal(degLat, degLon, 0, &x, &y, &z);
-        XPLMProbeTerrainXYZ(mRef, x, y, z, &probeinfo);
+        XPLMProbeTerrainXYZ(m_probeRef, x, y, z, &probeinfo);
         XPLMLocalToWorld(probeinfo.locationX, probeinfo.locationY, probeinfo.locationZ, &foo, &foo, &alt);
         XPLMWorldToLocal(degLat, degLon, alt, &x, &y, &z);
-        if (XPLMProbeTerrainXYZ(mRef, x, y, z, &probeinfo) == xplm_ProbeHitTerrain) 
+        if (XPLMProbeTerrainXYZ(m_probeRef, x, y, z, &probeinfo) == xplm_ProbeHitTerrain) 
         {
             XPLMLocalToWorld(probeinfo.locationX, probeinfo.locationY, probeinfo.locationZ, &foo, &foo, &alt);
             return alt * 3.28084;

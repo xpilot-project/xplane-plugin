@@ -52,9 +52,9 @@ namespace xpilot {
 		fileBrowser.SetWindowSize(450, 250);
 	}
 
-	void PreferencesWindow::LoadConfig()
+	void PreferencesWindow::loadConfig()
 	{
-		const Config::vecCslPackages& paths = xpilot::Config::Instance().GetCslPackages();
+		const Config::vecCslPackages& paths = xpilot::Config::Instance().getCSLPackages();
 		for (int i = 0; i < 7; i++) 
 		{
 			if (i < paths.size()) 
@@ -67,21 +67,21 @@ namespace xpilot {
 			}
 		}
 
-		debugModelMatching = xpilot::Config::Instance().GetDebugModelMatching();
-		showHideLabels = xpilot::Config::Instance().GetShowHideLabels();
-		fallbackTypeCode = xpilot::Config::Instance().GetDefaultAcIcaoType();
-		tcpPort = xpilot::Config::Instance().GetTcpPort();
-		showNotificationPanel = xpilot::Config::Instance().GetShowNotificationBar();
-		notificationPanelTimeoutSeconds = xpilot::Config::Instance().GetNotificationBarDisappaerTime();
-		overrideContactAtcCommand = xpilot::Config::Instance().GetOverrideContactAtcCommand();
-		labelMaxDistance = xpilot::Config::Instance().GetMaxLabelDistance();
-		labelVisibilityCutoff = xpilot::Config::Instance().GetLabelCutoffVis();
-		HexToRgb(xpilot::Config::Instance().GetAircraftLabelColor(), lblCol);
+		debugModelMatching = xpilot::Config::Instance().getDebugModelMatching();
+		showHideLabels = xpilot::Config::Instance().getShowHideLabels();
+		fallbackTypeCode = xpilot::Config::Instance().getDefaultAcIcaoType();
+		tcpPort = xpilot::Config::Instance().getTcpPort();
+		showNotificationPanel = xpilot::Config::Instance().getShowNotificationBar();
+		notificationPanelTimeoutSeconds = xpilot::Config::Instance().getNotificationBarDisappaerTime();
+		overrideContactAtcCommand = xpilot::Config::Instance().getOverrideContactAtcCommand();
+		labelMaxDistance = xpilot::Config::Instance().getMaxLabelDistance();
+		labelVisibilityCutoff = xpilot::Config::Instance().getLabelCutoffVis();
+		HexToRgb(xpilot::Config::Instance().getAircraftLabelColor(), lblCol);
 	}
 
 	void Save() 
 	{
-		if (!xpilot::Config::Instance().SaveConfig()) 
+		if (!xpilot::Config::Instance().saveConfig()) 
 		{
 			ImGui::OpenPopup("Error Saving Preferences");
 		}
@@ -89,14 +89,14 @@ namespace xpilot {
 
 	void PreferencesWindow::buildInterface() 
 	{
-		LoadConfig();
+		loadConfig();
 		ImGui::PushFont(0);
 
 		ImGui::Text("General");
 		ImGui::PushItemWidth(125);
 		if (ImGui::InputTextStd("Fallback Aircraft Type ICAO", &fallbackTypeCode, ImGuiInputTextFlags_CharsUppercase))
 		{
-			xpilot::Config::Instance().SetDefaultAcIcaoType(fallbackTypeCode);
+			xpilot::Config::Instance().setDefaultAcIcaoType(fallbackTypeCode);
 			Save();
 		}
 		ImGui::PopItemWidth();
@@ -112,7 +112,7 @@ namespace xpilot {
 			{
 				tcpPort = 65535;
 			}
-			xpilot::Config::Instance().SetTcpPort(tcpPort);
+			xpilot::Config::Instance().setTcpPort(tcpPort);
 			Save();
 		}
 		ImGui::PopItemWidth();
@@ -120,7 +120,7 @@ namespace xpilot {
 		if (ImGui::Checkbox("Show Aircraft Labels", &showHideLabels))
 		{
 			XPMPEnableAircraftLabels(showHideLabels);
-			xpilot::Config::Instance().SetShowHideLabels(showHideLabels);
+			xpilot::Config::Instance().setShowHideLabels(showHideLabels);
 			Save();
 		}
 		ImGui::SameLine();
@@ -140,7 +140,7 @@ namespace xpilot {
 					+ (std::lround(lblCol[1] * 255.0f) << 8)
 					+ (std::lround(lblCol[2] * 255.0f) << 0));
 
-				xpilot::Config::Instance().SetAircraftLabelColor(col);
+				xpilot::Config::Instance().setAircraftLabelColor(col);
 				Save();
 			}
 			ImGui::EndPopup();
@@ -151,35 +151,35 @@ namespace xpilot {
 		if (ImGui::ColorButton("Yellow", ImVec4(1.0f, 1.0f, 0.0f, 1.0f), ImGuiColorEditFlags_NoTooltip))
 		{
 			HexToRgb(COLOR_YELLOW, lblCol);
-			xpilot::Config::Instance().SetAircraftLabelColor(COLOR_YELLOW);
+			xpilot::Config::Instance().setAircraftLabelColor(COLOR_YELLOW);
 			Save();
 		}
 		ImGui::SameLine();
 		if (ImGui::ColorButton("Red", ImVec4(1.0f, 0.0f, 0.0f, 1.0f), ImGuiColorEditFlags_NoTooltip))
 		{
 			HexToRgb(COLOR_RED, lblCol);
-			xpilot::Config::Instance().SetAircraftLabelColor(COLOR_RED);
+			xpilot::Config::Instance().setAircraftLabelColor(COLOR_RED);
 			Save();
 		}
 		ImGui::SameLine();
 		if (ImGui::ColorButton("Green", ImVec4(0.0f, 1.0f, 0.0f, 1.0f), ImGuiColorEditFlags_NoTooltip))
 		{
 			HexToRgb(COLOR_GREEN, lblCol);
-			xpilot::Config::Instance().SetAircraftLabelColor(COLOR_GREEN);
+			xpilot::Config::Instance().setAircraftLabelColor(COLOR_GREEN);
 			Save();
 		}
 		ImGui::SameLine();
 		if (ImGui::ColorButton("Blue", ImVec4(0.0f, 0.94f, 0.94f, 1.0f), ImGuiColorEditFlags_NoTooltip))
 		{
 			HexToRgb(COLOR_BLUE, lblCol);
-			xpilot::Config::Instance().SetAircraftLabelColor(COLOR_BLUE);
+			xpilot::Config::Instance().setAircraftLabelColor(COLOR_BLUE);
 			Save();
 		}
 		ImGui::PushItemWidth(100);
 		if (ImGui::SliderInt("Max Label Distance", &labelMaxDistance, 1, 50, "%d nm"))
 		{
 			XPMPSetAircraftLabelDist(float(labelMaxDistance), labelVisibilityCutoff);
-			xpilot::Config::Instance().SetMaxLabelDistance(labelMaxDistance);
+			xpilot::Config::Instance().setMaxLabelDistance(labelMaxDistance);
 			Save();
 		}
 		ImGui::PopItemWidth();
@@ -187,24 +187,24 @@ namespace xpilot {
 		if (ImGui::Checkbox("Cutoff at Visibility", &labelVisibilityCutoff))
 		{
 			XPMPSetAircraftLabelDist(float(labelMaxDistance), labelVisibilityCutoff);
-			xpilot::Config::Instance().SetLabelCutoffVis(labelVisibilityCutoff);
+			xpilot::Config::Instance().setLabelCutoffVis(labelVisibilityCutoff);
 			Save();
 		}
 		if (ImGui::Checkbox("Override \"Contact ATC\" Command", &overrideContactAtcCommand))
 		{
-			xpilot::Config::Instance().SetOverrideContactAtcCommand(overrideContactAtcCommand);
+			xpilot::Config::Instance().setOverrideContactAtcCommand(overrideContactAtcCommand);
 			Save();
 		}
 
 		if (ImGui::Checkbox("Model Matching Debug Logging", &debugModelMatching))
 		{
-			xpilot::Config::Instance().SetDebugModelMatching(debugModelMatching);
+			xpilot::Config::Instance().setDebugModelMatching(debugModelMatching);
 			Save();
 		}
 
 		if (ImGui::Checkbox("Show Notification Panel", &showNotificationPanel))
 		{
-			xpilot::Config::Instance().SetShowNotificationPanel(showNotificationPanel);
+			xpilot::Config::Instance().setShowNotificationPanel(showNotificationPanel);
 			Save();
 		}
 		ImGui::SameLine();
@@ -219,7 +219,7 @@ namespace xpilot {
 			{
 				notificationPanelTimeoutSeconds = 60;
 			}
-			xpilot::Config::Instance().SetNotificationPanelDisappearTime(notificationPanelTimeoutSeconds);
+			xpilot::Config::Instance().setNotificationPanelDisappearTime(notificationPanelTimeoutSeconds);
 			Save();
 		}
 		ImGui::PopItemWidth();
@@ -234,13 +234,13 @@ namespace xpilot {
 			ImGui::PushID(i);
 			if (ImGui::Checkbox("Enabled", &pathsEnabled[i])) 
 			{
-				xpilot::Config::Instance().SaveCSLEnabled(i, pathsEnabled[i]);
+				xpilot::Config::Instance().saveCSLEnabled(i, pathsEnabled[i]);
 				Save();
 			}
 			ImGui::SameLine();
 			if (ImGui::InputTextStd("", &cslPaths[i])) 
 			{
-				xpilot::Config::Instance().SaveCSLPath(i, cslPaths[i]);
+				xpilot::Config::Instance().saveCSLPath(i, cslPaths[i]);
 				Save();
 			}
 			ImGui::SameLine();
@@ -255,8 +255,8 @@ namespace xpilot {
 				cslPaths[i] = "";
 				pathsEnabled[i] = false;
 
-				xpilot::Config::Instance().SaveCSLEnabled(i, pathsEnabled[i]);
-				xpilot::Config::Instance().SaveCSLPath(i, cslPaths[i]);
+				xpilot::Config::Instance().saveCSLEnabled(i, pathsEnabled[i]);
+				xpilot::Config::Instance().saveCSLPath(i, cslPaths[i]);
 				Save();
 			}
 			ImGui::PopID();
@@ -269,8 +269,8 @@ namespace xpilot {
 			cslPaths[selectedPathIdx] = fileBrowser.GetSelected().string();
 			pathsEnabled[selectedPathIdx] = true;
 
-			xpilot::Config::Instance().SaveCSLEnabled(selectedPathIdx, pathsEnabled[selectedPathIdx]);
-			xpilot::Config::Instance().SaveCSLPath(selectedPathIdx, cslPaths[selectedPathIdx]);
+			xpilot::Config::Instance().saveCSLEnabled(selectedPathIdx, pathsEnabled[selectedPathIdx]);
+			xpilot::Config::Instance().saveCSLPath(selectedPathIdx, cslPaths[selectedPathIdx]);
 			Save();
 
 			fileBrowser.ClearSelected();

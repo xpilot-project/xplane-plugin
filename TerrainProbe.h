@@ -30,9 +30,9 @@ namespace xpilot
     public:
         TerrainProbe();
         ~TerrainProbe();
-        double GetTerrainElevation(double degLat, double degLon)const;
+        double getTerrainElevation(double degLat, double degLon)const;
     private:
-        XPLMProbeRef mRef = nullptr;
+        XPLMProbeRef m_probeRef = nullptr;
     };
 }
 

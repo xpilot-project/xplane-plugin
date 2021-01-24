@@ -37,30 +37,30 @@ namespace xpilot
         NetworkAircraft(const std::string& _icaoType, const std::string& _icaoAirline, 
             const std::string& _livery, XPMPPlaneID _modeS_id, const std::string& _modelName);
 
-        void CopyBulkData(XPilotAPIAircraft::XPilotAPIBulkData* pOut, size_t size) const;
-        void CopyBulkData(XPilotAPIAircraft::XPilotAPIBulkInfoTexts* pOut, size_t size) const;
+        void copyBulkData(XPilotAPIAircraft::XPilotAPIBulkData* pOut, size_t size) const;
+        void copyBulkData(XPilotAPIAircraft::XPilotAPIBulkInfoTexts* pOut, size_t size) const;
 
-        std::string Callsign;
-        bool OnGround;
-        bool GearDown;
-        bool EnginesRunning;
-        bool ReverseThrust;
-        XPMPPlaneSurfaces_t Surfaces;
-        XPMPPlanePosition_t Position;
-        XPMPPlaneRadar_t Radar;
-        std::deque<InterpolatedState> InterpolationStack;
+        std::string callsign;
+        bool onGround;
+        bool gearDown;
+        bool enginesRunning;
+        bool reverseThrust;
+        XPMPPlaneSurfaces_t surfaces;
+        XPMPPlanePosition_t position;
+        XPMPPlaneRadar_t radar;
+        std::deque<InterpolatedState> interpolationStack;
         TerrainProbe terrainProbe;
-        float GroundSpeed;
-        double TerrainAltitude;
-        float TargetGearPosition;
-        float TargetFlapPosition;
-        float TargetSpoilerPosition;
-        float TargetReversersPosition;
-        bool SpoilersDeployed;
-        int RenderCount;
-        std::string Origin;
-        std::string Destination;
-        std::chrono::system_clock::time_point PreviousSurfaceUpdateTime;
+        float groundSpeed;
+        double terrainAltitude;
+        float targetGearPosition;
+        float targetFlapPosition;
+        float targetSpoilerPosition;
+        float targetReversersPosition;
+        bool spoilersDeployed;
+        int renderCount;
+        std::string origin;
+        std::string destination;
+        std::chrono::system_clock::time_point previousSurfaceUpdateTime;
 
     protected:
         virtual void UpdatePosition(float, int);
