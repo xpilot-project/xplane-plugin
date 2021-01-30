@@ -46,22 +46,22 @@ set(Header_Files
     include/XPilot.h
     include/XPilotAPI.h
     include/XplaneCommand.h
-    ${CMAKE_SOURCE_DIR}/extern/imgui/imstb_rectpack.h
-    ${CMAKE_SOURCE_DIR}/extern/imgui/imstb_textedit.h
-    ${CMAKE_SOURCE_DIR}/extern/imgui/imstb_truetype.h
-    ${CMAKE_SOURCE_DIR}/extern/imgui/imgui_internal.h
-    ${CMAKE_SOURCE_DIR}/extern/imgui/imgui.h
-    ${CMAKE_SOURCE_DIR}/extern/imgui/imconfig.h
-    ${CMAKE_SOURCE_DIR}/extern/imgui/misc/cpp/imgui_stdlib.h
-    ${CMAKE_SOURCE_DIR}/extern/ImgWindow/ImgFontAtlas.h
-    ${CMAKE_SOURCE_DIR}/extern/ImgWindow/ImgWindow.h
-    ${CMAKE_SOURCE_DIR}/extern/ImgWindow/SystemGL.h
-    ${CMAKE_SOURCE_DIR}/extern/ImgWindow/XPImgWindow.h
-	${CMAKE_SOURCE_DIR}/extern/ZMQ/zmq.h
-	${CMAKE_SOURCE_DIR}/extern/ZMQ/zmq.hpp
-    ${CMAKE_SOURCE_DIR}/extern/json.hpp
-	${CMAKE_SOURCE_DIR}/extern/Font/IconsFontAwesome5.h
-	${CMAKE_SOURCE_DIR}/extern/Font/fa-solid-900.inc
+    ${CMAKE_SOURCE_DIR}/Lib/imgui/imstb_rectpack.h
+    ${CMAKE_SOURCE_DIR}/Lib/imgui/imstb_textedit.h
+    ${CMAKE_SOURCE_DIR}/Lib/imgui/imstb_truetype.h
+    ${CMAKE_SOURCE_DIR}/Lib/imgui/imgui_internal.h
+    ${CMAKE_SOURCE_DIR}/Lib/imgui/imgui.h
+    ${CMAKE_SOURCE_DIR}/Lib/imgui/imconfig.h
+    ${CMAKE_SOURCE_DIR}/Lib/imgui/misc/cpp/imgui_stdlib.h
+    ${CMAKE_SOURCE_DIR}/Lib/ImgWindow/ImgFontAtlas.h
+    ${CMAKE_SOURCE_DIR}/Lib/ImgWindow/ImgWindow.h
+    ${CMAKE_SOURCE_DIR}/Lib/ImgWindow/SystemGL.h
+    ${CMAKE_SOURCE_DIR}/Lib/ImgWindow/XPImgWindow.h
+	${CMAKE_SOURCE_DIR}/Lib/ZMQ/zmq.h
+	${CMAKE_SOURCE_DIR}/Lib/ZMQ/zmq.hpp
+    ${CMAKE_SOURCE_DIR}/Lib/json.hpp
+	${CMAKE_SOURCE_DIR}/Lib/Font/IconsFontAwesome5.h
+	${CMAKE_SOURCE_DIR}/Lib/Font/fa-solid-900.inc
 )
 source_group("Header Files" FILES ${Header_Files})
 
@@ -81,14 +81,14 @@ set(Source_Files
     src/TerrainProbe.cpp
     src/TextMessageConsole.cpp
     src/XPilot.cpp
-    ${CMAKE_SOURCE_DIR}/extern/ImgWindow/XPImgWindow.cpp
-    ${CMAKE_SOURCE_DIR}/extern/ImgWindow/ImgFontAtlas.cpp
-    ${CMAKE_SOURCE_DIR}/extern/ImgWindow/ImgWindow.cpp
-    ${CMAKE_SOURCE_DIR}/extern/imgui/misc/cpp/imgui_stdlib.cpp
-    ${CMAKE_SOURCE_DIR}/extern/imgui/imgui.cpp
-    ${CMAKE_SOURCE_DIR}/extern/imgui/imgui_tables.cpp
-    ${CMAKE_SOURCE_DIR}/extern/imgui/imgui_draw.cpp
-    ${CMAKE_SOURCE_DIR}/extern/imgui/imgui_widgets.cpp
+    ${CMAKE_SOURCE_DIR}/Lib/ImgWindow/XPImgWindow.cpp
+    ${CMAKE_SOURCE_DIR}/Lib/ImgWindow/ImgFontAtlas.cpp
+    ${CMAKE_SOURCE_DIR}/Lib/ImgWindow/ImgWindow.cpp
+    ${CMAKE_SOURCE_DIR}/Lib/imgui/misc/cpp/imgui_stdlib.cpp
+    ${CMAKE_SOURCE_DIR}/Lib/imgui/imgui.cpp
+    ${CMAKE_SOURCE_DIR}/Lib/imgui/imgui_tables.cpp
+    ${CMAKE_SOURCE_DIR}/Lib/imgui/imgui_draw.cpp
+    ${CMAKE_SOURCE_DIR}/Lib/imgui/imgui_widgets.cpp
 )
 source_group("Source Files" FILES ${Source_Files})
 
@@ -97,13 +97,13 @@ set(ALL_FILES  ${Header_Files} ${Source_Files})
 add_library(xPilot MODULE ${ALL_FILES})
 
 if (APPLE)
-    list(APPEND CMAKE_FRAMEWORK_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extern/XPMP2")
-	list(APPEND CMAKE_FRAMEWORK_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extern/ZMQ")
-    list(APPEND CMAKE_FRAMEWORK_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extern/sdk/Libraries/Mac")
+    list(APPEND CMAKE_FRAMEWORK_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Lib/XPMP2")
+	list(APPEND CMAKE_FRAMEWORK_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Lib/ZMQ")
+    list(APPEND CMAKE_FRAMEWORK_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Lib/sdk/Libraries/Mac")
 elseif (WIN32)
-    list(APPEND CMAKE_LIBRARY_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extern/XPMP2")
-	list(APPEND CMAKE_LIBRARY_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extern/ZMQ")
-    list(APPEND CMAKE_LIBRARY_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extern/sdk/Libraries/Win")
+    list(APPEND CMAKE_LIBRARY_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Lib/XPMP2")
+	list(APPEND CMAKE_LIBRARY_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Lib/ZMQ")
+    list(APPEND CMAKE_LIBRARY_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Lib/sdk/Libraries/Win")
 endif()
 
 if (APPLE)
