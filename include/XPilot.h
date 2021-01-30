@@ -35,7 +35,7 @@
 #include "DataRefAccess.h"
 #include "OwnedDataRef.h"
 #include "TextMessageConsole.h"
-#include "Lib/ZMQ/zmq.hpp"
+#include "ZMQ/zmq.hpp"
 
 #include "XPLMMenus.h"
 #include "XPLMUtilities.h"

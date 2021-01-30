@@ -21,7 +21,7 @@
 #include "TextMessageConsole.h"
 #include "Utilities.h"
 #include "XPilot.h"
-#include "Lib/json.hpp"
+#include "json.hpp"
 
 using json = nlohmann::json;
 

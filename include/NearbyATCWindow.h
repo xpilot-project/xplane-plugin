@@ -19,7 +19,7 @@
 #ifndef NearbyATCWindow_h
 #define NearbyATCWindow_h
 
-#include "Lib/json.hpp"
+#include "json.hpp"
 using json = nlohmann::json;
 
 namespace xpilot 

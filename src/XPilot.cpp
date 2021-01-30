@@ -30,7 +30,7 @@
 #include "NotificationPanel.h"
 #include "TextMessageConsole.h"
 #include "sha512.hh"
-#include "Lib/json.hpp"
+#include "json.hpp"
 
 using json = nlohmann::json;
 
