@@ -81,7 +81,7 @@ namespace xpilot
                 }
                 if (jf.contains("ShowNotificationBar"))
                 {
-                    setShowNotificationPanel(jf["ShowNotificationBar"]);
+                    setAutoShowMessageConsole(jf["ShowNotificationBar"]);
                 }
                 if (jf.contains("NotificationBarDisappearTime"))
                 {
@@ -106,6 +106,10 @@ namespace xpilot
                 if (jf.contains("LabelCutoffVis"))
                 {
                     setLabelCutoffVis(jf["LabelCutoffVis"]);
+                }
+                if (jf.contains("LogLevel"))
+                {
+                    setLogLevel(jf["LogLevel"]);
                 }
                 if (jf.contains("CSL"))
                 {
@@ -152,6 +156,7 @@ namespace xpilot
         j["DisableTcas"] = getDisableTcas();
         j["MaxLabelDist"] = getMaxLabelDistance();
         j["LabelCutoffVis"] = getLabelCutoffVis();
+        j["LogLevel"] = getLogLevel();
 
         if (!m_cslPackages.empty())
         {
@@ -212,24 +217,24 @@ namespace xpilot
 
             if (CountFilesInPath(path) > 1)
             {
-                LOG_INFO("Found CSL Path: %s", path.c_str());
+                LOG_MSG(logDEBUG, "Found CSL Path: %s", path.c_str());
                 if (!path.empty())
                 {
                     auto err = XPMPLoadCSLPackage(path.c_str());
                     if (*err)
                     {
-                        LOG_ERROR("Error loading CSL package (%s): %s", path.c_str(), err);
+                        LOG_MSG(logERROR, "Error loading CSL package (%s): %s", path.c_str(), err);
                     }
                     else
                     {
-                        LOG_INFO("CSL package successfully loaded: %s", path.c_str());
+                        LOG_MSG(logDEBUG, "CSL package successfully loaded: %s", path.c_str());
                         return true;
                     }
                 }
             }
             else
             {
-                LOG_INFO("Skipping CSL path '%s' because it does not exist or the folder is empty.", path.c_str());
+                LOG_MSG(logDEBUG, "Skipping CSL path '%s' because it does not exist or the folder is empty.", path.c_str());
             }
         }
         return false;
@@ -254,7 +259,7 @@ namespace xpilot
         return true;
     }
 
-    bool Config::setTcpPort(int port)
+    bool Config::setTcpPort(std::string port)
     {
         m_tcpPort = port;
         return true;
@@ -291,7 +296,7 @@ namespace xpilot
         return true;
     }
 
-    bool Config::setShowNotificationPanel(bool show)
+    bool Config::setAutoShowMessageConsole(bool show)
     {
         m_showNotificationBar = show;
         return true;
@@ -312,6 +317,14 @@ namespace xpilot
     bool Config::setLabelCutoffVis(bool b)
     {
         m_labelCutoffVis = b;
+        return true;
+    }
+
+    bool Config::setLogLevel(int lvl)
+    {
+        if (lvl > 5) lvl = 5;
+        if (lvl < 0) lvl = 0;
+        m_logLevel = lvl;
         return true;
     }
 }

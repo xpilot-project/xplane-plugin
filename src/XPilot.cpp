@@ -36,31 +36,13 @@ using json = nlohmann::json;
 
 namespace xpilot
 {
-	void callbackPlaneNotifier(XPMPPlaneID inPlaneID, XPMPPlaneNotification inNotification, void* inRefcon)
-	{
-		auto* env = static_cast<XPilot*>(inRefcon);
-		XPMP2::Aircraft* pAc = XPMP2::AcFindByID(inPlaneID);
-		if (pAc)
-		{
-			switch (inNotification)
-			{
-				case xpmp_PlaneNotification_Created:
-					env->incrementAircraftCount();
-					break;
-				case xpmp_PlaneNotification_Destroyed:
-					env->decrementAircraftCount();
-					break;
-			}
-		}
-	}
-
 	XPilot::XPilot() :
 		m_xplaneAtisEnabled("sim/atc/atis_enabled", ReadWrite),
 		m_pttPressed("xpilot/ptt", ReadWrite),
 		m_rxCom1("xpilot/audio/com1_rx", ReadWrite),
 		m_rxCom2("xpilot/audio/com2_rx", ReadWrite),
-		m_networkLoginStatus("xpilot/login/status", ReadOnly, true),
-		m_networkCallsign("xpilot/login/callsign", ReadOnly, true),
+		m_networkLoginStatus("xpilot/login/status", ReadOnly),
+		m_networkCallsign("xpilot/login/callsign", ReadOnly),
 		m_volumeSignalLevel("xpilot/audio/vu", ReadWrite),
 		m_aiControlled("xpilot/ai_controlled", ReadOnly),
 		m_aircraftCount("xpilot/num_aircraft", ReadOnly),
@@ -113,8 +95,8 @@ namespace xpilot
 		m_frameRateMonitor = std::make_unique<FrameRateMonitor>(this);
 		m_aircraftManager = std::make_unique<AircraftManager>();
 		pluginHash = sw::sha512::file(GetTruePluginPath().c_str());
+		m_pluginVersion = PLUGIN_VERSION;
 
-		XPMPRegisterPlaneNotifierFunc(callbackPlaneNotifier, this);
 		XPLMRegisterFlightLoopCallback(deferredStartup, -1.0f, this);
 	}
 
@@ -122,7 +104,6 @@ namespace xpilot
 	{
 		XPLMUnregisterDataAccessor(m_bulkDataQuick);
 		XPLMUnregisterDataAccessor(m_bulkDataExpensive);
-		XPMPUnregisterPlaneNotifierFunc(callbackPlaneNotifier, this);
 		XPLMUnregisterFlightLoopCallback(deferredStartup, this);
 		XPLMUnregisterFlightLoopCallback(onFlightLoop, this);
 	}
@@ -139,8 +120,6 @@ namespace xpilot
 
 	void XPilot::startZmqServer()
 	{
-		LOG_INFO("Initializing xPilot... Version %s", PLUGIN_VERSION_STRING);
-
 		initializeXPMP();
 
 		if (m_zmqThread)
@@ -156,17 +135,15 @@ namespace xpilot
 			m_zmqSocket = std::make_unique<zmq::socket_t>(*m_zmqContext.get(), ZMQ_ROUTER);
 			m_zmqSocket->setsockopt(ZMQ_IDENTITY, "PLUGIN", 6);
 			m_zmqSocket->setsockopt(ZMQ_LINGER, 0);
-			m_zmqSocket->bind("tcp://*:" + std::to_string(Config::Instance().getTcpPort()));
+			m_zmqSocket->bind("tcp://*:" + Config::Instance().getTcpPort());
 		}
 		catch (zmq::error_t& e)
 		{
-			LOG_ERROR("Error binding TCP socket port: %s", e.what());
-			addNotification(string_format("Error binding TCP socket port: %s", e.what()));
+			LOG_MSG(logERROR, "Error binding port: %s", e.what());
 		}
 		catch (const std::exception& e)
 		{
-			LOG_ERROR("Error binding TCP socket port: %s", e.what());
-			addNotification(string_format("Error binding TCP socket port: %s", e.what()));
+			LOG_MSG(logERROR, "Error binding port: %s", e.what());
 		}
 		catch (...)
 		{
@@ -176,8 +153,7 @@ namespace xpilot
 
 		m_keepAlive = true;
 		m_zmqThread = std::make_unique<std::thread>(&XPilot::zmqWorker, this);
-		LOG_INFO("TCP socket thread started on port %i", Config::Instance().getTcpPort());
-		addNotification(string_format("TCP socket thread started on port %i", Config::Instance().getTcpPort()));
+		LOG_MSG(logMSG, "xPilot is listening on port %i.", Config::Instance().getTcpPort());
 	}
 
 	void XPilot::stopZmqServer()
@@ -192,11 +168,11 @@ namespace xpilot
 		}
 		catch (zmq::error_t& e)
 		{
-			LOG_ERROR("Error closing TCP socket: %s", e.what());
+			LOG_MSG(logERROR, "Error closing socket: %s", e.what());
 		}
 		catch (std::exception& e)
 		{
-			LOG_ERROR("Unknown TCP socket exception: %s", e.what());
+			LOG_MSG(logERROR, "Socket exception: %s", e.what());
 		}
 		catch (...)
 		{
@@ -208,7 +184,6 @@ namespace xpilot
 		{
 			m_zmqThread->join();
 			m_zmqThread.reset();
-			LOG_INFO("TCP server successfully stopped");
 		}
 	}
 
@@ -230,7 +205,7 @@ namespace xpilot
 		}
 		catch (zmq::error_t& e)
 		{
-			LOG_ERROR("Error sending socket message: %s", e.what());
+			LOG_MSG(logERROR, "Error sending socket message: %s", e.what());
 		}
 		catch (...)
 		{
@@ -244,6 +219,7 @@ namespace xpilot
 		{
 			instance->invokeQueuedCallbacks();
 			instance->m_aiControlled = XPMPHasControlOfAIAircraft();
+			instance->m_aircraftCount = XPMPCountPlanes();
 			instance->m_aircraftManager->interpolateAirplanes();
 			UpdateMenuItems();
 		}
@@ -451,12 +427,12 @@ namespace xpilot
 			{
 				if (e.num() != ETERM)
 				{
-					LOG_ERROR("TCP socket exception: %s", e.what());
+					LOG_MSG(logERROR, "Socket recv exception: %s", e.what());
 				}
 			}
 			catch (std::exception& e)
 			{
-				LOG_ERROR("TCP socket exception: %s", e.what());
+				LOG_MSG(logERROR, "Socket recv exception: %s", e.what());
 			}
 			catch (...)
 			{
@@ -474,7 +450,7 @@ namespace xpilot
 		if (!strcmp(item, "model_matching"))
 			return Config::Instance().getDebugModelMatching();
 		if (!strcmp(item, "log_level"))
-			return 0;
+			return Config::Instance().getLogLevel();
 		return defaultVal;
 	}
 
@@ -515,41 +491,23 @@ namespace xpilot
 
 	void XPilot::requestControllerAtis(std::string callsign)
 	{
-		try
-		{
-			addNotification(string_format("Requesting controller ATIS for: %s", callsign), 149, 165, 166);
-			LOG_INFO("Requesting controller ATIS for %s", callsign.c_str());
+		json j;
+		j["Type"] = "RequestAtis";
+		j["Timestamp"] = UtcTimestamp();
+		j["Data"]["Callsign"] = callsign;
 
-			json j;
-			j["Type"] = "RequestAtis";
-			j["Timestamp"] = UtcTimestamp();
-			j["Data"]["Callsign"] = callsign;
-
-			sendSocketMsg(j.dump());
-		}
-		catch (zmq::error_t& e)
-		{
-			LOG_ERROR("Error requesting controller ATIS for %s: %s", callsign.c_str(), e.what());
-		}
-		catch (std::exception& e)
-		{
-			LOG_ERROR("Error requesting controller ATIS for %s: %s", callsign.c_str(), e.what());
-		}
-		catch (...)
-		{
-		}
+		sendSocketMsg(j.dump());
 	}
 
 	bool XPilot::initializeXPMP()
 	{
 		const std::string pathResources(GetPluginPath() + "Resources");
-		LOG_INFO("Resources path initialized: %s", pathResources.c_str());
 
 		auto err = XPMPMultiplayerInit(PLUGIN_NAME, pathResources.c_str(), &CBIntPrefsFunc);
 
 		if (*err)
 		{
-			LOG_ERROR("Error initializing XPMP2: %s", err);
+			LOG_MSG(logERROR, "Error initializing multiplayer: %s", err);
 			XPMPMultiplayerCleanup();
 			return false;
 		}
@@ -558,7 +516,7 @@ namespace xpilot
 		{
 			std::string err = "No valid CSL paths are configured or the paths are disabled. Verify the CSL configuration in X-Plane (Plugins > xPilot > Settings > CSL Packages).";
 			addNotification(err.c_str(), 192, 57, 43);
-			LOG_ERROR(err.c_str());
+			LOG_MSG(logERROR, err.c_str());
 		}
 		else
 		{
@@ -571,13 +529,12 @@ namespace xpilot
 						err = XPMPLoadCSLPackage(p.path.c_str());
 						if (*err)
 						{
-							addNotification(string_format("Error loading CSL package %s: %s", p.path.c_str(), err), 231, 76, 60);
-							LOG_ERROR("Error loading CSL package %s: %s", p.path.c_str(), err);
+							LOG_MSG(logERROR, "Error loading CSL package %s: %s", p.path.c_str(), err);
 						}
 					}
 					catch (std::exception& e)
 					{
-						LOG_ERROR("Error loading CSL package %s: %s", p.path.c_str(), err);
+						LOG_MSG(logERROR, "Error loading CSL package %s: %s", p.path.c_str(), err);
 					}
 				}
 			}
@@ -585,7 +542,6 @@ namespace xpilot
 
 		XPMPEnableAircraftLabels(Config::Instance().getShowHideLabels());
 		XPMPSetAircraftLabelDist(Config::Instance().getMaxLabelDistance(), Config::Instance().getLabelCutoffVis());
-		LOG_INFO("XPMP2 successfully initialized");
 		return true;
 	}
 
@@ -699,12 +655,7 @@ namespace xpilot
 			if (*err)
 			{
 				addNotification(err, 231, 76, 60);
-				LOG_ERROR(err);
-			}
-			else
-			{
-				addNotification("xPilot has TCAS control");
-				LOG_INFO("xPilot has TCAS control");
+				LOG_MSG(logERROR, err);
 			}
 		}
 	}
@@ -714,8 +665,7 @@ namespace xpilot
 		if (XPMPHasControlOfAIAircraft())
 		{
 			XPMPMultiplayerDisable();
-			addNotification("xPilot released TCAS control");
-			LOG_INFO("xPilot released TCAS control");
+			LOG_MSG(logDEBUG, "xPilot has released TCAS control");
 		}
 	}
 

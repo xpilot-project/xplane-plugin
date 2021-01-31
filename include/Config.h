@@ -30,9 +30,18 @@ namespace xpilot
         std::string path;
         bool enabled;
 
-        inline bool empty() const { return path.empty(); }
-        inline bool operator== (const CslPackage& o) const { return path == o.path; }
-        inline bool operator== (const std::string& s) const { return path == s; }
+        inline bool empty() const
+        {
+            return path.empty();
+        }
+        inline bool operator== (const CslPackage& o) const
+        {
+            return path == o.path;
+        }
+        inline bool operator== (const std::string& s) const
+        {
+            return path == s;
+        }
     };
 
     class Config
@@ -49,47 +58,93 @@ namespace xpilot
         bool saveConfig();
 
         typedef std::vector<CslPackage> vecCslPackages;
-        std::vector<CslPackage> getCSLPackages()const { return m_cslPackages; }
+        std::vector<CslPackage> getCSLPackages()const
+        {
+            return m_cslPackages;
+        }
         void saveCSLPath(int idx, const std::string path);
         void saveCSLEnabled(int idx, bool enabled);
         bool loadCSLPackage(int idx);
         bool hasValidPaths() const;
 
-        std::string getDefaultAcIcaoType() const { return m_defaultAcIcaoType; }
+        std::string getDefaultAcIcaoType() const
+        {
+            return m_defaultAcIcaoType;
+        }
         bool setDefaultAcIcaoType(const std::string type);
 
         bool setShowHideLabels(bool status);
-        bool getShowHideLabels() const { return m_showHideLabels; }
+        bool getShowHideLabels() const
+        {
+            return m_showHideLabels;
+        }
 
         bool setDebugModelMatching(bool status);
-        bool getDebugModelMatching() const { return m_debugModelMatching; }
+        bool getDebugModelMatching() const
+        {
+            return m_debugModelMatching;
+        }
 
-        bool setTcpPort(int port);
-        int getTcpPort() const { return m_tcpPort; }
+        bool setTcpPort(std::string port);
+        std::string getTcpPort() const
+        {
+            return m_tcpPort;
+        }
 
         bool setDefaultAtisEnabled(bool status);
-        bool getDefaultAtisEnabled() const { return m_defaultAtis; }
+        bool getDefaultAtisEnabled() const
+        {
+            return m_defaultAtis;
+        }
 
-        bool setShowNotificationPanel(bool enabled);
-        bool getShowNotificationBar()const { return m_showNotificationBar; }
+        bool setAutoShowMessageConsole(bool enabled);
+        bool getShowNotificationBar()const
+        {
+            return m_showNotificationBar;
+        }
 
         bool setNotificationPanelDisappearTime(int timeout);
-        int getNotificationBarDisappaerTime() const { return m_notificationBarDisappearTime; }
+        int getNotificationBarDisappaerTime() const
+        {
+            return m_notificationBarDisappearTime;
+        }
 
         bool setOverrideContactAtcCommand(bool status);
-        bool getOverrideContactAtcCommand() const { return m_overrideContactAtcCommand; }
+        bool getOverrideContactAtcCommand() const
+        {
+            return m_overrideContactAtcCommand;
+        }
 
         bool setAircraftLabelColor(int c);
-        int getAircraftLabelColor() { return m_labelColor; }
+        int getAircraftLabelColor()
+        {
+            return m_labelColor;
+        }
 
         bool setDisableTcas(bool status);
-        bool getDisableTcas()const { return m_disableTcas; }
+        bool getDisableTcas()const
+        {
+            return m_disableTcas;
+        }
 
         bool setMaxLabelDistance(int d);
-        int getMaxLabelDistance()const { return m_maxLabelDist; }
+        int getMaxLabelDistance()const
+        {
+            return m_maxLabelDist;
+        }
 
         bool setLabelCutoffVis(bool b);
-        bool getLabelCutoffVis()const { return m_labelCutoffVis; }
+        bool getLabelCutoffVis()const
+        {
+            return m_labelCutoffVis;
+        }
+
+        bool setLogLevel(int lvl);
+        int getLogLevel()const
+        {
+            return m_logLevel;
+        }
+
     private:
         Config() = default;
         std::vector<CslPackage> m_cslPackages;
@@ -97,7 +152,7 @@ namespace xpilot
         bool m_showHideLabels = true;
         bool m_debugModelMatching = false;
         bool m_defaultAtis = false;
-        int m_tcpPort = 45001;
+        std::string m_tcpPort = "45001";
         bool m_overrideContactAtcCommand = false;
         int m_labelColor = COLOR_YELLOW;
         bool m_disableTcas = false;
@@ -105,6 +160,7 @@ namespace xpilot
         int m_notificationBarDisappearTime = 10;
         int m_maxLabelDist = 3;
         bool m_labelCutoffVis = true;
+        int m_logLevel = 3; // 0=Debug, 1=Info, 2=Warning, 3=Error, 4=Fatal, 5=Msg
     };
 }
 

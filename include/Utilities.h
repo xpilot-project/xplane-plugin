@@ -30,6 +30,7 @@
 #include <vector>
 
 #include "Constants.h"
+#include "Config.h"
 #include "XPLMPlugin.h"
 #include "XPLMUtilities.h"
 #include "XPLMDataAccess.h"
@@ -187,14 +188,15 @@ inline void HexToRgb(int inCol, float outColor[4])
 
 enum logLevel
 {
-	logDEBUG,
-	logINFO,
-	logWARN,
-	logERROR,
-	logFATAL
+	logDEBUG, // Debug, highest level of detail
+	logINFO,  // Regular info messages
+	logWARN,  // Warnings, i.e. unexpected, but critical events
+	logERROR, // Errors
+	logFATAL, // Fatal errors, often results in a crash
+	logMSG    // Message will always output, regardless of minimum log level
 };
 
-inline const char* LOG_LEVEL[] = { "[DEBUG]","[INFO]","[WARN]","[ERROR]","[FATAL]" };
+inline const char* LOG_LEVEL[] = { " DEBUG "," INFO "," WARN "," ERROR "," FATAL ","" };
 
 inline const char* Logger(logLevel level, const char* msg, va_list args)
 {
@@ -206,7 +208,7 @@ inline const char* Logger(logLevel level, const char* msg, va_list args)
 	const unsigned mins = unsigned(secs / 60.0f);
 	secs -= mins * 60.0f;
 
-	snprintf(buf, sizeof(buf), "%u:%02u:%06.3f %s %s ", hours, mins, secs, PLUGIN_NAME, LOG_LEVEL[level]);
+	snprintf(buf, sizeof(buf), "%u:%02u:%06.3f %s: %s", hours, mins, secs, PLUGIN_NAME, LOG_LEVEL[level]);
 	if (args)
 	{
 		vsnprintf(&buf[strlen(buf)], sizeof(buf) - strlen(buf) - 1, msg, args);
@@ -228,10 +230,9 @@ inline void Log(logLevel level, const char* msg, ...)
 	va_end(args);
 }
 
-#define LOG(level,...) {Log(level, __VA_ARGS__);}
-#define LOG_DEBUG(...){Log(logDEBUG, __VA_ARGS__);}
-#define LOG_INFO(...){Log(logINFO, __VA_ARGS__);}
-#define LOG_ERROR(...){Log(logERROR, __VA_ARGS__);}
-#define LOG_FATAL(...){Log(logFATAL, __VA_ARGS__);}
+#define LOG_MSG(lvl,...)  {        \
+    if (lvl >= xpilot::Config::Instance().getLogLevel()) \
+    {Log(lvl, __VA_ARGS__);}       \
+}
 
 #endif // !Utilities_h

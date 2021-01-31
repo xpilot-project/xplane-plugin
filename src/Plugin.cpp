@@ -44,13 +44,17 @@ PLUGIN_API int XPluginStart(char* outName, char* outSignature, char* outDescript
         XPLMEnableFeature("XPLM_USE_NATIVE_PATHS", 1);
         XPMPSetPluginName(PLUGIN_NAME);
         RegisterMenuItems();
+        LOG_MSG(logMSG, "xPilot Version %s Initialized", PLUGIN_VERSION_STRING);
     }
     catch (const std::exception& e)
     {
-        LOG_ERROR("Exception in XPluginStart: %s", e.what());
+        LOG_MSG(logERROR, "Exception in XPluginStart: %s", e.what());
         return 0;
     }
-    catch (...) { return 0; }
+    catch (...)
+    {
+        return 0;
+    }
 
     return 1;
 }
@@ -62,14 +66,19 @@ PLUGIN_API int XPluginEnable(void)
         XPImgWindowInit();
         Config::Instance().loadConfig();
         environment = std::make_unique<xpilot::XPilot>();
-        XPLMCheckMenuItem(PluginMenu, MenuDefaultAtis, xpilot::Config::Instance().getDefaultAtisEnabled() ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+        XPLMCheckMenuItem(PluginMenu, MenuDefaultAtis,
+            xpilot::Config::Instance().getDefaultAtisEnabled() ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+        LOG_MSG(logMSG, "xPilot Plugin Enabled");
     }
     catch (std::exception& e)
     {
-        LOG_ERROR("Exception in XPluginEnable: %s", e.what());
+        LOG_MSG(logERROR, "Exception in XPluginEnable: %s", e.what());
         return 0;
     }
-    catch (...) { return 0; }
+    catch (...)
+    {
+        return 0;
+    }
 
     return 1;
 }
@@ -82,12 +91,15 @@ PLUGIN_API void XPluginDisable(void)
         environment->stopZmqServer();
         XPMPMultiplayerDisable();
         XPMPMultiplayerCleanup();
+        LOG_MSG(logMSG, "xPilot Plugin Disabled");
     }
     catch (std::exception& e)
     {
-        LOG_ERROR("Exception in XPluginDisable: %s", e.what());
+        LOG_MSG(logERROR, "Exception in XPluginDisable: %s", e.what());
     }
-    catch (...) {}
+    catch (...)
+    {
+    }
 }
 
 PLUGIN_API void XPluginStop(void)
@@ -107,9 +119,11 @@ PLUGIN_API void XPluginStop(void)
     }
     catch (const std::exception& e)
     {
-        LOG_ERROR("Exception in XPluginStop: %s", e.what());
+        LOG_MSG(logERROR, "Exception in XPluginStop: %s", e.what());
     }
-    catch (...) {}
+    catch (...)
+    {
+    }
 }
 
 PLUGIN_API void XPluginReceiveMessage(XPLMPluginID from, int msg, void* inParam)
@@ -233,7 +247,7 @@ void RegisterMenuItems()
     ToggleTcasCommand = XPLMCreateCommand("xpilot/toggle_tcas", "xPilot: Toggle TCAS Control");
     XPLMRegisterCommandHandler(ToggleTcasCommand, ToggleTcasCommandHandler, 1, (void*)0);
 
-    ToggleTextMessageConsoleCommand = XPLMCreateCommand("xpilot/toggle_text_message_console", "xPilot: Toggle Text Message Console");
+    ToggleTextMessageConsoleCommand = XPLMCreateCommand("xpilot/toggle_text_message_console", "xPilot: Toggle Message Console");
     XPLMRegisterCommandHandler(ToggleTextMessageConsoleCommand, ToggleTextMessageConsoleCommandHandler, 1, (void*)0);
 
     ToggleAircraftLabelsCommand = XPLMCreateCommand("xpilot/toggle_aircraft_labels", "xPilot: Toggle Aircraft Labels");
@@ -246,7 +260,7 @@ void RegisterMenuItems()
 
     MenuPreferences = XPLMAppendMenuItemWithCommand(PluginMenu, "Preferences", TogglePreferencesCommand);
     MenuNearbyAtc = XPLMAppendMenuItemWithCommand(PluginMenu, "Nearby ATC", ToggleNearbyATCWindowCommand);
-    MenuTextMessageConsole = XPLMAppendMenuItemWithCommand(PluginMenu, "Text Message Console", ToggleTextMessageConsoleCommand);
+    MenuTextMessageConsole = XPLMAppendMenuItemWithCommand(PluginMenu, "Toggle Message Console", ToggleTextMessageConsoleCommand);
     MenuNotificationPanel = XPLMAppendMenuItemWithCommand(PluginMenu, "Notification Panel", ToggleNotificationPanelCommand);
     MenuDefaultAtis = XPLMAppendMenuItemWithCommand(PluginMenu, "Default ATIS", ToggleDefaultAtisCommand);
     MenuToggleTcas = XPLMAppendMenuItemWithCommand(PluginMenu, "Toggle TCAS", ToggleTcasCommand);
