@@ -137,7 +137,8 @@ namespace xpilot
 				const char* autoHideOptions[] = { "5 seconds", "10 seconds", "15 seconds", "30 seconds", "60 seconds" };
 				if (ImGui::Combo("##AutoHide", &notificationPanelTimeoutSeconds, autoHideOptions, IM_ARRAYSIZE(autoHideOptions)))
 				{
-
+					xpilot::Config::Instance().setNotificationPanelDisappearTime(notificationPanelTimeoutSeconds);
+					Save();
 				}
 
 				ImGui::TableNextRow();
