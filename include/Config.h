@@ -160,7 +160,7 @@ namespace xpilot
         int m_notificationBarDisappearTime = 10;
         int m_maxLabelDist = 3;
         bool m_labelCutoffVis = true;
-        int m_logLevel = 3; // 0=Debug, 1=Info, 2=Warning, 3=Error, 4=Fatal, 5=Msg
+        int m_logLevel = 2; // 0=Debug, 1=Info, 2=Warning, 3=Error, 4=Fatal, 5=Msg
     };
 }
 

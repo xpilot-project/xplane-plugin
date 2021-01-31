@@ -315,7 +315,34 @@ namespace xpilot
 
     bool Config::setNotificationPanelDisappearTime(int timeout)
     {
-        m_notificationBarDisappearTime = timeout;
+        switch (timeout)
+        {
+            case 5:
+                m_notificationBarDisappearTime = 0;
+                break;
+            case 10:
+                m_notificationBarDisappearTime = 1;
+                break;
+            case 15:
+                m_notificationBarDisappearTime = 2;
+                break;
+            case 30:
+                m_notificationBarDisappearTime = 3;
+                break;
+            case 60:
+                m_notificationBarDisappearTime = 4;
+                break;
+            default:
+                if (timeout <= 4)
+                {
+                    m_notificationBarDisappearTime = timeout;
+                }
+                else
+                {
+                    m_notificationBarDisappearTime = 2;
+                }
+                break;
+        }
         return true;
     }
     

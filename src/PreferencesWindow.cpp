@@ -128,7 +128,7 @@ namespace xpilot
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
 				ImGui::AlignTextToFramePadding();
-				ImGui::Text("Hide Message Console After");
+				ImGui::Text("Hide Message Console After...");
 				ImGui::SameLine();
 				ImGui::ButtonIcon(ICON_FA_QUESTION_CIRCLE, "Automatically hide the message console after the specified number of seconds.");
 				ImGui::TableSetColumnIndex(1);
@@ -138,19 +138,6 @@ namespace xpilot
 				if (ImGui::Combo("##AutoHide", &notificationPanelTimeoutSeconds, autoHideOptions, IM_ARRAYSIZE(autoHideOptions)))
 				{
 
-				}
-
-				ImGui::TableNextRow();
-				ImGui::TableSetColumnIndex(0);
-				ImGui::AlignTextToFramePadding();
-				ImGui::Text("Override \"Contact ATC\" Command");
-				ImGui::SameLine();
-				ImGui::ButtonIcon(ICON_FA_QUESTION_CIRCLE, "If this option is enabled, xPilot will ignore the \"Contact ATC\" X-Plane Command. This is only useful for users who also use PilotEdge.");
-				ImGui::TableSetColumnIndex(1);
-				if (ImGui::Checkbox("##OverrideContactATC", &overrideContactAtcCommand))
-				{
-					xpilot::Config::Instance().setOverrideContactAtcCommand(overrideContactAtcCommand);
-					Save();
 				}
 
 				ImGui::TableNextRow();
@@ -275,6 +262,19 @@ namespace xpilot
 				if (ImGui::Checkbox("##ModelMatchingLog", &debugModelMatching))
 				{
 					xpilot::Config::Instance().setDebugModelMatching(debugModelMatching);
+					Save();
+				}
+
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+				ImGui::AlignTextToFramePadding();
+				ImGui::Text("Override \"Contact ATC\" Command");
+				ImGui::SameLine();
+				ImGui::ButtonIcon(ICON_FA_QUESTION_CIRCLE, "If this option is enabled, xPilot will ignore the \"Contact ATC\" X-Plane Command. This is only useful for users who also use PilotEdge.");
+				ImGui::TableSetColumnIndex(1);
+				if (ImGui::Checkbox("##OverrideContactATC", &overrideContactAtcCommand))
+				{
+					xpilot::Config::Instance().setOverrideContactAtcCommand(overrideContactAtcCommand);
 					Save();
 				}
 
