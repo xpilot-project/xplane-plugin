@@ -24,9 +24,72 @@
 #define XPImgWindow_h
 
 #include "imgui.h"
+#include "Utilities.h"
+#include "Font/fa-solid-900.inc";
+#include "Font/IconsFontAwesome5.h"
 #include "ImgWindow.h"
 #include "DataRefAccess.h"
 #include "XPLMDisplay.h"
+
+#define WND_STANDARD_FONT "Resources/fonts/DejaVuSans.ttf"
+constexpr int WND_FONT_SIZE = 15;
+constexpr ImU32 DEF_WND_BG_COL = IM_COL32(15, 15, 15, 240);
+
+namespace ImGui
+{
+    /// Get width of an icon button (calculate on first use)
+    IMGUI_API float GetWidthIconBtn(bool _bWithSpacing = false);
+
+    /// Convert color from float pointer to ImVec4
+    inline ImVec4 ConvColor(float _col[4])
+    {
+        return ImVec4(_col[0], _col[1], _col[2], _col[3]);
+    }
+
+    /// @brief Helper for creating unique IDs
+    /// @details Required when creating many widgets in a loop, e.g. in a table
+    IMGUI_API void PushID_formatted(const char* format, ...)    IM_FMTARGS(1);
+
+    /// Output alignment
+    enum AlignTy
+    {
+        IM_ALIGN_LEFT = 0,  ///< left aligned
+        IM_ALIGN_CENTER,    ///< centered
+        IM_ALIGN_RIGHT,     ///< right aligned
+    };
+
+    /// @brief Outputs aligned text
+    IMGUI_API void TextAligned(AlignTy _align, const std::string& s);
+
+    /// @brief Small button with on-hover popup helper text
+    /// @param label Text on Button
+    /// @param tip Tooltip text when hovering over the button (or NULL of none)
+    /// @param colFg Foreground/text color (optional, otherwise no change)
+    /// @param colBg Background color (optional, otherwise no change)
+    IMGUI_API bool SmallButtonTooltip(const char* label,
+        const char* tip = nullptr,
+        ImU32 colFg = IM_COL32(1, 1, 1, 0),
+        ImU32 colBg = IM_COL32(1, 1, 1, 0));
+
+    /// @brief Button with on-hover popup helper text
+    /// @param label Text on Button
+    /// @param tip Tooltip text when hovering over the button (or NULL of none)
+    /// @param colFg Foreground/text color (optional, otherwise no change)
+    /// @param colBg Background color (optional, otherwise no change)
+    /// @param size button size, 0 for either axis means: auto size
+    IMGUI_API bool ButtonTooltip(const char* label,
+        const char* tip = nullptr,
+        ImU32 colFg = IM_COL32(1, 1, 1, 0),
+        ImU32 colBg = IM_COL32(1, 1, 1, 0),
+        const ImVec2& size = ImVec2(0, 0));
+
+    /// @brief Draws a button with an icon
+    /// @param icon The icon to draw, expected to be a single char from an icon font
+    /// @param tooltip (optional) Tooltip text when hovering over the button
+    /// @param rightAligned (optional) Align button to the right of the content region?
+    /// @return Button pressed?
+    IMGUI_API bool ButtonIcon(const char* icon, const char* tooltip = nullptr, bool rightAligned = false);
+}
 
 using namespace xpilot;
 

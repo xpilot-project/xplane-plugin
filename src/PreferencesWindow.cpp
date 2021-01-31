@@ -124,17 +124,10 @@ namespace xpilot
 				ImGui::TableNextRow();
 
 				ImGui::TableSetColumnIndex(0);
+				ImGui::AlignTextToFramePadding();
 				ImGui::Text("Plugin Port");
 				ImGui::SameLine();
-				ImGui::Text("(?)");
-				if (ImGui::IsItemHovered())
-				{
-					ImGui::BeginTooltip();
-					ImGui::PushTextWrapPos(300);
-					ImGui::TextUnformatted("This port number allows xPilot to communicate with X-Plane.\n\nOnly change this port number if you know what you are doing.\n\nYou must restart X-Plane and xPilot after changing the port number.");
-					ImGui::PopTextWrapPos();
-					ImGui::EndTooltip();
-				}
+				ImGui::ButtonIcon(ICON_FA_QUESTION_CIRCLE, "This port number allows xPilot to communicate with X-Plane.\n\nOnly change this port number if you know what you are doing.\n\nYou must restart X-Plane and xPilot after changing the port number.");
 				ImGui::TableSetColumnIndex(1);
 				if (ImGui::InputTextStd("##Port", &tcpPort, ImGuiInputTextFlags_CallbackCharFilter, TextFilters::FilterNumbersOnly))
 				{
@@ -156,17 +149,10 @@ namespace xpilot
 
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
+				ImGui::AlignTextToFramePadding();
 				ImGui::Text("Automatically Show Message Console");
 				ImGui::SameLine();
-				ImGui::Text("(?)");
-				if (ImGui::IsItemHovered())
-				{
-					ImGui::BeginTooltip();
-					ImGui::PushTextWrapPos(300);
-					ImGui::TextUnformatted("If enabled, the Message Console will automatically appear if a new message is received.");
-					ImGui::PopTextWrapPos();
-					ImGui::EndTooltip();
-				}
+				ImGui::ButtonIcon(ICON_FA_QUESTION_CIRCLE, "If enabled, the Message Console will automatically appear if a new message is received.");
 				ImGui::TableSetColumnIndex(1);
 				if (ImGui::Checkbox("##AutoShowMessageConsole", &showMessageConsole))
 				{
@@ -176,17 +162,10 @@ namespace xpilot
 
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
+				ImGui::AlignTextToFramePadding();
 				ImGui::Text("Hide Message Console After");
 				ImGui::SameLine();
-				ImGui::Text("(?)");
-				if (ImGui::IsItemHovered())
-				{
-					ImGui::BeginTooltip();
-					ImGui::PushTextWrapPos(300);
-					ImGui::TextUnformatted("Set this option to automatically hide the message console after the specified number of seconds.");
-					ImGui::PopTextWrapPos();
-					ImGui::EndTooltip();
-				}
+				ImGui::ButtonIcon(ICON_FA_QUESTION_CIRCLE, "Automatically hide the message console after the specified number of seconds.");
 				ImGui::TableSetColumnIndex(1);
 				const float cbWidth = ImGui::CalcTextSize("5 Seconds_______").x;
 				ImGui::SetNextItemWidth(cbWidth);
@@ -198,17 +177,10 @@ namespace xpilot
 
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
+				ImGui::AlignTextToFramePadding();
 				ImGui::Text("Override \"Contact ATC\" Command");
 				ImGui::SameLine();
-				ImGui::Text("(?)");
-				if (ImGui::IsItemHovered())
-				{
-					ImGui::BeginTooltip();
-					ImGui::PushTextWrapPos(300);
-					ImGui::TextUnformatted("If this option is enabled, xPilot will ignore the \"Contact ATC\" X-Plane Command. This is only useful for users who also use PilotEdge.");
-					ImGui::PopTextWrapPos();
-					ImGui::EndTooltip();
-				}
+				ImGui::ButtonIcon(ICON_FA_QUESTION_CIRCLE, "If this option is enabled, xPilot will ignore the \"Contact ATC\" X-Plane Command. This is only useful for users who also use PilotEdge.");
 				ImGui::TableSetColumnIndex(1);
 				if (ImGui::Checkbox("##OverrideContactATC", &overrideContactAtcCommand))
 				{
@@ -218,17 +190,10 @@ namespace xpilot
 
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
+				ImGui::AlignTextToFramePadding();
 				ImGui::Text("Enable Aircraft Labels");
 				ImGui::SameLine();
-				ImGui::Text("(?)");
-				if (ImGui::IsItemHovered())
-				{
-					ImGui::BeginTooltip();
-					ImGui::PushTextWrapPos(300);
-					ImGui::TextUnformatted("Enable this option to show the callsign above all aircraft.");
-					ImGui::PopTextWrapPos();
-					ImGui::EndTooltip();
-				}
+				ImGui::ButtonIcon(ICON_FA_QUESTION_CIRCLE, "Enable this option to show the callsign above all aircraft.");
 				ImGui::TableSetColumnIndex(1);
 				if (ImGui::Checkbox("##EnableAircraftLabels", &showHideLabels))
 				{
@@ -238,19 +203,12 @@ namespace xpilot
 
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
+				ImGui::AlignTextToFramePadding();
 				ImGui::Text("Aircraft Label Color");
 				ImGui::SameLine();
-				ImGui::Text("(?)");
-				if (ImGui::IsItemHovered())
-				{
-					ImGui::BeginTooltip();
-					ImGui::PushTextWrapPos(300);
-					ImGui::TextUnformatted("Specify the color of the aircraft labels. Choose a custom color or a pre-defined color.");
-					ImGui::PopTextWrapPos();
-					ImGui::EndTooltip();
-				}
+				ImGui::ButtonIcon(ICON_FA_QUESTION_CIRCLE, "Specify the color of the aircraft labels. Choose a custom color or a pre-defined color.");
 				ImGui::TableSetColumnIndex(1);
-				if (ImGui::ColorButton("Pick Label Color", ImVec4(lblCol[0], lblCol[1], lblCol[2], lblCol[3]), ImGuiColorEditFlags_NoAlpha))
+				if (ImGui::ColorButton("Click to Pick Label Color", ImVec4(lblCol[0], lblCol[1], lblCol[2], lblCol[3]), ImGuiColorEditFlags_NoAlpha))
 				{
 					ImGui::OpenPopup("Label Color Picker");
 				}
@@ -302,17 +260,10 @@ namespace xpilot
 
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
+				ImGui::AlignTextToFramePadding();
 				ImGui::Text("Max Label Distance (nm)");
 				ImGui::SameLine();
-				ImGui::Text("(?)");
-				if (ImGui::IsItemHovered())
-				{
-					ImGui::BeginTooltip();
-					ImGui::PushTextWrapPos(300);
-					ImGui::TextUnformatted("Specify how far away (nautical miles) you want aircraft labels to be visible.");
-					ImGui::PopTextWrapPos();
-					ImGui::EndTooltip();
-				}
+				ImGui::ButtonIcon(ICON_FA_QUESTION_CIRCLE, "Specify how far away (nautical miles) you want aircraft labels to be visible.");
 				ImGui::TableSetColumnIndex(1);
 				if (ImGui::SliderInt("##MaxDist", &labelMaxDistance, 1, 50, "%d nm"))
 				{
@@ -323,17 +274,10 @@ namespace xpilot
 
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
+				ImGui::AlignTextToFramePadding();
 				ImGui::Text("Hide Labels at Visibility Distance");
 				ImGui::SameLine();
-				ImGui::Text("(?)");
-				if (ImGui::IsItemHovered())
-				{
-					ImGui::BeginTooltip();
-					ImGui::PushTextWrapPos(300);
-					ImGui::TextUnformatted("Visibility can oftentimes be less than the \"Max Label Distance\" due to weather conditions.\n\nIf enabled, aircraft labels will not be visible for planes beyond the current visibility range.\n\nIf disabled, labels will show even if the plane is hidden behind fog or clouds.");
-					ImGui::PopTextWrapPos();
-					ImGui::EndTooltip();
-				}
+				ImGui::ButtonIcon(ICON_FA_QUESTION_CIRCLE, "Visibility can oftentimes be less than the \"Max Label Distance\" due to weather conditions.\n\nIf enabled, aircraft labels will not be visible for planes beyond the current visibility range.\n\nIf disabled, labels will show even if the plane is hidden behind fog or clouds.");
 				ImGui::TableSetColumnIndex(1);
 				if (ImGui::Checkbox("##HideLabelsVisibility", &labelVisibilityCutoff))
 				{
@@ -343,17 +287,10 @@ namespace xpilot
 
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
+				ImGui::AlignTextToFramePadding();
 				ImGui::Text("Log.txt Log Level");
 				ImGui::SameLine();
-				ImGui::Text("(?)");
-				if (ImGui::IsItemHovered())
-				{
-					ImGui::BeginTooltip();
-					ImGui::PushTextWrapPos(300);
-					ImGui::TextUnformatted("This option manages the amount of information that is written to the X-Plane Log.txt.\n\n\"Debug\" will write the most information.\n\"Fatal\" will write the least amount of information.\n\nIt is recommended you only change this if you experience odd behavior and need to log additional information to provide to the developer.");
-					ImGui::PopTextWrapPos();
-					ImGui::EndTooltip();
-				}
+				ImGui::ButtonIcon(ICON_FA_QUESTION_CIRCLE, "This option manages the amount of information that is written to the X-Plane Log.txt.\n\n\"Debug\" will write the most information.\n\"Fatal\" will write the least amount of information.\n\nIt is recommended you only change this if you experience odd behavior and need to log additional information to provide to the developer.");
 				ImGui::TableSetColumnIndex(1);
 				const float logCbWidth = ImGui::CalcTextSize("Warning (default)_____").x;
 				ImGui::SetNextItemWidth(logCbWidth);
@@ -365,17 +302,10 @@ namespace xpilot
 
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
+				ImGui::AlignTextToFramePadding();
 				ImGui::Text("Log Model Matching Results");
 				ImGui::SameLine();
-				ImGui::Text("(?)");
-				if (ImGui::IsItemHovered())
-				{
-					ImGui::BeginTooltip();
-					ImGui::PushTextWrapPos(300);
-					ImGui::TextUnformatted("If enabled, debug information will be logged to the X-Plane Log.txt about how a CSL model was chosen.\n\nOnly enable this option if you need to determine why planes are rendering as expected.");
-					ImGui::PopTextWrapPos();
-					ImGui::EndTooltip();
-				}
+				ImGui::ButtonIcon(ICON_FA_QUESTION_CIRCLE, "If enabled, debug information will be logged to the X-Plane Log.txt about how a CSL model was chosen.\n\nOnly enable this option if you need to determine why planes are rendering as expected.");
 				ImGui::TableSetColumnIndex(1);
 				if (ImGui::Checkbox("##ModelMatchingLog", &debugModelMatching))
 				{
@@ -385,17 +315,10 @@ namespace xpilot
 
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
+				ImGui::AlignTextToFramePadding();
 				ImGui::Text("Default Aircraft Type ICAO");
 				ImGui::SameLine();
-				ImGui::Text("(?)");
-				if (ImGui::IsItemHovered())
-				{
-					ImGui::BeginTooltip();
-					ImGui::PushTextWrapPos(300);
-					ImGui::TextUnformatted("Fallback aircraft ICAO type designator if no CSL model can be found for a plane.");
-					ImGui::PopTextWrapPos();
-					ImGui::EndTooltip();
-				}
+				ImGui::ButtonIcon(ICON_FA_QUESTION_CIRCLE, "Fallback aircraft ICAO type designator if no CSL model can be found for a plane.");
 				ImGui::TableSetColumnIndex(1);
 				if (ImGui::InputTextStd("##Fallback", &fallbackTypeCode, ImGuiInputTextFlags_CharsUppercase))
 				{

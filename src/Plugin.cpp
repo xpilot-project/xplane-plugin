@@ -66,8 +66,7 @@ PLUGIN_API int XPluginEnable(void)
         XPImgWindowInit();
         Config::Instance().loadConfig();
         environment = std::make_unique<xpilot::XPilot>();
-        XPLMCheckMenuItem(PluginMenu, MenuDefaultAtis,
-            xpilot::Config::Instance().getDefaultAtisEnabled() ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+        XPLMCheckMenuItem(PluginMenu, MenuDefaultAtis, xpilot::Config::Instance().getDefaultAtisEnabled() ? xplm_Menu_Checked : xplm_Menu_Unchecked);
         LOG_MSG(logMSG, "xPilot Plugin Enabled");
     }
     catch (std::exception& e)

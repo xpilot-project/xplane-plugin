@@ -21,6 +21,150 @@
 
 #include "XPImgWindow.h"
 
+#define FATAL_COULD_NOT_LOAD_FONT "Could not load GUI font %s"
+#define WARN_NOT_LOADED_ICON_FONT "Could not load icon font, icons will not be displayed properly"
+constexpr ImU32 LTIM_BTN_COL = IM_COL32(0xB0, 0xB0, 0xB0, 0xFF);
+
+namespace ImGui
+{
+    /// width of a single-icon button
+    static float gWidthIconBtn = NAN;
+
+    // Get width of an icon button (calculate on first use)
+    IMGUI_API float GetWidthIconBtn(bool _bWithSpacing)
+    {
+        if (std::isnan(gWidthIconBtn))
+            gWidthIconBtn = CalcTextSize(ICON_FA_WINDOW_MAXIMIZE).x;
+        if (_bWithSpacing)
+            return gWidthIconBtn + ImGui::GetStyle().ItemSpacing.x;
+        else
+            return gWidthIconBtn;
+    }
+
+    // Helper for creating unique IDs
+    IMGUI_API void PushID_formatted(const char* format, ...)
+    {
+        // format the variable string
+        va_list args;
+        char sz[500];
+        va_start(args, format);
+        vsnprintf(sz, sizeof(sz), format, args);
+        va_end(args);
+        // Call the actual push function
+        PushID(sz);
+    }
+
+    // Outputs aligned text
+    IMGUI_API void TextAligned(AlignTy _align, const std::string& s)
+    {
+        // Change cursor position so that text becomes aligned
+        if (_align != IM_ALIGN_LEFT)
+        {
+            ImVec2 avail = GetContentRegionAvail();
+            ImVec2 pos = GetCursorPos();
+            const float txtWidth = CalcTextSize(s.c_str()).x;
+            if (_align == IM_ALIGN_CENTER)
+                pos.x += avail.x / 2.0f - txtWidth / 2.0f;
+            else
+                pos.x += avail.x - txtWidth - ImGui::GetStyle().ItemSpacing.x;
+            SetCursorPos(pos);
+        }
+        // Output the text
+        TextUnformatted(s.c_str());
+    }
+
+    // Small Button with on-hover popup helper text
+    IMGUI_API bool SmallButtonTooltip(const char* label,
+        const char* tip,
+        ImU32 colFg,
+        ImU32 colBg)
+    {
+        // Setup colors
+        if (colFg != IM_COL32(1, 1, 1, 0))
+            PushStyleColor(ImGuiCol_Text, colFg);
+        if (colBg != IM_COL32(1, 1, 1, 0))
+            PushStyleColor(ImGuiCol_Button, colBg);
+
+        // do the button (and we _really_ using also x frame padding = 0)
+        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.0f, 0.0f));
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
+        bool b = SmallButton(label);
+        ImGui::PopStyleVar(2);
+
+        // restore previous colors
+        if (colBg != IM_COL32(1, 1, 1, 0))
+            PopStyleColor();
+        if (colFg != IM_COL32(1, 1, 1, 0))
+            PopStyleColor();
+
+        // do the tooltip
+        if (tip && IsItemHovered())
+        {
+            ImGui::BeginTooltip();
+            ImGui::PushTextWrapPos(300);
+            ImGui::TextUnformatted(tip);
+            ImGui::PopTextWrapPos();
+            ImGui::EndTooltip();
+        }
+
+        // return if button pressed
+        return b;
+    }
+
+    IMGUI_API bool ButtonTooltip(const char* label,
+        const char* tip,
+        ImU32 colFg,
+        ImU32 colBg,
+        const ImVec2& size)
+    {
+        // Setup colors
+        if (colFg != IM_COL32(1, 1, 1, 0))
+            PushStyleColor(ImGuiCol_Text, colFg);
+        if (colBg != IM_COL32(1, 1, 1, 0))
+            PushStyleColor(ImGuiCol_Button, colBg);
+
+        // do the button
+        bool b = Button(label, size);
+
+        // restore previous colors
+        if (colBg != IM_COL32(1, 1, 1, 0))
+            PopStyleColor();
+        if (colFg != IM_COL32(1, 1, 1, 0))
+            PopStyleColor();
+
+        // do the tooltip
+        if (tip && IsItemHovered())
+        {
+            ImGui::BeginTooltip();
+            ImGui::PushTextWrapPos(300);
+            ImGui::TextUnformatted(tip);
+            ImGui::PopTextWrapPos();
+            ImGui::EndTooltip();
+        }
+
+        // return if button pressed
+        return b;
+    }
+
+    IMGUI_API bool ButtonIcon(const char* label, const char* tooltip, bool rightAligned)
+    {
+        // Setup colors for window sizing buttons
+        PushStyleColor(ImGuiCol_Text, LTIM_BTN_COL);                                         // very light gray
+        PushStyleColor(ImGuiCol_Button, IM_COL32_BLACK_TRANS);                               // transparent
+        PushStyleColor(ImGuiCol_ButtonHovered, GetColorU32(ImGuiCol_ScrollbarGrab));  // gray
+
+        if (rightAligned)
+            SetCursorPosX(GetWindowContentRegionMax().x - GetWidthIconBtn() - ImGui::GetStyle().ItemSpacing.x);
+
+        bool b = ButtonTooltip(label, tooltip);
+
+        // Restore colors
+        PopStyleColor(3);
+
+        return b;
+    }
+}
+
 XPImgWindow::XPImgWindow(WndMode _mode, WndStyle _style, WndRect _initPos) :
     ImgWindow(_initPos.left(), _initPos.top(),
         _initPos.right(), _initPos.bottom(),
@@ -140,10 +284,30 @@ bool XPImgWindowInit()
     {
         ImgWindow::sFontAtlas = std::make_shared<ImgFontAtlas>();
     }
-    if (!ImgWindow::sFontAtlas->AddFontFromFileTTF("./Resources/fonts/Roboto-Regular.ttf", 16.0f))
+    if (!ImgWindow::sFontAtlas->AddFontFromFileTTF((GetXPlanePath() + WND_STANDARD_FONT).c_str(), WND_FONT_SIZE))
     {
+        LOG_MSG(logFATAL, FATAL_COULD_NOT_LOAD_FONT, WND_STANDARD_FONT);
         return false;
     }
+
+    ImFontConfig config;
+    config.MergeMode = true;
+
+    static ImVector<ImWchar> icon_ranges;
+    ImFontGlyphRangesBuilder builder;
+    builder.AddText(ICON_FA_QUESTION_CIRCLE);
+    builder.BuildRanges(&icon_ranges);
+
+    if (!ImgWindow::sFontAtlas->AddFontFromMemoryCompressedTTF(
+        fa_solid_900_compressed_data,
+        fa_solid_900_compressed_size,
+        WND_FONT_SIZE,
+        &config,
+        icon_ranges.Data))
+    {
+        LOG_MSG(logWARN, "%s", WARN_NOT_LOADED_ICON_FONT);
+    }
+
     return true;
 }
 
