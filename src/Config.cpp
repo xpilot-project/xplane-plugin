@@ -39,6 +39,16 @@ namespace xpilot
         j.at("Enabled").get_to(p.enabled);
     }
 
+    inline std::string json_to_string(const json& j)
+    {
+        if (j.type() == json::value_t::string)
+        {
+            return j.get<std::string>();
+        }
+
+        return j.dump();
+    }
+
     Config& Config::Instance()
     {
         static auto&& config = Config();
@@ -69,7 +79,8 @@ namespace xpilot
                 }
                 if (jf.contains("PluginPort"))
                 {
-                    setTcpPort(jf["PluginPort"]);
+                    std::string v = json_to_string(jf["PluginPort"]);
+                    setTcpPort(v);
                 }
                 if (jf.contains("DebugModelMatching"))
                 {

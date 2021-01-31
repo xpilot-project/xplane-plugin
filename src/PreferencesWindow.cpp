@@ -90,15 +90,6 @@ namespace xpilot
 		}
 	}
 
-	static bool is_number(const std::string& s)
-	{
-		return !s.empty() && std::find_if(s.begin(),
-			s.end(), [](unsigned char c)
-		{
-			return !std::isdigit(c);
-		}) == s.end();
-	}
-
 	void PreferencesWindow::buildInterface()
 	{
 		loadConfig();
@@ -120,32 +111,6 @@ namespace xpilot
 			{
 				ImGui::TableSetupColumn("Item", ImGuiTableColumnFlags_WidthFixed | ImGuiTableColumnFlags_NoSort, 300);
 				ImGui::TableSetupColumn("Value", ImGuiTableColumnFlags_WidthStretch | ImGuiTableColumnFlags_NoSort);
-
-				ImGui::TableNextRow();
-
-				ImGui::TableSetColumnIndex(0);
-				ImGui::AlignTextToFramePadding();
-				ImGui::Text("Plugin Port");
-				ImGui::SameLine();
-				ImGui::ButtonIcon(ICON_FA_QUESTION_CIRCLE, "This port number allows xPilot to communicate with X-Plane.\n\nOnly change this port number if you know what you are doing.\n\nYou must restart X-Plane and xPilot after changing the port number.");
-				ImGui::TableSetColumnIndex(1);
-				if (ImGui::InputTextStd("##Port", &tcpPort, ImGuiInputTextFlags_CallbackCharFilter, TextFilters::FilterNumbersOnly))
-				{
-					if (is_number(tcpPort))
-					{
-						int t = std::stoi(tcpPort);
-						if (t > 65535)
-						{
-							tcpPort = "65535";
-						}
-						if (t < 1025)
-						{
-							tcpPort = "1025";
-						}
-					}
-					xpilot::Config::Instance().setTcpPort(tcpPort);
-					Save();
-				}
 
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
@@ -323,6 +288,31 @@ namespace xpilot
 				if (ImGui::InputTextStd("##Fallback", &fallbackTypeCode, ImGuiInputTextFlags_CharsUppercase))
 				{
 					xpilot::Config::Instance().setDefaultAcIcaoType(fallbackTypeCode);
+					Save();
+				}
+
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+				ImGui::AlignTextToFramePadding();
+				ImGui::Text("TCP Port");
+				ImGui::SameLine();
+				ImGui::ButtonIcon(ICON_FA_QUESTION_CIRCLE, "This port number allows xPilot to communicate with X-Plane.\n\nOnly change this port number if you know what you are doing.\n\nYou must restart X-Plane and xPilot after changing the port number.");
+				ImGui::TableSetColumnIndex(1);
+				if (ImGui::InputTextStd("##Port", &tcpPort, ImGuiInputTextFlags_CallbackCharFilter, TextFilters::FilterNumbersOnly))
+				{
+					if (is_number(tcpPort))
+					{
+						int t = std::stoi(tcpPort);
+						if (t > 65535)
+						{
+							tcpPort = "65535";
+						}
+						if (t < 1025)
+						{
+							tcpPort = "1025";
+						}
+					}
+					xpilot::Config::Instance().setTcpPort(tcpPort);
 					Save();
 				}
 
