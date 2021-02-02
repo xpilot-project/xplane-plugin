@@ -86,7 +86,7 @@
 #define ZMQ_INLINE_VAR
 #endif
 
-#include <zmq.h>
+#include "zmq.h"
 
 #include <cassert>
 #include <cstring>
