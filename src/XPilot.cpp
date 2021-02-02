@@ -26,7 +26,7 @@
 #include "NetworkAircraftConfig.h"
 #include "FrameRateMonitor.h"
 #include "NearbyATCWindow.h"
-#include "PreferencesWindow.h"
+#include "SettingsWindow.h"
 #include "NotificationPanel.h"
 #include "TextMessageConsole.h"
 #include "sha512.hh"
@@ -91,7 +91,7 @@ namespace xpilot
 		m_notificationPanel = std::make_unique<NotificationPanel>(left, top, right, bottom);
 		m_textMessageConsole = std::make_unique<TextMessageConsole>(this);
 		m_nearbyAtcWindow = std::make_unique<NearbyATCWindow>(this);
-		m_preferencesWindow = std::make_unique<PreferencesWindow>();
+		m_settingsWindow = std::make_unique<SettingsWindow>();
 		m_frameRateMonitor = std::make_unique<FrameRateMonitor>(this);
 		m_aircraftManager = std::make_unique<AircraftManager>();
 		pluginHash = sw::sha512::file(GetTruePluginPath().c_str());
@@ -153,7 +153,7 @@ namespace xpilot
 
 		m_keepAlive = true;
 		m_zmqThread = std::make_unique<std::thread>(&XPilot::zmqWorker, this);
-		LOG_MSG(logMSG, "xPilot is listening on port %i.", Config::Instance().getTcpPort());
+		LOG_MSG(logMSG, "xPilot is now listening on port %s.", Config::Instance().getTcpPort());
 	}
 
 	void XPilot::stopZmqServer()
@@ -607,7 +607,7 @@ namespace xpilot
 
 	void XPilot::togglePreferencesWindow()
 	{
-		m_preferencesWindow->SetVisible(!m_preferencesWindow->GetVisible());
+		m_settingsWindow->SetVisible(!m_settingsWindow->GetVisible());
 	}
 
 	void XPilot::toggleNearbyAtcWindow()

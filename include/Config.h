@@ -97,16 +97,33 @@ namespace xpilot
             return m_defaultAtis;
         }
 
-        bool setAutoShowMessageConsole(bool enabled);
+        bool setShowMessagePreview(bool enabled);
         bool getShowNotificationBar()const
         {
             return m_showNotificationBar;
         }
 
-        bool setNotificationPanelDisappearTime(int timeout);
+        bool setMessagePreviewTimeout(int timeout);
         int getNotificationBarDisappaerTime() const
         {
             return m_notificationBarDisappearTime;
+        }
+        int getActualMessagePreviewTime()const
+        {
+            switch (m_notificationBarDisappearTime)
+            {
+                case 0:
+                    return 5;
+                case 1:
+                    return 10;
+                case 2:
+                    return 15;
+                case 3:
+                    return 30;
+                case 4:
+                default:
+                    return 60;
+            }
         }
 
         bool setOverrideContactAtcCommand(bool status);

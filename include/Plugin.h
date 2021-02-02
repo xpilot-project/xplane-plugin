@@ -28,20 +28,20 @@ void UpdateMenuItems();
 inline XPLMCommandRef PttCommand = NULL;
 inline int PttCommandHandler(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* inRefcon);
 
-inline XPLMCommandRef TogglePreferencesCommand = NULL;
-inline int TogglePreferencesCommandHandler(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* inRefcon);
+inline XPLMCommandRef ToggleSettingsCommand = NULL;
+inline int ToggleSettingsCommandHandler(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* inRefcon);
 
 inline XPLMCommandRef ToggleNearbyATCWindowCommand = NULL;
 inline int ToggleNearbyATCWindowCommandHandler(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* inRefcon);
 
-inline XPLMCommandRef ToggleNotificationPanelCommand = NULL;
-inline int ToggleNotificationPanelCommandHandler(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* inRefcon);
+inline XPLMCommandRef ToggleMessgePreviewPanelCommnd = NULL;
+inline int ToggleMessagePreviewPanelCommandHandler(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* inRefcon);
 
 inline XPLMCommandRef ToggleDefaultAtisCommand = NULL;
 inline int ToggleDefaultAtisCommandHandler(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* inRefcon);
 
-inline XPLMCommandRef ToggleTextMessageConsoleCommand = NULL;
-inline int ToggleTextMessageConsoleCommandHandler(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* inRefcon);
+inline XPLMCommandRef ToggleMessageConsoleCommand = NULL;
+inline int ToggleMessageConsoleCommandHandler(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* inRefcon);
 
 inline XPLMCommandRef ToggleTcasCommand = NULL;
 inline int ToggleTcasCommandHandler(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* inRefcon);

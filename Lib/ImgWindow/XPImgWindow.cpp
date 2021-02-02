@@ -186,6 +186,32 @@ XPImgWindow::XPImgWindow(WndMode _mode, WndStyle _style, WndRect _initPos) :
     };
     flChangeWndMode = XPLMCreateFlightLoop(&flDef);
 
+    // Safeguard position a bit against "out of view" positions
+    if (_initPos.left() > 0 || _initPos.bottom())
+    {
+        WndRect screen;
+        XPLMGetScreenBoundsGlobal(&screen.left(), &screen.top(),
+            &screen.right(), &screen.bottom());
+        if (!screen.contains(_initPos.tl) ||
+            !screen.contains(_initPos.tl.shiftedBy(50, -20)))
+        {
+            // top left corner is not (sufficiently) inside screen bounds
+            // -> make left/botom = 0 so that wnd will be centered
+            //    while retaining width/height
+            _initPos.shift(-_initPos.left(), -_initPos.bottom());
+        }
+    }
+
+    // If _initPos defines left/bottom already then we don't do centered
+    if (_initPos.left() > 0 || _initPos.bottom() > 0)
+    {
+        // Don't center the window as we have a proper position
+        if (_mode == WND_MODE_FLOAT_CENTERED)
+            _mode = WND_MODE_FLOAT;
+        else if (_mode == WND_MODE_FLOAT_CNT_VR)
+            _mode = WND_MODE_FLOAT_OR_VR;
+    }
+
     // Set the positioning mode
     SetMode(_mode);
 }
@@ -281,9 +307,8 @@ float XPImgWindow::cbChangeWndMode(float, float, int, void* inRefcon)
 bool XPImgWindowInit()
 {
     if (!ImgWindow::sFontAtlas)
-    {
         ImgWindow::sFontAtlas = std::make_shared<ImgFontAtlas>();
-    }
+
     if (!ImgWindow::sFontAtlas->AddFontFromFileTTF((GetXPlanePath() + WND_STANDARD_FONT).c_str(), WND_FONT_SIZE))
     {
         LOG_MSG(logFATAL, FATAL_COULD_NOT_LOAD_FONT, WND_STANDARD_FONT);

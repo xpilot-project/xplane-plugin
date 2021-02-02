@@ -98,6 +98,18 @@ struct WndPos
 {
     int x = 0;
     int y = 0;
+
+    /// Shift both values
+    void shift(int _dx, int _dy)
+    {
+        x += _dx; y += _dy;
+    }
+
+    /// Return a shifted copy
+    WndPos shiftedBy(int _dx, int _dy) const
+    {
+        WndPos ret = *this; ret.shift(_dx, _dy); return ret;
+    }
 };
 
 /// 2D rectagle
@@ -128,9 +140,23 @@ struct WndRect
     int     width() const { return right() - left(); }    ///< width
     int     height() const { return top() - bottom(); }    ///< height
 
+    /// Does window contain the position?
+    bool    contains(const WndPos& _p) const
+    {
+        return
+            left() <= _p.x && _p.x <= right() &&
+            bottom() <= _p.y && _p.y <= top();
+    }
+
     // Clear all to zero
     void    clear() { tl.x = tl.y = br.x = br.y = 0; }
     bool    empty() const { return !tl.x && !tl.y && !br.x && !br.y; }
+
+    /// Shift position right/down
+    WndRect& shift(int _dx, int _dy)
+    {
+        tl.shift(_dx, _dy); br.shift(_dx, _dy); return *this;
+    }
 };
 
 /// Mode the window is to open in / does currently operate in

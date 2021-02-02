@@ -55,7 +55,7 @@ namespace xpilot
 	class NotificationPanel;
 	class TextMessageConsole;
 	class NearbyATCWindow;
-	class PreferencesWindow;
+	class SettingsWindow;
 
 	class XPilot
 	{
@@ -166,7 +166,7 @@ namespace xpilot
 		std::unique_ptr<NotificationPanel> m_notificationPanel;
 		std::unique_ptr<TextMessageConsole> m_textMessageConsole;
 		std::unique_ptr<NearbyATCWindow> m_nearbyAtcWindow;
-		std::unique_ptr<PreferencesWindow> m_preferencesWindow;
+		std::unique_ptr<SettingsWindow> m_settingsWindow;
 	};
 }
 

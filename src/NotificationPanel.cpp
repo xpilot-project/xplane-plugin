@@ -119,7 +119,7 @@ namespace xpilot
             {
                 SetVisible(true);
                 m_disappearTime = std::chrono::system_clock::now() +
-                    std::chrono::milliseconds(Config::Instance().getNotificationBarDisappaerTime() * 1000);
+                    std::chrono::milliseconds(Config::Instance().getActualMessagePreviewTime() * 1000);
             }
         }
     }

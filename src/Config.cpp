@@ -92,11 +92,11 @@ namespace xpilot
                 }
                 if (jf.contains("ShowNotificationBar"))
                 {
-                    setAutoShowMessageConsole(jf["ShowNotificationBar"]);
+                    setShowMessagePreview(jf["ShowNotificationBar"]);
                 }
                 if (jf.contains("NotificationBarDisappearTime"))
                 {
-                    setNotificationPanelDisappearTime(jf["NotificationBarDisappearTime"]);
+                    setMessagePreviewTimeout(jf["NotificationBarDisappearTime"]);
                 }
                 if (jf.contains("OverrideContactAtc"))
                 {
@@ -307,13 +307,13 @@ namespace xpilot
         return true;
     }
 
-    bool Config::setAutoShowMessageConsole(bool show)
+    bool Config::setShowMessagePreview(bool show)
     {
         m_showNotificationBar = show;
         return true;
     }
 
-    bool Config::setNotificationPanelDisappearTime(int timeout)
+    bool Config::setMessagePreviewTimeout(int timeout)
     {
         switch (timeout)
         {
