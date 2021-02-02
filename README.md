@@ -1,6 +1,6 @@
 # xPilot - Plugin
 
-xPilot is an intuitive and easy to use X-Plane pilot client for the VATSIM network. The plugin is a dynamic-linked library written C++ that manages the drawing of network aircraft in X-Plane using CSL models. The plugin uses [cppzmq](https://github.com/zeromq/cppzmq) to transport messages to and from the C# pilot client application through the use of a TCP socket.
+xPilot is an intuitive and easy to use X-Plane pilot client for the VATSIM network. The plugin is a C++ dynamically-linked library that manages the drawing of network aircraft in X-Plane using CSL models. The plugin uses [cppzmq](https://github.com/zeromq/cppzmq) to transport messages to and from the C# pilot client application through the use of a TCP socket.
 
 ### Prerequisites 
 
@@ -12,8 +12,12 @@ These instructions will get you a copy of the project up and running on your loc
 
 `git clone https://github.com/xpilot-project/Plugin.git`
 
-* Open the solution `Xpilot.Plugin.sln` in VisualStudio
-* Build from within VisualStudio
+```
+$ mkdir build && cd build
+$ cmake ..
+```
+
+Then build the project appropriately.
 
 ## Contributing
 
@@ -34,8 +38,9 @@ This project is licensed under the [GPLv3 License](LICENSE).
 ## Acknowledgments
 
 * [XPMP2](https://github.com/TwinFan/XPMP2) Multiplayer library for X-Plane
-* [libzmq](https://github.com/zeromq/libzmq) ZeroMQ engine
+* [libzmq](https://github.com/zeromq/libzmq) Lightweight networking library
 * [cppzmq](https://github.com/zeromq/cppzmq) C++ binding for ZeroMQ
+* [ImGui](https://github.com/ocornut/imgui) Graphical User Interface
 * [imgui4xp](https://github.com/sparker256/imgui4xp) ImGui wrapper for X-Plane
 * [ImgWindow](https://github.com/xsquawkbox/xsb_public) ImGui implementation for X-Plane
 * [JSON for Modern C++](https://github.com/nlohmann/json)
