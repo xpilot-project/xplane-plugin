@@ -10,9 +10,8 @@ xPilot is an intuitive and easy to use X-Plane pilot client for the VATSIM netwo
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-`git clone https://github.com/xpilot-project/Plugin.git`
-
 ```
+$ git clone https://github.com/xpilot-project/Plugin.git
 $ mkdir build && cd build
 $ cmake ..
 ```
