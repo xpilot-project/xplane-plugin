@@ -38,7 +38,7 @@ set(Header_Files
     include/NotificationPanel.h
     include/OwnedDataRef.h
     include/Plugin.h
-    include/PreferencesWindow.h
+    include/SettingsWindow.h
     include/sha512.hh
     include/StopWatch.h
     include/TerrainProbe.h
@@ -77,7 +77,7 @@ set(Source_Files
     src/NotificationPanel.cpp
     src/OwnedDataRef.cpp
     src/Plugin.cpp
-    src/PreferencesWindow.cpp
+    src/SettingsWindow.cpp
     src/Stopwatch.cpp
     src/TerrainProbe.cpp
     src/TextMessageConsole.cpp
