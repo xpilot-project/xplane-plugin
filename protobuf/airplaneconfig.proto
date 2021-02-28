@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package xpilot;
+
+message AirplaneConfig {
+	message AirplaneConfigLights {
+		optional bool strobe_lights_on = 1;
+		optional bool landing_lights_on = 2;
+		optional bool taxi_lights_on = 3;
+		optional bool beacon_lights_on = 4;
+		optional bool nav_lights_on = 5;
+	}
+	optional string callsign = 1;
+	optional AirplaneConfigLights lights = 2;
+	optional bool gear_down = 3;
+	optional float flaps = 4;
+	optional bool engines_on = 5;
+	optional bool spoilers_deployed = 6;
+	optional bool reverse_thrust = 7;
+	optional bool on_ground = 8;
+}

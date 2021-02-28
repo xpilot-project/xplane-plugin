@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package xpilot;
+
+message PluginVersion {
+	optional int32 version = 1;
+}

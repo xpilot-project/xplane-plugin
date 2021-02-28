@@ -165,93 +165,93 @@ namespace xpilot
 		}
 	}
 
-	void AircraftManager::updateAircraftConfig(const std::string& callsign, const NetworkAircraftConfig& config)
+	void AircraftManager::updateAircraftConfig(const xpilot::AirplaneConfig& config)
 	{
-		auto planeIt = mapPlanes.find(callsign);
+		auto planeIt = mapPlanes.find(config.callsign());
 		if (planeIt == mapPlanes.end()) return;
 
 		NetworkAircraft* plane = planeIt->second.get();
 		if (!plane) return;
 
-		if (config.data.flapsPct.has_value())
+		if (config.has_flaps())
 		{
-			if (config.data.flapsPct.value() != plane->targetFlapPosition)
+			if (config.flaps() != plane->targetFlapPosition)
 			{
-				plane->targetFlapPosition = config.data.flapsPct.value();
+				plane->targetFlapPosition = config.flaps();
 			}
 		}
-		if (config.data.gearDown.has_value())
+		if (config.has_gear_down())
 		{
-			if (config.data.gearDown.value() != plane->gearDown)
+			if (config.gear_down() != plane->gearDown)
 			{
-				plane->gearDown = config.data.gearDown.value();
+				plane->gearDown = config.gear_down();
 			}
 		}
-		if (config.data.spoilersDeployed.has_value())
+		if (config.has_spoilers_deployed())
 		{
-			if (config.data.spoilersDeployed.value() != plane->spoilersDeployed)
+			if (config.spoilers_deployed() != plane->spoilersDeployed)
 			{
-				plane->spoilersDeployed = config.data.spoilersDeployed.value();
+				plane->spoilersDeployed = config.spoilers_deployed();
 			}
 		}
-		if (config.data.lights.has_value())
+		if (config.has_lights())
 		{
-			if (config.data.lights.value().strobesOn.has_value())
+			if (config.lights().has_strobe_lights_on())
 			{
-				if (config.data.lights.value().strobesOn.value() != plane->surfaces.lights.strbLights)
+				if (config.lights().strobe_lights_on() != plane->surfaces.lights.strbLights)
 				{
-					plane->surfaces.lights.strbLights = config.data.lights.value().strobesOn.value();
+					plane->surfaces.lights.strbLights = config.lights().strobe_lights_on();
 				}
 			}
-			if (config.data.lights.value().taxiOn.has_value())
+			if (config.lights().has_landing_lights_on())
 			{
-				if (config.data.lights.value().taxiOn.value() != plane->surfaces.lights.taxiLights)
+				if (config.lights().landing_lights_on() != plane->surfaces.lights.landLights)
 				{
-					plane->surfaces.lights.taxiLights = config.data.lights.value().taxiOn.value();
+					plane->surfaces.lights.landLights = config.lights().landing_lights_on();
 				}
 			}
-			if (config.data.lights.value().navOn.has_value())
+			if (config.lights().has_nav_lights_on())
 			{
-				if (config.data.lights.value().navOn.value() != plane->surfaces.lights.navLights)
+				if (config.lights().nav_lights_on() != plane->surfaces.lights.navLights)
 				{
-					plane->surfaces.lights.navLights = config.data.lights.value().navOn.value();
+					plane->surfaces.lights.navLights = config.lights().nav_lights_on();
 				}
 			}
-			if (config.data.lights.value().landingOn.has_value())
+			if (config.lights().has_beacon_lights_on())
 			{
-				if (config.data.lights.value().landingOn.value() != plane->surfaces.lights.landLights)
+				if (config.lights().beacon_lights_on() != plane->surfaces.lights.bcnLights)
 				{
-					plane->surfaces.lights.landLights = config.data.lights.value().landingOn.value();
+					plane->surfaces.lights.bcnLights = config.lights().beacon_lights_on();
 				}
 			}
-			if (config.data.lights.value().beaconOn.has_value())
+			if (config.lights().has_taxi_lights_on())
 			{
-				if (config.data.lights.value().beaconOn.value() != plane->surfaces.lights.bcnLights)
+				if (config.lights().taxi_lights_on() != plane->surfaces.lights.taxiLights)
 				{
-					plane->surfaces.lights.bcnLights = config.data.lights.value().beaconOn.value();
+					plane->surfaces.lights.taxiLights = config.lights().taxi_lights_on();
 				}
 			}
 		}
-		if (config.data.enginesRunning.has_value())
+		if (config.has_engines_on())
 		{
-			if (config.data.enginesRunning.value() != plane->enginesRunning)
+			if (config.engines_on() != plane->enginesRunning)
 			{
-				plane->enginesRunning = config.data.enginesRunning.value();
+				plane->enginesRunning = config.engines_on();
 			}
 		}
-		if (config.data.reverseThrust.has_value())
+		if (config.has_reverse_thrust())
 		{
-			if (config.data.reverseThrust.value() != plane->reverseThrust)
+			if (config.reverse_thrust() != plane->reverseThrust)
 			{
-				plane->reverseThrust = config.data.reverseThrust.value();
+				plane->reverseThrust = config.reverse_thrust();
 			}
 		}
-		if (config.data.onGround.has_value())
+		if (config.has_on_ground())
 		{
-			if (config.data.onGround.value() != plane->onGround)
+			if (config.on_ground() != plane->onGround)
 			{
-				plane->bClampToGround = (plane->renderCount <= 2) ? config.data.onGround.value() : false;
-				plane->onGround = config.data.onGround.value();
+				plane->bClampToGround = (plane->renderCount <= 2) ? config.on_ground() : false;
+				plane->onGround = config.on_ground();
 			}
 		}
 	}

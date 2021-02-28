@@ -41,6 +41,8 @@
 #include "XPLMUtilities.h"
 #include "XPLMProcessing.h"
 
+#include "../protobuf/wrapper.pb.h"
+
 namespace xpilot
 {
 	enum dataRefs
@@ -69,6 +71,7 @@ namespace xpilot
 		void addNotification(const std::string& msg, double red = 255, double green = 255, double blue = 255);
 
 		void sendSocketMsg(const std::string& string);
+		void sendPbArray(xpilot::Wrapper& wrapper);
 
 		void onNetworkDisconnected();
 		void onNetworkConnected();
@@ -98,9 +101,6 @@ namespace xpilot
 		void tryGetTcasControl();
 		void releaseTcasControl();
 
-		void incrementAircraftCount();
-		void decrementAircraftCount();
-
 		void togglePreferencesWindow();
 		void toggleNearbyAtcWindow();
 		void toggleTextMessageConsole();
@@ -121,10 +121,56 @@ namespace xpilot
 		OwnedDataRef<int> m_pluginVersion;
 		DataRefAccess<int> m_xplaneAtisEnabled;
 
+		// pilot client datarefs
+		DataRefAccess<int> m_audioComSelection;
+
+		DataRefAccess<int> m_com1Power;
+		DataRefAccess<int> m_com1Frequency833;
+		DataRefAccess<int> m_com1StandbyFrequency833;
+		DataRefAccess<int> m_com1AudioSelection;
+		DataRefAccess<float> m_com1AudioVolume;
+
+		DataRefAccess<int> m_com2Power;
+		DataRefAccess<int> m_com2Frequency833;
+		DataRefAccess<int> m_com2StandbyFrequency833;
+		DataRefAccess<int> m_com2AudioSelection;
+		DataRefAccess<float> m_com2AudioVolume;
+
+		DataRefAccess<int> m_avionicsPowerOn;
+
+		DataRefAccess<double> m_positionLatitude;
+		DataRefAccess<double> m_positionLongitude;
+		DataRefAccess<double> m_positionAltitude;
+		DataRefAccess<float> m_positionPressureAltitude;
+		DataRefAccess<float> m_groundSpeed;
+		DataRefAccess<float> m_positionPitch;
+		DataRefAccess<float> m_positionRoll;
+		DataRefAccess<float> m_positionYaw;
+
+		DataRefAccess<int> m_transponderCode;
+		DataRefAccess<int> m_transponderMode;
+		DataRefAccess<int> m_transponderIdent;
+
+		DataRefAccess<int> m_beaconLightsOn;
+		DataRefAccess<int> m_landingLightsOn;
+		DataRefAccess<int> m_navLightsOn;
+		DataRefAccess<int> m_strobeLightsOn;
+		DataRefAccess<int> m_taxiLightsOn;
+
+		DataRefAccess<float> m_flapRatio;
+		DataRefAccess<int> m_gearDown;
+		DataRefAccess<float> m_speedBrakeRatio;
+
+		DataRefAccess<int> m_engineCount;
+		DataRefAccess<std::vector<int>> m_enginesRunning;
+		DataRefAccess<int> m_onGround;
+		DataRefAccess<int> m_replayMode;
+
 	private:
 		std::string pluginHash;
 		static float deferredStartup(float, float, int, void* ref);
-		static float onFlightLoop(float, float, int, void* ref);
+		static float mainFlightLoop(float, float, int, void* ref);
+		static float drFlightLoop(float, float, int, void* ref);
 		bool initializeXPMP();
 
 		std::thread::id m_xplaneThread;
@@ -138,6 +184,7 @@ namespace xpilot
 		}
 
 		bool m_keepAlive;
+		bool m_clientConnected;
 		std::unique_ptr<std::thread> m_zmqThread;
 		std::unique_ptr<zmq::context_t> m_zmqContext;
 		std::unique_ptr<zmq::socket_t> m_zmqSocket;
@@ -155,7 +202,9 @@ namespace xpilot
 		std::mutex m_mutex;
 		std::deque<std::function<void()>> m_queuedCallbacks;
 		void invokeQueuedCallbacks();
-		void queueCallback(const std::function<void()> &cb);
+		void queueCallback(const std::function<void()>& cb);
+
+		void checkDatarefs(bool force);
 
 		XPLMDataRef m_bulkDataQuick{}, m_bulkDataExpensive{};
 		static int getBulkData(void* inRefcon, void* outData, int inStartPos, int inNumBytes);

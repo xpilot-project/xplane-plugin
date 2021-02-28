@@ -23,7 +23,7 @@
 #include <map>
 #include <mutex>
 
-#include "NetworkAircraftConfig.h"
+#include "../protobuf/airplaneconfig.pb.h"
 #include "NetworkAircraft.h"
 
 namespace xpilot
@@ -59,7 +59,7 @@ namespace xpilot
 		void addNewPlane(const std::string& callsign, const std::string& typeIcao, const std::string& airlineIcao,
 			const std::string& livery = "", const std::string& modelName = "");
 		void setPlanePosition(const std::string& callsign, XPMPPlanePosition_t pos, XPMPPlaneRadar_t radar, float groundSpeed, const std::string& origin, const std::string& destination);
-		void updateAircraftConfig(const std::string& callsign, const NetworkAircraftConfig& config);
+		void updateAircraftConfig(const xpilot::AirplaneConfig& config);
 		void changeModel(const std::string& callsign, const std::string& typeIcao, const std::string& airlineIcao);
 		void removePlane(const std::string& callsign);
 		void removeAllPlanes();

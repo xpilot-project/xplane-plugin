@@ -187,6 +187,20 @@ inline float GetNetworkTime()
 	return XPLMGetDataf(drNetworkTime);
 }
 
+inline bool CheckEverySoOften(float& _lastCheck, float _interval, float _now)
+{
+	if (_lastCheck < 0.00001f || _now >= _lastCheck + _interval)
+	{
+		_lastCheck = _now;
+		return true;
+	}
+	return false;
+}
+inline bool CheckEverySoOften(float& _lastCheck, float _interval)
+{
+	return CheckEverySoOften(_lastCheck, _interval, GetNetworkTime());
+}
+
 inline void HexToRgb(int inCol, float outColor[4])
 {
 	outColor[0] = float((inCol & 0xFF0000) >> 16) / 255.0f;

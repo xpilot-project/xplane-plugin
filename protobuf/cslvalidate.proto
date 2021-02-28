@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package xpilot;
+
+message CslValidate {
+	optional bool valid = 1;
+}

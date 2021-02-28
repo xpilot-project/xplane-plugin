@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package xpilot;
+
+message PositionUpdate {
+	optional string callsign = 1;
+	optional double latitude = 2;
+	optional double longitude = 3;
+	optional double altitude = 4;
+	optional double heading = 5;
+	optional double pitch = 6;
+	optional double bank = 7;
+	optional double ground_speed = 8;
+	optional int32 transponder_code = 9;
+	optional bool transponder_mode_c = 10;
+	optional string origin = 11;
+	optional string destination = 12;
+}

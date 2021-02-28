@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package xpilot;
+
+message RemovePlane {
+	optional string callsign = 1;
+}

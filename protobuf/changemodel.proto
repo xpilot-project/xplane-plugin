@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package xpilot;
+
+message ChangeModel {
+	optional string callsign = 1;
+	optional string airline = 2;
+	optional string equipment = 3;
+}

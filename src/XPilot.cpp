@@ -31,6 +31,7 @@
 #include "TextMessageConsole.h"
 #include "sha512.hh"
 #include "json.hpp"
+#include "../protobuf/wrapper.pb.h"
 
 using json = nlohmann::json;
 
@@ -46,7 +47,43 @@ namespace xpilot
 		m_volumeSignalLevel("xpilot/audio/vu", ReadWrite),
 		m_aiControlled("xpilot/ai_controlled", ReadOnly),
 		m_aircraftCount("xpilot/num_aircraft", ReadOnly),
-		m_pluginVersion("xpilot/version", ReadOnly)
+		m_pluginVersion("xpilot/version", ReadOnly),
+		// pilot client datarefs
+		m_audioComSelection("sim/cockpit2/radios/actuators/audio_com_selection", ReadOnly),
+		m_com1Power("sim/cockpit2/radios/actuators/com1_power", ReadOnly),
+		m_com1Frequency833("sim/cockpit2/radios/actuators/com1_frequency_hz_833", ReadOnly),
+		m_com1StandbyFrequency833("sim/cockpit2/radios/actuators/com1_standby_frequency_hz_833", ReadOnly),
+		m_com1AudioSelection("sim/cockpit2/radios/actuators/audio_selection_com1", ReadOnly),
+		m_com1AudioVolume("sim/cockpit2/radios/actuators/audio_volume_com1", ReadOnly),
+		m_com2Power("sim/cockpit2/radios/actuators/com2_power", ReadOnly),
+		m_com2Frequency833("sim/cockpit2/radios/actuators/com2_frequency_hz_833", ReadOnly),
+		m_com2StandbyFrequency833("sim/cockpit2/radios/actuators/com2_standby_frequency_hz_833", ReadOnly),
+		m_com2AudioSelection("sim/cockpit2/radios/actuators/audio_selection_com2", ReadOnly),
+		m_com2AudioVolume("sim/cockpit2/radios/actuators/audio_volume_com2", ReadOnly),
+		m_avionicsPowerOn("sim/cockpit2/switches/avionics_power_on", ReadOnly),
+		m_positionLatitude("sim/flightmodel/position/latitude", ReadOnly),
+		m_positionLongitude("sim/flightmodel/position/longitude", ReadOnly),
+		m_positionAltitude("sim/flightmodel/position/elevation", ReadOnly),
+		m_positionPressureAltitude("sim/cockpit2/gauges/indicators/altitude_ft_pilot", ReadOnly),
+		m_groundSpeed("sim/flightmodel/position/groundspeed", ReadOnly),
+		m_positionPitch("sim/flightmodel/position/theta", ReadOnly),
+		m_positionRoll("sim/flightmodel/position/phi", ReadOnly),
+		m_positionYaw("sim/flightmodel/position/psi", ReadOnly),
+		m_transponderCode("sim/cockpit/radios/transponder_code", ReadOnly),
+		m_transponderMode("sim/cockpit/radios/transponder_mode", ReadOnly),
+		m_transponderIdent("sim/cockpit/radios/transponder_id", ReadOnly),
+		m_beaconLightsOn("sim/cockpit/electrical/beacon_lights_on", ReadOnly),
+		m_landingLightsOn("sim/cockpit/electrical/landing_lights_on", ReadOnly),
+		m_navLightsOn("sim/cockpit/electrical/nav_lights_on", ReadOnly),
+		m_strobeLightsOn("sim/cockpit/electrical/strobe_lights_on", ReadOnly),
+		m_taxiLightsOn("sim/cockpit/electrical/taxi_light_on", ReadOnly),
+		m_flapRatio("sim/flightmodel/controls/flaprat", ReadOnly),
+		m_gearDown("sim/cockpit/switches/gear_handle_status", ReadOnly),
+		m_speedBrakeRatio("sim/cockpit2/controls/speedbrake_ratio", ReadOnly),
+		m_engineCount("sim/aircraft/engine/acf_num_engines", ReadOnly),
+		m_enginesRunning("sim/flightmodel/engine/ENGN_running", ReadOnly),
+		m_onGround("sim/flightmodel/failures/onground_any", ReadOnly),
+		m_replayMode("sim/operation/prefs/replay_mode", ReadOnly)
 	{
 		thisThreadIsXP();
 
@@ -105,7 +142,8 @@ namespace xpilot
 		XPLMUnregisterDataAccessor(m_bulkDataQuick);
 		XPLMUnregisterDataAccessor(m_bulkDataExpensive);
 		XPLMUnregisterFlightLoopCallback(deferredStartup, this);
-		XPLMUnregisterFlightLoopCallback(onFlightLoop, this);
+		XPLMUnregisterFlightLoopCallback(mainFlightLoop, this);
+		XPLMUnregisterFlightLoopCallback(drFlightLoop, this);
 	}
 
 	float XPilot::deferredStartup(float, float, int, void* ref)
@@ -149,7 +187,8 @@ namespace xpilot
 		{
 		}
 
-		XPLMRegisterFlightLoopCallback(onFlightLoop, -1.0f, this);
+		XPLMRegisterFlightLoopCallback(mainFlightLoop, -1.0f, this);
+		XPLMRegisterFlightLoopCallback(drFlightLoop, -1.0f, this);
 
 		m_keepAlive = true;
 		m_zmqThread = std::make_unique<std::thread>(&XPilot::zmqWorker, this);
@@ -187,32 +226,67 @@ namespace xpilot
 		}
 	}
 
-	void XPilot::sendSocketMsg(const std::string& msg)
+	void XPilot::sendPbArray(xpilot::Wrapper& wrapper)
 	{
-		try
+		if (isSocketConnected())
 		{
-			if (isSocketConnected() && !msg.empty())
+			try
 			{
+				int dataSize = wrapper.ByteSize();
+				char* dataArray = new char[dataSize];
+				wrapper.SerializeToArray(dataArray, dataSize);
+				
 				std::string identity = "CLIENT";
-				zmq::message_t msg1(identity.size());
-				std::memcpy(msg1.data(), identity.data(), identity.size());
-				m_zmqSocket->send(msg1, zmq::send_flags::sndmore);
-
-				zmq::message_t message(msg.size());
-				std::memcpy(message.data(), msg.data(), msg.size());
-				m_zmqSocket->send(message, ZMQ_NOBLOCK);
+				zmq::message_t msgIdentity(identity.size());
+				std::memcpy(msgIdentity.data(), identity.data(), identity.size());
+				m_zmqSocket->send(msgIdentity, zmq::send_flags::sndmore);
+				m_zmqSocket->send(dataArray, dataSize, ZMQ_NOBLOCK);
 			}
-		}
-		catch (zmq::error_t& e)
-		{
-			LOG_MSG(logERROR, "Error sending socket message: %s", e.what());
-		}
-		catch (...)
-		{
+			catch (zmq::error_t)
+			{
+			}
+			catch (...)
+			{
+			}
 		}
 	}
 
-	float XPilot::onFlightLoop(float, float, int, void* ref)
+	void XPilot::sendSocketMsg(const std::string& msg)
+	{
+		//try
+		//{
+		//	if (isSocketConnected() && !msg.empty())
+		//	{
+		//		std::string identity = "CLIENT";
+		//		zmq::message_t msg1(identity.size());
+		//		std::memcpy(msg1.data(), identity.data(), identity.size());
+		//		m_zmqSocket->send(msg1, zmq::send_flags::sndmore);
+
+		//		zmq::message_t message(msg.size());
+		//		std::memcpy(message.data(), msg.data(), msg.size());
+		//		m_zmqSocket->send(message, ZMQ_NOBLOCK);
+		//	}
+		//}
+		//catch (zmq::error_t& e)
+		//{
+		//	LOG_MSG(logERROR, "Error sending socket message: %s", e.what());
+		//}
+		//catch (...)
+		//{
+		//}
+	}
+
+	float XPilot::drFlightLoop(float, float, int, void* ref)
+	{
+		auto* instance = static_cast<XPilot*>(ref);
+		if (instance)
+		{
+			instance->checkDatarefs(false);
+		}
+		return 0.2;
+	}
+
+	float XPilot::mainFlightLoop(float inElapsedSinceLastCall, float, int, void* ref)
 	{
 		auto* instance = static_cast<XPilot*>(ref);
 		if (instance)
@@ -226,17 +300,332 @@ namespace xpilot
 		return -1.0;
 	}
 
+	void XPilot::checkDatarefs(bool force)
+	{
+		xpilot::Wrapper msg;
+		xpilot::XplaneData* data = new xpilot::XplaneData();
+		msg.set_allocated_xplane_data(data);
+
+		auto ts = new google::protobuf::Timestamp{};
+		ts->set_seconds(time(NULL));
+		ts->set_nanos(0);
+		msg.set_allocated_timestamp(ts);
+
+		if (m_audioComSelection.hasChanged())
+		{
+			data->set_audio_com_selection(m_audioComSelection);
+		}
+
+		// com1
+		if (m_com1Power.hasChanged())
+		{
+			data->set_com1_power(m_com1Power);
+		}
+		if (m_com1Frequency833.hasChanged())
+		{
+			data->set_com1_freq(m_com1Frequency833);
+		}
+		if (m_com1StandbyFrequency833.hasChanged())
+		{
+			data->set_com1_stby_freq(m_com1StandbyFrequency833);
+		}
+		if (m_com1AudioSelection.hasChanged())
+		{
+			data->set_com1_audio_selection(m_com1AudioSelection);
+		}
+
+		// com2
+		if (m_com2Power.hasChanged())
+		{
+			data->set_com2_power(m_com2Power);
+		}
+		if (m_com2Frequency833.hasChanged())
+		{
+			data->set_com2_freq(m_com2Frequency833);
+		}
+		if (m_com2StandbyFrequency833.hasChanged())
+		{
+			data->set_com2_stby_freq(m_com2StandbyFrequency833);
+		}
+		if (m_com2AudioSelection.hasChanged())
+		{
+			data->set_com2_audio_selection(m_com2AudioSelection);
+		}
+
+		if (m_avionicsPowerOn.hasChanged())
+		{
+			data->set_avionics_power_on(m_avionicsPowerOn);
+		}
+
+		// transponder
+		if (m_transponderCode.hasChanged())
+		{
+			data->set_transponder_code(m_transponderCode);
+		}
+		if (m_transponderMode.hasChanged())
+		{
+			data->set_transponder_mode(m_transponderMode);
+		}
+		if (m_transponderIdent.hasChanged())
+		{
+			data->set_transponder_ident(m_transponderIdent);
+		}
+
+		// lights
+		if (m_beaconLightsOn.hasChanged())
+		{
+			data->set_beacon_lights_on(m_beaconLightsOn);
+		}
+		if (m_landingLightsOn.hasChanged())
+		{
+			data->set_landing_lights_on(m_landingLightsOn);
+		}
+		if (m_navLightsOn.hasChanged())
+		{
+			data->set_nav_lights_on(m_navLightsOn);
+		}
+		if (m_strobeLightsOn.hasChanged())
+		{
+			data->set_strobe_lights_on(m_strobeLightsOn);
+		}
+		if (m_taxiLightsOn.hasChanged())
+		{
+			data->set_taxi_lights_on(m_taxiLightsOn);
+		}
+
+		// control surfaces
+		if (m_flapRatio.hasChanged())
+		{
+			data->set_flaps(m_flapRatio);
+		}
+		if (m_gearDown.hasChanged())
+		{
+			data->set_gear_down(m_gearDown);
+		}
+		if (m_speedBrakeRatio.hasChanged())
+		{
+			data->set_speed_brakes(m_speedBrakeRatio);
+		}
+
+		// engines
+		if (m_engineCount.hasChanged())
+		{
+			data->set_engine_count(m_engineCount);
+		}
+		if (m_enginesRunning.hasChanged())
+		{
+			std::vector<int> val = m_enginesRunning;
+			for (size_t i = 0; i < 4; ++i)
+			{
+				switch (i)
+				{
+					case 0:
+						data->set_engine1_running(val[i]);
+						break;
+					case 1:
+						data->set_engine2_running(val[i]);
+						break;
+					case 2:
+						data->set_engine3_running(val[i]);
+						break;
+					case 3:
+						data->set_engine4_running(val[i]);
+						break;
+				}
+			}
+		}
+
+		// position
+		if (m_positionLatitude.hasChanged())
+		{
+			data->set_latitude(m_positionLatitude);
+		}
+		if (m_positionLongitude.hasChanged())
+		{
+			data->set_longitude(m_positionLongitude);
+		}
+		if (m_positionAltitude.hasChanged())
+		{
+			data->set_altitude(m_positionAltitude);
+		}
+		if (m_positionPressureAltitude.hasChanged())
+		{
+			data->set_pressure_altitude(m_positionPressureAltitude);
+		}
+		if (m_groundSpeed.hasChanged())
+		{
+			data->set_ground_speed(m_groundSpeed);
+		}
+		if (m_positionPitch.hasChanged())
+		{
+			data->set_pitch(m_positionPitch);
+		}
+		if (m_positionRoll.hasChanged())
+		{
+			data->set_roll(m_positionRoll);
+		}
+		if (m_positionYaw.hasChanged())
+		{
+			data->set_yaw(m_positionYaw);
+		}
+
+		// misc
+		if (m_onGround.hasChanged())
+		{
+			data->set_on_ground(m_onGround);
+		}
+		if (m_replayMode.hasChanged())
+		{
+			data->set_replay_mode(m_replayMode);
+		}
+
+		sendPbArray(msg);
+	}
+
 	void XPilot::zmqWorker()
 	{
 		while (isSocketReady())
 		{
 			try
 			{
-				zmq::message_t msg;
-				m_zmqSocket->recv(msg, zmq::recv_flags::none);
-				std::string data(static_cast<char*>(msg.data()), msg.size());
+				zmq::message_t zmqMsg;
+				m_zmqSocket->recv(zmqMsg, zmq::recv_flags::none);
 
-				if (!data.empty())
+				xpilot::Wrapper wrapper;
+				wrapper.ParseFromArray(zmqMsg.data(), zmqMsg.size());
+
+				if (wrapper.has_plugin_hash())
+				{
+					xpilot::Wrapper reply;
+					xpilot::PluginHash* msg = new xpilot::PluginHash();
+					reply.set_allocated_plugin_hash(msg);
+					msg->set_hash(pluginHash.c_str());
+					sendPbArray(reply);
+				}
+
+				if (wrapper.has_plugin_version())
+				{
+					xpilot::Wrapper reply;
+					xpilot::PluginVersion* msg = new xpilot::PluginVersion();
+					reply.set_allocated_plugin_version(msg);
+					msg->set_version(PLUGIN_VERSION);
+					sendPbArray(reply);
+				}
+
+				if (wrapper.has_csl_validate())
+				{
+					xpilot::Wrapper reply;
+					xpilot::CslValidate* msg = new xpilot::CslValidate();
+					reply.set_allocated_csl_validate(msg);
+					msg->set_valid(Config::Instance().hasValidPaths() && XPMPGetNumberOfInstalledModels() > 0);
+					sendPbArray(reply);
+				}
+
+				if (wrapper.has_add_plane())
+				{
+					xpilot::AddPlane msg = wrapper.add_plane();
+					if (msg.has_callsign() && msg.has_equipment())
+					{
+						queueCallback([=]()
+						{
+							m_aircraftManager->addNewPlane(msg.callsign(), msg.equipment(), msg.airline());
+						});
+					}
+				}
+
+				if (wrapper.has_change_model())
+				{
+					xpilot::ChangeModel msg = wrapper.change_model();
+					if(msg.has_callsign() && msg.has_equipment())
+					{
+						queueCallback([=]()
+						{
+							m_aircraftManager->changeModel(msg.callsign(), msg.equipment(), msg.airline());
+						});
+					}
+				}
+
+				if (wrapper.has_position_update())
+				{
+					xpilot::PositionUpdate msg = wrapper.position_update();
+
+					XPMPPlanePosition_t pos;
+					pos.lat = msg.latitude();
+					pos.lon = msg.longitude();
+					pos.elevation = msg.altitude();
+					pos.heading = msg.heading();
+					pos.pitch = msg.pitch();
+					pos.roll = msg.bank();
+
+					XPMPPlaneRadar_t radar;
+					radar.code = msg.transponder_code();
+					radar.mode = msg.transponder_mode_c() ? xpmpTransponderMode_ModeC : xpmpTransponderMode_Standby;
+
+					if (msg.has_callsign())
+					{
+						queueCallback([=]()
+						{
+							m_aircraftManager->setPlanePosition(msg.callsign(), pos, radar, msg.ground_speed(), msg.origin(), msg.destination());
+						});
+					}
+				}
+
+				if (wrapper.has_airplane_config())
+				{
+					xpilot::AirplaneConfig msg = wrapper.airplane_config();
+					if (msg.has_callsign())
+					{
+						queueCallback([=]()
+						{
+							m_aircraftManager->updateAircraftConfig(msg);
+						});
+					}
+				}
+
+				if (wrapper.has_remove_plane())
+				{
+					xpilot::RemovePlane msg = wrapper.remove_plane();
+					if (msg.has_callsign())
+					{
+						queueCallback([=]()
+						{
+							m_aircraftManager->removePlane(msg.callsign());
+						});
+					}
+				}
+
+				if (wrapper.has_remove_all_planes())
+				{
+					queueCallback([=]()
+					{
+						m_aircraftManager->removeAllPlanes();
+					});
+				}
+
+				if (wrapper.has_network_connected())
+				{
+					if (wrapper.network_connected().has_callsign())
+					{
+						m_networkCallsign = wrapper.network_connected().callsign();
+					}
+					queueCallback([=]()
+					{
+						onNetworkConnected();
+					});
+				}
+
+				if (wrapper.has_network_disconnected())
+				{
+					m_networkCallsign = "";
+					queueCallback([=]()
+					{
+						onNetworkDisconnected();
+					});
+				}
+
+				//std::string data(static_cast<char*>(msg.data()), msg.size());
+
+				/*if (!data.empty())
 				{
 					if (json::accept(data.c_str()))
 					{
@@ -421,7 +810,7 @@ namespace xpilot
 							}
 						}
 					}
-				}
+				}*/
 			}
 			catch (zmq::error_t& e)
 			{
@@ -628,18 +1017,6 @@ namespace xpilot
 	bool XPilot::setNotificationPanelAlwaysVisible()const
 	{
 		return m_notificationPanel->isAlwaysVisible();
-	}
-
-	void XPilot::incrementAircraftCount()
-	{
-		++m_currentAircraftCount;
-		m_aircraftCount = m_currentAircraftCount;
-	}
-
-	void XPilot::decrementAircraftCount()
-	{
-		--m_currentAircraftCount;
-		m_aircraftCount = m_currentAircraftCount;
 	}
 
 	void callbackRequestTcasAgain(void*)
