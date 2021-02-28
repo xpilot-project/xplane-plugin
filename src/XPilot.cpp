@@ -623,6 +623,36 @@ namespace xpilot
 					});
 				}
 
+				if (wrapper.has_nearby_controllers())
+				{
+					queueCallback([=]()
+					{
+						m_nearbyAtcWindow->UpdateList(wrapper.nearby_controllers());
+					});
+				}
+
+				if (wrapper.has_clear_nearby_controllers())
+				{
+					queueCallback([=]()
+					{
+						m_nearbyAtcWindow->ClearList();
+					});
+				}
+
+				if (wrapper.has_private_message_received())
+				{
+					xpilot::PrivateMessageReceived msg = wrapper.private_message_received();
+					addConsoleMessageTab(msg.from(), msg.message(), ConsoleTabType::Incoming);
+					addNotificationPanelMessage(string_format("%s [pvt]:  %s", msg.from(), msg.message().c_str()), 230, 94, 230);
+				}
+
+				if (wrapper.has_private_message_sent())
+				{
+					xpilot::PrivateMessageSent msg = wrapper.private_message_sent();
+					addConsoleMessageTab(msg.to(), msg.message(), ConsoleTabType::Outgoing);
+					addNotificationPanelMessage(string_format("%s [pvt: %s]:  %s", m_networkCallsign.value().c_str(), msg.to(), msg.message().c_str()), 50, 205, 50);
+				}
+
 				//std::string data(static_cast<char*>(msg.data()), msg.size());
 
 				/*if (!data.empty())

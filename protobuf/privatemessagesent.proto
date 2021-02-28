@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package xpilot;
+
+message PrivateMessageSent {
+	optional string to = 1;
+	optional string message = 2;
+}

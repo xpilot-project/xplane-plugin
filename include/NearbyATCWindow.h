@@ -19,6 +19,7 @@
 #ifndef NearbyATCWindow_h
 #define NearbyATCWindow_h
 
+#include "../protobuf/nearbycontrollers.pb.h"
 #include "json.hpp"
 using json = nlohmann::json;
 
@@ -48,7 +49,8 @@ namespace xpilot
 	public:
 		NearbyATCWindow(XPilot* instance);
 		~NearbyATCWindow() final = default;
-		void UpdateList(const nlohmann::json& data);
+		void UpdateList(xpilot::NearbyControllers data);
+		void ClearList();
 	protected:
 		void buildInterface() override;
 	private:

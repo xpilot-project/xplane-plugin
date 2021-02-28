@@ -44,6 +44,10 @@
 #include "networkconnected.pb.h"
 #include "networkdisconnected.pb.h"
 #include "airplaneconfig.pb.h"
+#include "nearbycontrollers.pb.h"
+#include "clearnearbycontrollers.pb.h"
+#include "privatemessagereceived.pb.h"
+#include "privatemessagesent.pb.h"
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
 #define PROTOBUF_INTERNAL_EXPORT_wrapper_2eproto
@@ -130,6 +134,10 @@ class Wrapper PROTOBUF_FINAL :
     kNetworkConnected = 11,
     kNetworkDisconnected = 12,
     kAirplaneConfig = 13,
+    kNearbyControllers = 14,
+    kClearNearbyControllers = 15,
+    kPrivateMessageReceived = 16,
+    kPrivateMessageSent = 17,
     MSG_NOT_SET = 0,
   };
 
@@ -221,6 +229,10 @@ class Wrapper PROTOBUF_FINAL :
     kNetworkConnectedFieldNumber = 11,
     kNetworkDisconnectedFieldNumber = 12,
     kAirplaneConfigFieldNumber = 13,
+    kNearbyControllersFieldNumber = 14,
+    kClearNearbyControllersFieldNumber = 15,
+    kPrivateMessageReceivedFieldNumber = 16,
+    kPrivateMessageSentFieldNumber = 17,
   };
   // .google.protobuf.Timestamp timestamp = 1;
   bool has_timestamp() const;
@@ -456,6 +468,78 @@ class Wrapper PROTOBUF_FINAL :
       ::xpilot::AirplaneConfig* airplane_config);
   ::xpilot::AirplaneConfig* unsafe_arena_release_airplane_config();
 
+  // .xpilot.NearbyControllers nearby_controllers = 14;
+  bool has_nearby_controllers() const;
+  private:
+  bool _internal_has_nearby_controllers() const;
+  public:
+  void clear_nearby_controllers();
+  const ::xpilot::NearbyControllers& nearby_controllers() const;
+  ::xpilot::NearbyControllers* release_nearby_controllers();
+  ::xpilot::NearbyControllers* mutable_nearby_controllers();
+  void set_allocated_nearby_controllers(::xpilot::NearbyControllers* nearby_controllers);
+  private:
+  const ::xpilot::NearbyControllers& _internal_nearby_controllers() const;
+  ::xpilot::NearbyControllers* _internal_mutable_nearby_controllers();
+  public:
+  void unsafe_arena_set_allocated_nearby_controllers(
+      ::xpilot::NearbyControllers* nearby_controllers);
+  ::xpilot::NearbyControllers* unsafe_arena_release_nearby_controllers();
+
+  // .xpilot.ClearNearbyControllers clear_nearby_controllers = 15;
+  bool has_clear_nearby_controllers() const;
+  private:
+  bool _internal_has_clear_nearby_controllers() const;
+  public:
+  void clear_clear_nearby_controllers();
+  const ::xpilot::ClearNearbyControllers& clear_nearby_controllers() const;
+  ::xpilot::ClearNearbyControllers* release_clear_nearby_controllers();
+  ::xpilot::ClearNearbyControllers* mutable_clear_nearby_controllers();
+  void set_allocated_clear_nearby_controllers(::xpilot::ClearNearbyControllers* clear_nearby_controllers);
+  private:
+  const ::xpilot::ClearNearbyControllers& _internal_clear_nearby_controllers() const;
+  ::xpilot::ClearNearbyControllers* _internal_mutable_clear_nearby_controllers();
+  public:
+  void unsafe_arena_set_allocated_clear_nearby_controllers(
+      ::xpilot::ClearNearbyControllers* clear_nearby_controllers);
+  ::xpilot::ClearNearbyControllers* unsafe_arena_release_clear_nearby_controllers();
+
+  // .xpilot.PrivateMessageReceived private_message_received = 16;
+  bool has_private_message_received() const;
+  private:
+  bool _internal_has_private_message_received() const;
+  public:
+  void clear_private_message_received();
+  const ::xpilot::PrivateMessageReceived& private_message_received() const;
+  ::xpilot::PrivateMessageReceived* release_private_message_received();
+  ::xpilot::PrivateMessageReceived* mutable_private_message_received();
+  void set_allocated_private_message_received(::xpilot::PrivateMessageReceived* private_message_received);
+  private:
+  const ::xpilot::PrivateMessageReceived& _internal_private_message_received() const;
+  ::xpilot::PrivateMessageReceived* _internal_mutable_private_message_received();
+  public:
+  void unsafe_arena_set_allocated_private_message_received(
+      ::xpilot::PrivateMessageReceived* private_message_received);
+  ::xpilot::PrivateMessageReceived* unsafe_arena_release_private_message_received();
+
+  // .xpilot.PrivateMessageSent private_message_sent = 17;
+  bool has_private_message_sent() const;
+  private:
+  bool _internal_has_private_message_sent() const;
+  public:
+  void clear_private_message_sent();
+  const ::xpilot::PrivateMessageSent& private_message_sent() const;
+  ::xpilot::PrivateMessageSent* release_private_message_sent();
+  ::xpilot::PrivateMessageSent* mutable_private_message_sent();
+  void set_allocated_private_message_sent(::xpilot::PrivateMessageSent* private_message_sent);
+  private:
+  const ::xpilot::PrivateMessageSent& _internal_private_message_sent() const;
+  ::xpilot::PrivateMessageSent* _internal_mutable_private_message_sent();
+  public:
+  void unsafe_arena_set_allocated_private_message_sent(
+      ::xpilot::PrivateMessageSent* private_message_sent);
+  ::xpilot::PrivateMessageSent* unsafe_arena_release_private_message_sent();
+
   void clear_msg();
   MsgCase msg_case() const;
   // @@protoc_insertion_point(class_scope:xpilot.Wrapper)
@@ -473,6 +557,10 @@ class Wrapper PROTOBUF_FINAL :
   void set_has_network_connected();
   void set_has_network_disconnected();
   void set_has_airplane_config();
+  void set_has_nearby_controllers();
+  void set_has_clear_nearby_controllers();
+  void set_has_private_message_received();
+  void set_has_private_message_sent();
 
   inline bool has_msg() const;
   inline void clear_has_msg();
@@ -496,6 +584,10 @@ class Wrapper PROTOBUF_FINAL :
     ::xpilot::NetworkConnected* network_connected_;
     ::xpilot::NetworkDisconnected* network_disconnected_;
     ::xpilot::AirplaneConfig* airplane_config_;
+    ::xpilot::NearbyControllers* nearby_controllers_;
+    ::xpilot::ClearNearbyControllers* clear_nearby_controllers_;
+    ::xpilot::PrivateMessageReceived* private_message_received_;
+    ::xpilot::PrivateMessageSent* private_message_sent_;
   } msg_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::uint32 _oneof_case_[1];
@@ -1368,6 +1460,266 @@ inline ::xpilot::AirplaneConfig* Wrapper::_internal_mutable_airplane_config() {
 inline ::xpilot::AirplaneConfig* Wrapper::mutable_airplane_config() {
   // @@protoc_insertion_point(field_mutable:xpilot.Wrapper.airplane_config)
   return _internal_mutable_airplane_config();
+}
+
+// .xpilot.NearbyControllers nearby_controllers = 14;
+inline bool Wrapper::_internal_has_nearby_controllers() const {
+  return msg_case() == kNearbyControllers;
+}
+inline bool Wrapper::has_nearby_controllers() const {
+  return _internal_has_nearby_controllers();
+}
+inline void Wrapper::set_has_nearby_controllers() {
+  _oneof_case_[0] = kNearbyControllers;
+}
+inline ::xpilot::NearbyControllers* Wrapper::release_nearby_controllers() {
+  // @@protoc_insertion_point(field_release:xpilot.Wrapper.nearby_controllers)
+  if (_internal_has_nearby_controllers()) {
+    clear_has_msg();
+      ::xpilot::NearbyControllers* temp = msg_.nearby_controllers_;
+    if (GetArena() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    msg_.nearby_controllers_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::xpilot::NearbyControllers& Wrapper::_internal_nearby_controllers() const {
+  return _internal_has_nearby_controllers()
+      ? *msg_.nearby_controllers_
+      : reinterpret_cast< ::xpilot::NearbyControllers&>(::xpilot::_NearbyControllers_default_instance_);
+}
+inline const ::xpilot::NearbyControllers& Wrapper::nearby_controllers() const {
+  // @@protoc_insertion_point(field_get:xpilot.Wrapper.nearby_controllers)
+  return _internal_nearby_controllers();
+}
+inline ::xpilot::NearbyControllers* Wrapper::unsafe_arena_release_nearby_controllers() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Wrapper.nearby_controllers)
+  if (_internal_has_nearby_controllers()) {
+    clear_has_msg();
+    ::xpilot::NearbyControllers* temp = msg_.nearby_controllers_;
+    msg_.nearby_controllers_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Wrapper::unsafe_arena_set_allocated_nearby_controllers(::xpilot::NearbyControllers* nearby_controllers) {
+  clear_msg();
+  if (nearby_controllers) {
+    set_has_nearby_controllers();
+    msg_.nearby_controllers_ = nearby_controllers;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Wrapper.nearby_controllers)
+}
+inline ::xpilot::NearbyControllers* Wrapper::_internal_mutable_nearby_controllers() {
+  if (!_internal_has_nearby_controllers()) {
+    clear_msg();
+    set_has_nearby_controllers();
+    msg_.nearby_controllers_ = CreateMaybeMessage< ::xpilot::NearbyControllers >(GetArena());
+  }
+  return msg_.nearby_controllers_;
+}
+inline ::xpilot::NearbyControllers* Wrapper::mutable_nearby_controllers() {
+  // @@protoc_insertion_point(field_mutable:xpilot.Wrapper.nearby_controllers)
+  return _internal_mutable_nearby_controllers();
+}
+
+// .xpilot.ClearNearbyControllers clear_nearby_controllers = 15;
+inline bool Wrapper::_internal_has_clear_nearby_controllers() const {
+  return msg_case() == kClearNearbyControllers;
+}
+inline bool Wrapper::has_clear_nearby_controllers() const {
+  return _internal_has_clear_nearby_controllers();
+}
+inline void Wrapper::set_has_clear_nearby_controllers() {
+  _oneof_case_[0] = kClearNearbyControllers;
+}
+inline ::xpilot::ClearNearbyControllers* Wrapper::release_clear_nearby_controllers() {
+  // @@protoc_insertion_point(field_release:xpilot.Wrapper.clear_nearby_controllers)
+  if (_internal_has_clear_nearby_controllers()) {
+    clear_has_msg();
+      ::xpilot::ClearNearbyControllers* temp = msg_.clear_nearby_controllers_;
+    if (GetArena() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    msg_.clear_nearby_controllers_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::xpilot::ClearNearbyControllers& Wrapper::_internal_clear_nearby_controllers() const {
+  return _internal_has_clear_nearby_controllers()
+      ? *msg_.clear_nearby_controllers_
+      : reinterpret_cast< ::xpilot::ClearNearbyControllers&>(::xpilot::_ClearNearbyControllers_default_instance_);
+}
+inline const ::xpilot::ClearNearbyControllers& Wrapper::clear_nearby_controllers() const {
+  // @@protoc_insertion_point(field_get:xpilot.Wrapper.clear_nearby_controllers)
+  return _internal_clear_nearby_controllers();
+}
+inline ::xpilot::ClearNearbyControllers* Wrapper::unsafe_arena_release_clear_nearby_controllers() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Wrapper.clear_nearby_controllers)
+  if (_internal_has_clear_nearby_controllers()) {
+    clear_has_msg();
+    ::xpilot::ClearNearbyControllers* temp = msg_.clear_nearby_controllers_;
+    msg_.clear_nearby_controllers_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Wrapper::unsafe_arena_set_allocated_clear_nearby_controllers(::xpilot::ClearNearbyControllers* clear_nearby_controllers) {
+  clear_msg();
+  if (clear_nearby_controllers) {
+    set_has_clear_nearby_controllers();
+    msg_.clear_nearby_controllers_ = clear_nearby_controllers;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Wrapper.clear_nearby_controllers)
+}
+inline ::xpilot::ClearNearbyControllers* Wrapper::_internal_mutable_clear_nearby_controllers() {
+  if (!_internal_has_clear_nearby_controllers()) {
+    clear_msg();
+    set_has_clear_nearby_controllers();
+    msg_.clear_nearby_controllers_ = CreateMaybeMessage< ::xpilot::ClearNearbyControllers >(GetArena());
+  }
+  return msg_.clear_nearby_controllers_;
+}
+inline ::xpilot::ClearNearbyControllers* Wrapper::mutable_clear_nearby_controllers() {
+  // @@protoc_insertion_point(field_mutable:xpilot.Wrapper.clear_nearby_controllers)
+  return _internal_mutable_clear_nearby_controllers();
+}
+
+// .xpilot.PrivateMessageReceived private_message_received = 16;
+inline bool Wrapper::_internal_has_private_message_received() const {
+  return msg_case() == kPrivateMessageReceived;
+}
+inline bool Wrapper::has_private_message_received() const {
+  return _internal_has_private_message_received();
+}
+inline void Wrapper::set_has_private_message_received() {
+  _oneof_case_[0] = kPrivateMessageReceived;
+}
+inline ::xpilot::PrivateMessageReceived* Wrapper::release_private_message_received() {
+  // @@protoc_insertion_point(field_release:xpilot.Wrapper.private_message_received)
+  if (_internal_has_private_message_received()) {
+    clear_has_msg();
+      ::xpilot::PrivateMessageReceived* temp = msg_.private_message_received_;
+    if (GetArena() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    msg_.private_message_received_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::xpilot::PrivateMessageReceived& Wrapper::_internal_private_message_received() const {
+  return _internal_has_private_message_received()
+      ? *msg_.private_message_received_
+      : reinterpret_cast< ::xpilot::PrivateMessageReceived&>(::xpilot::_PrivateMessageReceived_default_instance_);
+}
+inline const ::xpilot::PrivateMessageReceived& Wrapper::private_message_received() const {
+  // @@protoc_insertion_point(field_get:xpilot.Wrapper.private_message_received)
+  return _internal_private_message_received();
+}
+inline ::xpilot::PrivateMessageReceived* Wrapper::unsafe_arena_release_private_message_received() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Wrapper.private_message_received)
+  if (_internal_has_private_message_received()) {
+    clear_has_msg();
+    ::xpilot::PrivateMessageReceived* temp = msg_.private_message_received_;
+    msg_.private_message_received_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Wrapper::unsafe_arena_set_allocated_private_message_received(::xpilot::PrivateMessageReceived* private_message_received) {
+  clear_msg();
+  if (private_message_received) {
+    set_has_private_message_received();
+    msg_.private_message_received_ = private_message_received;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Wrapper.private_message_received)
+}
+inline ::xpilot::PrivateMessageReceived* Wrapper::_internal_mutable_private_message_received() {
+  if (!_internal_has_private_message_received()) {
+    clear_msg();
+    set_has_private_message_received();
+    msg_.private_message_received_ = CreateMaybeMessage< ::xpilot::PrivateMessageReceived >(GetArena());
+  }
+  return msg_.private_message_received_;
+}
+inline ::xpilot::PrivateMessageReceived* Wrapper::mutable_private_message_received() {
+  // @@protoc_insertion_point(field_mutable:xpilot.Wrapper.private_message_received)
+  return _internal_mutable_private_message_received();
+}
+
+// .xpilot.PrivateMessageSent private_message_sent = 17;
+inline bool Wrapper::_internal_has_private_message_sent() const {
+  return msg_case() == kPrivateMessageSent;
+}
+inline bool Wrapper::has_private_message_sent() const {
+  return _internal_has_private_message_sent();
+}
+inline void Wrapper::set_has_private_message_sent() {
+  _oneof_case_[0] = kPrivateMessageSent;
+}
+inline ::xpilot::PrivateMessageSent* Wrapper::release_private_message_sent() {
+  // @@protoc_insertion_point(field_release:xpilot.Wrapper.private_message_sent)
+  if (_internal_has_private_message_sent()) {
+    clear_has_msg();
+      ::xpilot::PrivateMessageSent* temp = msg_.private_message_sent_;
+    if (GetArena() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    msg_.private_message_sent_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::xpilot::PrivateMessageSent& Wrapper::_internal_private_message_sent() const {
+  return _internal_has_private_message_sent()
+      ? *msg_.private_message_sent_
+      : reinterpret_cast< ::xpilot::PrivateMessageSent&>(::xpilot::_PrivateMessageSent_default_instance_);
+}
+inline const ::xpilot::PrivateMessageSent& Wrapper::private_message_sent() const {
+  // @@protoc_insertion_point(field_get:xpilot.Wrapper.private_message_sent)
+  return _internal_private_message_sent();
+}
+inline ::xpilot::PrivateMessageSent* Wrapper::unsafe_arena_release_private_message_sent() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Wrapper.private_message_sent)
+  if (_internal_has_private_message_sent()) {
+    clear_has_msg();
+    ::xpilot::PrivateMessageSent* temp = msg_.private_message_sent_;
+    msg_.private_message_sent_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Wrapper::unsafe_arena_set_allocated_private_message_sent(::xpilot::PrivateMessageSent* private_message_sent) {
+  clear_msg();
+  if (private_message_sent) {
+    set_has_private_message_sent();
+    msg_.private_message_sent_ = private_message_sent;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Wrapper.private_message_sent)
+}
+inline ::xpilot::PrivateMessageSent* Wrapper::_internal_mutable_private_message_sent() {
+  if (!_internal_has_private_message_sent()) {
+    clear_msg();
+    set_has_private_message_sent();
+    msg_.private_message_sent_ = CreateMaybeMessage< ::xpilot::PrivateMessageSent >(GetArena());
+  }
+  return msg_.private_message_sent_;
+}
+inline ::xpilot::PrivateMessageSent* Wrapper::mutable_private_message_sent() {
+  // @@protoc_insertion_point(field_mutable:xpilot.Wrapper.private_message_sent)
+  return _internal_mutable_private_message_sent();
 }
 
 inline bool Wrapper::has_msg() const {

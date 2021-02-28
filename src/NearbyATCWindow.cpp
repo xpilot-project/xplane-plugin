@@ -35,23 +35,28 @@ namespace xpilot {
 		SetWindowResizingLimits(500, 300, 500, 300);
 	}
 
-	void NearbyATCWindow::UpdateList(const nlohmann::json& data)
+	void NearbyATCWindow::UpdateList(xpilot::NearbyControllers data)
 	{
 		std::lock_guard<std::mutex> lock(m_mutex);
 		{
 			NearbyList.clear();
-			if (data.find("Data") != data.end())
+			for (auto& el : data.list())
 			{
-				for (auto& el : data["Data"].items())
-				{
-					NearbyATCList l;
-					l.setCallsign(el.value()["Callsign"]);
-					l.setFrequency(el.value()["Frequency"]);
-					l.setXplaneFrequency(el.value()["XplaneFrequency"]);
-					l.setRealName(el.value()["RealName"]);
-					NearbyList.push_back(l);
-				}
+				NearbyATCList l;
+				l.setCallsign(el.callsign());
+				l.setFrequency(el.frequency());
+				l.setXplaneFrequency(el.xplane_frequency());
+				l.setRealName(el.real_name());
+				NearbyList.push_back(l);
 			}
+		}
+	}
+
+	void NearbyATCWindow::ClearList()
+	{
+		std::lock_guard<std::mutex> lock(m_mutex);
+		{
+			NearbyList.clear();
 		}
 	}
 

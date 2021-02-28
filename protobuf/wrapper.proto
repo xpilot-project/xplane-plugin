@@ -15,6 +15,10 @@ import "removeallplanes.proto";
 import "networkconnected.proto";
 import "networkdisconnected.proto";
 import "airplaneconfig.proto";
+import "nearbycontrollers.proto";
+import "clearnearbycontrollers.proto";
+import "privatemessagereceived.proto";
+import "privatemessagesent.proto";
 
 message Wrapper {
 	google.protobuf.Timestamp timestamp = 1;
@@ -31,5 +35,9 @@ message Wrapper {
 		NetworkConnected network_connected = 11;
 		NetworkDisconnected network_disconnected = 12;
 		AirplaneConfig airplane_config = 13;
+		NearbyControllers nearby_controllers = 14;
+		ClearNearbyControllers clear_nearby_controllers = 15;
+		PrivateMessageReceived private_message_received = 16;
+		PrivateMessageSent private_message_sent = 17;
 	}
 }
