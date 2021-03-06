@@ -1,8 +1,0 @@
-syntax = "proto3";
-
-package xpilot;
-
-message PrivateMessageReceived {
-	optional string from = 1;
-	optional string message = 2;
-}

@@ -70,7 +70,6 @@ namespace xpilot
 		void addNotificationPanelMessage(const std::string& msg, double red = 255, double green = 255, double blue = 255);
 		void addNotification(const std::string& msg, double red = 255, double green = 255, double blue = 255);
 
-		void sendSocketMsg(const std::string& string);
 		void sendPbArray(xpilot::Wrapper& wrapper);
 
 		void onNetworkDisconnected();
@@ -120,6 +119,7 @@ namespace xpilot
 		OwnedDataRef<int> m_aircraftCount;
 		OwnedDataRef<int> m_pluginVersion;
 		DataRefAccess<int> m_xplaneAtisEnabled;
+		DataRefAccess<float> m_frameRatePeriod;
 
 		// pilot client datarefs
 		DataRefAccess<int> m_audioComSelection;
@@ -146,6 +146,13 @@ namespace xpilot
 		DataRefAccess<float> m_positionPitch;
 		DataRefAccess<float> m_positionRoll;
 		DataRefAccess<float> m_positionYaw;
+
+		DataRefAccess<float> m_velocityLatitude;
+		DataRefAccess<float> m_velocityAltitude;
+		DataRefAccess<float> m_velocityLongitude;
+		DataRefAccess<float> m_velocityPitch;
+		DataRefAccess<float> m_velocityHeading;
+		DataRefAccess<float> m_velocityBank;
 
 		DataRefAccess<int> m_transponderCode;
 		DataRefAccess<int> m_transponderMode;

@@ -23,7 +23,8 @@
 #include <map>
 #include <mutex>
 
-#include "../protobuf/airplaneconfig.pb.h"
+#include "XPilot.h"
+#include "../protobuf/AirplaneConfig.pb.h"
 #include "NetworkAircraft.h"
 
 namespace xpilot
@@ -53,16 +54,22 @@ namespace xpilot
 	class AircraftManager
 	{
 	public:
-		AircraftManager() {};
+		AircraftManager(XPilot* instance);
 		~AircraftManager() {};
-		void interpolateAirplanes();
-		void addNewPlane(const std::string& callsign, const std::string& typeIcao, const std::string& airlineIcao,
-			const std::string& livery = "", const std::string& modelName = "");
-		void setPlanePosition(const std::string& callsign, XPMPPlanePosition_t pos, XPMPPlaneRadar_t radar, float groundSpeed, const std::string& origin, const std::string& destination);
-		void updateAircraftConfig(const xpilot::AirplaneConfig& config);
-		void changeModel(const std::string& callsign, const std::string& typeIcao, const std::string& airlineIcao);
-		void removePlane(const std::string& callsign);
-		void removeAllPlanes();
+
+		void SetUpNewPlane(const std::string& callsign, const AircraftVisualState& visualState, const std::string& typeIcao, const std::string& airlineIcao, const std::string& livery = "", const std::string& modelName = "");
+		void UpdateAircraftConfiguration(const xpilot::AirplaneConfig& config);
+		void ChangeAircraftModel(const std::string& callsign, const std::string& typeIcao, const std::string& airlineIcao);
+		void HandleSlowPositionUpdate(const std::string& callsign, AircraftVisualState visualState, double speed);
+		void HandleFastPositionUpdate(const std::string& callsign, const AircraftVisualState& visualState, Vector3 positionalVector, Vector3 rotationalVector);
+		void DeleteAircraft(const std::string& callsign);
+		void DeleteAllAircraft();
+
+	private:
+		XPilot* mEnv;
+		NetworkAircraft* GetAircraft(const std::string& callsign);
+		bool ReceivingFastPositionUpdates(NetworkAircraft* aircraft);
+		Vector3 DerivePositionalVelocityVector(AircraftVisualState previousVisualState, AircraftVisualState newVisualState, long intervalMs);
 	};
 }
 

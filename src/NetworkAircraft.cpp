@@ -16,118 +16,292 @@
  * along with this program. If not, see http://www.gnu.org/licenses/.
 */
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 #include "NetworkAircraft.h"
 #include "Utilities.h"
 #include "Config.h"
+#include "GeoCalc.hpp"
+#include "Quaternion.hpp"
 
 namespace xpilot
 {
-    NetworkAircraft::NetworkAircraft(const std::string& _icaoType, const std::string& _icaoAirline, const std::string& _livery,
-        XPMPPlaneID _modeS_id = 0, const std::string& _modelName = "") :
-        XPMP2::Aircraft(_icaoType, _icaoAirline, _livery, _modeS_id, _modelName),
-        enginesRunning(false),
-        gearDown(false),
-        onGround(false),
-        renderCount(0),
-        reverseThrust(false),
-        spoilersDeployed(false),
-        targetFlapPosition(0.0f),
-        targetGearPosition(0.0f),
-        targetSpoilerPosition(0.0f),
-        targetReversersPosition(0.0f),
-        terrainAltitude(0.0),
-        groundSpeed(0.0)
+    double CalculateNormalizedDelta(double start, double end, double lowerBound, double upperBound)
     {
+        double range = upperBound - lowerBound;
+        double halfRange = range / 2.0;
 
+        if (abs(end - start) > halfRange)
+        {
+            end += (end > start ? -range : range);
+        }
+
+        return end - start;
     }
 
-    void NetworkAircraft::UpdatePosition(float, int)
+    double HeadingDiff(double head1, double head2)
     {
-        label = callsign;
-        if (callsign.length() > 7)
+        if (std::abs(head2 - head1) > 180)
         {
-            strScpy(acInfoTexts.tailNum, callsign.substr(0, 7).c_str(), sizeof(acInfoTexts.tailNum));
+            if (head1 < head2)
+            {
+                head1 += 360;
+            }
+            else
+            {
+                head2 += 360;
+            }
         }
-        else
-        {
-            strScpy(acInfoTexts.tailNum, callsign.c_str(), sizeof(acInfoTexts.tailNum));
-        }
+        return head2 - head1;
+    }
+
+    NetworkAircraft::NetworkAircraft(
+        const std::string& _callsign,
+        const AircraftVisualState& _visualState,
+        const std::string& _icaoType, 
+        const std::string& _icaoAirline, 
+        const std::string& _livery,
+        XPMPPlaneID _modeS_id = 0,
+        const std::string& _modelName = "") :
+        XPMP2::Aircraft(_icaoType, _icaoAirline, _livery, _modeS_id, _modelName),
+        engines_running(false),
+        gear_down(false),
+        on_ground(false),
+        fast_positions_received_count(0),
+        reverse_thrust(false),
+        spoilersDeployed(false),
+        target_flaps_position(0.0f),
+        target_gear_position(0.0f),
+        target_spoiler_position(0.0f),
+        ground_speed(0.0)
+    {
+        label = _callsign;
+        strScpy(acInfoTexts.tailNum, _callsign.c_str(), sizeof(acInfoTexts.tailNum));
         strScpy(acInfoTexts.icaoAcType, acIcaoType.c_str(), sizeof(acInfoTexts.icaoAcType));
         strScpy(acInfoTexts.icaoAirline, acIcaoAirline.c_str(), sizeof(acInfoTexts.icaoAirline));
 
-        HexToRgb(Config::Instance().getAircraftLabelColor(), colLabel);
+        SetLocation(_visualState.Lat, _visualState.Lon, _visualState.Altitude);
+        SetHeading(_visualState.Heading);
+        SetPitch(_visualState.Pitch);
+        SetRoll(_visualState.Bank);
 
-        SetLocation(position.lat, position.lon, position.elevation);
+        last_slow_position_timestamp = std::chrono::steady_clock::now();
+        current_visual_state = _visualState;
+        remote_visual_state = _visualState;
+        positional_velocity_vector = Vector3::Zero();
+        rotational_velocity_vector = Vector3::Zero();
 
-        SetHeading(position.heading);
-        SetPitch(position.pitch);
-        SetRoll(position.roll);
+        SetVisible(false);
+    }
+
+    void NetworkAircraft::Extrapolate(
+        Vector3 velocityVector,
+        Vector3 rotationVector,
+        double interval)
+    {
+        double lat_change = MetersToDegrees(velocityVector.Z * interval);
+        double new_lat = NormalizeDegrees(current_visual_state.Lat + lat_change, -90.0, 90.0);
+
+        double lon_change = MetersToDegrees(velocityVector.X * interval / LongitudeScalingFactor(current_visual_state.Lat));
+        double new_lon = NormalizeDegrees(current_visual_state.Lon + lon_change, -180.0, 180.0);
+
+        double alt_change = velocityVector.Y * interval * 3.28084;
+        double new_alt = current_visual_state.Altitude + alt_change;
+
+        terrain_altitude = 0.0;
+        if (new_alt < 18000)
+        {
+            terrain_altitude = terrain_probe.getTerrainElevation(new_lat, new_lon);
+        }
+
+        if (on_ground || (new_alt < 200.0 && new_alt < terrain_altitude))
+        {
+            if (fast_positions_received_count > 1)
+            {
+                double diff = terrain_altitude - new_alt;
+                new_alt += diff * interval;
+
+                SetTouchDown(just_touched_down);
+                just_touched_down = false;
+            }
+            else
+            {
+                new_alt = terrain_altitude;
+            }
+        }
+
+        SetLocation(new_lat, new_lon, new_alt);
+
+        Quaternion current_orientation = Quaternion::FromEuler(
+            DegreesToRadians(GetPitch()),
+            DegreesToRadians(GetHeading()),
+            DegreesToRadians(GetRoll())
+        );
+
+        Quaternion rotation = Quaternion::FromEuler(
+            rotationVector.X,
+            rotationVector.Y,
+            rotationVector.Z
+        );
+
+        Quaternion slerp = Quaternion::Slerp(
+            Quaternion::Identity(),
+            rotation,
+            interval > 1.0 ? 1.0 : interval
+        );
+
+        Quaternion result = current_orientation * slerp;
+
+        Vector3 new_orientation = Quaternion::ToEuler(result);
+
+        double new_pitch = RadiansToDegrees(new_orientation.X);
+        double new_heading = RadiansToDegrees(new_orientation.Y);
+        double new_roll = RadiansToDegrees(new_orientation.Z);
+
+        current_visual_state.Lat = new_lat;
+        current_visual_state.Lon = new_lon;
+        current_visual_state.Altitude = new_alt;
+        current_visual_state.Pitch = new_pitch;
+        current_visual_state.Bank = new_roll;
+        current_visual_state.Heading = new_heading;
+
+        SetPitch(new_pitch);
+        SetHeading(new_heading);
+        SetRoll(new_roll);
+    }
+
+    void NetworkAircraft::UpdateErrorVectors(double interval)
+    {
+        if (positional_velocity_vector == Vector3::Zero())
+        {
+            positional_velocity_vector_error = Vector3::Zero();
+            rotational_velocity_vector_error = Vector3::Zero();
+            return;
+        }
+
+        double latDelta = DegreesToMeters(CalculateNormalizedDelta(
+            current_visual_state.Lat,
+            remote_visual_state.Lat,
+            -90.0,
+            90.0
+        ));
+
+        double lonDelta = DegreesToMeters(CalculateNormalizedDelta(
+            current_visual_state.Lon,
+            remote_visual_state.Lon,
+            -180.0,
+            180.0
+        ));
+        lonDelta *= LongitudeScalingFactor(remote_visual_state.Lat);
+
+        double altDelta = (remote_visual_state.Altitude - current_visual_state.Altitude) * 0.3048;
+
+        positional_velocity_vector_error = Vector3(
+            lonDelta / interval,
+            altDelta / interval,
+            latDelta / interval
+        );
+
+        Quaternion currentOrientation = Quaternion::FromEuler(
+            DegreesToRadians(GetPitch()), 
+            DegreesToRadians(GetHeading()), 
+            DegreesToRadians(GetRoll())
+        );
+        
+        Quaternion targetOrientation = Quaternion::FromEuler(
+            DegreesToRadians(remote_visual_state.Pitch), 
+            DegreesToRadians(remote_visual_state.Heading), 
+            DegreesToRadians(remote_visual_state.Bank)
+        );
+
+        Quaternion delta = Quaternion::Inverse(currentOrientation) * targetOrientation;
+
+        Vector3 result = Quaternion::ToEuler(delta);
+
+        rotational_velocity_vector_error = Vector3(result.X / interval, result.Y / interval, result.Z / interval);
+    }
+
+    double NetworkAircraft::NormalizeDegrees(double value, double lowerBound, double upperBound)
+    {
+        double range = upperBound - lowerBound;
+        if (value < lowerBound)
+        {
+            return value + range;
+        }
+        if (value > upperBound)
+        {
+            return value - range;
+        }
+        return value;
+    }
+
+    void NetworkAircraft::UpdatePosition(float _elapsedSinceLastCall, int)
+    {
+        Extrapolate(
+            positional_velocity_vector + positional_velocity_vector_error,
+            rotational_velocity_vector + rotational_velocity_vector_error,
+            _elapsedSinceLastCall
+        );
+        
+        double rpm = (60 / (2 * M_PI * 3.2)) * positional_velocity_vector.X * -1;
+        double rpmDeg = GetTireRotRpm() / 60.0 * _elapsedSinceLastCall * 360.0;
+
+        SetTireRotRpm(rpm);
+        SetTireRotAngle(GetTireRotAngle() + rpmDeg);
 
         const auto now = std::chrono::system_clock::now();
         static const float epsilon = std::numeric_limits<float>::epsilon();
         const auto diffMs = std::chrono::duration_cast<std::chrono::milliseconds>(now - previousSurfaceUpdateTime);
 
-        targetGearPosition = gearDown ? 1.0f : 0.0f;
-        targetSpoilerPosition = spoilersDeployed ? 1.0f : 0.0f;
-        targetReversersPosition = reverseThrust ? 1.0f : 0.0f;
+        target_gear_position = gear_down ? 1.0f : 0.0f;
+        target_spoiler_position = spoilersDeployed ? 1.0f : 0.0f;
 
-        if (renderCount <= 2)
+        if (fast_positions_received_count <= 2)
         {
             // we don't want to wait for the animation on first load...
             // looks particular funny with the gear extending after the aircraft
             // loads on the ground
-            surfaces.gearPosition = targetGearPosition;
-            surfaces.flapRatio = targetFlapPosition;
-            surfaces.spoilerRatio = targetSpoilerPosition;
-            surfaces.reversRatio = targetReversersPosition;
+            surfaces.gearPosition = target_gear_position;
+            surfaces.flapRatio = target_flaps_position;
+            surfaces.spoilerRatio = target_spoiler_position;
         }
         else
         {
-            const float f = surfaces.gearPosition - targetGearPosition;
+            const float f = surfaces.gearPosition - target_gear_position;
             if (std::abs(f) > epsilon)
             {
                 // interpolate gear position
                 constexpr float gearMoveTimeMs = 10000;
-                const auto gearPositionDiffRemaining = targetGearPosition - surfaces.gearPosition;
+                const auto gearPositionDiffRemaining = target_gear_position - surfaces.gearPosition;
 
                 const auto gearPositionDiffThisFrame = (diffMs.count()) / gearMoveTimeMs;
                 surfaces.gearPosition += std::copysign(gearPositionDiffThisFrame, gearPositionDiffRemaining);
                 surfaces.gearPosition = (std::max)(0.0f, (std::min)(surfaces.gearPosition, 1.0f));
             }
 
-            const float f2 = surfaces.flapRatio - targetFlapPosition;
+            const float f2 = surfaces.flapRatio - target_flaps_position;
             if (std::abs(f2) > epsilon)
             {
                 // interpolate flap position
                 constexpr float flapMoveTimeMs = 10000;
-                const auto flapPositionDiffRemaining = targetFlapPosition - surfaces.flapRatio;
+                const auto flapPositionDiffRemaining = target_flaps_position - surfaces.flapRatio;
 
                 const auto flapPositionDiffThisFrame = (diffMs.count()) / flapMoveTimeMs;
                 surfaces.flapRatio += std::copysign(flapPositionDiffThisFrame, flapPositionDiffRemaining);
                 surfaces.flapRatio = (std::max)(0.0f, (std::min)(surfaces.flapRatio, 1.0f));
             }
 
-            const float f3 = surfaces.spoilerRatio - targetSpoilerPosition;
+            const float f3 = surfaces.spoilerRatio - target_spoiler_position;
             if (std::abs(f3) > epsilon)
             {
                 // interpolate spoiler position
                 constexpr float spoilerMoveTimeMs = 2000;
-                const auto spoilerPositionDiffRemaining = targetSpoilerPosition - surfaces.spoilerRatio;
+                const auto spoilerPositionDiffRemaining = target_spoiler_position - surfaces.spoilerRatio;
 
                 const auto spoilerPositionDiffThisFrame = (diffMs.count()) / spoilerMoveTimeMs;
                 surfaces.spoilerRatio += std::copysign(spoilerPositionDiffThisFrame, spoilerPositionDiffRemaining);
                 surfaces.spoilerRatio = (std::max)(0.0f, (std::min)(surfaces.spoilerRatio, 1.0f));
-            }
-
-            const float f4 = surfaces.reversRatio - targetReversersPosition;
-            if (std::abs(f4) > epsilon)
-            {
-                constexpr float reversersMoveTimeMs = 4000;
-                const auto reverserPositionDiffRemaining = targetReversersPosition - surfaces.reversRatio;
-
-                const auto reverserPositionDiffThisFrame = (diffMs.count()) / reversersMoveTimeMs;
-                surfaces.reversRatio += std::copysign(reverserPositionDiffThisFrame, reverserPositionDiffRemaining);
-                surfaces.reversRatio = (std::max)(0.0f, (std::min)(surfaces.reversRatio, 1.0f));
             }
 
             previousSurfaceUpdateTime = now;
@@ -146,7 +320,7 @@ namespace xpilot
         SetSpoilerRatio(surfaces.spoilerRatio);
         SetSpeedbrakeRatio(surfaces.spoilerRatio);
         SetWingSweepRatio(0.0f);
-        SetThrustRatio(enginesRunning ? 1.0f : 0.0f);
+        SetThrustRatio(engines_running ? 1.0f : 0.0f);
         SetYokePitchRatio(0.0f);
         SetYokeHeadingRatio(0.0f);
         SetYokeRollRatio(0.0f);
@@ -158,17 +332,19 @@ namespace xpilot
         SetLightsStrobe(surfaces.lights.strbLights);
         SetLightsNav(surfaces.lights.navLights);
 
-        SetTireDeflection(0.0f);
-        SetTireRotAngle(0.0f);
-        SetTireRotRpm(0.0f);
+        //SetTireDeflection(0.0f);
+        //SetTireRotAngle(0.0f);
+        //SetTireRotRpm(0.0f);
 
-        SetEngineRotRpm(0.0f);
-        SetPropRotRpm(0.0f);
-        SetEngineRotAngle(0.0f);
-        SetPropRotAngle(0.0f);
+        //SetEngineRotRpm(0.0f);
+        //SetPropRotRpm(0.0f);
+        //SetEngineRotAngle(0.0f);
+        //SetPropRotAngle(0.0f);
 
-        SetReversDeployRatio(0.0f);
-        SetTouchDown(false);
+        //SetReversDeployRatio(0.0f);
+        //SetTouchDown(false);
+
+        HexToRgb(Config::Instance().getAircraftLabelColor(), colLabel);
     }
 
     void NetworkAircraft::copyBulkData(XPilotAPIAircraft::XPilotAPIBulkData* pOut, size_t size) const
@@ -182,8 +358,8 @@ namespace xpilot
         pOut->alt_ft = alt;
         pOut->pitch = GetPitch();
         pOut->roll = GetRoll();
-        pOut->terrainAlt_ft = (float)terrainAltitude;
-        pOut->speed_kt = (float)groundSpeed;
+        pOut->terrainAlt_ft = (float)terrain_altitude;
+        pOut->speed_kt = (float)ground_speed;
         pOut->heading = GetHeading();
         pOut->flaps = (float)surfaces.flapRatio;
         pOut->gear = (float)surfaces.gearPosition;
@@ -194,7 +370,7 @@ namespace xpilot
         pOut->bits.bcn = GetLightsBeacon();
         pOut->bits.strb = GetLightsStrobe();
         pOut->bits.nav = GetLightsNav();
-        pOut->bits.onGnd = onGround;
+        pOut->bits.onGnd = on_ground;
         pOut->bits.filler1 = 0;
         pOut->bits.multiIdx = GetTcasTargetIdx();
         pOut->bits.filler2 = 0;
@@ -204,7 +380,7 @@ namespace xpilot
     void NetworkAircraft::copyBulkData(XPilotAPIAircraft::XPilotAPIBulkInfoTexts* pOut, size_t size) const
     {
         pOut->keyNum = modeS_id;
-        STRCPY_ATMOST(pOut->callSign, callsign);
+        STRCPY_ATMOST(pOut->callSign, label);
         STRCPY_ATMOST(pOut->modelIcao, acIcaoType);
         STRCPY_ATMOST(pOut->cslModel, GetModelName());
         STRCPY_ATMOST(pOut->acClass, GetModelInfo().doc8643Classification);

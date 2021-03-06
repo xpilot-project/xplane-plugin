@@ -31,7 +31,7 @@
 #include "TextMessageConsole.h"
 #include "sha512.hh"
 #include "json.hpp"
-#include "../protobuf/wrapper.pb.h"
+#include "../protobuf/Wrapper.pb.h"
 
 using json = nlohmann::json;
 
@@ -69,6 +69,12 @@ namespace xpilot
 		m_positionPitch("sim/flightmodel/position/theta", ReadOnly),
 		m_positionRoll("sim/flightmodel/position/phi", ReadOnly),
 		m_positionYaw("sim/flightmodel/position/psi", ReadOnly),
+		m_velocityLongitude("sim/flightmodel/position/local_vx", ReadOnly),
+		m_velocityAltitude("sim/flightmodel/position/local_vy", ReadOnly),
+		m_velocityLatitude("sim/flightmodel/position/local_vz", ReadOnly),
+		m_velocityPitch("sim/flightmodel/position/Qrad", ReadOnly),
+		m_velocityHeading("sim/flightmodel/position/Rrad", ReadOnly),
+		m_velocityBank("sim/flightmodel/position/Prad", ReadOnly),
 		m_transponderCode("sim/cockpit/radios/transponder_code", ReadOnly),
 		m_transponderMode("sim/cockpit/radios/transponder_mode", ReadOnly),
 		m_transponderIdent("sim/cockpit/radios/transponder_id", ReadOnly),
@@ -77,13 +83,14 @@ namespace xpilot
 		m_navLightsOn("sim/cockpit/electrical/nav_lights_on", ReadOnly),
 		m_strobeLightsOn("sim/cockpit/electrical/strobe_lights_on", ReadOnly),
 		m_taxiLightsOn("sim/cockpit/electrical/taxi_light_on", ReadOnly),
-		m_flapRatio("sim/flightmodel/controls/flaprat", ReadOnly),
+		m_flapRatio("sim/flightmodel/controls/flaprat", ReadOnly), // flap_handle_deploy_ratio
 		m_gearDown("sim/cockpit/switches/gear_handle_status", ReadOnly),
-		m_speedBrakeRatio("sim/cockpit2/controls/speedbrake_ratio", ReadOnly),
+		m_speedBrakeRatio("sim/cockpit2/controls/speedbrake_ratio", ReadOnly), // speedbrake_ratio
 		m_engineCount("sim/aircraft/engine/acf_num_engines", ReadOnly),
 		m_enginesRunning("sim/flightmodel/engine/ENGN_running", ReadOnly),
 		m_onGround("sim/flightmodel/failures/onground_any", ReadOnly),
-		m_replayMode("sim/operation/prefs/replay_mode", ReadOnly)
+		m_replayMode("sim/operation/prefs/replay_mode", ReadOnly),
+		m_frameRatePeriod("sim/operation/misc/frame_rate_period", ReadOnly)
 	{
 		thisThreadIsXP();
 
@@ -130,7 +137,7 @@ namespace xpilot
 		m_nearbyAtcWindow = std::make_unique<NearbyATCWindow>(this);
 		m_settingsWindow = std::make_unique<SettingsWindow>();
 		m_frameRateMonitor = std::make_unique<FrameRateMonitor>(this);
-		m_aircraftManager = std::make_unique<AircraftManager>();
+		m_aircraftManager = std::make_unique<AircraftManager>(this);
 		pluginHash = sw::sha512::file(GetTruePluginPath().c_str());
 		m_pluginVersion = PLUGIN_VERSION;
 
@@ -189,6 +196,8 @@ namespace xpilot
 
 		XPLMRegisterFlightLoopCallback(mainFlightLoop, -1.0f, this);
 		XPLMRegisterFlightLoopCallback(drFlightLoop, -1.0f, this);
+
+		tryGetTcasControl();
 
 		m_keepAlive = true;
 		m_zmqThread = std::make_unique<std::thread>(&XPilot::zmqWorker, this);
@@ -251,31 +260,6 @@ namespace xpilot
 		}
 	}
 
-	void XPilot::sendSocketMsg(const std::string& msg)
-	{
-		//try
-		//{
-		//	if (isSocketConnected() && !msg.empty())
-		//	{
-		//		std::string identity = "CLIENT";
-		//		zmq::message_t msg1(identity.size());
-		//		std::memcpy(msg1.data(), identity.data(), identity.size());
-		//		m_zmqSocket->send(msg1, zmq::send_flags::sndmore);
-
-		//		zmq::message_t message(msg.size());
-		//		std::memcpy(message.data(), msg.data(), msg.size());
-		//		m_zmqSocket->send(message, ZMQ_NOBLOCK);
-		//	}
-		//}
-		//catch (zmq::error_t& e)
-		//{
-		//	LOG_MSG(logERROR, "Error sending socket message: %s", e.what());
-		//}
-		//catch (...)
-		//{
-		//}
-	}
-
 	float XPilot::drFlightLoop(float, float, int, void* ref)
 	{
 		auto* instance = static_cast<XPilot*>(ref);
@@ -294,7 +278,6 @@ namespace xpilot
 			instance->invokeQueuedCallbacks();
 			instance->m_aiControlled = XPMPHasControlOfAIAircraft();
 			instance->m_aircraftCount = XPMPCountPlanes();
-			instance->m_aircraftManager->interpolateAirplanes();
 			UpdateMenuItems();
 		}
 		return -1.0;
@@ -303,181 +286,90 @@ namespace xpilot
 	void XPilot::checkDatarefs(bool force)
 	{
 		xpilot::Wrapper msg;
-		xpilot::XplaneData* data = new xpilot::XplaneData();
-		msg.set_allocated_xplane_data(data);
+		xpilot::XplaneDatarefs * data = new xpilot::XplaneDatarefs();
+		msg.set_allocated_xplane_datarefs(data);
 
 		auto ts = new google::protobuf::Timestamp{};
 		ts->set_seconds(time(NULL));
 		ts->set_nanos(0);
 		msg.set_allocated_timestamp(ts);
 
-		if (m_audioComSelection.hasChanged())
-		{
-			data->set_audio_com_selection(m_audioComSelection);
-		}
+		data->set_audio_com_selection(m_audioComSelection);
 
 		// com1
-		if (m_com1Power.hasChanged())
-		{
-			data->set_com1_power(m_com1Power);
-		}
-		if (m_com1Frequency833.hasChanged())
-		{
-			data->set_com1_freq(m_com1Frequency833);
-		}
-		if (m_com1StandbyFrequency833.hasChanged())
-		{
-			data->set_com1_stby_freq(m_com1StandbyFrequency833);
-		}
-		if (m_com1AudioSelection.hasChanged())
-		{
-			data->set_com1_audio_selection(m_com1AudioSelection);
-		}
+		data->set_com1_power(m_com1Power);
+		data->set_com1_freq(m_com1Frequency833);
+		data->set_com1_stby_freq(m_com1StandbyFrequency833);
+		data->set_com1_audio_selection(m_com1AudioSelection);
 
 		// com2
-		if (m_com2Power.hasChanged())
-		{
-			data->set_com2_power(m_com2Power);
-		}
-		if (m_com2Frequency833.hasChanged())
-		{
-			data->set_com2_freq(m_com2Frequency833);
-		}
-		if (m_com2StandbyFrequency833.hasChanged())
-		{
-			data->set_com2_stby_freq(m_com2StandbyFrequency833);
-		}
-		if (m_com2AudioSelection.hasChanged())
-		{
-			data->set_com2_audio_selection(m_com2AudioSelection);
-		}
+		data->set_com2_power(m_com2Power);
+		data->set_com2_freq(m_com2Frequency833);
+		data->set_com2_stby_freq(m_com2StandbyFrequency833);
+		data->set_com2_audio_selection(m_com2AudioSelection);
 
-		if (m_avionicsPowerOn.hasChanged())
-		{
-			data->set_avionics_power_on(m_avionicsPowerOn);
-		}
+		data->set_avionics_power_on(m_avionicsPowerOn);
 
 		// transponder
-		if (m_transponderCode.hasChanged())
-		{
-			data->set_transponder_code(m_transponderCode);
-		}
-		if (m_transponderMode.hasChanged())
-		{
-			data->set_transponder_mode(m_transponderMode);
-		}
-		if (m_transponderIdent.hasChanged())
-		{
-			data->set_transponder_ident(m_transponderIdent);
-		}
+		data->set_transponder_code(m_transponderCode);
+		data->set_transponder_mode(m_transponderMode);
+		data->set_transponder_ident(m_transponderIdent);
 
 		// lights
-		if (m_beaconLightsOn.hasChanged())
-		{
-			data->set_beacon_lights_on(m_beaconLightsOn);
-		}
-		if (m_landingLightsOn.hasChanged())
-		{
-			data->set_landing_lights_on(m_landingLightsOn);
-		}
-		if (m_navLightsOn.hasChanged())
-		{
-			data->set_nav_lights_on(m_navLightsOn);
-		}
-		if (m_strobeLightsOn.hasChanged())
-		{
-			data->set_strobe_lights_on(m_strobeLightsOn);
-		}
-		if (m_taxiLightsOn.hasChanged())
-		{
-			data->set_taxi_lights_on(m_taxiLightsOn);
-		}
+		data->set_beacon_lights_on(m_beaconLightsOn);
+		data->set_landing_lights_on(m_landingLightsOn);
+		data->set_nav_lights_on(m_navLightsOn);
+		data->set_strobe_lights_on(m_strobeLightsOn);
+		data->set_taxi_lights_on(m_taxiLightsOn);
 
 		// control surfaces
-		if (m_flapRatio.hasChanged())
-		{
-			data->set_flaps(m_flapRatio);
-		}
-		if (m_gearDown.hasChanged())
-		{
-			data->set_gear_down(m_gearDown);
-		}
-		if (m_speedBrakeRatio.hasChanged())
-		{
-			data->set_speed_brakes(m_speedBrakeRatio);
-		}
+		data->set_flaps(m_flapRatio);
+		data->set_gear_down(m_gearDown);
+		data->set_speed_brakes(m_speedBrakeRatio);
 
 		// engines
-		if (m_engineCount.hasChanged())
+		data->set_engine_count(m_engineCount);
+		std::vector<int> val = m_enginesRunning;
+		for (size_t i = 0; i < 4; ++i)
 		{
-			data->set_engine_count(m_engineCount);
-		}
-		if (m_enginesRunning.hasChanged())
-		{
-			std::vector<int> val = m_enginesRunning;
-			for (size_t i = 0; i < 4; ++i)
+			switch (i)
 			{
-				switch (i)
-				{
-					case 0:
-						data->set_engine1_running(val[i]);
-						break;
-					case 1:
-						data->set_engine2_running(val[i]);
-						break;
-					case 2:
-						data->set_engine3_running(val[i]);
-						break;
-					case 3:
-						data->set_engine4_running(val[i]);
-						break;
-				}
+				case 0:
+					data->set_engine1_running(val[i]);
+					break;
+				case 1:
+					data->set_engine2_running(val[i]);
+					break;
+				case 2:
+					data->set_engine3_running(val[i]);
+					break;
+				case 3:
+					data->set_engine4_running(val[i]);
+					break;
 			}
 		}
 
 		// position
-		if (m_positionLatitude.hasChanged())
-		{
-			data->set_latitude(m_positionLatitude);
-		}
-		if (m_positionLongitude.hasChanged())
-		{
-			data->set_longitude(m_positionLongitude);
-		}
-		if (m_positionAltitude.hasChanged())
-		{
-			data->set_altitude(m_positionAltitude);
-		}
-		if (m_positionPressureAltitude.hasChanged())
-		{
-			data->set_pressure_altitude(m_positionPressureAltitude);
-		}
-		if (m_groundSpeed.hasChanged())
-		{
-			data->set_ground_speed(m_groundSpeed);
-		}
-		if (m_positionPitch.hasChanged())
-		{
-			data->set_pitch(m_positionPitch);
-		}
-		if (m_positionRoll.hasChanged())
-		{
-			data->set_roll(m_positionRoll);
-		}
-		if (m_positionYaw.hasChanged())
-		{
-			data->set_yaw(m_positionYaw);
-		}
+		data->set_latitude(m_positionLatitude);
+		data->set_longitude(m_positionLongitude);
+		data->set_altitude(m_positionAltitude);
+		data->set_pressure_altitude(m_positionPressureAltitude);
+		data->set_ground_speed(m_groundSpeed);
+		data->set_pitch(m_positionPitch);
+		data->set_roll(m_positionRoll);
+		data->set_yaw(m_positionYaw);
+
+		// velocity
+		data->set_velocity_latitude(m_velocityLatitude * -1.0);
+		data->set_velocity_altitude(m_velocityAltitude);
+		data->set_velocity_longitude(m_velocityLongitude);
+		data->set_velocity_pitch(m_velocityPitch * -1.0);
+		data->set_velocity_heading(m_velocityHeading);
+		data->set_velocity_bank(m_velocityBank * -1.0);
 
 		// misc
-		if (m_onGround.hasChanged())
-		{
-			data->set_on_ground(m_onGround);
-		}
-		if (m_replayMode.hasChanged())
-		{
-			data->set_replay_mode(m_replayMode);
-		}
+		data->set_on_ground(m_onGround);
+		data->set_replay_mode(m_replayMode);
 
 		sendPbArray(msg);
 	}
@@ -524,11 +416,19 @@ namespace xpilot
 				if (wrapper.has_add_plane())
 				{
 					xpilot::AddPlane msg = wrapper.add_plane();
-					if (msg.has_callsign() && msg.has_equipment())
+					if (msg.has_callsign() && msg.has_visual_state() && msg.has_equipment())
 					{
+						AircraftVisualState visualState{};
+						visualState.Lat = msg.visual_state().latitude();
+						visualState.Lon = msg.visual_state().longitude();
+						visualState.Altitude = msg.visual_state().altitude();
+						visualState.Heading = msg.visual_state().heading();
+						visualState.Pitch = msg.visual_state().pitch();
+						visualState.Bank = msg.visual_state().bank();
+
 						queueCallback([=]()
 						{
-							m_aircraftManager->addNewPlane(msg.callsign(), msg.equipment(), msg.airline());
+							m_aircraftManager->SetUpNewPlane(msg.callsign(), visualState, msg.equipment(), msg.airline());
 						});
 					}
 				}
@@ -540,7 +440,7 @@ namespace xpilot
 					{
 						queueCallback([=]()
 						{
-							m_aircraftManager->changeModel(msg.callsign(), msg.equipment(), msg.airline());
+							m_aircraftManager->ChangeAircraftModel(msg.callsign(), msg.equipment(), msg.airline());
 						});
 					}
 				}
@@ -549,23 +449,55 @@ namespace xpilot
 				{
 					xpilot::PositionUpdate msg = wrapper.position_update();
 
-					XPMPPlanePosition_t pos;
-					pos.lat = msg.latitude();
-					pos.lon = msg.longitude();
-					pos.elevation = msg.altitude();
-					pos.heading = msg.heading();
-					pos.pitch = msg.pitch();
-					pos.roll = msg.bank();
-
-					XPMPPlaneRadar_t radar;
-					radar.code = msg.transponder_code();
-					radar.mode = msg.transponder_mode_c() ? xpmpTransponderMode_ModeC : xpmpTransponderMode_Standby;
+					AircraftVisualState visualState;
+					visualState.Lat = msg.latitude();
+					visualState.Lon = msg.longitude();
+					visualState.Altitude = msg.altitude();
+					visualState.Pitch = msg.pitch();
+					visualState.Bank = msg.bank();
+					visualState.Heading = msg.heading();
 
 					if (msg.has_callsign())
 					{
 						queueCallback([=]()
 						{
-							m_aircraftManager->setPlanePosition(msg.callsign(), pos, radar, msg.ground_speed(), msg.origin(), msg.destination());
+							m_aircraftManager->HandleSlowPositionUpdate(msg.callsign(), visualState, msg.ground_speed());
+						});
+					}
+				}
+
+				if (wrapper.has_fast_position_update())
+				{
+					xpilot::FastPositionUpdate msg = wrapper.fast_position_update();
+
+					AircraftVisualState visualState{};
+					visualState.Lat = msg.latitude();
+					visualState.Lon = msg.longitude();
+					visualState.Altitude = msg.altitude();
+					visualState.Pitch = msg.pitch();
+					visualState.Bank = msg.bank();
+					visualState.Heading = msg.heading();
+
+					Vector3 positionalVector{};
+					positionalVector.X = msg.velocity_longitude();
+					positionalVector.Y = msg.velocity_altitude();
+					positionalVector.Z = msg.velocity_latitude();
+
+					Vector3 rotationalVector{};
+					rotationalVector.X = msg.velocity_pitch() * -1;
+					rotationalVector.Y = msg.velocity_heading();
+					rotationalVector.Z = msg.velocity_bank();
+
+					if (msg.has_callsign())
+					{
+						queueCallback([=]()
+						{
+							m_aircraftManager->HandleFastPositionUpdate(
+								msg.callsign(),
+								visualState,
+								positionalVector,
+								rotationalVector
+							);
 						});
 					}
 				}
@@ -577,7 +509,7 @@ namespace xpilot
 					{
 						queueCallback([=]()
 						{
-							m_aircraftManager->updateAircraftConfig(msg);
+							m_aircraftManager->UpdateAircraftConfiguration(msg);
 						});
 					}
 				}
@@ -589,7 +521,7 @@ namespace xpilot
 					{
 						queueCallback([=]()
 						{
-							m_aircraftManager->removePlane(msg.callsign());
+							m_aircraftManager->DeleteAircraft(msg.callsign());
 						});
 					}
 				}
@@ -598,7 +530,7 @@ namespace xpilot
 				{
 					queueCallback([=]()
 					{
-						m_aircraftManager->removeAllPlanes();
+						m_aircraftManager->DeleteAllAircraft();
 					});
 				}
 
@@ -875,7 +807,7 @@ namespace xpilot
 
 	void XPilot::onNetworkConnected()
 	{
-		m_aircraftManager->removeAllPlanes();
+		m_aircraftManager->DeleteAllAircraft();
 		m_frameRateMonitor->startMonitoring();
 		tryGetTcasControl();
 		m_xplaneAtisEnabled = 0;
@@ -884,7 +816,7 @@ namespace xpilot
 
 	void XPilot::onNetworkDisconnected()
 	{
-		m_aircraftManager->removeAllPlanes();
+		m_aircraftManager->DeleteAllAircraft();
 		m_frameRateMonitor->stopMonitoring();
 		releaseTcasControl();
 		m_xplaneAtisEnabled = 1;
@@ -893,29 +825,29 @@ namespace xpilot
 
 	void XPilot::forceDisconnect(std::string reason)
 	{
-		json j;
-		j["Type"] = "ForceDisconnect";
-		j["Data"]["Reason"] = reason;
-		j["Timestamp"] = UtcTimestamp();
-		sendSocketMsg(j.dump());
+		//json j;
+		//j["Type"] = "ForceDisconnect";
+		//j["Data"]["Reason"] = reason;
+		//j["Timestamp"] = UtcTimestamp();
+		//sendSocketMsg(j.dump());
 	}
 
 	void XPilot::onPluginDisabled()
 	{
-		json j;
-		j["Type"] = "PluginDisabled";
-		j["Timestamp"] = UtcTimestamp();
-		sendSocketMsg(j.dump());
+		//json j;
+		//j["Type"] = "PluginDisabled";
+		//j["Timestamp"] = UtcTimestamp();
+		//sendSocketMsg(j.dump());
 	}
 
 	void XPilot::requestControllerAtis(std::string callsign)
 	{
-		json j;
-		j["Type"] = "RequestAtis";
-		j["Timestamp"] = UtcTimestamp();
-		j["Data"]["Callsign"] = callsign;
+		//json j;
+		//j["Type"] = "RequestAtis";
+		//j["Timestamp"] = UtcTimestamp();
+		//j["Data"]["Callsign"] = callsign;
 
-		sendSocketMsg(j.dump());
+		//sendSocketMsg(j.dump());
 	}
 
 	bool XPilot::initializeXPMP()

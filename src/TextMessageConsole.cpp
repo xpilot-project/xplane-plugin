@@ -65,10 +65,10 @@ namespace xpilot
 	{
 		if (m_env->isNetworkConnected())
 		{
-			json j;
-			j["Type"] = "SocketMessage";
-			j["Data"]["Message"] = msg.c_str();
-			m_env->sendSocketMsg(j.dump());
+			//json j;
+			//j["Type"] = "SocketMessage";
+			//j["Data"]["Message"] = msg.c_str();
+			//m_env->sendSocketMsg(j.dump());
 		}
 	}
 
@@ -134,11 +134,11 @@ namespace xpilot
 		{
 			if (m_env->isNetworkConnected())
 			{
-				json j;
-				j["Type"] = "PrivateMessageSent";
-				j["Data"]["Message"] = msg.c_str();
-				j["Data"]["To"] = str_toupper(tabName).c_str();
-				m_env->sendSocketMsg(j.dump());
+				//json j;
+				//j["Type"] = "PrivateMessageSent";
+				//j["Data"]["Message"] = msg.c_str();
+				//j["Data"]["To"] = str_toupper(tabName).c_str();
+				//m_env->sendSocketMsg(j.dump());
 			}
 		}
 	}

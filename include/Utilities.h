@@ -258,4 +258,6 @@ inline void Log(logLevel level, const char* msg, ...)
     {Log(lvl, __VA_ARGS__);}       \
 }
 
+#define MY_DEBUG(...) {char cad[512]; sprintf(cad, __VA_ARGS__);  OutputDebugString(cad);}
+
 #endif // !Utilities_h

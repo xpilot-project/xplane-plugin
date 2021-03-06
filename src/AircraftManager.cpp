@@ -19,9 +19,49 @@
 #include "AircraftManager.h"
 #include "NetworkAircraft.h"
 #include "Utilities.h"
+#include "GeoCalc.hpp"
+#include "Quaternion.hpp"
+#include "XPilot.h"
 
 namespace xpilot
 {
+	const long FAST_POSITION_INTERVAL_TOLERANCE = 300;
+	const double ERROR_CORRECTION_INTERVAL_FAST = 2.0;
+	const double ERROR_CORRECTION_INTERVAL_SLOW = 5.0;
+
+	static double NormalizeDegrees(double value, double lowerBound, double upperBound)
+	{
+		double range = upperBound - lowerBound;
+		if (value < lowerBound)
+		{
+			return value + range;
+		}
+		if (value > upperBound)
+		{
+			return value - range;
+		}
+		return value;
+	}
+
+	static double CalculateNormalizedDelta(double start, double end, double lowerBound, double upperBound)
+	{
+		double range = upperBound - lowerBound;
+		double halfRange = range / 2.0;
+
+		if (abs(end - start) > halfRange)
+		{
+			end += (end > start ? -range : range);
+		}
+
+		return end - start;
+	}
+
+	static double Round(double value, int to)
+	{
+		double places = pow(10.0, to);
+		return round(value * places) / places;
+	}
+
 	mapPlanesTy mapPlanes;
 	mapPlanesTy::iterator mapGetAircraftByIndex(int idx)
 	{
@@ -39,152 +79,183 @@ namespace xpilot
 		return mapPlanes.end();
 	}
 
-	void AircraftManager::interpolateAirplanes()
+	AircraftManager::AircraftManager(XPilot* instance) : mEnv(instance)
 	{
-		for (auto& kv : mapPlanes)
-		{
-			NetworkAircraft* plane = kv.second.get();
-			if (!plane) continue;
 
-			if (plane->interpolationStack.size() > 0)
-			{
-				InterpolatedState interpolated;
-				long long currentTimestamp = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-
-				if (plane->interpolationStack.size() == 1)
-				{
-					interpolated = plane->interpolationStack.front();
-				}
-				else if (currentTimestamp <= plane->interpolationStack.front().timestamp)
-				{
-					interpolated = plane->interpolationStack.front();
-				}
-				else
-				{
-					InterpolatedState start{};
-					InterpolatedState end{};
-
-					for (int i = 0; i < plane->interpolationStack.size() - 1; i++)
-					{
-						start = plane->interpolationStack.at(i);
-						end = plane->interpolationStack.at(i + 1.0);
-						if ((start.timestamp < currentTimestamp) && (end.timestamp >= currentTimestamp))
-						{
-							break;
-						}
-					}
-
-					if (currentTimestamp <= start.timestamp)
-					{
-						interpolated = start;
-					}
-					else if (currentTimestamp >= end.timestamp)
-					{
-						interpolated = end;
-					}
-					else
-					{
-						long long timeDelta = end.timestamp - start.timestamp;
-						double pct = (currentTimestamp - start.timestamp) / (double)timeDelta;
-						double startHeaing = start.heading;
-						double endHeading = end.heading;
-						if (abs(endHeading - startHeaing) > 180.0)
-						{
-							endHeading += (endHeading > startHeaing ? -360.0 : 360.0);
-						}
-						interpolated.timestamp = currentTimestamp;
-						interpolated.latitude = start.latitude + ((end.latitude - start.latitude) * pct);
-						interpolated.longitude = start.longitude + ((end.longitude - start.longitude) * pct);
-						interpolated.altitude = start.altitude + ((end.altitude - start.altitude) * pct);
-						interpolated.pitch = start.pitch + ((end.pitch - start.pitch) * pct);
-						interpolated.bank = start.bank + ((end.bank - start.bank) * pct);
-						interpolated.heading = NormalizeHeading(startHeaing + ((endHeading - startHeaing) * pct));
-						interpolated.groundSpeed = start.groundSpeed + ((end.groundSpeed - start.groundSpeed) * pct);
-					}
-				}
-				plane->position.lat = interpolated.latitude;
-				plane->position.lon = interpolated.longitude;
-				plane->position.elevation = interpolated.altitude;
-				plane->position.heading = static_cast<float>(interpolated.heading);
-				plane->position.roll = static_cast<float>(interpolated.bank);
-				plane->position.pitch = static_cast<float>(interpolated.pitch);
-				plane->groundSpeed = static_cast<float>(interpolated.groundSpeed);
-			}
-		}
 	}
 
-	void AircraftManager::addNewPlane(const std::string& callsign, const std::string& typeIcao,
-		const std::string& airlineIcao, const std::string& livery, const std::string& model)
+	void AircraftManager::SetUpNewPlane(const std::string& callsign, const AircraftVisualState& visualState, const std::string& typeIcao, const std::string& airlineIcao, const std::string& livery, const std::string& model)
 	{
 		auto planeIt = mapPlanes.find(callsign);
 		if (planeIt != mapPlanes.end()) return;
 
-		NetworkAircraft* plane = new NetworkAircraft(typeIcao.c_str(), airlineIcao.c_str(), livery.c_str(), 0, model.c_str());
-		plane->callsign = callsign;
+		NetworkAircraft* plane = new NetworkAircraft(
+			callsign.c_str(),
+			visualState,
+			typeIcao.c_str(),
+			airlineIcao.c_str(),
+			livery.c_str(), 0,
+			model.c_str()
+		);
 		mapPlanes.emplace(callsign, std::move(plane));
+
+		if (plane->IsValid())
+		{
+			xpilot::Wrapper reply;
+			xpilot::PlaneAddedToSim* msg = new xpilot::PlaneAddedToSim();
+			reply.set_allocated_plane_added_to_sim(msg);
+			msg->set_callsign(plane->label);
+			if (mEnv)
+			{
+				mEnv->sendPbArray(reply);
+			}
+		}
 	}
 
-	void AircraftManager::setPlanePosition(const std::string& callsign, XPMPPlanePosition_t pos, XPMPPlaneRadar_t radar, float groundSpeed, const std::string& origin, const std::string& destination)
+	void AircraftManager::DeleteAircraft(const std::string& callsign)
+	{
+		auto aircraft = GetAircraft(callsign);
+		if (!aircraft) return;
+
+		mapPlanes.erase(callsign);
+	}
+
+	void AircraftManager::DeleteAllAircraft()
+	{
+		mapPlanes.clear();
+	}
+
+	void AircraftManager::HandleSlowPositionUpdate(const std::string& callsign, AircraftVisualState visualState, double speed)
+	{
+		auto aircraft = GetAircraft(callsign);
+		if (!aircraft)
+		{
+			return;
+		}
+
+		auto now = std::chrono::steady_clock::now();
+
+		// The logic here is that if we have not received a fast position packet recently, then
+		// we need to derive positional velocities from the last position that we received (either
+		// fast or slow) and the position that we're currently processing. We also snap to the
+		// newly-reported rotation rather than trying to derive rotational velocities.
+		if (!ReceivingFastPositionUpdates(aircraft))
+		{
+			auto lastUpdateTimeStamp = (aircraft->last_slow_position_timestamp > aircraft->last_fast_position_timestamp) ? aircraft->last_slow_position_timestamp : aircraft->last_fast_position_timestamp;
+
+			auto intervalMs = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastUpdateTimeStamp).count();
+
+			aircraft->positional_velocity_vector = DerivePositionalVelocityVector(
+				aircraft->remote_visual_state,
+				visualState,
+				intervalMs
+			);
+			aircraft->rotational_velocity_vector = Vector3::Zero();
+
+			AircraftVisualState newVisualState{};
+			newVisualState.Lat = aircraft->current_visual_state.Lat;
+			newVisualState.Lon = aircraft->current_visual_state.Lon;
+			newVisualState.Altitude = aircraft->current_visual_state.Altitude;
+			newVisualState.Pitch = visualState.Pitch;
+			newVisualState.Heading = visualState.Heading;
+			newVisualState.Bank = visualState.Bank;
+
+			aircraft->current_visual_state = newVisualState;
+			aircraft->remote_visual_state = visualState;
+			aircraft->UpdateErrorVectors(ERROR_CORRECTION_INTERVAL_SLOW);
+		}
+
+		aircraft->last_slow_position_timestamp = now;
+	}
+
+	void AircraftManager::HandleFastPositionUpdate(const std::string& callsign, const AircraftVisualState& visualState, Vector3 positionalVector, Vector3 rotationalVector)
+	{
+		auto aircraft = GetAircraft(callsign);
+		if (!aircraft)
+		{
+			return;
+		}
+
+		aircraft->positional_velocity_vector = positionalVector;
+		aircraft->rotational_velocity_vector = rotationalVector;
+		aircraft->remote_visual_state = visualState;
+		aircraft->last_fast_position_timestamp = std::chrono::steady_clock::now();
+		aircraft->fast_positions_received_count++;
+
+		aircraft->UpdateErrorVectors(ERROR_CORRECTION_INTERVAL_FAST);
+	}
+
+	NetworkAircraft* AircraftManager::GetAircraft(const std::string& callsign)
 	{
 		auto planeIt = mapPlanes.find(callsign);
-		if (planeIt == mapPlanes.end()) return;
-
-		NetworkAircraft* plane = planeIt->second.get();
-		if (!plane) return;
-
-		InterpolatedState state{};
-		state.timestamp = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count() + 5500000;
-		state.latitude = pos.lat;
-		state.longitude = pos.lon;
-		state.bank = pos.roll;
-		state.pitch = pos.pitch;
-		state.heading = pos.heading;
-		state.groundSpeed = groundSpeed;
-
-		double groundElevation = 0.0;
-		groundElevation = plane->terrainProbe.getTerrainElevation(pos.lat, pos.lon);
-		if (std::isnan(groundElevation))
-		{
-			groundElevation = 0.0;
-		}
-
-		plane->origin = origin.empty() ? "" : origin;
-		plane->destination = destination.empty() ? "" : destination;
-
-		plane->terrainAltitude = groundElevation;
-		state.altitude = plane->onGround ? groundElevation : pos.elevation;
-		plane->radar = radar;
-		plane->renderCount++;
-
-		plane->interpolationStack.push_back(state);
-		while (plane->interpolationStack.size() > 2
-			&& plane->interpolationStack.at(1).timestamp
-			<= std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count())
-		{
-			plane->interpolationStack.pop_front();
-		}
+		if (planeIt == mapPlanes.end()) return nullptr;
+		return planeIt->second.get();
 	}
 
-	void AircraftManager::updateAircraftConfig(const xpilot::AirplaneConfig& config)
+	bool AircraftManager::ReceivingFastPositionUpdates(NetworkAircraft* aircraft)
 	{
-		auto planeIt = mapPlanes.find(config.callsign());
-		if (planeIt == mapPlanes.end()) return;
+		const auto now = std::chrono::steady_clock::now();
+		const auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(now - aircraft->last_fast_position_timestamp);
+		return diff.count() < FAST_POSITION_INTERVAL_TOLERANCE;
+	}
 
-		NetworkAircraft* plane = planeIt->second.get();
+	Vector3 AircraftManager::DerivePositionalVelocityVector(AircraftVisualState previousVisualState, AircraftVisualState newVisualState, long intervalMs)
+	{
+		double latDelta = DegreesToMeters(CalculateNormalizedDelta(
+			Round(previousVisualState.Lat, 5),
+			Round(newVisualState.Lat, 5),
+			- 90.0,
+			90.0
+		));
+
+		double lonDelta = DegreesToMeters(CalculateNormalizedDelta(
+			Round(previousVisualState.Lon, 5),
+			Round(newVisualState.Lon, 5),
+			-180.0,
+			180.0
+		)) * LongitudeScalingFactor(newVisualState.Lat);
+
+		double altDelta = (int)newVisualState.Altitude - (int)previousVisualState.Altitude;
+
+		double intervalSec = intervalMs / 1000.0;
+
+		return Vector3(
+			(lonDelta / intervalSec) * -1,
+			altDelta / intervalSec,
+			latDelta / intervalSec
+		);
+	}
+
+	void AircraftManager::ChangeAircraftModel(const std::string& callsign, const std::string& typeIcao, const std::string& airlineIcao)
+	{
+		auto aircraft = GetAircraft(callsign);
+		if (!aircraft) return;
+
+		aircraft->ChangeModel(typeIcao.c_str(), airlineIcao.c_str(), "");
+	}
+
+	void AircraftManager::UpdateAircraftConfiguration(const xpilot::AirplaneConfig& config)
+	{
+		auto plane = GetAircraft(config.callsign());
 		if (!plane) return;
+
+		if (config.has_is_full_config() && config.is_full_config())
+		{
+			plane->SetVisible(true);
+		}
 
 		if (config.has_flaps())
 		{
-			if (config.flaps() != plane->targetFlapPosition)
+			if (config.flaps() != plane->target_flaps_position)
 			{
-				plane->targetFlapPosition = config.flaps();
+				plane->target_flaps_position = config.flaps();
 			}
 		}
 		if (config.has_gear_down())
 		{
-			if (config.gear_down() != plane->gearDown)
+			if (config.gear_down() != plane->gear_down)
 			{
-				plane->gearDown = config.gear_down();
+				plane->gear_down = config.gear_down();
 			}
 		}
 		if (config.has_spoilers_deployed())
@@ -234,52 +305,25 @@ namespace xpilot
 		}
 		if (config.has_engines_on())
 		{
-			if (config.engines_on() != plane->enginesRunning)
+			if (config.engines_on() != plane->engines_running)
 			{
-				plane->enginesRunning = config.engines_on();
+				plane->engines_running = config.engines_on();
 			}
 		}
 		if (config.has_reverse_thrust())
 		{
-			if (config.reverse_thrust() != plane->reverseThrust)
+			if (config.reverse_thrust() != plane->reverse_thrust)
 			{
-				plane->reverseThrust = config.reverse_thrust();
+				plane->reverse_thrust = config.reverse_thrust();
 			}
 		}
 		if (config.has_on_ground())
 		{
-			if (config.on_ground() != plane->onGround)
+			if (config.on_ground() != plane->on_ground)
 			{
-				plane->bClampToGround = (plane->renderCount <= 2) ? config.on_ground() : false;
-				plane->onGround = config.on_ground();
+				plane->on_ground = config.on_ground();
+				plane->just_touched_down = config.on_ground();
 			}
 		}
-	}
-
-	void AircraftManager::removePlane(const std::string& callsign)
-	{
-		auto planeIt = mapPlanes.find(callsign);
-		if (planeIt == mapPlanes.end()) return;
-
-		NetworkAircraft* plane = planeIt->second.get();
-		if (!plane) return;
-
-		mapPlanes.erase(callsign);
-	}
-
-	void AircraftManager::removeAllPlanes()
-	{
-		mapPlanes.clear();
-	}
-
-	void AircraftManager::changeModel(const std::string& callsign, const std::string& typeIcao, const std::string& airlineIcao)
-	{
-		auto planeIt = mapPlanes.find(callsign);
-		if (planeIt == mapPlanes.end()) return;
-
-		NetworkAircraft* plane = planeIt->second.get();
-		if (!plane) return;
-
-		plane->ChangeModel(typeIcao.c_str(), airlineIcao.c_str(), "");
 	}
 }
