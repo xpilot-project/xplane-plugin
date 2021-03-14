@@ -52,6 +52,11 @@ namespace xpilot
         return head2 - head1;
     }
 
+    inline float RpmToDegree(float rpm, double s)
+    {
+        return rpm / 60.0f * float(s) * 360.0f;
+    }
+
     NetworkAircraft::NetworkAircraft(
         const std::string& _callsign,
         const AircraftVisualState& _visualState,
@@ -253,10 +258,14 @@ namespace xpilot
         );
         
         double rpm = (60 / (2 * M_PI * 3.2)) * positional_velocity_vector.X * -1;
-        double rpmDeg = GetTireRotRpm() / 60.0 * _elapsedSinceLastCall * 360.0;
+        double rpmDeg = RpmToDegree(GetTireRotRpm(), _elapsedSinceLastCall);
 
         SetTireRotRpm(rpm);
         SetTireRotAngle(GetTireRotAngle() + rpmDeg);
+        while (GetTireRotAngle() >= 360.0f)
+        {
+            SetTireRotAngle(GetTireRotAngle() - 360.0f);
+        }
 
         const auto now = std::chrono::system_clock::now();
         static const float epsilon = std::numeric_limits<float>::epsilon();
@@ -317,10 +326,28 @@ namespace xpilot
 
         SetGearRatio(surfaces.gearPosition);
         SetFlapRatio(surfaces.flapRatio);
-        SetSlatRatio(surfaces.flapRatio <= 0.25f ? (std::min)(surfaces.flapRatio / 4, 0.0f) : surfaces.flapRatio);
+        SetSlatRatio(GetFlapRatio());
         SetSpoilerRatio(surfaces.spoilerRatio);
         SetSpeedbrakeRatio(surfaces.spoilerRatio);
-        SetThrustRatio(engines_running ? 1.0f : 0.0f);
+        
+        if (engines_running)
+        {
+            SetEngineRotRpm(1200);
+            SetPropRotRpm(GetEngineRotRpm());
+            SetEngineRotAngle(GetEngineRotAngle() + RpmToDegree(GetEngineRotRpm(), _elapsedSinceLastCall));
+            while (GetEngineRotAngle() >= 360.0f)
+            {
+                SetEngineRotAngle(GetEngineRotAngle() - 360.0f);
+            }
+            SetPropRotAngle(GetEngineRotAngle());
+        }
+        else
+        {
+            SetEngineRotRpm(0.0f);
+            SetPropRotRpm(0.0f);
+            SetEngineRotAngle(0.0f);
+            SetPropRotAngle(0.0f);
+        }
 
         SetLightsTaxi(surfaces.lights.taxiLights);
         SetLightsLanding(surfaces.lights.landLights);
