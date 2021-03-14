@@ -73,72 +73,73 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 
 const char descriptor_table_protodef_Wrapper_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\rWrapper.proto\022\006xpilot\032\037google/protobuf"
-  "/timestamp.proto\032\024XplaneDatarefs.proto\032\020"
-  "PluginHash.proto\032\023PluginVersion.proto\032\021C"
-  "SLValidate.proto\032\016AddPlane.proto\032\021Change"
-  "Model.proto\032\024PositionUpdate.proto\032\021Remov"
-  "ePlane.proto\032\025RemoveAllPlanes.proto\032\026Net"
-  "workConnected.proto\032\031NetworkDisconnected"
-  ".proto\032\024AirplaneConfig.proto\032\027NearbyCont"
-  "rollers.proto\032\034ClearNearbyControllers.pr"
-  "oto\032\034PrivateMessageReceived.proto\032\030Priva"
-  "teMessageSent.proto\032\030SetTransponderCode."
-  "proto\032\030FastPositionUpdate.proto\032\025PlaneAd"
-  "dedToSim.proto\"\270\010\n\007Wrapper\022-\n\ttimestamp\030"
-  "\001 \001(\0132\032.google.protobuf.Timestamp\0221\n\017xpl"
-  "ane_datarefs\030\002 \001(\0132\026.xpilot.XplaneDatare"
-  "fsH\000\022)\n\013plugin_hash\030\003 \001(\0132\022.xpilot.Plugi"
-  "nHashH\000\022/\n\016plugin_version\030\004 \001(\0132\025.xpilot"
-  ".PluginVersionH\000\022+\n\014csl_validate\030\005 \001(\0132\023"
-  ".xpilot.CslValidateH\000\022%\n\tadd_plane\030\006 \001(\013"
-  "2\020.xpilot.AddPlaneH\000\022+\n\014change_model\030\007 \001"
-  "(\0132\023.xpilot.ChangeModelH\000\0221\n\017position_up"
-  "date\030\010 \001(\0132\026.xpilot.PositionUpdateH\000\022:\n\024"
-  "fast_position_update\030\t \001(\0132\032.xpilot.Fast"
-  "PositionUpdateH\000\022+\n\014remove_plane\030\n \001(\0132\023"
-  ".xpilot.RemovePlaneH\000\0224\n\021remove_all_plan"
-  "es\030\013 \001(\0132\027.xpilot.RemoveAllPlanesH\000\0225\n\021n"
-  "etwork_connected\030\014 \001(\0132\030.xpilot.NetworkC"
-  "onnectedH\000\022;\n\024network_disconnected\030\r \001(\013"
-  "2\033.xpilot.NetworkDisconnectedH\000\0221\n\017airpl"
-  "ane_config\030\016 \001(\0132\026.xpilot.AirplaneConfig"
-  "H\000\0227\n\022nearby_controllers\030\017 \001(\0132\031.xpilot."
-  "NearbyControllersH\000\022B\n\030clear_nearby_cont"
-  "rollers\030\020 \001(\0132\036.xpilot.ClearNearbyContro"
-  "llersH\000\022B\n\030private_message_received\030\021 \001("
-  "\0132\036.xpilot.PrivateMessageReceivedH\000\022:\n\024p"
-  "rivate_message_sent\030\022 \001(\0132\032.xpilot.Priva"
-  "teMessageSentH\000\022:\n\024set_transponder_code\030"
-  "\023 \001(\0132\032.xpilot.SetTransponderCodeH\000\0225\n\022p"
-  "lane_added_to_sim\030\024 \001(\0132\027.xpilot.PlaneAd"
-  "dedToSimH\000B\005\n\003msgB\031\252\002\026Vatsim.Xpilot.Prot"
-  "obufb\006proto3"
+  "/timestamp.proto\032\024XplaneDatarefs.proto\032\027"
+  "PluginInformation.proto\032\023CslValidation.p"
+  "roto\032\016AddPlane.proto\032\026ChangePlaneModel.p"
+  "roto\032\024PositionUpdate.proto\032\021DeletePlane."
+  "proto\032\026NetworkConnected.proto\032\031NetworkDi"
+  "sconnected.proto\032\024AirplaneConfig.proto\032\027"
+  "NearbyControllers.proto\032\034PrivateMessageR"
+  "eceived.proto\032\030PrivateMessageSent.proto\032"
+  "\030SetTransponderCode.proto\032\030FastPositionU"
+  "pdate.proto\032\025PlaneAddedToSim.proto\032\020Radi"
+  "oStack.proto\032\026UserAircraftData.proto\032\034Us"
+  "erAircraftConfigData.proto\"\315\010\n\007Wrapper\022-"
+  "\n\ttimestamp\030\001 \001(\0132\032.google.protobuf.Time"
+  "stamp\0226\n\022user_aircraft_data\030\002 \001(\0132\030.xpil"
+  "ot.UserAircraftDataH\000\022>\n\024user_aircraft_c"
+  "onfig\030\003 \001(\0132\036.xpilot.UserAircraftConfigD"
+  "ataH\000\022)\n\013radio_stack\030\004 \001(\0132\022.xpilot.Radi"
+  "oStackH\000\0221\n\017position_update\030\005 \001(\0132\026.xpil"
+  "ot.PositionUpdateH\000\022:\n\024fast_position_upd"
+  "ate\030\006 \001(\0132\032.xpilot.FastPositionUpdateH\000\022"
+  "1\n\017airplane_config\030\007 \001(\0132\026.xpilot.Airpla"
+  "neConfigH\000\022%\n\tadd_plane\030\010 \001(\0132\020.xpilot.A"
+  "ddPlaneH\000\0225\n\022plane_added_to_sim\030\t \001(\0132\027."
+  "xpilot.PlaneAddedToSimH\000\0226\n\022change_plane"
+  "_model\030\n \001(\0132\030.xpilot.ChangePlaneModelH\000"
+  "\022+\n\014delete_plane\030\013 \001(\0132\023.xpilot.DeletePl"
+  "aneH\000\022B\n\030private_message_received\030\014 \001(\0132"
+  "\036.xpilot.PrivateMessageReceivedH\000\022:\n\024pri"
+  "vate_message_sent\030\r \001(\0132\032.xpilot.Private"
+  "MessageSentH\000\0225\n\021network_connected\030\016 \001(\013"
+  "2\030.xpilot.NetworkConnectedH\000\022;\n\024network_"
+  "disconnected\030\017 \001(\0132\033.xpilot.NetworkDisco"
+  "nnectedH\000\0227\n\022nearby_controllers\030\020 \001(\0132\031."
+  "xpilot.NearbyControllersH\000\022:\n\024set_transp"
+  "onder_code\030\021 \001(\0132\032.xpilot.SetTransponder"
+  "CodeH\000\0221\n\017xplane_datarefs\030\022 \001(\0132\026.xpilot"
+  ".XplaneDatarefsH\000\0227\n\022plugin_information\030"
+  "\023 \001(\0132\031.xpilot.PluginInformationH\000\022/\n\016cs"
+  "l_validation\030\024 \001(\0132\025.xpilot.CslValidatio"
+  "nH\000B\005\n\003msgB\031\252\002\026Vatsim.Xpilot.Protobufb\006p"
+  "roto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Wrapper_2eproto_deps[20] = {
   &::descriptor_table_AddPlane_2eproto,
   &::descriptor_table_AirplaneConfig_2eproto,
-  &::descriptor_table_CSLValidate_2eproto,
-  &::descriptor_table_ChangeModel_2eproto,
-  &::descriptor_table_ClearNearbyControllers_2eproto,
+  &::descriptor_table_ChangePlaneModel_2eproto,
+  &::descriptor_table_CslValidation_2eproto,
+  &::descriptor_table_DeletePlane_2eproto,
   &::descriptor_table_FastPositionUpdate_2eproto,
   &::descriptor_table_NearbyControllers_2eproto,
   &::descriptor_table_NetworkConnected_2eproto,
   &::descriptor_table_NetworkDisconnected_2eproto,
   &::descriptor_table_PlaneAddedToSim_2eproto,
-  &::descriptor_table_PluginHash_2eproto,
-  &::descriptor_table_PluginVersion_2eproto,
+  &::descriptor_table_PluginInformation_2eproto,
   &::descriptor_table_PositionUpdate_2eproto,
   &::descriptor_table_PrivateMessageReceived_2eproto,
   &::descriptor_table_PrivateMessageSent_2eproto,
-  &::descriptor_table_RemoveAllPlanes_2eproto,
-  &::descriptor_table_RemovePlane_2eproto,
+  &::descriptor_table_RadioStack_2eproto,
   &::descriptor_table_SetTransponderCode_2eproto,
+  &::descriptor_table_UserAircraftConfigData_2eproto,
+  &::descriptor_table_UserAircraftData_2eproto,
   &::descriptor_table_XplaneDatarefs_2eproto,
   &::descriptor_table_google_2fprotobuf_2ftimestamp_2eproto,
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Wrapper_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Wrapper_2eproto = {
-  false, false, 1612, descriptor_table_protodef_Wrapper_2eproto, "Wrapper.proto", 
+  false, false, 1645, descriptor_table_protodef_Wrapper_2eproto, "Wrapper.proto", 
   &descriptor_table_Wrapper_2eproto_once, descriptor_table_Wrapper_2eproto_deps, 20, 1,
   schemas, file_default_instances, TableStruct_Wrapper_2eproto::offsets,
   file_level_metadata_Wrapper_2eproto, file_level_enum_descriptors_Wrapper_2eproto, file_level_service_descriptors_Wrapper_2eproto,
@@ -158,54 +159,42 @@ namespace xpilot {
 class Wrapper::_Internal {
  public:
   static const PROTOBUF_NAMESPACE_ID::Timestamp& timestamp(const Wrapper* msg);
-  static const ::xpilot::XplaneDatarefs& xplane_datarefs(const Wrapper* msg);
-  static const ::xpilot::PluginHash& plugin_hash(const Wrapper* msg);
-  static const ::xpilot::PluginVersion& plugin_version(const Wrapper* msg);
-  static const ::xpilot::CslValidate& csl_validate(const Wrapper* msg);
-  static const ::xpilot::AddPlane& add_plane(const Wrapper* msg);
-  static const ::xpilot::ChangeModel& change_model(const Wrapper* msg);
+  static const ::xpilot::UserAircraftData& user_aircraft_data(const Wrapper* msg);
+  static const ::xpilot::UserAircraftConfigData& user_aircraft_config(const Wrapper* msg);
+  static const ::xpilot::RadioStack& radio_stack(const Wrapper* msg);
   static const ::xpilot::PositionUpdate& position_update(const Wrapper* msg);
   static const ::xpilot::FastPositionUpdate& fast_position_update(const Wrapper* msg);
-  static const ::xpilot::RemovePlane& remove_plane(const Wrapper* msg);
-  static const ::xpilot::RemoveAllPlanes& remove_all_planes(const Wrapper* msg);
-  static const ::xpilot::NetworkConnected& network_connected(const Wrapper* msg);
-  static const ::xpilot::NetworkDisconnected& network_disconnected(const Wrapper* msg);
   static const ::xpilot::AirplaneConfig& airplane_config(const Wrapper* msg);
-  static const ::xpilot::NearbyControllers& nearby_controllers(const Wrapper* msg);
-  static const ::xpilot::ClearNearbyControllers& clear_nearby_controllers(const Wrapper* msg);
+  static const ::xpilot::AddPlane& add_plane(const Wrapper* msg);
+  static const ::xpilot::PlaneAddedToSim& plane_added_to_sim(const Wrapper* msg);
+  static const ::xpilot::ChangePlaneModel& change_plane_model(const Wrapper* msg);
+  static const ::xpilot::DeletePlane& delete_plane(const Wrapper* msg);
   static const ::xpilot::PrivateMessageReceived& private_message_received(const Wrapper* msg);
   static const ::xpilot::PrivateMessageSent& private_message_sent(const Wrapper* msg);
+  static const ::xpilot::NetworkConnected& network_connected(const Wrapper* msg);
+  static const ::xpilot::NetworkDisconnected& network_disconnected(const Wrapper* msg);
+  static const ::xpilot::NearbyControllers& nearby_controllers(const Wrapper* msg);
   static const ::xpilot::SetTransponderCode& set_transponder_code(const Wrapper* msg);
-  static const ::xpilot::PlaneAddedToSim& plane_added_to_sim(const Wrapper* msg);
+  static const ::xpilot::XplaneDatarefs& xplane_datarefs(const Wrapper* msg);
+  static const ::xpilot::PluginInformation& plugin_information(const Wrapper* msg);
+  static const ::xpilot::CslValidation& csl_validation(const Wrapper* msg);
 };
 
 const PROTOBUF_NAMESPACE_ID::Timestamp&
 Wrapper::_Internal::timestamp(const Wrapper* msg) {
   return *msg->timestamp_;
 }
-const ::xpilot::XplaneDatarefs&
-Wrapper::_Internal::xplane_datarefs(const Wrapper* msg) {
-  return *msg->msg_.xplane_datarefs_;
+const ::xpilot::UserAircraftData&
+Wrapper::_Internal::user_aircraft_data(const Wrapper* msg) {
+  return *msg->msg_.user_aircraft_data_;
 }
-const ::xpilot::PluginHash&
-Wrapper::_Internal::plugin_hash(const Wrapper* msg) {
-  return *msg->msg_.plugin_hash_;
+const ::xpilot::UserAircraftConfigData&
+Wrapper::_Internal::user_aircraft_config(const Wrapper* msg) {
+  return *msg->msg_.user_aircraft_config_;
 }
-const ::xpilot::PluginVersion&
-Wrapper::_Internal::plugin_version(const Wrapper* msg) {
-  return *msg->msg_.plugin_version_;
-}
-const ::xpilot::CslValidate&
-Wrapper::_Internal::csl_validate(const Wrapper* msg) {
-  return *msg->msg_.csl_validate_;
-}
-const ::xpilot::AddPlane&
-Wrapper::_Internal::add_plane(const Wrapper* msg) {
-  return *msg->msg_.add_plane_;
-}
-const ::xpilot::ChangeModel&
-Wrapper::_Internal::change_model(const Wrapper* msg) {
-  return *msg->msg_.change_model_;
+const ::xpilot::RadioStack&
+Wrapper::_Internal::radio_stack(const Wrapper* msg) {
+  return *msg->msg_.radio_stack_;
 }
 const ::xpilot::PositionUpdate&
 Wrapper::_Internal::position_update(const Wrapper* msg) {
@@ -215,33 +204,25 @@ const ::xpilot::FastPositionUpdate&
 Wrapper::_Internal::fast_position_update(const Wrapper* msg) {
   return *msg->msg_.fast_position_update_;
 }
-const ::xpilot::RemovePlane&
-Wrapper::_Internal::remove_plane(const Wrapper* msg) {
-  return *msg->msg_.remove_plane_;
-}
-const ::xpilot::RemoveAllPlanes&
-Wrapper::_Internal::remove_all_planes(const Wrapper* msg) {
-  return *msg->msg_.remove_all_planes_;
-}
-const ::xpilot::NetworkConnected&
-Wrapper::_Internal::network_connected(const Wrapper* msg) {
-  return *msg->msg_.network_connected_;
-}
-const ::xpilot::NetworkDisconnected&
-Wrapper::_Internal::network_disconnected(const Wrapper* msg) {
-  return *msg->msg_.network_disconnected_;
-}
 const ::xpilot::AirplaneConfig&
 Wrapper::_Internal::airplane_config(const Wrapper* msg) {
   return *msg->msg_.airplane_config_;
 }
-const ::xpilot::NearbyControllers&
-Wrapper::_Internal::nearby_controllers(const Wrapper* msg) {
-  return *msg->msg_.nearby_controllers_;
+const ::xpilot::AddPlane&
+Wrapper::_Internal::add_plane(const Wrapper* msg) {
+  return *msg->msg_.add_plane_;
 }
-const ::xpilot::ClearNearbyControllers&
-Wrapper::_Internal::clear_nearby_controllers(const Wrapper* msg) {
-  return *msg->msg_.clear_nearby_controllers_;
+const ::xpilot::PlaneAddedToSim&
+Wrapper::_Internal::plane_added_to_sim(const Wrapper* msg) {
+  return *msg->msg_.plane_added_to_sim_;
+}
+const ::xpilot::ChangePlaneModel&
+Wrapper::_Internal::change_plane_model(const Wrapper* msg) {
+  return *msg->msg_.change_plane_model_;
+}
+const ::xpilot::DeletePlane&
+Wrapper::_Internal::delete_plane(const Wrapper* msg) {
+  return *msg->msg_.delete_plane_;
 }
 const ::xpilot::PrivateMessageReceived&
 Wrapper::_Internal::private_message_received(const Wrapper* msg) {
@@ -251,13 +232,33 @@ const ::xpilot::PrivateMessageSent&
 Wrapper::_Internal::private_message_sent(const Wrapper* msg) {
   return *msg->msg_.private_message_sent_;
 }
+const ::xpilot::NetworkConnected&
+Wrapper::_Internal::network_connected(const Wrapper* msg) {
+  return *msg->msg_.network_connected_;
+}
+const ::xpilot::NetworkDisconnected&
+Wrapper::_Internal::network_disconnected(const Wrapper* msg) {
+  return *msg->msg_.network_disconnected_;
+}
+const ::xpilot::NearbyControllers&
+Wrapper::_Internal::nearby_controllers(const Wrapper* msg) {
+  return *msg->msg_.nearby_controllers_;
+}
 const ::xpilot::SetTransponderCode&
 Wrapper::_Internal::set_transponder_code(const Wrapper* msg) {
   return *msg->msg_.set_transponder_code_;
 }
-const ::xpilot::PlaneAddedToSim&
-Wrapper::_Internal::plane_added_to_sim(const Wrapper* msg) {
-  return *msg->msg_.plane_added_to_sim_;
+const ::xpilot::XplaneDatarefs&
+Wrapper::_Internal::xplane_datarefs(const Wrapper* msg) {
+  return *msg->msg_.xplane_datarefs_;
+}
+const ::xpilot::PluginInformation&
+Wrapper::_Internal::plugin_information(const Wrapper* msg) {
+  return *msg->msg_.plugin_information_;
+}
+const ::xpilot::CslValidation&
+Wrapper::_Internal::csl_validation(const Wrapper* msg) {
+  return *msg->msg_.csl_validation_;
 }
 void Wrapper::clear_timestamp() {
   if (GetArena() == nullptr && timestamp_ != nullptr) {
@@ -265,140 +266,71 @@ void Wrapper::clear_timestamp() {
   }
   timestamp_ = nullptr;
 }
-void Wrapper::set_allocated_xplane_datarefs(::xpilot::XplaneDatarefs* xplane_datarefs) {
+void Wrapper::set_allocated_user_aircraft_data(::xpilot::UserAircraftData* user_aircraft_data) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
   clear_msg();
-  if (xplane_datarefs) {
+  if (user_aircraft_data) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(xplane_datarefs)->GetArena();
+      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(user_aircraft_data)->GetArena();
     if (message_arena != submessage_arena) {
-      xplane_datarefs = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, xplane_datarefs, submessage_arena);
+      user_aircraft_data = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, user_aircraft_data, submessage_arena);
     }
-    set_has_xplane_datarefs();
-    msg_.xplane_datarefs_ = xplane_datarefs;
+    set_has_user_aircraft_data();
+    msg_.user_aircraft_data_ = user_aircraft_data;
   }
-  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.xplane_datarefs)
+  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.user_aircraft_data)
 }
-void Wrapper::clear_xplane_datarefs() {
-  if (_internal_has_xplane_datarefs()) {
+void Wrapper::clear_user_aircraft_data() {
+  if (_internal_has_user_aircraft_data()) {
     if (GetArena() == nullptr) {
-      delete msg_.xplane_datarefs_;
+      delete msg_.user_aircraft_data_;
     }
     clear_has_msg();
   }
 }
-void Wrapper::set_allocated_plugin_hash(::xpilot::PluginHash* plugin_hash) {
+void Wrapper::set_allocated_user_aircraft_config(::xpilot::UserAircraftConfigData* user_aircraft_config) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
   clear_msg();
-  if (plugin_hash) {
+  if (user_aircraft_config) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(plugin_hash)->GetArena();
+      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(user_aircraft_config)->GetArena();
     if (message_arena != submessage_arena) {
-      plugin_hash = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, plugin_hash, submessage_arena);
+      user_aircraft_config = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, user_aircraft_config, submessage_arena);
     }
-    set_has_plugin_hash();
-    msg_.plugin_hash_ = plugin_hash;
+    set_has_user_aircraft_config();
+    msg_.user_aircraft_config_ = user_aircraft_config;
   }
-  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.plugin_hash)
+  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.user_aircraft_config)
 }
-void Wrapper::clear_plugin_hash() {
-  if (_internal_has_plugin_hash()) {
+void Wrapper::clear_user_aircraft_config() {
+  if (_internal_has_user_aircraft_config()) {
     if (GetArena() == nullptr) {
-      delete msg_.plugin_hash_;
+      delete msg_.user_aircraft_config_;
     }
     clear_has_msg();
   }
 }
-void Wrapper::set_allocated_plugin_version(::xpilot::PluginVersion* plugin_version) {
+void Wrapper::set_allocated_radio_stack(::xpilot::RadioStack* radio_stack) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
   clear_msg();
-  if (plugin_version) {
+  if (radio_stack) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(plugin_version)->GetArena();
+      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(radio_stack)->GetArena();
     if (message_arena != submessage_arena) {
-      plugin_version = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, plugin_version, submessage_arena);
+      radio_stack = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, radio_stack, submessage_arena);
     }
-    set_has_plugin_version();
-    msg_.plugin_version_ = plugin_version;
+    set_has_radio_stack();
+    msg_.radio_stack_ = radio_stack;
   }
-  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.plugin_version)
+  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.radio_stack)
 }
-void Wrapper::clear_plugin_version() {
-  if (_internal_has_plugin_version()) {
+void Wrapper::clear_radio_stack() {
+  if (_internal_has_radio_stack()) {
     if (GetArena() == nullptr) {
-      delete msg_.plugin_version_;
-    }
-    clear_has_msg();
-  }
-}
-void Wrapper::set_allocated_csl_validate(::xpilot::CslValidate* csl_validate) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
-  clear_msg();
-  if (csl_validate) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(csl_validate)->GetArena();
-    if (message_arena != submessage_arena) {
-      csl_validate = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, csl_validate, submessage_arena);
-    }
-    set_has_csl_validate();
-    msg_.csl_validate_ = csl_validate;
-  }
-  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.csl_validate)
-}
-void Wrapper::clear_csl_validate() {
-  if (_internal_has_csl_validate()) {
-    if (GetArena() == nullptr) {
-      delete msg_.csl_validate_;
-    }
-    clear_has_msg();
-  }
-}
-void Wrapper::set_allocated_add_plane(::xpilot::AddPlane* add_plane) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
-  clear_msg();
-  if (add_plane) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(add_plane)->GetArena();
-    if (message_arena != submessage_arena) {
-      add_plane = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, add_plane, submessage_arena);
-    }
-    set_has_add_plane();
-    msg_.add_plane_ = add_plane;
-  }
-  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.add_plane)
-}
-void Wrapper::clear_add_plane() {
-  if (_internal_has_add_plane()) {
-    if (GetArena() == nullptr) {
-      delete msg_.add_plane_;
-    }
-    clear_has_msg();
-  }
-}
-void Wrapper::set_allocated_change_model(::xpilot::ChangeModel* change_model) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
-  clear_msg();
-  if (change_model) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(change_model)->GetArena();
-    if (message_arena != submessage_arena) {
-      change_model = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, change_model, submessage_arena);
-    }
-    set_has_change_model();
-    msg_.change_model_ = change_model;
-  }
-  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.change_model)
-}
-void Wrapper::clear_change_model() {
-  if (_internal_has_change_model()) {
-    if (GetArena() == nullptr) {
-      delete msg_.change_model_;
+      delete msg_.radio_stack_;
     }
     clear_has_msg();
   }
@@ -449,98 +381,6 @@ void Wrapper::clear_fast_position_update() {
     clear_has_msg();
   }
 }
-void Wrapper::set_allocated_remove_plane(::xpilot::RemovePlane* remove_plane) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
-  clear_msg();
-  if (remove_plane) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(remove_plane)->GetArena();
-    if (message_arena != submessage_arena) {
-      remove_plane = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, remove_plane, submessage_arena);
-    }
-    set_has_remove_plane();
-    msg_.remove_plane_ = remove_plane;
-  }
-  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.remove_plane)
-}
-void Wrapper::clear_remove_plane() {
-  if (_internal_has_remove_plane()) {
-    if (GetArena() == nullptr) {
-      delete msg_.remove_plane_;
-    }
-    clear_has_msg();
-  }
-}
-void Wrapper::set_allocated_remove_all_planes(::xpilot::RemoveAllPlanes* remove_all_planes) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
-  clear_msg();
-  if (remove_all_planes) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(remove_all_planes)->GetArena();
-    if (message_arena != submessage_arena) {
-      remove_all_planes = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, remove_all_planes, submessage_arena);
-    }
-    set_has_remove_all_planes();
-    msg_.remove_all_planes_ = remove_all_planes;
-  }
-  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.remove_all_planes)
-}
-void Wrapper::clear_remove_all_planes() {
-  if (_internal_has_remove_all_planes()) {
-    if (GetArena() == nullptr) {
-      delete msg_.remove_all_planes_;
-    }
-    clear_has_msg();
-  }
-}
-void Wrapper::set_allocated_network_connected(::xpilot::NetworkConnected* network_connected) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
-  clear_msg();
-  if (network_connected) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(network_connected)->GetArena();
-    if (message_arena != submessage_arena) {
-      network_connected = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, network_connected, submessage_arena);
-    }
-    set_has_network_connected();
-    msg_.network_connected_ = network_connected;
-  }
-  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.network_connected)
-}
-void Wrapper::clear_network_connected() {
-  if (_internal_has_network_connected()) {
-    if (GetArena() == nullptr) {
-      delete msg_.network_connected_;
-    }
-    clear_has_msg();
-  }
-}
-void Wrapper::set_allocated_network_disconnected(::xpilot::NetworkDisconnected* network_disconnected) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
-  clear_msg();
-  if (network_disconnected) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(network_disconnected)->GetArena();
-    if (message_arena != submessage_arena) {
-      network_disconnected = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, network_disconnected, submessage_arena);
-    }
-    set_has_network_disconnected();
-    msg_.network_disconnected_ = network_disconnected;
-  }
-  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.network_disconnected)
-}
-void Wrapper::clear_network_disconnected() {
-  if (_internal_has_network_disconnected()) {
-    if (GetArena() == nullptr) {
-      delete msg_.network_disconnected_;
-    }
-    clear_has_msg();
-  }
-}
 void Wrapper::set_allocated_airplane_config(::xpilot::AirplaneConfig* airplane_config) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
   clear_msg();
@@ -564,48 +404,94 @@ void Wrapper::clear_airplane_config() {
     clear_has_msg();
   }
 }
-void Wrapper::set_allocated_nearby_controllers(::xpilot::NearbyControllers* nearby_controllers) {
+void Wrapper::set_allocated_add_plane(::xpilot::AddPlane* add_plane) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
   clear_msg();
-  if (nearby_controllers) {
+  if (add_plane) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(nearby_controllers)->GetArena();
+      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(add_plane)->GetArena();
     if (message_arena != submessage_arena) {
-      nearby_controllers = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, nearby_controllers, submessage_arena);
+      add_plane = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, add_plane, submessage_arena);
     }
-    set_has_nearby_controllers();
-    msg_.nearby_controllers_ = nearby_controllers;
+    set_has_add_plane();
+    msg_.add_plane_ = add_plane;
   }
-  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.nearby_controllers)
+  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.add_plane)
 }
-void Wrapper::clear_nearby_controllers() {
-  if (_internal_has_nearby_controllers()) {
+void Wrapper::clear_add_plane() {
+  if (_internal_has_add_plane()) {
     if (GetArena() == nullptr) {
-      delete msg_.nearby_controllers_;
+      delete msg_.add_plane_;
     }
     clear_has_msg();
   }
 }
-void Wrapper::set_allocated_clear_nearby_controllers(::xpilot::ClearNearbyControllers* clear_nearby_controllers) {
+void Wrapper::set_allocated_plane_added_to_sim(::xpilot::PlaneAddedToSim* plane_added_to_sim) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
   clear_msg();
-  if (clear_nearby_controllers) {
+  if (plane_added_to_sim) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(clear_nearby_controllers)->GetArena();
+      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(plane_added_to_sim)->GetArena();
     if (message_arena != submessage_arena) {
-      clear_nearby_controllers = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, clear_nearby_controllers, submessage_arena);
+      plane_added_to_sim = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, plane_added_to_sim, submessage_arena);
     }
-    set_has_clear_nearby_controllers();
-    msg_.clear_nearby_controllers_ = clear_nearby_controllers;
+    set_has_plane_added_to_sim();
+    msg_.plane_added_to_sim_ = plane_added_to_sim;
   }
-  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.clear_nearby_controllers)
+  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.plane_added_to_sim)
 }
-void Wrapper::clear_clear_nearby_controllers() {
-  if (_internal_has_clear_nearby_controllers()) {
+void Wrapper::clear_plane_added_to_sim() {
+  if (_internal_has_plane_added_to_sim()) {
     if (GetArena() == nullptr) {
-      delete msg_.clear_nearby_controllers_;
+      delete msg_.plane_added_to_sim_;
+    }
+    clear_has_msg();
+  }
+}
+void Wrapper::set_allocated_change_plane_model(::xpilot::ChangePlaneModel* change_plane_model) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
+  clear_msg();
+  if (change_plane_model) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(change_plane_model)->GetArena();
+    if (message_arena != submessage_arena) {
+      change_plane_model = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, change_plane_model, submessage_arena);
+    }
+    set_has_change_plane_model();
+    msg_.change_plane_model_ = change_plane_model;
+  }
+  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.change_plane_model)
+}
+void Wrapper::clear_change_plane_model() {
+  if (_internal_has_change_plane_model()) {
+    if (GetArena() == nullptr) {
+      delete msg_.change_plane_model_;
+    }
+    clear_has_msg();
+  }
+}
+void Wrapper::set_allocated_delete_plane(::xpilot::DeletePlane* delete_plane) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
+  clear_msg();
+  if (delete_plane) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(delete_plane)->GetArena();
+    if (message_arena != submessage_arena) {
+      delete_plane = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, delete_plane, submessage_arena);
+    }
+    set_has_delete_plane();
+    msg_.delete_plane_ = delete_plane;
+  }
+  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.delete_plane)
+}
+void Wrapper::clear_delete_plane() {
+  if (_internal_has_delete_plane()) {
+    if (GetArena() == nullptr) {
+      delete msg_.delete_plane_;
     }
     clear_has_msg();
   }
@@ -656,6 +542,75 @@ void Wrapper::clear_private_message_sent() {
     clear_has_msg();
   }
 }
+void Wrapper::set_allocated_network_connected(::xpilot::NetworkConnected* network_connected) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
+  clear_msg();
+  if (network_connected) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(network_connected)->GetArena();
+    if (message_arena != submessage_arena) {
+      network_connected = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, network_connected, submessage_arena);
+    }
+    set_has_network_connected();
+    msg_.network_connected_ = network_connected;
+  }
+  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.network_connected)
+}
+void Wrapper::clear_network_connected() {
+  if (_internal_has_network_connected()) {
+    if (GetArena() == nullptr) {
+      delete msg_.network_connected_;
+    }
+    clear_has_msg();
+  }
+}
+void Wrapper::set_allocated_network_disconnected(::xpilot::NetworkDisconnected* network_disconnected) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
+  clear_msg();
+  if (network_disconnected) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(network_disconnected)->GetArena();
+    if (message_arena != submessage_arena) {
+      network_disconnected = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, network_disconnected, submessage_arena);
+    }
+    set_has_network_disconnected();
+    msg_.network_disconnected_ = network_disconnected;
+  }
+  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.network_disconnected)
+}
+void Wrapper::clear_network_disconnected() {
+  if (_internal_has_network_disconnected()) {
+    if (GetArena() == nullptr) {
+      delete msg_.network_disconnected_;
+    }
+    clear_has_msg();
+  }
+}
+void Wrapper::set_allocated_nearby_controllers(::xpilot::NearbyControllers* nearby_controllers) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
+  clear_msg();
+  if (nearby_controllers) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(nearby_controllers)->GetArena();
+    if (message_arena != submessage_arena) {
+      nearby_controllers = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, nearby_controllers, submessage_arena);
+    }
+    set_has_nearby_controllers();
+    msg_.nearby_controllers_ = nearby_controllers;
+  }
+  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.nearby_controllers)
+}
+void Wrapper::clear_nearby_controllers() {
+  if (_internal_has_nearby_controllers()) {
+    if (GetArena() == nullptr) {
+      delete msg_.nearby_controllers_;
+    }
+    clear_has_msg();
+  }
+}
 void Wrapper::set_allocated_set_transponder_code(::xpilot::SetTransponderCode* set_transponder_code) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
   clear_msg();
@@ -679,25 +634,71 @@ void Wrapper::clear_set_transponder_code() {
     clear_has_msg();
   }
 }
-void Wrapper::set_allocated_plane_added_to_sim(::xpilot::PlaneAddedToSim* plane_added_to_sim) {
+void Wrapper::set_allocated_xplane_datarefs(::xpilot::XplaneDatarefs* xplane_datarefs) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
   clear_msg();
-  if (plane_added_to_sim) {
+  if (xplane_datarefs) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(plane_added_to_sim)->GetArena();
+      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(xplane_datarefs)->GetArena();
     if (message_arena != submessage_arena) {
-      plane_added_to_sim = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, plane_added_to_sim, submessage_arena);
+      xplane_datarefs = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, xplane_datarefs, submessage_arena);
     }
-    set_has_plane_added_to_sim();
-    msg_.plane_added_to_sim_ = plane_added_to_sim;
+    set_has_xplane_datarefs();
+    msg_.xplane_datarefs_ = xplane_datarefs;
   }
-  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.plane_added_to_sim)
+  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.xplane_datarefs)
 }
-void Wrapper::clear_plane_added_to_sim() {
-  if (_internal_has_plane_added_to_sim()) {
+void Wrapper::clear_xplane_datarefs() {
+  if (_internal_has_xplane_datarefs()) {
     if (GetArena() == nullptr) {
-      delete msg_.plane_added_to_sim_;
+      delete msg_.xplane_datarefs_;
+    }
+    clear_has_msg();
+  }
+}
+void Wrapper::set_allocated_plugin_information(::xpilot::PluginInformation* plugin_information) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
+  clear_msg();
+  if (plugin_information) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(plugin_information)->GetArena();
+    if (message_arena != submessage_arena) {
+      plugin_information = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, plugin_information, submessage_arena);
+    }
+    set_has_plugin_information();
+    msg_.plugin_information_ = plugin_information;
+  }
+  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.plugin_information)
+}
+void Wrapper::clear_plugin_information() {
+  if (_internal_has_plugin_information()) {
+    if (GetArena() == nullptr) {
+      delete msg_.plugin_information_;
+    }
+    clear_has_msg();
+  }
+}
+void Wrapper::set_allocated_csl_validation(::xpilot::CslValidation* csl_validation) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
+  clear_msg();
+  if (csl_validation) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(csl_validation)->GetArena();
+    if (message_arena != submessage_arena) {
+      csl_validation = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, csl_validation, submessage_arena);
+    }
+    set_has_csl_validation();
+    msg_.csl_validation_ = csl_validation;
+  }
+  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.csl_validation)
+}
+void Wrapper::clear_csl_validation() {
+  if (_internal_has_csl_validation()) {
+    if (GetArena() == nullptr) {
+      delete msg_.csl_validation_;
     }
     clear_has_msg();
   }
@@ -718,28 +719,16 @@ Wrapper::Wrapper(const Wrapper& from)
   }
   clear_has_msg();
   switch (from.msg_case()) {
-    case kXplaneDatarefs: {
-      _internal_mutable_xplane_datarefs()->::xpilot::XplaneDatarefs::MergeFrom(from._internal_xplane_datarefs());
+    case kUserAircraftData: {
+      _internal_mutable_user_aircraft_data()->::xpilot::UserAircraftData::MergeFrom(from._internal_user_aircraft_data());
       break;
     }
-    case kPluginHash: {
-      _internal_mutable_plugin_hash()->::xpilot::PluginHash::MergeFrom(from._internal_plugin_hash());
+    case kUserAircraftConfig: {
+      _internal_mutable_user_aircraft_config()->::xpilot::UserAircraftConfigData::MergeFrom(from._internal_user_aircraft_config());
       break;
     }
-    case kPluginVersion: {
-      _internal_mutable_plugin_version()->::xpilot::PluginVersion::MergeFrom(from._internal_plugin_version());
-      break;
-    }
-    case kCslValidate: {
-      _internal_mutable_csl_validate()->::xpilot::CslValidate::MergeFrom(from._internal_csl_validate());
-      break;
-    }
-    case kAddPlane: {
-      _internal_mutable_add_plane()->::xpilot::AddPlane::MergeFrom(from._internal_add_plane());
-      break;
-    }
-    case kChangeModel: {
-      _internal_mutable_change_model()->::xpilot::ChangeModel::MergeFrom(from._internal_change_model());
+    case kRadioStack: {
+      _internal_mutable_radio_stack()->::xpilot::RadioStack::MergeFrom(from._internal_radio_stack());
       break;
     }
     case kPositionUpdate: {
@@ -750,32 +739,24 @@ Wrapper::Wrapper(const Wrapper& from)
       _internal_mutable_fast_position_update()->::xpilot::FastPositionUpdate::MergeFrom(from._internal_fast_position_update());
       break;
     }
-    case kRemovePlane: {
-      _internal_mutable_remove_plane()->::xpilot::RemovePlane::MergeFrom(from._internal_remove_plane());
-      break;
-    }
-    case kRemoveAllPlanes: {
-      _internal_mutable_remove_all_planes()->::xpilot::RemoveAllPlanes::MergeFrom(from._internal_remove_all_planes());
-      break;
-    }
-    case kNetworkConnected: {
-      _internal_mutable_network_connected()->::xpilot::NetworkConnected::MergeFrom(from._internal_network_connected());
-      break;
-    }
-    case kNetworkDisconnected: {
-      _internal_mutable_network_disconnected()->::xpilot::NetworkDisconnected::MergeFrom(from._internal_network_disconnected());
-      break;
-    }
     case kAirplaneConfig: {
       _internal_mutable_airplane_config()->::xpilot::AirplaneConfig::MergeFrom(from._internal_airplane_config());
       break;
     }
-    case kNearbyControllers: {
-      _internal_mutable_nearby_controllers()->::xpilot::NearbyControllers::MergeFrom(from._internal_nearby_controllers());
+    case kAddPlane: {
+      _internal_mutable_add_plane()->::xpilot::AddPlane::MergeFrom(from._internal_add_plane());
       break;
     }
-    case kClearNearbyControllers: {
-      _internal_mutable_clear_nearby_controllers()->::xpilot::ClearNearbyControllers::MergeFrom(from._internal_clear_nearby_controllers());
+    case kPlaneAddedToSim: {
+      _internal_mutable_plane_added_to_sim()->::xpilot::PlaneAddedToSim::MergeFrom(from._internal_plane_added_to_sim());
+      break;
+    }
+    case kChangePlaneModel: {
+      _internal_mutable_change_plane_model()->::xpilot::ChangePlaneModel::MergeFrom(from._internal_change_plane_model());
+      break;
+    }
+    case kDeletePlane: {
+      _internal_mutable_delete_plane()->::xpilot::DeletePlane::MergeFrom(from._internal_delete_plane());
       break;
     }
     case kPrivateMessageReceived: {
@@ -786,12 +767,32 @@ Wrapper::Wrapper(const Wrapper& from)
       _internal_mutable_private_message_sent()->::xpilot::PrivateMessageSent::MergeFrom(from._internal_private_message_sent());
       break;
     }
+    case kNetworkConnected: {
+      _internal_mutable_network_connected()->::xpilot::NetworkConnected::MergeFrom(from._internal_network_connected());
+      break;
+    }
+    case kNetworkDisconnected: {
+      _internal_mutable_network_disconnected()->::xpilot::NetworkDisconnected::MergeFrom(from._internal_network_disconnected());
+      break;
+    }
+    case kNearbyControllers: {
+      _internal_mutable_nearby_controllers()->::xpilot::NearbyControllers::MergeFrom(from._internal_nearby_controllers());
+      break;
+    }
     case kSetTransponderCode: {
       _internal_mutable_set_transponder_code()->::xpilot::SetTransponderCode::MergeFrom(from._internal_set_transponder_code());
       break;
     }
-    case kPlaneAddedToSim: {
-      _internal_mutable_plane_added_to_sim()->::xpilot::PlaneAddedToSim::MergeFrom(from._internal_plane_added_to_sim());
+    case kXplaneDatarefs: {
+      _internal_mutable_xplane_datarefs()->::xpilot::XplaneDatarefs::MergeFrom(from._internal_xplane_datarefs());
+      break;
+    }
+    case kPluginInformation: {
+      _internal_mutable_plugin_information()->::xpilot::PluginInformation::MergeFrom(from._internal_plugin_information());
+      break;
+    }
+    case kCslValidation: {
+      _internal_mutable_csl_validation()->::xpilot::CslValidation::MergeFrom(from._internal_csl_validation());
       break;
     }
     case MSG_NOT_SET: {
@@ -833,39 +834,21 @@ void Wrapper::SetCachedSize(int size) const {
 void Wrapper::clear_msg() {
 // @@protoc_insertion_point(one_of_clear_start:xpilot.Wrapper)
   switch (msg_case()) {
-    case kXplaneDatarefs: {
+    case kUserAircraftData: {
       if (GetArena() == nullptr) {
-        delete msg_.xplane_datarefs_;
+        delete msg_.user_aircraft_data_;
       }
       break;
     }
-    case kPluginHash: {
+    case kUserAircraftConfig: {
       if (GetArena() == nullptr) {
-        delete msg_.plugin_hash_;
+        delete msg_.user_aircraft_config_;
       }
       break;
     }
-    case kPluginVersion: {
+    case kRadioStack: {
       if (GetArena() == nullptr) {
-        delete msg_.plugin_version_;
-      }
-      break;
-    }
-    case kCslValidate: {
-      if (GetArena() == nullptr) {
-        delete msg_.csl_validate_;
-      }
-      break;
-    }
-    case kAddPlane: {
-      if (GetArena() == nullptr) {
-        delete msg_.add_plane_;
-      }
-      break;
-    }
-    case kChangeModel: {
-      if (GetArena() == nullptr) {
-        delete msg_.change_model_;
+        delete msg_.radio_stack_;
       }
       break;
     }
@@ -881,45 +864,33 @@ void Wrapper::clear_msg() {
       }
       break;
     }
-    case kRemovePlane: {
-      if (GetArena() == nullptr) {
-        delete msg_.remove_plane_;
-      }
-      break;
-    }
-    case kRemoveAllPlanes: {
-      if (GetArena() == nullptr) {
-        delete msg_.remove_all_planes_;
-      }
-      break;
-    }
-    case kNetworkConnected: {
-      if (GetArena() == nullptr) {
-        delete msg_.network_connected_;
-      }
-      break;
-    }
-    case kNetworkDisconnected: {
-      if (GetArena() == nullptr) {
-        delete msg_.network_disconnected_;
-      }
-      break;
-    }
     case kAirplaneConfig: {
       if (GetArena() == nullptr) {
         delete msg_.airplane_config_;
       }
       break;
     }
-    case kNearbyControllers: {
+    case kAddPlane: {
       if (GetArena() == nullptr) {
-        delete msg_.nearby_controllers_;
+        delete msg_.add_plane_;
       }
       break;
     }
-    case kClearNearbyControllers: {
+    case kPlaneAddedToSim: {
       if (GetArena() == nullptr) {
-        delete msg_.clear_nearby_controllers_;
+        delete msg_.plane_added_to_sim_;
+      }
+      break;
+    }
+    case kChangePlaneModel: {
+      if (GetArena() == nullptr) {
+        delete msg_.change_plane_model_;
+      }
+      break;
+    }
+    case kDeletePlane: {
+      if (GetArena() == nullptr) {
+        delete msg_.delete_plane_;
       }
       break;
     }
@@ -935,15 +906,45 @@ void Wrapper::clear_msg() {
       }
       break;
     }
+    case kNetworkConnected: {
+      if (GetArena() == nullptr) {
+        delete msg_.network_connected_;
+      }
+      break;
+    }
+    case kNetworkDisconnected: {
+      if (GetArena() == nullptr) {
+        delete msg_.network_disconnected_;
+      }
+      break;
+    }
+    case kNearbyControllers: {
+      if (GetArena() == nullptr) {
+        delete msg_.nearby_controllers_;
+      }
+      break;
+    }
     case kSetTransponderCode: {
       if (GetArena() == nullptr) {
         delete msg_.set_transponder_code_;
       }
       break;
     }
-    case kPlaneAddedToSim: {
+    case kXplaneDatarefs: {
       if (GetArena() == nullptr) {
-        delete msg_.plane_added_to_sim_;
+        delete msg_.xplane_datarefs_;
+      }
+      break;
+    }
+    case kPluginInformation: {
+      if (GetArena() == nullptr) {
+        delete msg_.plugin_information_;
+      }
+      break;
+    }
+    case kCslValidation: {
+      if (GetArena() == nullptr) {
+        delete msg_.csl_validation_;
       }
       break;
     }
@@ -983,136 +984,136 @@ const char* Wrapper::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::in
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // .xpilot.XplaneDatarefs xplane_datarefs = 2;
+      // .xpilot.UserAircraftData user_aircraft_data = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
-          ptr = ctx->ParseMessage(_internal_mutable_xplane_datarefs(), ptr);
+          ptr = ctx->ParseMessage(_internal_mutable_user_aircraft_data(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // .xpilot.PluginHash plugin_hash = 3;
+      // .xpilot.UserAircraftConfigData user_aircraft_config = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
-          ptr = ctx->ParseMessage(_internal_mutable_plugin_hash(), ptr);
+          ptr = ctx->ParseMessage(_internal_mutable_user_aircraft_config(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // .xpilot.PluginVersion plugin_version = 4;
+      // .xpilot.RadioStack radio_stack = 4;
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
-          ptr = ctx->ParseMessage(_internal_mutable_plugin_version(), ptr);
+          ptr = ctx->ParseMessage(_internal_mutable_radio_stack(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // .xpilot.CslValidate csl_validate = 5;
+      // .xpilot.PositionUpdate position_update = 5;
       case 5:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 42)) {
-          ptr = ctx->ParseMessage(_internal_mutable_csl_validate(), ptr);
-          CHK_(ptr);
-        } else goto handle_unusual;
-        continue;
-      // .xpilot.AddPlane add_plane = 6;
-      case 6:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 50)) {
-          ptr = ctx->ParseMessage(_internal_mutable_add_plane(), ptr);
-          CHK_(ptr);
-        } else goto handle_unusual;
-        continue;
-      // .xpilot.ChangeModel change_model = 7;
-      case 7:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 58)) {
-          ptr = ctx->ParseMessage(_internal_mutable_change_model(), ptr);
-          CHK_(ptr);
-        } else goto handle_unusual;
-        continue;
-      // .xpilot.PositionUpdate position_update = 8;
-      case 8:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 66)) {
           ptr = ctx->ParseMessage(_internal_mutable_position_update(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // .xpilot.FastPositionUpdate fast_position_update = 9;
-      case 9:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 74)) {
+      // .xpilot.FastPositionUpdate fast_position_update = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 50)) {
           ptr = ctx->ParseMessage(_internal_mutable_fast_position_update(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // .xpilot.RemovePlane remove_plane = 10;
-      case 10:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 82)) {
-          ptr = ctx->ParseMessage(_internal_mutable_remove_plane(), ptr);
-          CHK_(ptr);
-        } else goto handle_unusual;
-        continue;
-      // .xpilot.RemoveAllPlanes remove_all_planes = 11;
-      case 11:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 90)) {
-          ptr = ctx->ParseMessage(_internal_mutable_remove_all_planes(), ptr);
-          CHK_(ptr);
-        } else goto handle_unusual;
-        continue;
-      // .xpilot.NetworkConnected network_connected = 12;
-      case 12:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 98)) {
-          ptr = ctx->ParseMessage(_internal_mutable_network_connected(), ptr);
-          CHK_(ptr);
-        } else goto handle_unusual;
-        continue;
-      // .xpilot.NetworkDisconnected network_disconnected = 13;
-      case 13:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 106)) {
-          ptr = ctx->ParseMessage(_internal_mutable_network_disconnected(), ptr);
-          CHK_(ptr);
-        } else goto handle_unusual;
-        continue;
-      // .xpilot.AirplaneConfig airplane_config = 14;
-      case 14:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 114)) {
+      // .xpilot.AirplaneConfig airplane_config = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 58)) {
           ptr = ctx->ParseMessage(_internal_mutable_airplane_config(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // .xpilot.NearbyControllers nearby_controllers = 15;
-      case 15:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 122)) {
-          ptr = ctx->ParseMessage(_internal_mutable_nearby_controllers(), ptr);
+      // .xpilot.AddPlane add_plane = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 66)) {
+          ptr = ctx->ParseMessage(_internal_mutable_add_plane(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // .xpilot.ClearNearbyControllers clear_nearby_controllers = 16;
-      case 16:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 130)) {
-          ptr = ctx->ParseMessage(_internal_mutable_clear_nearby_controllers(), ptr);
+      // .xpilot.PlaneAddedToSim plane_added_to_sim = 9;
+      case 9:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 74)) {
+          ptr = ctx->ParseMessage(_internal_mutable_plane_added_to_sim(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // .xpilot.PrivateMessageReceived private_message_received = 17;
-      case 17:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 138)) {
+      // .xpilot.ChangePlaneModel change_plane_model = 10;
+      case 10:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 82)) {
+          ptr = ctx->ParseMessage(_internal_mutable_change_plane_model(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .xpilot.DeletePlane delete_plane = 11;
+      case 11:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 90)) {
+          ptr = ctx->ParseMessage(_internal_mutable_delete_plane(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .xpilot.PrivateMessageReceived private_message_received = 12;
+      case 12:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 98)) {
           ptr = ctx->ParseMessage(_internal_mutable_private_message_received(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // .xpilot.PrivateMessageSent private_message_sent = 18;
-      case 18:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 146)) {
+      // .xpilot.PrivateMessageSent private_message_sent = 13;
+      case 13:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 106)) {
           ptr = ctx->ParseMessage(_internal_mutable_private_message_sent(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // .xpilot.SetTransponderCode set_transponder_code = 19;
-      case 19:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 154)) {
+      // .xpilot.NetworkConnected network_connected = 14;
+      case 14:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 114)) {
+          ptr = ctx->ParseMessage(_internal_mutable_network_connected(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .xpilot.NetworkDisconnected network_disconnected = 15;
+      case 15:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 122)) {
+          ptr = ctx->ParseMessage(_internal_mutable_network_disconnected(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .xpilot.NearbyControllers nearby_controllers = 16;
+      case 16:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 130)) {
+          ptr = ctx->ParseMessage(_internal_mutable_nearby_controllers(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .xpilot.SetTransponderCode set_transponder_code = 17;
+      case 17:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 138)) {
           ptr = ctx->ParseMessage(_internal_mutable_set_transponder_code(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // .xpilot.PlaneAddedToSim plane_added_to_sim = 20;
+      // .xpilot.XplaneDatarefs xplane_datarefs = 18;
+      case 18:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 146)) {
+          ptr = ctx->ParseMessage(_internal_mutable_xplane_datarefs(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .xpilot.PluginInformation plugin_information = 19;
+      case 19:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 154)) {
+          ptr = ctx->ParseMessage(_internal_mutable_plugin_information(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .xpilot.CslValidation csl_validation = 20;
       case 20:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 162)) {
-          ptr = ctx->ParseMessage(_internal_mutable_plane_added_to_sim(), ptr);
+          ptr = ctx->ParseMessage(_internal_mutable_csl_validation(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -1152,156 +1153,156 @@ failure:
         1, _Internal::timestamp(this), target, stream);
   }
 
-  // .xpilot.XplaneDatarefs xplane_datarefs = 2;
-  if (_internal_has_xplane_datarefs()) {
+  // .xpilot.UserAircraftData user_aircraft_data = 2;
+  if (_internal_has_user_aircraft_data()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        2, _Internal::xplane_datarefs(this), target, stream);
+        2, _Internal::user_aircraft_data(this), target, stream);
   }
 
-  // .xpilot.PluginHash plugin_hash = 3;
-  if (_internal_has_plugin_hash()) {
+  // .xpilot.UserAircraftConfigData user_aircraft_config = 3;
+  if (_internal_has_user_aircraft_config()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        3, _Internal::plugin_hash(this), target, stream);
+        3, _Internal::user_aircraft_config(this), target, stream);
   }
 
-  // .xpilot.PluginVersion plugin_version = 4;
-  if (_internal_has_plugin_version()) {
+  // .xpilot.RadioStack radio_stack = 4;
+  if (_internal_has_radio_stack()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        4, _Internal::plugin_version(this), target, stream);
+        4, _Internal::radio_stack(this), target, stream);
   }
 
-  // .xpilot.CslValidate csl_validate = 5;
-  if (_internal_has_csl_validate()) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(
-        5, _Internal::csl_validate(this), target, stream);
-  }
-
-  // .xpilot.AddPlane add_plane = 6;
-  if (_internal_has_add_plane()) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(
-        6, _Internal::add_plane(this), target, stream);
-  }
-
-  // .xpilot.ChangeModel change_model = 7;
-  if (_internal_has_change_model()) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(
-        7, _Internal::change_model(this), target, stream);
-  }
-
-  // .xpilot.PositionUpdate position_update = 8;
+  // .xpilot.PositionUpdate position_update = 5;
   if (_internal_has_position_update()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        8, _Internal::position_update(this), target, stream);
+        5, _Internal::position_update(this), target, stream);
   }
 
-  // .xpilot.FastPositionUpdate fast_position_update = 9;
+  // .xpilot.FastPositionUpdate fast_position_update = 6;
   if (_internal_has_fast_position_update()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        9, _Internal::fast_position_update(this), target, stream);
+        6, _Internal::fast_position_update(this), target, stream);
   }
 
-  // .xpilot.RemovePlane remove_plane = 10;
-  if (_internal_has_remove_plane()) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(
-        10, _Internal::remove_plane(this), target, stream);
-  }
-
-  // .xpilot.RemoveAllPlanes remove_all_planes = 11;
-  if (_internal_has_remove_all_planes()) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(
-        11, _Internal::remove_all_planes(this), target, stream);
-  }
-
-  // .xpilot.NetworkConnected network_connected = 12;
-  if (_internal_has_network_connected()) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(
-        12, _Internal::network_connected(this), target, stream);
-  }
-
-  // .xpilot.NetworkDisconnected network_disconnected = 13;
-  if (_internal_has_network_disconnected()) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(
-        13, _Internal::network_disconnected(this), target, stream);
-  }
-
-  // .xpilot.AirplaneConfig airplane_config = 14;
+  // .xpilot.AirplaneConfig airplane_config = 7;
   if (_internal_has_airplane_config()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        14, _Internal::airplane_config(this), target, stream);
+        7, _Internal::airplane_config(this), target, stream);
   }
 
-  // .xpilot.NearbyControllers nearby_controllers = 15;
-  if (_internal_has_nearby_controllers()) {
+  // .xpilot.AddPlane add_plane = 8;
+  if (_internal_has_add_plane()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        15, _Internal::nearby_controllers(this), target, stream);
+        8, _Internal::add_plane(this), target, stream);
   }
 
-  // .xpilot.ClearNearbyControllers clear_nearby_controllers = 16;
-  if (_internal_has_clear_nearby_controllers()) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(
-        16, _Internal::clear_nearby_controllers(this), target, stream);
-  }
-
-  // .xpilot.PrivateMessageReceived private_message_received = 17;
-  if (_internal_has_private_message_received()) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(
-        17, _Internal::private_message_received(this), target, stream);
-  }
-
-  // .xpilot.PrivateMessageSent private_message_sent = 18;
-  if (_internal_has_private_message_sent()) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(
-        18, _Internal::private_message_sent(this), target, stream);
-  }
-
-  // .xpilot.SetTransponderCode set_transponder_code = 19;
-  if (_internal_has_set_transponder_code()) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(
-        19, _Internal::set_transponder_code(this), target, stream);
-  }
-
-  // .xpilot.PlaneAddedToSim plane_added_to_sim = 20;
+  // .xpilot.PlaneAddedToSim plane_added_to_sim = 9;
   if (_internal_has_plane_added_to_sim()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        20, _Internal::plane_added_to_sim(this), target, stream);
+        9, _Internal::plane_added_to_sim(this), target, stream);
+  }
+
+  // .xpilot.ChangePlaneModel change_plane_model = 10;
+  if (_internal_has_change_plane_model()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        10, _Internal::change_plane_model(this), target, stream);
+  }
+
+  // .xpilot.DeletePlane delete_plane = 11;
+  if (_internal_has_delete_plane()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        11, _Internal::delete_plane(this), target, stream);
+  }
+
+  // .xpilot.PrivateMessageReceived private_message_received = 12;
+  if (_internal_has_private_message_received()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        12, _Internal::private_message_received(this), target, stream);
+  }
+
+  // .xpilot.PrivateMessageSent private_message_sent = 13;
+  if (_internal_has_private_message_sent()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        13, _Internal::private_message_sent(this), target, stream);
+  }
+
+  // .xpilot.NetworkConnected network_connected = 14;
+  if (_internal_has_network_connected()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        14, _Internal::network_connected(this), target, stream);
+  }
+
+  // .xpilot.NetworkDisconnected network_disconnected = 15;
+  if (_internal_has_network_disconnected()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        15, _Internal::network_disconnected(this), target, stream);
+  }
+
+  // .xpilot.NearbyControllers nearby_controllers = 16;
+  if (_internal_has_nearby_controllers()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        16, _Internal::nearby_controllers(this), target, stream);
+  }
+
+  // .xpilot.SetTransponderCode set_transponder_code = 17;
+  if (_internal_has_set_transponder_code()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        17, _Internal::set_transponder_code(this), target, stream);
+  }
+
+  // .xpilot.XplaneDatarefs xplane_datarefs = 18;
+  if (_internal_has_xplane_datarefs()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        18, _Internal::xplane_datarefs(this), target, stream);
+  }
+
+  // .xpilot.PluginInformation plugin_information = 19;
+  if (_internal_has_plugin_information()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        19, _Internal::plugin_information(this), target, stream);
+  }
+
+  // .xpilot.CslValidation csl_validation = 20;
+  if (_internal_has_csl_validation()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        20, _Internal::csl_validation(this), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1328,137 +1329,137 @@ size_t Wrapper::ByteSizeLong() const {
   }
 
   switch (msg_case()) {
-    // .xpilot.XplaneDatarefs xplane_datarefs = 2;
-    case kXplaneDatarefs: {
+    // .xpilot.UserAircraftData user_aircraft_data = 2;
+    case kUserAircraftData: {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *msg_.xplane_datarefs_);
+          *msg_.user_aircraft_data_);
       break;
     }
-    // .xpilot.PluginHash plugin_hash = 3;
-    case kPluginHash: {
+    // .xpilot.UserAircraftConfigData user_aircraft_config = 3;
+    case kUserAircraftConfig: {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *msg_.plugin_hash_);
+          *msg_.user_aircraft_config_);
       break;
     }
-    // .xpilot.PluginVersion plugin_version = 4;
-    case kPluginVersion: {
+    // .xpilot.RadioStack radio_stack = 4;
+    case kRadioStack: {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *msg_.plugin_version_);
+          *msg_.radio_stack_);
       break;
     }
-    // .xpilot.CslValidate csl_validate = 5;
-    case kCslValidate: {
-      total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *msg_.csl_validate_);
-      break;
-    }
-    // .xpilot.AddPlane add_plane = 6;
-    case kAddPlane: {
-      total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *msg_.add_plane_);
-      break;
-    }
-    // .xpilot.ChangeModel change_model = 7;
-    case kChangeModel: {
-      total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *msg_.change_model_);
-      break;
-    }
-    // .xpilot.PositionUpdate position_update = 8;
+    // .xpilot.PositionUpdate position_update = 5;
     case kPositionUpdate: {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
           *msg_.position_update_);
       break;
     }
-    // .xpilot.FastPositionUpdate fast_position_update = 9;
+    // .xpilot.FastPositionUpdate fast_position_update = 6;
     case kFastPositionUpdate: {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
           *msg_.fast_position_update_);
       break;
     }
-    // .xpilot.RemovePlane remove_plane = 10;
-    case kRemovePlane: {
-      total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *msg_.remove_plane_);
-      break;
-    }
-    // .xpilot.RemoveAllPlanes remove_all_planes = 11;
-    case kRemoveAllPlanes: {
-      total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *msg_.remove_all_planes_);
-      break;
-    }
-    // .xpilot.NetworkConnected network_connected = 12;
-    case kNetworkConnected: {
-      total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *msg_.network_connected_);
-      break;
-    }
-    // .xpilot.NetworkDisconnected network_disconnected = 13;
-    case kNetworkDisconnected: {
-      total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *msg_.network_disconnected_);
-      break;
-    }
-    // .xpilot.AirplaneConfig airplane_config = 14;
+    // .xpilot.AirplaneConfig airplane_config = 7;
     case kAirplaneConfig: {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
           *msg_.airplane_config_);
       break;
     }
-    // .xpilot.NearbyControllers nearby_controllers = 15;
-    case kNearbyControllers: {
+    // .xpilot.AddPlane add_plane = 8;
+    case kAddPlane: {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *msg_.nearby_controllers_);
+          *msg_.add_plane_);
       break;
     }
-    // .xpilot.ClearNearbyControllers clear_nearby_controllers = 16;
-    case kClearNearbyControllers: {
-      total_size += 2 +
+    // .xpilot.PlaneAddedToSim plane_added_to_sim = 9;
+    case kPlaneAddedToSim: {
+      total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *msg_.clear_nearby_controllers_);
+          *msg_.plane_added_to_sim_);
       break;
     }
-    // .xpilot.PrivateMessageReceived private_message_received = 17;
+    // .xpilot.ChangePlaneModel change_plane_model = 10;
+    case kChangePlaneModel: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *msg_.change_plane_model_);
+      break;
+    }
+    // .xpilot.DeletePlane delete_plane = 11;
+    case kDeletePlane: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *msg_.delete_plane_);
+      break;
+    }
+    // .xpilot.PrivateMessageReceived private_message_received = 12;
     case kPrivateMessageReceived: {
-      total_size += 2 +
+      total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
           *msg_.private_message_received_);
       break;
     }
-    // .xpilot.PrivateMessageSent private_message_sent = 18;
+    // .xpilot.PrivateMessageSent private_message_sent = 13;
     case kPrivateMessageSent: {
-      total_size += 2 +
+      total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
           *msg_.private_message_sent_);
       break;
     }
-    // .xpilot.SetTransponderCode set_transponder_code = 19;
+    // .xpilot.NetworkConnected network_connected = 14;
+    case kNetworkConnected: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *msg_.network_connected_);
+      break;
+    }
+    // .xpilot.NetworkDisconnected network_disconnected = 15;
+    case kNetworkDisconnected: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *msg_.network_disconnected_);
+      break;
+    }
+    // .xpilot.NearbyControllers nearby_controllers = 16;
+    case kNearbyControllers: {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *msg_.nearby_controllers_);
+      break;
+    }
+    // .xpilot.SetTransponderCode set_transponder_code = 17;
     case kSetTransponderCode: {
       total_size += 2 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
           *msg_.set_transponder_code_);
       break;
     }
-    // .xpilot.PlaneAddedToSim plane_added_to_sim = 20;
-    case kPlaneAddedToSim: {
+    // .xpilot.XplaneDatarefs xplane_datarefs = 18;
+    case kXplaneDatarefs: {
       total_size += 2 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *msg_.plane_added_to_sim_);
+          *msg_.xplane_datarefs_);
+      break;
+    }
+    // .xpilot.PluginInformation plugin_information = 19;
+    case kPluginInformation: {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *msg_.plugin_information_);
+      break;
+    }
+    // .xpilot.CslValidation csl_validation = 20;
+    case kCslValidation: {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *msg_.csl_validation_);
       break;
     }
     case MSG_NOT_SET: {
@@ -1500,28 +1501,16 @@ void Wrapper::MergeFrom(const Wrapper& from) {
     _internal_mutable_timestamp()->PROTOBUF_NAMESPACE_ID::Timestamp::MergeFrom(from._internal_timestamp());
   }
   switch (from.msg_case()) {
-    case kXplaneDatarefs: {
-      _internal_mutable_xplane_datarefs()->::xpilot::XplaneDatarefs::MergeFrom(from._internal_xplane_datarefs());
+    case kUserAircraftData: {
+      _internal_mutable_user_aircraft_data()->::xpilot::UserAircraftData::MergeFrom(from._internal_user_aircraft_data());
       break;
     }
-    case kPluginHash: {
-      _internal_mutable_plugin_hash()->::xpilot::PluginHash::MergeFrom(from._internal_plugin_hash());
+    case kUserAircraftConfig: {
+      _internal_mutable_user_aircraft_config()->::xpilot::UserAircraftConfigData::MergeFrom(from._internal_user_aircraft_config());
       break;
     }
-    case kPluginVersion: {
-      _internal_mutable_plugin_version()->::xpilot::PluginVersion::MergeFrom(from._internal_plugin_version());
-      break;
-    }
-    case kCslValidate: {
-      _internal_mutable_csl_validate()->::xpilot::CslValidate::MergeFrom(from._internal_csl_validate());
-      break;
-    }
-    case kAddPlane: {
-      _internal_mutable_add_plane()->::xpilot::AddPlane::MergeFrom(from._internal_add_plane());
-      break;
-    }
-    case kChangeModel: {
-      _internal_mutable_change_model()->::xpilot::ChangeModel::MergeFrom(from._internal_change_model());
+    case kRadioStack: {
+      _internal_mutable_radio_stack()->::xpilot::RadioStack::MergeFrom(from._internal_radio_stack());
       break;
     }
     case kPositionUpdate: {
@@ -1532,32 +1521,24 @@ void Wrapper::MergeFrom(const Wrapper& from) {
       _internal_mutable_fast_position_update()->::xpilot::FastPositionUpdate::MergeFrom(from._internal_fast_position_update());
       break;
     }
-    case kRemovePlane: {
-      _internal_mutable_remove_plane()->::xpilot::RemovePlane::MergeFrom(from._internal_remove_plane());
-      break;
-    }
-    case kRemoveAllPlanes: {
-      _internal_mutable_remove_all_planes()->::xpilot::RemoveAllPlanes::MergeFrom(from._internal_remove_all_planes());
-      break;
-    }
-    case kNetworkConnected: {
-      _internal_mutable_network_connected()->::xpilot::NetworkConnected::MergeFrom(from._internal_network_connected());
-      break;
-    }
-    case kNetworkDisconnected: {
-      _internal_mutable_network_disconnected()->::xpilot::NetworkDisconnected::MergeFrom(from._internal_network_disconnected());
-      break;
-    }
     case kAirplaneConfig: {
       _internal_mutable_airplane_config()->::xpilot::AirplaneConfig::MergeFrom(from._internal_airplane_config());
       break;
     }
-    case kNearbyControllers: {
-      _internal_mutable_nearby_controllers()->::xpilot::NearbyControllers::MergeFrom(from._internal_nearby_controllers());
+    case kAddPlane: {
+      _internal_mutable_add_plane()->::xpilot::AddPlane::MergeFrom(from._internal_add_plane());
       break;
     }
-    case kClearNearbyControllers: {
-      _internal_mutable_clear_nearby_controllers()->::xpilot::ClearNearbyControllers::MergeFrom(from._internal_clear_nearby_controllers());
+    case kPlaneAddedToSim: {
+      _internal_mutable_plane_added_to_sim()->::xpilot::PlaneAddedToSim::MergeFrom(from._internal_plane_added_to_sim());
+      break;
+    }
+    case kChangePlaneModel: {
+      _internal_mutable_change_plane_model()->::xpilot::ChangePlaneModel::MergeFrom(from._internal_change_plane_model());
+      break;
+    }
+    case kDeletePlane: {
+      _internal_mutable_delete_plane()->::xpilot::DeletePlane::MergeFrom(from._internal_delete_plane());
       break;
     }
     case kPrivateMessageReceived: {
@@ -1568,12 +1549,32 @@ void Wrapper::MergeFrom(const Wrapper& from) {
       _internal_mutable_private_message_sent()->::xpilot::PrivateMessageSent::MergeFrom(from._internal_private_message_sent());
       break;
     }
+    case kNetworkConnected: {
+      _internal_mutable_network_connected()->::xpilot::NetworkConnected::MergeFrom(from._internal_network_connected());
+      break;
+    }
+    case kNetworkDisconnected: {
+      _internal_mutable_network_disconnected()->::xpilot::NetworkDisconnected::MergeFrom(from._internal_network_disconnected());
+      break;
+    }
+    case kNearbyControllers: {
+      _internal_mutable_nearby_controllers()->::xpilot::NearbyControllers::MergeFrom(from._internal_nearby_controllers());
+      break;
+    }
     case kSetTransponderCode: {
       _internal_mutable_set_transponder_code()->::xpilot::SetTransponderCode::MergeFrom(from._internal_set_transponder_code());
       break;
     }
-    case kPlaneAddedToSim: {
-      _internal_mutable_plane_added_to_sim()->::xpilot::PlaneAddedToSim::MergeFrom(from._internal_plane_added_to_sim());
+    case kXplaneDatarefs: {
+      _internal_mutable_xplane_datarefs()->::xpilot::XplaneDatarefs::MergeFrom(from._internal_xplane_datarefs());
+      break;
+    }
+    case kPluginInformation: {
+      _internal_mutable_plugin_information()->::xpilot::PluginInformation::MergeFrom(from._internal_plugin_information());
+      break;
+    }
+    case kCslValidation: {
+      _internal_mutable_csl_validation()->::xpilot::CslValidation::MergeFrom(from._internal_csl_validation());
       break;
     }
     case MSG_NOT_SET: {

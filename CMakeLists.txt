@@ -9,6 +9,8 @@ include_directories("${CMAKE_SOURCE_DIR}/Lib/ImgWindow")
 include_directories("${CMAKE_SOURCE_DIR}/Lib/SDK/CHeaders/XPLM")
 include_directories("${CMAKE_SOURCE_DIR}/Lib/XPMP2")
 include_directories("${CMAKE_SOURCE_DIR}/Lib/Font")
+include_directories("${CMAKE_SOURCE_DIR}/Lib/gmath")
+include_directories("${CMAKE_SOURCE_DIR}/Lib/protobuf")
 
 add_definitions(-DXPLM200=1 -DXPLM210=1 -DXPLM300=1 -DXPLM301=1 -DXPLM303=1 -DZMQ_STATIC=1)
 add_definitions(-DAPL=$<BOOL:${APPLE}> -DIBM=$<BOOL:${WIN32}> -DLIN=$<AND:$<BOOL:${UNIX}>,$<NOT:$<BOOL:${APPLE}>>>)
@@ -66,6 +68,8 @@ set(Header_Files
 )
 source_group("Header Files" FILES ${Header_Files})
 
+AUX_SOURCE_DIRECTORY("${CMAKE_SOURCE_DIR}/protobuf" PROTOBUF_SRC)
+
 set(Source_Files
     src/AircraftManager.cpp
     src/Config.cpp
@@ -90,6 +94,7 @@ set(Source_Files
     ${CMAKE_SOURCE_DIR}/Lib/imgui/imgui_tables.cpp
     ${CMAKE_SOURCE_DIR}/Lib/imgui/imgui_draw.cpp
     ${CMAKE_SOURCE_DIR}/Lib/imgui/imgui_widgets.cpp
+	${PROTOBUF_SRC}
 )
 source_group("Source Files" FILES ${Source_Files})
 
@@ -105,6 +110,7 @@ elseif (WIN32)
     list(APPEND CMAKE_LIBRARY_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Lib/XPMP2")
 	list(APPEND CMAKE_LIBRARY_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Lib/ZMQ")
     list(APPEND CMAKE_LIBRARY_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Lib/sdk/Libraries/Win")
+	list(APPEND CMAKE_LIBRARY_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Lib/protobuf")
 endif()
 
 if (APPLE)
@@ -120,10 +126,12 @@ target_link_libraries(xPilot ${XPMP2_LIBRARY})
 if (WIN32)
 	find_library(ZLIB_LIBRARY NAMES zlib.lib)
 	find_library(ZMQ_LIBRARY NAMES libzmq.lib)
+	find_library(PROTOBUF_LIB NAMES libprotobuf.lib)
 endif()
 
 target_link_libraries(xPilot ${ZLIB_LIBRARY})
 target_link_libraries(xPilot ${ZMQ_LIBRARY})
+target_link_libraries(xPilot ${PROTOBUF_LIB})
 
 if (WIN32 OR APPLE)
     find_library(XPLM_LIBRARY NAMES XPLM XPLM_64.lib)

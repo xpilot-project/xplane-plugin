@@ -125,13 +125,11 @@ namespace xpilot
 
 		DataRefAccess<int> m_com1Power;
 		DataRefAccess<int> m_com1Frequency833;
-		DataRefAccess<int> m_com1StandbyFrequency833;
 		DataRefAccess<int> m_com1AudioSelection;
 		DataRefAccess<float> m_com1AudioVolume;
 
 		DataRefAccess<int> m_com2Power;
 		DataRefAccess<int> m_com2Frequency833;
-		DataRefAccess<int> m_com2StandbyFrequency833;
 		DataRefAccess<int> m_com2AudioSelection;
 		DataRefAccess<float> m_com2AudioVolume;
 
