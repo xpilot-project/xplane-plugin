@@ -107,29 +107,41 @@ namespace xpilot
         double new_lon = NormalizeDegrees(current_visual_state.Lon + lon_change, -180.0, 180.0);
 
         double alt_change = velocityVector.Y * interval * 3.28084;
-        double new_alt = current_visual_state.Altitude + alt_change;
 
+        // Terrain offset
         terrain_altitude = 0.0;
-        if (new_alt < 18000)
+        if (current_visual_state.Altitude < 18000)
         {
-            terrain_altitude = terrain_probe.getTerrainElevation(new_lat, new_lon);
-        }
-
-        if (on_ground || (new_alt < 200.0 && new_alt < terrain_altitude))
-        {
-            if (fast_positions_received_count > 1)
+            terrain_altitude = terrain_probe.getTerrainElevation(current_visual_state.Lat, current_visual_state.Lon);
+            if (on_ground || (current_visual_state.Altitude < 200.0 && current_visual_state.Altitude < terrain_altitude))
             {
-                double diff = terrain_altitude - new_alt;
-                new_alt += diff * interval;
+                if (fast_positions_received_count > 1)
+                {
+                    const double diff = (terrain_altitude - (current_visual_state.Altitude + alt_change)) * interval;
+                    if (std::abs(diff) > 0.0)
+                    {
+                        current_visual_state.Altitude += std::copysign(diff, diff);
+                    }
 
-                SetTouchDown(just_touched_down);
-                just_touched_down = false;
+                    SetTouchDown(just_touched_down);
+                    just_touched_down = false;
+                }
+                else
+                {
+                    current_visual_state.Altitude = terrain_altitude;
+                }
             }
             else
             {
-                new_alt = terrain_altitude;
+                current_visual_state.Altitude += alt_change;
             }
         }
+        else
+        {
+            current_visual_state.Altitude += alt_change;
+        }
+
+        double new_alt = current_visual_state.Altitude;
 
         SetLocation(new_lat, new_lon, new_alt);
 
