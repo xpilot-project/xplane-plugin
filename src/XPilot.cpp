@@ -449,7 +449,7 @@ namespace xpilot
 				{
 					xpilot::PositionUpdate msg = wrapper.position_update();
 
-					AircraftVisualState visualState;
+					AircraftVisualState visualState{};
 					visualState.Lat = msg.latitude();
 					visualState.Lon = msg.longitude();
 					visualState.Altitude = msg.altitude();
@@ -828,14 +828,6 @@ namespace xpilot
 		//json j;
 		//j["Type"] = "ForceDisconnect";
 		//j["Data"]["Reason"] = reason;
-		//j["Timestamp"] = UtcTimestamp();
-		//sendSocketMsg(j.dump());
-	}
-
-	void XPilot::onPluginDisabled()
-	{
-		//json j;
-		//j["Type"] = "PluginDisabled";
 		//j["Timestamp"] = UtcTimestamp();
 		//sendSocketMsg(j.dump());
 	}

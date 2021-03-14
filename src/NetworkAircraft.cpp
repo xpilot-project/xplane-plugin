@@ -15,10 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see http://www.gnu.org/licenses/.
 */
-
-#define _USE_MATH_DEFINES
-#include <math.h>
-
 #include "NetworkAircraft.h"
 #include "Utilities.h"
 #include "Config.h"
@@ -321,40 +317,16 @@ namespace xpilot
 
         SetGearRatio(surfaces.gearPosition);
         SetFlapRatio(surfaces.flapRatio);
-        if (surfaces.flapRatio <= 0.25f)
-        {
-            SetSlatRatio((std::min)(surfaces.flapRatio / 4, 0.0f));
-        }
-        else
-        {
-            SetSlatRatio(surfaces.flapRatio);
-        }
+        SetSlatRatio(surfaces.flapRatio <= 0.25f ? (std::min)(surfaces.flapRatio / 4, 0.0f) : surfaces.flapRatio);
         SetSpoilerRatio(surfaces.spoilerRatio);
         SetSpeedbrakeRatio(surfaces.spoilerRatio);
-        SetWingSweepRatio(0.0f);
         SetThrustRatio(engines_running ? 1.0f : 0.0f);
-        SetYokePitchRatio(0.0f);
-        SetYokeHeadingRatio(0.0f);
-        SetYokeRollRatio(0.0f);
-        SetThrustReversRatio(surfaces.reversRatio * -1);
 
         SetLightsTaxi(surfaces.lights.taxiLights);
         SetLightsLanding(surfaces.lights.landLights);
         SetLightsBeacon(surfaces.lights.bcnLights);
         SetLightsStrobe(surfaces.lights.strbLights);
         SetLightsNav(surfaces.lights.navLights);
-
-        //SetTireDeflection(0.0f);
-        //SetTireRotAngle(0.0f);
-        //SetTireRotRpm(0.0f);
-
-        //SetEngineRotRpm(0.0f);
-        //SetPropRotRpm(0.0f);
-        //SetEngineRotAngle(0.0f);
-        //SetPropRotAngle(0.0f);
-
-        //SetReversDeployRatio(0.0f);
-        //SetTouchDown(false);
 
         HexToRgb(Config::Instance().getAircraftLabelColor(), colLabel);
     }

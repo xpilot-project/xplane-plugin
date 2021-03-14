@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see http://www.gnu.org/licenses/.
 */
-
 #include <algorithm>
 #include <string>
 #include <vector>
@@ -112,7 +111,8 @@ namespace xpilot
                 }
                 if (jf.contains("MaxLabelDist"))
                 {
-                    setMaxLabelDistance(jf["MaxLabelDist"]);
+                    int dist = std::max(1, std::min(jf.at("MaxLabelDist").get<int>(), 10));
+                    setMaxLabelDistance(dist);
                 }
                 if (jf.contains("LabelCutoffVis"))
                 {

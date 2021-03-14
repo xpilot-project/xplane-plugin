@@ -85,7 +85,6 @@ PLUGIN_API void XPluginDisable(void)
 {
     try
     {
-        environment->onPluginDisabled();
         environment->stopZmqServer();
         XPMPMultiplayerDisable();
         XPMPMultiplayerCleanup();
