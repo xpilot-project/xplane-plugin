@@ -29,9 +29,10 @@ constexpr RadioStack::RadioStack(
   , com2_freq_(0)
   , com2_volume_(0)
   , transponder_code_(0)
+  , transponder_mode_(0)
   , avionics_power_on_(false)
   , transponder_ident_(false)
-  , transponder_mode_(0){}
+  , ptt_pressed_(false){}
 struct RadioStackDefaultTypeInternal {
   constexpr RadioStackDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -65,6 +66,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_RadioStack_2eproto::offsets[] 
   PROTOBUF_FIELD_OFFSET(::xpilot::RadioStack, transponder_code_),
   PROTOBUF_FIELD_OFFSET(::xpilot::RadioStack, transponder_mode_),
   PROTOBUF_FIELD_OFFSET(::xpilot::RadioStack, transponder_ident_),
+  PROTOBUF_FIELD_OFFSET(::xpilot::RadioStack, ptt_pressed_),
   0,
   3,
   1,
@@ -74,13 +76,14 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_RadioStack_2eproto::offsets[] 
   7,
   6,
   8,
-  10,
-  9,
-  12,
   11,
+  9,
+  10,
+  12,
+  13,
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, 18, sizeof(::xpilot::RadioStack)},
+  { 0, 19, sizeof(::xpilot::RadioStack)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -88,7 +91,7 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 };
 
 const char descriptor_table_protodef_RadioStack_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\020RadioStack.proto\022\006xpilot\"\202\005\n\nRadioStac"
+  "\n\020RadioStack.proto\022\006xpilot\"\254\005\n\nRadioStac"
   "k\022 \n\023audio_com_selection\030\001 \001(\005H\000\210\001\001\022\027\n\nc"
   "om1_power\030\002 \001(\010H\001\210\001\001\022\026\n\tcom1_freq\030\003 \001(\005H"
   "\002\210\001\001\022!\n\024com1_audio_selection\030\004 \001(\010H\003\210\001\001\022"
@@ -98,18 +101,19 @@ const char descriptor_table_protodef_RadioStack_2eproto[] PROTOBUF_SECTION_VARIA
   "lume\030\t \001(\002H\010\210\001\001\022\036\n\021avionics_power_on\030\n \001"
   "(\010H\t\210\001\001\022\035\n\020transponder_code\030\013 \001(\005H\n\210\001\001\022\035"
   "\n\020transponder_mode\030\014 \001(\005H\013\210\001\001\022\036\n\021transpo"
-  "nder_ident\030\r \001(\010H\014\210\001\001B\026\n\024_audio_com_sele"
-  "ctionB\r\n\013_com1_powerB\014\n\n_com1_freqB\027\n\025_c"
-  "om1_audio_selectionB\016\n\014_com1_volumeB\r\n\013_"
-  "com2_powerB\014\n\n_com2_freqB\027\n\025_com2_audio_"
-  "selectionB\016\n\014_com2_volumeB\024\n\022_avionics_p"
-  "ower_onB\023\n\021_transponder_codeB\023\n\021_transpo"
-  "nder_modeB\024\n\022_transponder_identB\031\252\002\026Vats"
-  "im.Xpilot.Protobufb\006proto3"
+  "nder_ident\030\r \001(\010H\014\210\001\001\022\030\n\013ptt_pressed\030\016 \001"
+  "(\010H\r\210\001\001B\026\n\024_audio_com_selectionB\r\n\013_com1"
+  "_powerB\014\n\n_com1_freqB\027\n\025_com1_audio_sele"
+  "ctionB\016\n\014_com1_volumeB\r\n\013_com2_powerB\014\n\n"
+  "_com2_freqB\027\n\025_com2_audio_selectionB\016\n\014_"
+  "com2_volumeB\024\n\022_avionics_power_onB\023\n\021_tr"
+  "ansponder_codeB\023\n\021_transponder_modeB\024\n\022_"
+  "transponder_identB\016\n\014_ptt_pressedB\031\252\002\026Va"
+  "tsim.Xpilot.Protobufb\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_RadioStack_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_RadioStack_2eproto = {
-  false, false, 706, descriptor_table_protodef_RadioStack_2eproto, "RadioStack.proto", 
+  false, false, 748, descriptor_table_protodef_RadioStack_2eproto, "RadioStack.proto", 
   &descriptor_table_RadioStack_2eproto_once, nullptr, 0, 1,
   schemas, file_default_instances, TableStruct_RadioStack_2eproto::offsets,
   file_level_metadata_RadioStack_2eproto, file_level_enum_descriptors_RadioStack_2eproto, file_level_service_descriptors_RadioStack_2eproto,
@@ -157,16 +161,19 @@ class RadioStack::_Internal {
     (*has_bits)[0] |= 256u;
   }
   static void set_has_avionics_power_on(HasBits* has_bits) {
-    (*has_bits)[0] |= 1024u;
+    (*has_bits)[0] |= 2048u;
   }
   static void set_has_transponder_code(HasBits* has_bits) {
     (*has_bits)[0] |= 512u;
   }
   static void set_has_transponder_mode(HasBits* has_bits) {
-    (*has_bits)[0] |= 4096u;
+    (*has_bits)[0] |= 1024u;
   }
   static void set_has_transponder_ident(HasBits* has_bits) {
-    (*has_bits)[0] |= 2048u;
+    (*has_bits)[0] |= 4096u;
+  }
+  static void set_has_ptt_pressed(HasBits* has_bits) {
+    (*has_bits)[0] |= 8192u;
   }
 };
 
@@ -181,16 +188,16 @@ RadioStack::RadioStack(const RadioStack& from)
       _has_bits_(from._has_bits_) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   ::memcpy(&audio_com_selection_, &from.audio_com_selection_,
-    static_cast<size_t>(reinterpret_cast<char*>(&transponder_mode_) -
-    reinterpret_cast<char*>(&audio_com_selection_)) + sizeof(transponder_mode_));
+    static_cast<size_t>(reinterpret_cast<char*>(&ptt_pressed_) -
+    reinterpret_cast<char*>(&audio_com_selection_)) + sizeof(ptt_pressed_));
   // @@protoc_insertion_point(copy_constructor:xpilot.RadioStack)
 }
 
 void RadioStack::SharedCtor() {
 ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
     reinterpret_cast<char*>(&audio_com_selection_) - reinterpret_cast<char*>(this)),
-    0, static_cast<size_t>(reinterpret_cast<char*>(&transponder_mode_) -
-    reinterpret_cast<char*>(&audio_com_selection_)) + sizeof(transponder_mode_));
+    0, static_cast<size_t>(reinterpret_cast<char*>(&ptt_pressed_) -
+    reinterpret_cast<char*>(&audio_com_selection_)) + sizeof(ptt_pressed_));
 }
 
 RadioStack::~RadioStack() {
@@ -225,10 +232,10 @@ void RadioStack::Clear() {
         reinterpret_cast<char*>(&com2_freq_) -
         reinterpret_cast<char*>(&audio_com_selection_)) + sizeof(com2_freq_));
   }
-  if (cached_has_bits & 0x00001f00u) {
+  if (cached_has_bits & 0x00003f00u) {
     ::memset(&com2_volume_, 0, static_cast<size_t>(
-        reinterpret_cast<char*>(&transponder_mode_) -
-        reinterpret_cast<char*>(&com2_volume_)) + sizeof(transponder_mode_));
+        reinterpret_cast<char*>(&ptt_pressed_) -
+        reinterpret_cast<char*>(&com2_volume_)) + sizeof(ptt_pressed_));
   }
   _has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
@@ -346,6 +353,14 @@ const char* RadioStack::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID:
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
+      // bool ptt_pressed = 14;
+      case 14:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 112)) {
+          _Internal::set_has_ptt_pressed(&has_bits);
+          ptt_pressed_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
       default: {
       handle_unusual:
         if ((tag & 7) == 4 || tag == 0) {
@@ -453,6 +468,12 @@ failure:
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(13, this->_internal_transponder_ident(), target);
   }
 
+  // bool ptt_pressed = 14;
+  if (_internal_has_ptt_pressed()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(14, this->_internal_ptt_pressed(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -518,7 +539,7 @@ size_t RadioStack::ByteSizeLong() const {
     }
 
   }
-  if (cached_has_bits & 0x00001f00u) {
+  if (cached_has_bits & 0x00003f00u) {
     // float com2_volume = 9;
     if (cached_has_bits & 0x00000100u) {
       total_size += 1 + 4;
@@ -531,21 +552,26 @@ size_t RadioStack::ByteSizeLong() const {
           this->_internal_transponder_code());
     }
 
-    // bool avionics_power_on = 10;
+    // int32 transponder_mode = 12;
     if (cached_has_bits & 0x00000400u) {
-      total_size += 1 + 1;
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+          this->_internal_transponder_mode());
     }
 
-    // bool transponder_ident = 13;
+    // bool avionics_power_on = 10;
     if (cached_has_bits & 0x00000800u) {
       total_size += 1 + 1;
     }
 
-    // int32 transponder_mode = 12;
+    // bool transponder_ident = 13;
     if (cached_has_bits & 0x00001000u) {
-      total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-          this->_internal_transponder_mode());
+      total_size += 1 + 1;
+    }
+
+    // bool ptt_pressed = 14;
+    if (cached_has_bits & 0x00002000u) {
+      total_size += 1 + 1;
     }
 
   }
@@ -608,7 +634,7 @@ void RadioStack::MergeFrom(const RadioStack& from) {
     }
     _has_bits_[0] |= cached_has_bits;
   }
-  if (cached_has_bits & 0x00001f00u) {
+  if (cached_has_bits & 0x00003f00u) {
     if (cached_has_bits & 0x00000100u) {
       com2_volume_ = from.com2_volume_;
     }
@@ -616,13 +642,16 @@ void RadioStack::MergeFrom(const RadioStack& from) {
       transponder_code_ = from.transponder_code_;
     }
     if (cached_has_bits & 0x00000400u) {
-      avionics_power_on_ = from.avionics_power_on_;
+      transponder_mode_ = from.transponder_mode_;
     }
     if (cached_has_bits & 0x00000800u) {
-      transponder_ident_ = from.transponder_ident_;
+      avionics_power_on_ = from.avionics_power_on_;
     }
     if (cached_has_bits & 0x00001000u) {
-      transponder_mode_ = from.transponder_mode_;
+      transponder_ident_ = from.transponder_ident_;
+    }
+    if (cached_has_bits & 0x00002000u) {
+      ptt_pressed_ = from.ptt_pressed_;
     }
     _has_bits_[0] |= cached_has_bits;
   }
@@ -651,8 +680,8 @@ void RadioStack::InternalSwap(RadioStack* other) {
   _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(RadioStack, transponder_mode_)
-      + sizeof(RadioStack::transponder_mode_)
+      PROTOBUF_FIELD_OFFSET(RadioStack, ptt_pressed_)
+      + sizeof(RadioStack::ptt_pressed_)
       - PROTOBUF_FIELD_OFFSET(RadioStack, audio_com_selection_)>(
           reinterpret_cast<char*>(&audio_com_selection_),
           reinterpret_cast<char*>(&other->audio_com_selection_));

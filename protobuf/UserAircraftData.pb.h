@@ -181,8 +181,8 @@ class UserAircraftData PROTOBUF_FINAL :
   enum : int {
     kLongitudeFieldNumber = 1,
     kLatitudeFieldNumber = 2,
-    kAltitudeFieldNumber = 3,
-    kPressureAltitudeFieldNumber = 4,
+    kAltitudeMslFieldNumber = 3,
+    kAltitudeAglFieldNumber = 4,
     kGroundSpeedFieldNumber = 5,
     kPitchFieldNumber = 6,
     kRollFieldNumber = 7,
@@ -220,30 +220,30 @@ class UserAircraftData PROTOBUF_FINAL :
   void _internal_set_latitude(double value);
   public:
 
-  // double altitude = 3;
-  bool has_altitude() const;
+  // double altitude_msl = 3;
+  bool has_altitude_msl() const;
   private:
-  bool _internal_has_altitude() const;
+  bool _internal_has_altitude_msl() const;
   public:
-  void clear_altitude();
-  double altitude() const;
-  void set_altitude(double value);
+  void clear_altitude_msl();
+  double altitude_msl() const;
+  void set_altitude_msl(double value);
   private:
-  double _internal_altitude() const;
-  void _internal_set_altitude(double value);
+  double _internal_altitude_msl() const;
+  void _internal_set_altitude_msl(double value);
   public:
 
-  // double pressure_altitude = 4;
-  bool has_pressure_altitude() const;
+  // double altitude_agl = 4;
+  bool has_altitude_agl() const;
   private:
-  bool _internal_has_pressure_altitude() const;
+  bool _internal_has_altitude_agl() const;
   public:
-  void clear_pressure_altitude();
-  double pressure_altitude() const;
-  void set_pressure_altitude(double value);
+  void clear_altitude_agl();
+  double altitude_agl() const;
+  void set_altitude_agl(double value);
   private:
-  double _internal_pressure_altitude() const;
-  void _internal_set_pressure_altitude(double value);
+  double _internal_altitude_agl() const;
+  void _internal_set_altitude_agl(double value);
   public:
 
   // double ground_speed = 5;
@@ -387,8 +387,8 @@ class UserAircraftData PROTOBUF_FINAL :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   double longitude_;
   double latitude_;
-  double altitude_;
-  double pressure_altitude_;
+  double altitude_msl_;
+  double altitude_agl_;
   double ground_speed_;
   double pitch_;
   double roll_;
@@ -468,60 +468,60 @@ inline void UserAircraftData::set_latitude(double value) {
   // @@protoc_insertion_point(field_set:xpilot.UserAircraftData.latitude)
 }
 
-// double altitude = 3;
-inline bool UserAircraftData::_internal_has_altitude() const {
+// double altitude_msl = 3;
+inline bool UserAircraftData::_internal_has_altitude_msl() const {
   bool value = (_has_bits_[0] & 0x00000004u) != 0;
   return value;
 }
-inline bool UserAircraftData::has_altitude() const {
-  return _internal_has_altitude();
+inline bool UserAircraftData::has_altitude_msl() const {
+  return _internal_has_altitude_msl();
 }
-inline void UserAircraftData::clear_altitude() {
-  altitude_ = 0;
+inline void UserAircraftData::clear_altitude_msl() {
+  altitude_msl_ = 0;
   _has_bits_[0] &= ~0x00000004u;
 }
-inline double UserAircraftData::_internal_altitude() const {
-  return altitude_;
+inline double UserAircraftData::_internal_altitude_msl() const {
+  return altitude_msl_;
 }
-inline double UserAircraftData::altitude() const {
-  // @@protoc_insertion_point(field_get:xpilot.UserAircraftData.altitude)
-  return _internal_altitude();
+inline double UserAircraftData::altitude_msl() const {
+  // @@protoc_insertion_point(field_get:xpilot.UserAircraftData.altitude_msl)
+  return _internal_altitude_msl();
 }
-inline void UserAircraftData::_internal_set_altitude(double value) {
+inline void UserAircraftData::_internal_set_altitude_msl(double value) {
   _has_bits_[0] |= 0x00000004u;
-  altitude_ = value;
+  altitude_msl_ = value;
 }
-inline void UserAircraftData::set_altitude(double value) {
-  _internal_set_altitude(value);
-  // @@protoc_insertion_point(field_set:xpilot.UserAircraftData.altitude)
+inline void UserAircraftData::set_altitude_msl(double value) {
+  _internal_set_altitude_msl(value);
+  // @@protoc_insertion_point(field_set:xpilot.UserAircraftData.altitude_msl)
 }
 
-// double pressure_altitude = 4;
-inline bool UserAircraftData::_internal_has_pressure_altitude() const {
+// double altitude_agl = 4;
+inline bool UserAircraftData::_internal_has_altitude_agl() const {
   bool value = (_has_bits_[0] & 0x00000008u) != 0;
   return value;
 }
-inline bool UserAircraftData::has_pressure_altitude() const {
-  return _internal_has_pressure_altitude();
+inline bool UserAircraftData::has_altitude_agl() const {
+  return _internal_has_altitude_agl();
 }
-inline void UserAircraftData::clear_pressure_altitude() {
-  pressure_altitude_ = 0;
+inline void UserAircraftData::clear_altitude_agl() {
+  altitude_agl_ = 0;
   _has_bits_[0] &= ~0x00000008u;
 }
-inline double UserAircraftData::_internal_pressure_altitude() const {
-  return pressure_altitude_;
+inline double UserAircraftData::_internal_altitude_agl() const {
+  return altitude_agl_;
 }
-inline double UserAircraftData::pressure_altitude() const {
-  // @@protoc_insertion_point(field_get:xpilot.UserAircraftData.pressure_altitude)
-  return _internal_pressure_altitude();
+inline double UserAircraftData::altitude_agl() const {
+  // @@protoc_insertion_point(field_get:xpilot.UserAircraftData.altitude_agl)
+  return _internal_altitude_agl();
 }
-inline void UserAircraftData::_internal_set_pressure_altitude(double value) {
+inline void UserAircraftData::_internal_set_altitude_agl(double value) {
   _has_bits_[0] |= 0x00000008u;
-  pressure_altitude_ = value;
+  altitude_agl_ = value;
 }
-inline void UserAircraftData::set_pressure_altitude(double value) {
-  _internal_set_pressure_altitude(value);
-  // @@protoc_insertion_point(field_set:xpilot.UserAircraftData.pressure_altitude)
+inline void UserAircraftData::set_altitude_agl(double value) {
+  _internal_set_altitude_agl(value);
+  // @@protoc_insertion_point(field_set:xpilot.UserAircraftData.altitude_agl)
 }
 
 // double ground_speed = 5;

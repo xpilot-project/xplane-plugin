@@ -119,31 +119,30 @@ namespace xpilot
 		OwnedDataRef<int> m_pluginVersion;
 		DataRefAccess<int> m_xplaneAtisEnabled;
 		DataRefAccess<float> m_frameRatePeriod;
+		DataRefAccess<int> m_transponderCode;
+		DataRefAccess<int> m_transponderMode;
+		DataRefAccess<int> m_transponderIdent;
 
-		// pilot client datarefs
+		// radiostack
 		DataRefAccess<int> m_audioComSelection;
-
-		DataRefAccess<int> m_com1Power;
 		DataRefAccess<int> m_com1Frequency833;
 		DataRefAccess<int> m_com1AudioSelection;
 		DataRefAccess<float> m_com1AudioVolume;
-
-		DataRefAccess<int> m_com2Power;
 		DataRefAccess<int> m_com2Frequency833;
 		DataRefAccess<int> m_com2AudioSelection;
 		DataRefAccess<float> m_com2AudioVolume;
-
 		DataRefAccess<int> m_avionicsPowerOn;
 
+		// user aircraft
 		DataRefAccess<double> m_positionLatitude;
 		DataRefAccess<double> m_positionLongitude;
-		DataRefAccess<double> m_positionAltitude;
-		DataRefAccess<float> m_positionPressureAltitude;
+		DataRefAccess<double> m_positionAltitudeMsl;
+		DataRefAccess<double> m_positionAltitudeAgl;
+		DataRefAccess<float> m_positionAltitudePressure;
 		DataRefAccess<float> m_groundSpeed;
 		DataRefAccess<float> m_positionPitch;
 		DataRefAccess<float> m_positionRoll;
 		DataRefAccess<float> m_positionYaw;
-
 		DataRefAccess<float> m_velocityLatitude;
 		DataRefAccess<float> m_velocityAltitude;
 		DataRefAccess<float> m_velocityLongitude;
@@ -151,27 +150,24 @@ namespace xpilot
 		DataRefAccess<float> m_velocityHeading;
 		DataRefAccess<float> m_velocityBank;
 
-		DataRefAccess<int> m_transponderCode;
-		DataRefAccess<int> m_transponderMode;
-		DataRefAccess<int> m_transponderIdent;
-
+		// user aircraft config
 		DataRefAccess<int> m_beaconLightsOn;
 		DataRefAccess<int> m_landingLightsOn;
 		DataRefAccess<int> m_navLightsOn;
 		DataRefAccess<int> m_strobeLightsOn;
 		DataRefAccess<int> m_taxiLightsOn;
-
 		DataRefAccess<float> m_flapRatio;
 		DataRefAccess<int> m_gearDown;
 		DataRefAccess<float> m_speedBrakeRatio;
-
 		DataRefAccess<int> m_engineCount;
 		DataRefAccess<std::vector<int>> m_enginesRunning;
 		DataRefAccess<int> m_onGround;
+
 		DataRefAccess<int> m_replayMode;
+		XPLMCommandRef m_cmdTransponderId;
 
 	private:
-		std::string pluginHash;
+		std::string m_pluginHash;
 		static float deferredStartup(float, float, int, void* ref);
 		static float mainFlightLoop(float, float, int, void* ref);
 		static float drFlightLoop(float, float, int, void* ref);
@@ -208,7 +204,7 @@ namespace xpilot
 		void invokeQueuedCallbacks();
 		void queueCallback(const std::function<void()>& cb);
 
-		void checkDatarefs(bool force);
+		void checkDatarefs();
 
 		XPLMDataRef m_bulkDataQuick{}, m_bulkDataExpensive{};
 		static int getBulkData(void* inRefcon, void* outData, int inStartPos, int inNumBytes);

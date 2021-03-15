@@ -49,20 +49,19 @@ namespace xpilot
 		m_aircraftCount("xpilot/num_aircraft", ReadOnly),
 		m_pluginVersion("xpilot/version", ReadOnly),
 		// pilot client datarefs
-		m_audioComSelection("sim/cockpit2/radios/actuators/audio_com_selection", ReadOnly),
-		m_com1Power("sim/cockpit2/radios/actuators/com1_power", ReadOnly),
-		m_com1Frequency833("sim/cockpit2/radios/actuators/com1_frequency_hz_833", ReadOnly),
-		m_com1AudioSelection("sim/cockpit2/radios/actuators/audio_selection_com1", ReadOnly),
-		m_com1AudioVolume("sim/cockpit2/radios/actuators/audio_volume_com1", ReadOnly),
-		m_com2Power("sim/cockpit2/radios/actuators/com2_power", ReadOnly),
-		m_com2Frequency833("sim/cockpit2/radios/actuators/com2_frequency_hz_833", ReadOnly),
-		m_com2AudioSelection("sim/cockpit2/radios/actuators/audio_selection_com2", ReadOnly),
-		m_com2AudioVolume("sim/cockpit2/radios/actuators/audio_volume_com2", ReadOnly),
+		m_audioComSelection("sim/cockpit2/radios/actuators/audio_com_selection", ReadWrite),
+		m_com1Frequency833("sim/cockpit2/radios/actuators/com1_frequency_hz_833", ReadWrite),
+		m_com1AudioSelection("sim/cockpit2/radios/actuators/audio_selection_com1", ReadWrite),
+		m_com1AudioVolume("sim/cockpit2/radios/actuators/audio_volume_com1", ReadWrite),
+		m_com2Frequency833("sim/cockpit2/radios/actuators/com2_frequency_hz_833", ReadWrite),
+		m_com2AudioSelection("sim/cockpit2/radios/actuators/audio_selection_com2", ReadWrite),
+		m_com2AudioVolume("sim/cockpit2/radios/actuators/audio_volume_com2", ReadWrite),
 		m_avionicsPowerOn("sim/cockpit2/switches/avionics_power_on", ReadOnly),
 		m_positionLatitude("sim/flightmodel/position/latitude", ReadOnly),
 		m_positionLongitude("sim/flightmodel/position/longitude", ReadOnly),
-		m_positionAltitude("sim/flightmodel/position/elevation", ReadOnly),
-		m_positionPressureAltitude("sim/cockpit2/gauges/indicators/altitude_ft_pilot", ReadOnly),
+		m_positionAltitudeMsl("sim/flightmodel/position/elevation", ReadOnly),
+		m_positionAltitudePressure("sim/flightmodel/position/elevation", ReadOnly),
+		m_positionAltitudeAgl("sim/flightmodel/position/y_agl", ReadOnly),
 		m_groundSpeed("sim/flightmodel/position/groundspeed", ReadOnly),
 		m_positionPitch("sim/flightmodel/position/theta", ReadOnly),
 		m_positionRoll("sim/flightmodel/position/phi", ReadOnly),
@@ -73,17 +72,17 @@ namespace xpilot
 		m_velocityPitch("sim/flightmodel/position/Qrad", ReadOnly),
 		m_velocityHeading("sim/flightmodel/position/Rrad", ReadOnly),
 		m_velocityBank("sim/flightmodel/position/Prad", ReadOnly),
-		m_transponderCode("sim/cockpit/radios/transponder_code", ReadOnly),
-		m_transponderMode("sim/cockpit/radios/transponder_mode", ReadOnly),
+		m_transponderCode("sim/cockpit/radios/transponder_code", ReadWrite),
+		m_transponderMode("sim/cockpit2/radios/actuators/transponder_mode", ReadWrite),
 		m_transponderIdent("sim/cockpit/radios/transponder_id", ReadOnly),
 		m_beaconLightsOn("sim/cockpit/electrical/beacon_lights_on", ReadOnly),
 		m_landingLightsOn("sim/cockpit/electrical/landing_lights_on", ReadOnly),
 		m_navLightsOn("sim/cockpit/electrical/nav_lights_on", ReadOnly),
 		m_strobeLightsOn("sim/cockpit/electrical/strobe_lights_on", ReadOnly),
 		m_taxiLightsOn("sim/cockpit/electrical/taxi_light_on", ReadOnly),
-		m_flapRatio("sim/flightmodel/controls/flaprat", ReadOnly), // flap_handle_deploy_ratio
+		m_flapRatio("sim/flightmodel/controls/flaprat", ReadOnly),
 		m_gearDown("sim/cockpit/switches/gear_handle_status", ReadOnly),
-		m_speedBrakeRatio("sim/cockpit2/controls/speedbrake_ratio", ReadOnly), // speedbrake_ratio
+		m_speedBrakeRatio("sim/cockpit2/controls/speedbrake_ratio", ReadOnly),
 		m_engineCount("sim/aircraft/engine/acf_num_engines", ReadOnly),
 		m_enginesRunning("sim/flightmodel/engine/ENGN_running", ReadOnly),
 		m_onGround("sim/flightmodel/failures/onground_any", ReadOnly),
@@ -136,8 +135,10 @@ namespace xpilot
 		m_settingsWindow = std::make_unique<SettingsWindow>();
 		m_frameRateMonitor = std::make_unique<FrameRateMonitor>(this);
 		m_aircraftManager = std::make_unique<AircraftManager>(this);
-		pluginHash = sw::sha512::file(GetTruePluginPath().c_str());
+		m_pluginHash = sw::sha512::file(GetTruePluginPath().c_str());
 		m_pluginVersion = PLUGIN_VERSION;
+
+		m_cmdTransponderId = XPLMFindCommand("sim/transponder/transponder_ident");
 
 		XPLMRegisterFlightLoopCallback(deferredStartup, -1.0f, this);
 	}
@@ -263,9 +264,9 @@ namespace xpilot
 		auto* instance = static_cast<XPilot*>(ref);
 		if (instance)
 		{
-			instance->checkDatarefs(false);
+			instance->checkDatarefs();
 		}
-		return 0.2;
+		return 0.05; // 50ms
 	}
 
 	float XPilot::mainFlightLoop(float inElapsedSinceLastCall, float, int, void* ref)
@@ -281,49 +282,56 @@ namespace xpilot
 		return -1.0;
 	}
 
-	void XPilot::checkDatarefs(bool force)
+	void XPilot::checkDatarefs()
 	{
-		auto ts = new google::protobuf::Timestamp{};
-		ts->set_seconds(time(NULL));
-		ts->set_nanos(0);
+		auto ts1 = new google::protobuf::Timestamp{};
+		ts1->set_seconds(time(NULL));
+		ts1->set_nanos(0);
+
+		auto ts2 = new google::protobuf::Timestamp{};
+		ts2->set_seconds(time(NULL));
+		ts2->set_nanos(0);
+
+		auto ts3 = new google::protobuf::Timestamp{};
+		ts3->set_seconds(time(NULL));
+		ts3->set_nanos(0);
+
+		auto ts4 = new google::protobuf::Timestamp{};
+		ts4->set_seconds(time(NULL));
+		ts4->set_nanos(0);
 
 		xpilot::Wrapper radiostackMsg{};
-		radiostackMsg.set_allocated_timestamp(ts);
+		radiostackMsg.set_allocated_timestamp(ts1);
 		xpilot::RadioStack* radiostack = new xpilot::RadioStack();
 		radiostackMsg.set_allocated_radio_stack(radiostack);
-		radiostackMsg.release_timestamp();
 
 		xpilot::Wrapper userAircraftMsg{};
-		userAircraftMsg.set_allocated_timestamp(ts);
+		userAircraftMsg.set_allocated_timestamp(ts2);
 		xpilot::UserAircraftData* useraircraft = new xpilot::UserAircraftData();
 		userAircraftMsg.set_allocated_user_aircraft_data(useraircraft);
-		userAircraftMsg.release_timestamp();
 
 		xpilot::Wrapper userAircraftCfgMsg{};
-		userAircraftCfgMsg.set_allocated_timestamp(ts);
+		userAircraftCfgMsg.set_allocated_timestamp(ts3);
 		xpilot::UserAircraftConfigData* useraircraftcfg = new xpilot::UserAircraftConfigData();
 		userAircraftCfgMsg.set_allocated_user_aircraft_config(useraircraftcfg);
-		userAircraftCfgMsg.release_timestamp();
 
 		xpilot::Wrapper xplaneMsg{};
-		xplaneMsg.set_allocated_timestamp(ts);
+		xplaneMsg.set_allocated_timestamp(ts4);
 		xpilot::XplaneDatarefs* xplane = new xpilot::XplaneDatarefs();
 		xplaneMsg.set_allocated_xplane_datarefs(xplane);
-		xplaneMsg.release_timestamp();
 
 		// radio stack
 		radiostack->set_audio_com_selection(m_audioComSelection);
 
 		// com1
-		radiostack->set_com1_power(m_com1Power);
 		radiostack->set_com1_freq(m_com1Frequency833);
 		radiostack->set_com1_audio_selection(m_com1AudioSelection);
 
 		// com2
-		radiostack->set_com2_power(m_com2Power);
 		radiostack->set_com2_freq(m_com2Frequency833);
 		radiostack->set_com2_audio_selection(m_com2AudioSelection);
 
+		radiostack->set_ptt_pressed(m_pttPressed);
 		radiostack->set_avionics_power_on(m_avionicsPowerOn);
 
 		// transponder
@@ -369,8 +377,8 @@ namespace xpilot
 		// position
 		useraircraft->set_latitude(m_positionLatitude);
 		useraircraft->set_longitude(m_positionLongitude);
-		useraircraft->set_altitude(m_positionAltitude);
-		useraircraft->set_pressure_altitude(m_positionPressureAltitude);
+		useraircraft->set_altitude_msl(m_positionAltitudeMsl);
+		useraircraft->set_altitude_agl(m_positionAltitudePressure);
 		useraircraft->set_ground_speed(m_groundSpeed);
 		useraircraft->set_pitch(m_positionPitch);
 		useraircraft->set_roll(m_positionRoll);
@@ -411,7 +419,7 @@ namespace xpilot
 					xpilot::PluginInformation* msg = new xpilot::PluginInformation();
 					reply.set_allocated_plugin_information(msg);
 					msg->set_version(PLUGIN_VERSION);
-					msg->set_hash(pluginHash.c_str());
+					msg->set_hash(m_pluginHash.c_str());
 					sendPbArray(reply);
 				}
 
@@ -551,7 +559,6 @@ namespace xpilot
 
 				if (wrapper.has_network_disconnected())
 				{
-					m_networkCallsign = "";
 					queueCallback([=]()
 					{
 						onNetworkDisconnected();
@@ -585,6 +592,65 @@ namespace xpilot
 					xpilot::PrivateMessageSent msg = wrapper.private_message_sent();
 					addConsoleMessageTab(msg.to(), msg.message(), ConsoleTabType::Outgoing);
 					addNotificationPanelMessage(string_format("%s [pvt: %s]:  %s", m_networkCallsign.value().c_str(), msg.to(), msg.message().c_str()), 50, 205, 50);
+				}
+
+				if (wrapper.has_set_radiostack())
+				{
+					xpilot::SetRadioStack msg = wrapper.set_radiostack();
+					if (msg.has_radio())
+					{
+						if (msg.has_frequency())
+						{
+							switch (msg.radio())
+							{
+								case 1:
+									m_com1Frequency833 = msg.frequency();
+									break;
+								case 2:
+									m_com2Frequency833 = msg.frequency();
+									break;
+							}
+						}
+						else if (msg.has_transmit_enabled() && msg.transmit_enabled())
+						{
+							m_audioComSelection = (msg.radio() == 1) ? 6 : 7;
+						}
+						else if (msg.has_receive_enabled())
+						{
+							switch (msg.radio())
+							{
+								case 1:
+									m_com1AudioSelection = msg.receive_enabled();
+									break;
+								case 2:
+									m_com2AudioSelection = msg.receive_enabled();
+									break;
+							}
+						}
+					}
+				}
+
+				if (wrapper.has_set_transponder())
+				{
+					xpilot::SetTransponder msg = wrapper.set_transponder();
+					if (msg.has_code())
+					{
+						m_transponderCode = msg.code();
+					}
+					if (msg.has_mode_c())
+					{
+						m_transponderMode = msg.mode_c() ? 2 : 1;
+					}
+					if (msg.has_ident())
+					{
+						queueCallback([=]()
+						{
+							if (m_cmdTransponderId)
+							{
+								XPLMCommandOnce(m_cmdTransponderId);
+							}
+						});
+					}
 				}
 
 				//std::string data(static_cast<char*>(msg.data()), msg.size());
@@ -811,18 +877,19 @@ namespace xpilot
 	{
 		m_aircraftManager->DeleteAllAircraft();
 		m_frameRateMonitor->startMonitoring();
-		tryGetTcasControl();
 		m_xplaneAtisEnabled = 0;
 		m_networkLoginStatus = 1;
+		tryGetTcasControl();
 	}
 
 	void XPilot::onNetworkDisconnected()
 	{
 		m_aircraftManager->DeleteAllAircraft();
 		m_frameRateMonitor->stopMonitoring();
-		releaseTcasControl();
 		m_xplaneAtisEnabled = 1;
 		m_networkLoginStatus = 0;
+		m_networkCallsign = "";
+		releaseTcasControl();
 	}
 
 	void XPilot::forceDisconnect(std::string reason)

@@ -189,9 +189,10 @@ class RadioStack PROTOBUF_FINAL :
     kCom2FreqFieldNumber = 7,
     kCom2VolumeFieldNumber = 9,
     kTransponderCodeFieldNumber = 11,
+    kTransponderModeFieldNumber = 12,
     kAvionicsPowerOnFieldNumber = 10,
     kTransponderIdentFieldNumber = 13,
-    kTransponderModeFieldNumber = 12,
+    kPttPressedFieldNumber = 14,
   };
   // int32 audio_com_selection = 1;
   bool has_audio_com_selection() const;
@@ -323,6 +324,19 @@ class RadioStack PROTOBUF_FINAL :
   void _internal_set_transponder_code(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
+  // int32 transponder_mode = 12;
+  bool has_transponder_mode() const;
+  private:
+  bool _internal_has_transponder_mode() const;
+  public:
+  void clear_transponder_mode();
+  ::PROTOBUF_NAMESPACE_ID::int32 transponder_mode() const;
+  void set_transponder_mode(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_transponder_mode() const;
+  void _internal_set_transponder_mode(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
   // bool avionics_power_on = 10;
   bool has_avionics_power_on() const;
   private:
@@ -349,17 +363,17 @@ class RadioStack PROTOBUF_FINAL :
   void _internal_set_transponder_ident(bool value);
   public:
 
-  // int32 transponder_mode = 12;
-  bool has_transponder_mode() const;
+  // bool ptt_pressed = 14;
+  bool has_ptt_pressed() const;
   private:
-  bool _internal_has_transponder_mode() const;
+  bool _internal_has_ptt_pressed() const;
   public:
-  void clear_transponder_mode();
-  ::PROTOBUF_NAMESPACE_ID::int32 transponder_mode() const;
-  void set_transponder_mode(::PROTOBUF_NAMESPACE_ID::int32 value);
+  void clear_ptt_pressed();
+  bool ptt_pressed() const;
+  void set_ptt_pressed(bool value);
   private:
-  ::PROTOBUF_NAMESPACE_ID::int32 _internal_transponder_mode() const;
-  void _internal_set_transponder_mode(::PROTOBUF_NAMESPACE_ID::int32 value);
+  bool _internal_ptt_pressed() const;
+  void _internal_set_ptt_pressed(bool value);
   public:
 
   // @@protoc_insertion_point(class_scope:xpilot.RadioStack)
@@ -381,9 +395,10 @@ class RadioStack PROTOBUF_FINAL :
   ::PROTOBUF_NAMESPACE_ID::int32 com2_freq_;
   float com2_volume_;
   ::PROTOBUF_NAMESPACE_ID::int32 transponder_code_;
+  ::PROTOBUF_NAMESPACE_ID::int32 transponder_mode_;
   bool avionics_power_on_;
   bool transponder_ident_;
-  ::PROTOBUF_NAMESPACE_ID::int32 transponder_mode_;
+  bool ptt_pressed_;
   friend struct ::TableStruct_RadioStack_2eproto;
 };
 // ===================================================================
@@ -651,7 +666,7 @@ inline void RadioStack::set_com2_volume(float value) {
 
 // bool avionics_power_on = 10;
 inline bool RadioStack::_internal_has_avionics_power_on() const {
-  bool value = (_has_bits_[0] & 0x00000400u) != 0;
+  bool value = (_has_bits_[0] & 0x00000800u) != 0;
   return value;
 }
 inline bool RadioStack::has_avionics_power_on() const {
@@ -659,7 +674,7 @@ inline bool RadioStack::has_avionics_power_on() const {
 }
 inline void RadioStack::clear_avionics_power_on() {
   avionics_power_on_ = false;
-  _has_bits_[0] &= ~0x00000400u;
+  _has_bits_[0] &= ~0x00000800u;
 }
 inline bool RadioStack::_internal_avionics_power_on() const {
   return avionics_power_on_;
@@ -669,7 +684,7 @@ inline bool RadioStack::avionics_power_on() const {
   return _internal_avionics_power_on();
 }
 inline void RadioStack::_internal_set_avionics_power_on(bool value) {
-  _has_bits_[0] |= 0x00000400u;
+  _has_bits_[0] |= 0x00000800u;
   avionics_power_on_ = value;
 }
 inline void RadioStack::set_avionics_power_on(bool value) {
@@ -707,7 +722,7 @@ inline void RadioStack::set_transponder_code(::PROTOBUF_NAMESPACE_ID::int32 valu
 
 // int32 transponder_mode = 12;
 inline bool RadioStack::_internal_has_transponder_mode() const {
-  bool value = (_has_bits_[0] & 0x00001000u) != 0;
+  bool value = (_has_bits_[0] & 0x00000400u) != 0;
   return value;
 }
 inline bool RadioStack::has_transponder_mode() const {
@@ -715,7 +730,7 @@ inline bool RadioStack::has_transponder_mode() const {
 }
 inline void RadioStack::clear_transponder_mode() {
   transponder_mode_ = 0;
-  _has_bits_[0] &= ~0x00001000u;
+  _has_bits_[0] &= ~0x00000400u;
 }
 inline ::PROTOBUF_NAMESPACE_ID::int32 RadioStack::_internal_transponder_mode() const {
   return transponder_mode_;
@@ -725,7 +740,7 @@ inline ::PROTOBUF_NAMESPACE_ID::int32 RadioStack::transponder_mode() const {
   return _internal_transponder_mode();
 }
 inline void RadioStack::_internal_set_transponder_mode(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  _has_bits_[0] |= 0x00001000u;
+  _has_bits_[0] |= 0x00000400u;
   transponder_mode_ = value;
 }
 inline void RadioStack::set_transponder_mode(::PROTOBUF_NAMESPACE_ID::int32 value) {
@@ -735,7 +750,7 @@ inline void RadioStack::set_transponder_mode(::PROTOBUF_NAMESPACE_ID::int32 valu
 
 // bool transponder_ident = 13;
 inline bool RadioStack::_internal_has_transponder_ident() const {
-  bool value = (_has_bits_[0] & 0x00000800u) != 0;
+  bool value = (_has_bits_[0] & 0x00001000u) != 0;
   return value;
 }
 inline bool RadioStack::has_transponder_ident() const {
@@ -743,7 +758,7 @@ inline bool RadioStack::has_transponder_ident() const {
 }
 inline void RadioStack::clear_transponder_ident() {
   transponder_ident_ = false;
-  _has_bits_[0] &= ~0x00000800u;
+  _has_bits_[0] &= ~0x00001000u;
 }
 inline bool RadioStack::_internal_transponder_ident() const {
   return transponder_ident_;
@@ -753,12 +768,40 @@ inline bool RadioStack::transponder_ident() const {
   return _internal_transponder_ident();
 }
 inline void RadioStack::_internal_set_transponder_ident(bool value) {
-  _has_bits_[0] |= 0x00000800u;
+  _has_bits_[0] |= 0x00001000u;
   transponder_ident_ = value;
 }
 inline void RadioStack::set_transponder_ident(bool value) {
   _internal_set_transponder_ident(value);
   // @@protoc_insertion_point(field_set:xpilot.RadioStack.transponder_ident)
+}
+
+// bool ptt_pressed = 14;
+inline bool RadioStack::_internal_has_ptt_pressed() const {
+  bool value = (_has_bits_[0] & 0x00002000u) != 0;
+  return value;
+}
+inline bool RadioStack::has_ptt_pressed() const {
+  return _internal_has_ptt_pressed();
+}
+inline void RadioStack::clear_ptt_pressed() {
+  ptt_pressed_ = false;
+  _has_bits_[0] &= ~0x00002000u;
+}
+inline bool RadioStack::_internal_ptt_pressed() const {
+  return ptt_pressed_;
+}
+inline bool RadioStack::ptt_pressed() const {
+  // @@protoc_insertion_point(field_get:xpilot.RadioStack.ptt_pressed)
+  return _internal_ptt_pressed();
+}
+inline void RadioStack::_internal_set_ptt_pressed(bool value) {
+  _has_bits_[0] |= 0x00002000u;
+  ptt_pressed_ = value;
+}
+inline void RadioStack::set_ptt_pressed(bool value) {
+  _internal_set_ptt_pressed(value);
+  // @@protoc_insertion_point(field_set:xpilot.RadioStack.ptt_pressed)
 }
 
 #ifdef __GNUC__

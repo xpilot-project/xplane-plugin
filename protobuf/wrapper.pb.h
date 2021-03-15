@@ -45,12 +45,13 @@
 #include "NearbyControllers.pb.h"
 #include "PrivateMessageReceived.pb.h"
 #include "PrivateMessageSent.pb.h"
-#include "SetTransponderCode.pb.h"
+#include "SetTransponder.pb.h"
 #include "FastPositionUpdate.pb.h"
 #include "PlaneAddedToSim.pb.h"
 #include "RadioStack.pb.h"
 #include "UserAircraftData.pb.h"
 #include "UserAircraftConfigData.pb.h"
+#include "SetRadioStack.pb.h"
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
 #define PROTOBUF_INTERNAL_EXPORT_Wrapper_2eproto
@@ -140,10 +141,11 @@ class Wrapper PROTOBUF_FINAL :
     kNetworkConnected = 14,
     kNetworkDisconnected = 15,
     kNearbyControllers = 16,
-    kSetTransponderCode = 17,
-    kXplaneDatarefs = 18,
-    kPluginInformation = 19,
-    kCslValidation = 20,
+    kSetTransponder = 17,
+    kSetRadiostack = 18,
+    kXplaneDatarefs = 19,
+    kPluginInformation = 20,
+    kCslValidation = 21,
     MSG_NOT_SET = 0,
   };
 
@@ -238,10 +240,11 @@ class Wrapper PROTOBUF_FINAL :
     kNetworkConnectedFieldNumber = 14,
     kNetworkDisconnectedFieldNumber = 15,
     kNearbyControllersFieldNumber = 16,
-    kSetTransponderCodeFieldNumber = 17,
-    kXplaneDatarefsFieldNumber = 18,
-    kPluginInformationFieldNumber = 19,
-    kCslValidationFieldNumber = 20,
+    kSetTransponderFieldNumber = 17,
+    kSetRadiostackFieldNumber = 18,
+    kXplaneDatarefsFieldNumber = 19,
+    kPluginInformationFieldNumber = 20,
+    kCslValidationFieldNumber = 21,
   };
   // .google.protobuf.Timestamp timestamp = 1;
   bool has_timestamp() const;
@@ -531,25 +534,43 @@ class Wrapper PROTOBUF_FINAL :
       ::xpilot::NearbyControllers* nearby_controllers);
   ::xpilot::NearbyControllers* unsafe_arena_release_nearby_controllers();
 
-  // .xpilot.SetTransponderCode set_transponder_code = 17;
-  bool has_set_transponder_code() const;
+  // .xpilot.SetTransponder set_transponder = 17;
+  bool has_set_transponder() const;
   private:
-  bool _internal_has_set_transponder_code() const;
+  bool _internal_has_set_transponder() const;
   public:
-  void clear_set_transponder_code();
-  const ::xpilot::SetTransponderCode& set_transponder_code() const;
-  ::xpilot::SetTransponderCode* release_set_transponder_code();
-  ::xpilot::SetTransponderCode* mutable_set_transponder_code();
-  void set_allocated_set_transponder_code(::xpilot::SetTransponderCode* set_transponder_code);
+  void clear_set_transponder();
+  const ::xpilot::SetTransponder& set_transponder() const;
+  ::xpilot::SetTransponder* release_set_transponder();
+  ::xpilot::SetTransponder* mutable_set_transponder();
+  void set_allocated_set_transponder(::xpilot::SetTransponder* set_transponder);
   private:
-  const ::xpilot::SetTransponderCode& _internal_set_transponder_code() const;
-  ::xpilot::SetTransponderCode* _internal_mutable_set_transponder_code();
+  const ::xpilot::SetTransponder& _internal_set_transponder() const;
+  ::xpilot::SetTransponder* _internal_mutable_set_transponder();
   public:
-  void unsafe_arena_set_allocated_set_transponder_code(
-      ::xpilot::SetTransponderCode* set_transponder_code);
-  ::xpilot::SetTransponderCode* unsafe_arena_release_set_transponder_code();
+  void unsafe_arena_set_allocated_set_transponder(
+      ::xpilot::SetTransponder* set_transponder);
+  ::xpilot::SetTransponder* unsafe_arena_release_set_transponder();
 
-  // .xpilot.XplaneDatarefs xplane_datarefs = 18;
+  // .xpilot.SetRadioStack set_radiostack = 18;
+  bool has_set_radiostack() const;
+  private:
+  bool _internal_has_set_radiostack() const;
+  public:
+  void clear_set_radiostack();
+  const ::xpilot::SetRadioStack& set_radiostack() const;
+  ::xpilot::SetRadioStack* release_set_radiostack();
+  ::xpilot::SetRadioStack* mutable_set_radiostack();
+  void set_allocated_set_radiostack(::xpilot::SetRadioStack* set_radiostack);
+  private:
+  const ::xpilot::SetRadioStack& _internal_set_radiostack() const;
+  ::xpilot::SetRadioStack* _internal_mutable_set_radiostack();
+  public:
+  void unsafe_arena_set_allocated_set_radiostack(
+      ::xpilot::SetRadioStack* set_radiostack);
+  ::xpilot::SetRadioStack* unsafe_arena_release_set_radiostack();
+
+  // .xpilot.XplaneDatarefs xplane_datarefs = 19;
   bool has_xplane_datarefs() const;
   private:
   bool _internal_has_xplane_datarefs() const;
@@ -567,7 +588,7 @@ class Wrapper PROTOBUF_FINAL :
       ::xpilot::XplaneDatarefs* xplane_datarefs);
   ::xpilot::XplaneDatarefs* unsafe_arena_release_xplane_datarefs();
 
-  // .xpilot.PluginInformation plugin_information = 19;
+  // .xpilot.PluginInformation plugin_information = 20;
   bool has_plugin_information() const;
   private:
   bool _internal_has_plugin_information() const;
@@ -585,7 +606,7 @@ class Wrapper PROTOBUF_FINAL :
       ::xpilot::PluginInformation* plugin_information);
   ::xpilot::PluginInformation* unsafe_arena_release_plugin_information();
 
-  // .xpilot.CslValidation csl_validation = 20;
+  // .xpilot.CslValidation csl_validation = 21;
   bool has_csl_validation() const;
   private:
   bool _internal_has_csl_validation() const;
@@ -623,7 +644,8 @@ class Wrapper PROTOBUF_FINAL :
   void set_has_network_connected();
   void set_has_network_disconnected();
   void set_has_nearby_controllers();
-  void set_has_set_transponder_code();
+  void set_has_set_transponder();
+  void set_has_set_radiostack();
   void set_has_xplane_datarefs();
   void set_has_plugin_information();
   void set_has_csl_validation();
@@ -653,7 +675,8 @@ class Wrapper PROTOBUF_FINAL :
     ::xpilot::NetworkConnected* network_connected_;
     ::xpilot::NetworkDisconnected* network_disconnected_;
     ::xpilot::NearbyControllers* nearby_controllers_;
-    ::xpilot::SetTransponderCode* set_transponder_code_;
+    ::xpilot::SetTransponder* set_transponder_;
+    ::xpilot::SetRadioStack* set_radiostack_;
     ::xpilot::XplaneDatarefs* xplane_datarefs_;
     ::xpilot::PluginInformation* plugin_information_;
     ::xpilot::CslValidation* csl_validation_;
@@ -1726,72 +1749,137 @@ inline ::xpilot::NearbyControllers* Wrapper::mutable_nearby_controllers() {
   return _internal_mutable_nearby_controllers();
 }
 
-// .xpilot.SetTransponderCode set_transponder_code = 17;
-inline bool Wrapper::_internal_has_set_transponder_code() const {
-  return msg_case() == kSetTransponderCode;
+// .xpilot.SetTransponder set_transponder = 17;
+inline bool Wrapper::_internal_has_set_transponder() const {
+  return msg_case() == kSetTransponder;
 }
-inline bool Wrapper::has_set_transponder_code() const {
-  return _internal_has_set_transponder_code();
+inline bool Wrapper::has_set_transponder() const {
+  return _internal_has_set_transponder();
 }
-inline void Wrapper::set_has_set_transponder_code() {
-  _oneof_case_[0] = kSetTransponderCode;
+inline void Wrapper::set_has_set_transponder() {
+  _oneof_case_[0] = kSetTransponder;
 }
-inline ::xpilot::SetTransponderCode* Wrapper::release_set_transponder_code() {
-  // @@protoc_insertion_point(field_release:xpilot.Wrapper.set_transponder_code)
-  if (_internal_has_set_transponder_code()) {
+inline ::xpilot::SetTransponder* Wrapper::release_set_transponder() {
+  // @@protoc_insertion_point(field_release:xpilot.Wrapper.set_transponder)
+  if (_internal_has_set_transponder()) {
     clear_has_msg();
-      ::xpilot::SetTransponderCode* temp = msg_.set_transponder_code_;
+      ::xpilot::SetTransponder* temp = msg_.set_transponder_;
     if (GetArena() != nullptr) {
       temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
     }
-    msg_.set_transponder_code_ = nullptr;
+    msg_.set_transponder_ = nullptr;
     return temp;
   } else {
     return nullptr;
   }
 }
-inline const ::xpilot::SetTransponderCode& Wrapper::_internal_set_transponder_code() const {
-  return _internal_has_set_transponder_code()
-      ? *msg_.set_transponder_code_
-      : reinterpret_cast< ::xpilot::SetTransponderCode&>(::xpilot::_SetTransponderCode_default_instance_);
+inline const ::xpilot::SetTransponder& Wrapper::_internal_set_transponder() const {
+  return _internal_has_set_transponder()
+      ? *msg_.set_transponder_
+      : reinterpret_cast< ::xpilot::SetTransponder&>(::xpilot::_SetTransponder_default_instance_);
 }
-inline const ::xpilot::SetTransponderCode& Wrapper::set_transponder_code() const {
-  // @@protoc_insertion_point(field_get:xpilot.Wrapper.set_transponder_code)
-  return _internal_set_transponder_code();
+inline const ::xpilot::SetTransponder& Wrapper::set_transponder() const {
+  // @@protoc_insertion_point(field_get:xpilot.Wrapper.set_transponder)
+  return _internal_set_transponder();
 }
-inline ::xpilot::SetTransponderCode* Wrapper::unsafe_arena_release_set_transponder_code() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Wrapper.set_transponder_code)
-  if (_internal_has_set_transponder_code()) {
+inline ::xpilot::SetTransponder* Wrapper::unsafe_arena_release_set_transponder() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Wrapper.set_transponder)
+  if (_internal_has_set_transponder()) {
     clear_has_msg();
-    ::xpilot::SetTransponderCode* temp = msg_.set_transponder_code_;
-    msg_.set_transponder_code_ = nullptr;
+    ::xpilot::SetTransponder* temp = msg_.set_transponder_;
+    msg_.set_transponder_ = nullptr;
     return temp;
   } else {
     return nullptr;
   }
 }
-inline void Wrapper::unsafe_arena_set_allocated_set_transponder_code(::xpilot::SetTransponderCode* set_transponder_code) {
+inline void Wrapper::unsafe_arena_set_allocated_set_transponder(::xpilot::SetTransponder* set_transponder) {
   clear_msg();
-  if (set_transponder_code) {
-    set_has_set_transponder_code();
-    msg_.set_transponder_code_ = set_transponder_code;
+  if (set_transponder) {
+    set_has_set_transponder();
+    msg_.set_transponder_ = set_transponder;
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Wrapper.set_transponder_code)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Wrapper.set_transponder)
 }
-inline ::xpilot::SetTransponderCode* Wrapper::_internal_mutable_set_transponder_code() {
-  if (!_internal_has_set_transponder_code()) {
+inline ::xpilot::SetTransponder* Wrapper::_internal_mutable_set_transponder() {
+  if (!_internal_has_set_transponder()) {
     clear_msg();
-    set_has_set_transponder_code();
-    msg_.set_transponder_code_ = CreateMaybeMessage< ::xpilot::SetTransponderCode >(GetArena());
+    set_has_set_transponder();
+    msg_.set_transponder_ = CreateMaybeMessage< ::xpilot::SetTransponder >(GetArena());
   }
-  return msg_.set_transponder_code_;
+  return msg_.set_transponder_;
 }
-inline ::xpilot::SetTransponderCode* Wrapper::mutable_set_transponder_code() {
-  // @@protoc_insertion_point(field_mutable:xpilot.Wrapper.set_transponder_code)
-  return _internal_mutable_set_transponder_code();
+inline ::xpilot::SetTransponder* Wrapper::mutable_set_transponder() {
+  // @@protoc_insertion_point(field_mutable:xpilot.Wrapper.set_transponder)
+  return _internal_mutable_set_transponder();
 }
 
-// .xpilot.XplaneDatarefs xplane_datarefs = 18;
+// .xpilot.SetRadioStack set_radiostack = 18;
+inline bool Wrapper::_internal_has_set_radiostack() const {
+  return msg_case() == kSetRadiostack;
+}
+inline bool Wrapper::has_set_radiostack() const {
+  return _internal_has_set_radiostack();
+}
+inline void Wrapper::set_has_set_radiostack() {
+  _oneof_case_[0] = kSetRadiostack;
+}
+inline ::xpilot::SetRadioStack* Wrapper::release_set_radiostack() {
+  // @@protoc_insertion_point(field_release:xpilot.Wrapper.set_radiostack)
+  if (_internal_has_set_radiostack()) {
+    clear_has_msg();
+      ::xpilot::SetRadioStack* temp = msg_.set_radiostack_;
+    if (GetArena() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    msg_.set_radiostack_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::xpilot::SetRadioStack& Wrapper::_internal_set_radiostack() const {
+  return _internal_has_set_radiostack()
+      ? *msg_.set_radiostack_
+      : reinterpret_cast< ::xpilot::SetRadioStack&>(::xpilot::_SetRadioStack_default_instance_);
+}
+inline const ::xpilot::SetRadioStack& Wrapper::set_radiostack() const {
+  // @@protoc_insertion_point(field_get:xpilot.Wrapper.set_radiostack)
+  return _internal_set_radiostack();
+}
+inline ::xpilot::SetRadioStack* Wrapper::unsafe_arena_release_set_radiostack() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Wrapper.set_radiostack)
+  if (_internal_has_set_radiostack()) {
+    clear_has_msg();
+    ::xpilot::SetRadioStack* temp = msg_.set_radiostack_;
+    msg_.set_radiostack_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Wrapper::unsafe_arena_set_allocated_set_radiostack(::xpilot::SetRadioStack* set_radiostack) {
+  clear_msg();
+  if (set_radiostack) {
+    set_has_set_radiostack();
+    msg_.set_radiostack_ = set_radiostack;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Wrapper.set_radiostack)
+}
+inline ::xpilot::SetRadioStack* Wrapper::_internal_mutable_set_radiostack() {
+  if (!_internal_has_set_radiostack()) {
+    clear_msg();
+    set_has_set_radiostack();
+    msg_.set_radiostack_ = CreateMaybeMessage< ::xpilot::SetRadioStack >(GetArena());
+  }
+  return msg_.set_radiostack_;
+}
+inline ::xpilot::SetRadioStack* Wrapper::mutable_set_radiostack() {
+  // @@protoc_insertion_point(field_mutable:xpilot.Wrapper.set_radiostack)
+  return _internal_mutable_set_radiostack();
+}
+
+// .xpilot.XplaneDatarefs xplane_datarefs = 19;
 inline bool Wrapper::_internal_has_xplane_datarefs() const {
   return msg_case() == kXplaneDatarefs;
 }
@@ -1856,7 +1944,7 @@ inline ::xpilot::XplaneDatarefs* Wrapper::mutable_xplane_datarefs() {
   return _internal_mutable_xplane_datarefs();
 }
 
-// .xpilot.PluginInformation plugin_information = 19;
+// .xpilot.PluginInformation plugin_information = 20;
 inline bool Wrapper::_internal_has_plugin_information() const {
   return msg_case() == kPluginInformation;
 }
@@ -1921,7 +2009,7 @@ inline ::xpilot::PluginInformation* Wrapper::mutable_plugin_information() {
   return _internal_mutable_plugin_information();
 }
 
-// .xpilot.CslValidation csl_validation = 20;
+// .xpilot.CslValidation csl_validation = 21;
 inline bool Wrapper::_internal_has_csl_validation() const {
   return msg_case() == kCslValidation;
 }

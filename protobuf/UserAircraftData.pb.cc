@@ -21,8 +21,8 @@ constexpr UserAircraftData::UserAircraftData(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : longitude_(0)
   , latitude_(0)
-  , altitude_(0)
-  , pressure_altitude_(0)
+  , altitude_msl_(0)
+  , altitude_agl_(0)
   , ground_speed_(0)
   , pitch_(0)
   , roll_(0)
@@ -55,8 +55,8 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_UserAircraftData_2eproto::offs
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::xpilot::UserAircraftData, longitude_),
   PROTOBUF_FIELD_OFFSET(::xpilot::UserAircraftData, latitude_),
-  PROTOBUF_FIELD_OFFSET(::xpilot::UserAircraftData, altitude_),
-  PROTOBUF_FIELD_OFFSET(::xpilot::UserAircraftData, pressure_altitude_),
+  PROTOBUF_FIELD_OFFSET(::xpilot::UserAircraftData, altitude_msl_),
+  PROTOBUF_FIELD_OFFSET(::xpilot::UserAircraftData, altitude_agl_),
   PROTOBUF_FIELD_OFFSET(::xpilot::UserAircraftData, ground_speed_),
   PROTOBUF_FIELD_OFFSET(::xpilot::UserAircraftData, pitch_),
   PROTOBUF_FIELD_OFFSET(::xpilot::UserAircraftData, roll_),
@@ -91,28 +91,28 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 };
 
 const char descriptor_table_protodef_UserAircraftData_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\026UserAircraftData.proto\022\006xpilot\"\354\004\n\020Use"
+  "\n\026UserAircraftData.proto\022\006xpilot\"\352\004\n\020Use"
   "rAircraftData\022\026\n\tlongitude\030\001 \001(\001H\000\210\001\001\022\025\n"
-  "\010latitude\030\002 \001(\001H\001\210\001\001\022\025\n\010altitude\030\003 \001(\001H\002"
-  "\210\001\001\022\036\n\021pressure_altitude\030\004 \001(\001H\003\210\001\001\022\031\n\014g"
-  "round_speed\030\005 \001(\001H\004\210\001\001\022\022\n\005pitch\030\006 \001(\001H\005\210"
-  "\001\001\022\021\n\004roll\030\007 \001(\001H\006\210\001\001\022\020\n\003yaw\030\010 \001(\001H\007\210\001\001\022"
-  "\036\n\021velocity_latitude\030\t \001(\001H\010\210\001\001\022\036\n\021veloc"
-  "ity_altitude\030\n \001(\001H\t\210\001\001\022\037\n\022velocity_long"
-  "itude\030\013 \001(\001H\n\210\001\001\022\033\n\016velocity_pitch\030\014 \001(\001"
-  "H\013\210\001\001\022\035\n\020velocity_heading\030\r \001(\001H\014\210\001\001\022\032\n\r"
-  "velocity_bank\030\016 \001(\001H\r\210\001\001B\014\n\n_longitudeB\013"
-  "\n\t_latitudeB\013\n\t_altitudeB\024\n\022_pressure_al"
-  "titudeB\017\n\r_ground_speedB\010\n\006_pitchB\007\n\005_ro"
-  "llB\006\n\004_yawB\024\n\022_velocity_latitudeB\024\n\022_vel"
-  "ocity_altitudeB\025\n\023_velocity_longitudeB\021\n"
-  "\017_velocity_pitchB\023\n\021_velocity_headingB\020\n"
-  "\016_velocity_bankB\031\252\002\026Vatsim.Xpilot.Protob"
-  "ufb\006proto3"
+  "\010latitude\030\002 \001(\001H\001\210\001\001\022\031\n\014altitude_msl\030\003 \001"
+  "(\001H\002\210\001\001\022\031\n\014altitude_agl\030\004 \001(\001H\003\210\001\001\022\031\n\014gr"
+  "ound_speed\030\005 \001(\001H\004\210\001\001\022\022\n\005pitch\030\006 \001(\001H\005\210\001"
+  "\001\022\021\n\004roll\030\007 \001(\001H\006\210\001\001\022\020\n\003yaw\030\010 \001(\001H\007\210\001\001\022\036"
+  "\n\021velocity_latitude\030\t \001(\001H\010\210\001\001\022\036\n\021veloci"
+  "ty_altitude\030\n \001(\001H\t\210\001\001\022\037\n\022velocity_longi"
+  "tude\030\013 \001(\001H\n\210\001\001\022\033\n\016velocity_pitch\030\014 \001(\001H"
+  "\013\210\001\001\022\035\n\020velocity_heading\030\r \001(\001H\014\210\001\001\022\032\n\rv"
+  "elocity_bank\030\016 \001(\001H\r\210\001\001B\014\n\n_longitudeB\013\n"
+  "\t_latitudeB\017\n\r_altitude_mslB\017\n\r_altitude"
+  "_aglB\017\n\r_ground_speedB\010\n\006_pitchB\007\n\005_roll"
+  "B\006\n\004_yawB\024\n\022_velocity_latitudeB\024\n\022_veloc"
+  "ity_altitudeB\025\n\023_velocity_longitudeB\021\n\017_"
+  "velocity_pitchB\023\n\021_velocity_headingB\020\n\016_"
+  "velocity_bankB\031\252\002\026Vatsim.Xpilot.Protobuf"
+  "b\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_UserAircraftData_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_UserAircraftData_2eproto = {
-  false, false, 690, descriptor_table_protodef_UserAircraftData_2eproto, "UserAircraftData.proto", 
+  false, false, 688, descriptor_table_protodef_UserAircraftData_2eproto, "UserAircraftData.proto", 
   &descriptor_table_UserAircraftData_2eproto_once, nullptr, 0, 1,
   schemas, file_default_instances, TableStruct_UserAircraftData_2eproto::offsets,
   file_level_metadata_UserAircraftData_2eproto, file_level_enum_descriptors_UserAircraftData_2eproto, file_level_service_descriptors_UserAircraftData_2eproto,
@@ -138,10 +138,10 @@ class UserAircraftData::_Internal {
   static void set_has_latitude(HasBits* has_bits) {
     (*has_bits)[0] |= 2u;
   }
-  static void set_has_altitude(HasBits* has_bits) {
+  static void set_has_altitude_msl(HasBits* has_bits) {
     (*has_bits)[0] |= 4u;
   }
-  static void set_has_pressure_altitude(HasBits* has_bits) {
+  static void set_has_altitude_agl(HasBits* has_bits) {
     (*has_bits)[0] |= 8u;
   }
   static void set_has_ground_speed(HasBits* has_bits) {
@@ -264,19 +264,19 @@ const char* UserAircraftData::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPA
           ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
-      // double altitude = 3;
+      // double altitude_msl = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 25)) {
-          _Internal::set_has_altitude(&has_bits);
-          altitude_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          _Internal::set_has_altitude_msl(&has_bits);
+          altitude_msl_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
           ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
-      // double pressure_altitude = 4;
+      // double altitude_agl = 4;
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 33)) {
-          _Internal::set_has_pressure_altitude(&has_bits);
-          pressure_altitude_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          _Internal::set_has_altitude_agl(&has_bits);
+          altitude_agl_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
           ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
@@ -401,16 +401,16 @@ failure:
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(2, this->_internal_latitude(), target);
   }
 
-  // double altitude = 3;
-  if (_internal_has_altitude()) {
+  // double altitude_msl = 3;
+  if (_internal_has_altitude_msl()) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(3, this->_internal_altitude(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(3, this->_internal_altitude_msl(), target);
   }
 
-  // double pressure_altitude = 4;
-  if (_internal_has_pressure_altitude()) {
+  // double altitude_agl = 4;
+  if (_internal_has_altitude_agl()) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(4, this->_internal_pressure_altitude(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(4, this->_internal_altitude_agl(), target);
   }
 
   // double ground_speed = 5;
@@ -501,12 +501,12 @@ size_t UserAircraftData::ByteSizeLong() const {
       total_size += 1 + 8;
     }
 
-    // double altitude = 3;
+    // double altitude_msl = 3;
     if (cached_has_bits & 0x00000004u) {
       total_size += 1 + 8;
     }
 
-    // double pressure_altitude = 4;
+    // double altitude_agl = 4;
     if (cached_has_bits & 0x00000008u) {
       total_size += 1 + 8;
     }
@@ -604,10 +604,10 @@ void UserAircraftData::MergeFrom(const UserAircraftData& from) {
       latitude_ = from.latitude_;
     }
     if (cached_has_bits & 0x00000004u) {
-      altitude_ = from.altitude_;
+      altitude_msl_ = from.altitude_msl_;
     }
     if (cached_has_bits & 0x00000008u) {
-      pressure_altitude_ = from.pressure_altitude_;
+      altitude_agl_ = from.altitude_agl_;
     }
     if (cached_has_bits & 0x00000010u) {
       ground_speed_ = from.ground_speed_;
