@@ -114,7 +114,7 @@ namespace xpilot
         if (current_visual_state.Altitude < 18000)
         {
             terrain_altitude = terrain_probe.getTerrainElevation(current_visual_state.Lat, current_visual_state.Lon);
-            if (on_ground || (current_visual_state.Altitude < 200.0 && current_visual_state.Altitude < terrain_altitude))
+            if (on_ground || (current_visual_state.Altitude < terrain_altitude && current_visual_state.Altitude < 50.0))
             {
                 if (fast_positions_received_count > 1)
                 {
@@ -123,9 +123,6 @@ namespace xpilot
                     {
                         current_visual_state.Altitude += std::copysign(diff, diff);
                     }
-
-                    SetTouchDown(just_touched_down);
-                    just_touched_down = false;
                 }
                 else
                 {

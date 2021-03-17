@@ -99,16 +99,13 @@ namespace xpilot
 		);
 		mapPlanes.emplace(callsign, std::move(plane));
 
-		if (plane->IsValid())
+		xpilot::Wrapper reply;
+		xpilot::PlaneAddedToSim* msg = new xpilot::PlaneAddedToSim();
+		reply.set_allocated_plane_added_to_sim(msg);
+		msg->set_callsign(plane->label);
+		if (mEnv)
 		{
-			xpilot::Wrapper reply;
-			xpilot::PlaneAddedToSim* msg = new xpilot::PlaneAddedToSim();
-			reply.set_allocated_plane_added_to_sim(msg);
-			msg->set_callsign(plane->label);
-			if (mEnv)
-			{
-				mEnv->sendPbArray(reply);
-			}
+			mEnv->sendPbArray(reply);
 		}
 	}
 
@@ -246,84 +243,50 @@ namespace xpilot
 
 		if (config.has_flaps())
 		{
-			if (config.flaps() != plane->target_flaps_position)
-			{
-				plane->target_flaps_position = config.flaps();
-			}
+			plane->target_flaps_position = config.flaps();
 		}
 		if (config.has_gear_down())
 		{
-			if (config.gear_down() != plane->gear_down)
-			{
-				plane->gear_down = config.gear_down();
-			}
+			plane->gear_down = config.gear_down();
 		}
 		if (config.has_spoilers_deployed())
 		{
-			if (config.spoilers_deployed() != plane->spoilersDeployed)
-			{
-				plane->spoilersDeployed = config.spoilers_deployed();
-			}
+			plane->spoilersDeployed = config.spoilers_deployed();
 		}
 		if (config.has_lights())
 		{
 			if (config.lights().has_strobe_lights_on())
 			{
-				if (config.lights().strobe_lights_on() != plane->surfaces.lights.strbLights)
-				{
-					plane->surfaces.lights.strbLights = config.lights().strobe_lights_on();
-				}
+				plane->surfaces.lights.strbLights = config.lights().strobe_lights_on();
 			}
 			if (config.lights().has_landing_lights_on())
 			{
-				if (config.lights().landing_lights_on() != plane->surfaces.lights.landLights)
-				{
-					plane->surfaces.lights.landLights = config.lights().landing_lights_on();
-				}
+				plane->surfaces.lights.landLights = config.lights().landing_lights_on();
 			}
 			if (config.lights().has_nav_lights_on())
 			{
-				if (config.lights().nav_lights_on() != plane->surfaces.lights.navLights)
-				{
-					plane->surfaces.lights.navLights = config.lights().nav_lights_on();
-				}
+				plane->surfaces.lights.navLights = config.lights().nav_lights_on();
 			}
 			if (config.lights().has_beacon_lights_on())
 			{
-				if (config.lights().beacon_lights_on() != plane->surfaces.lights.bcnLights)
-				{
-					plane->surfaces.lights.bcnLights = config.lights().beacon_lights_on();
-				}
+				plane->surfaces.lights.bcnLights = config.lights().beacon_lights_on();
 			}
 			if (config.lights().has_taxi_lights_on())
 			{
-				if (config.lights().taxi_lights_on() != plane->surfaces.lights.taxiLights)
-				{
-					plane->surfaces.lights.taxiLights = config.lights().taxi_lights_on();
-				}
+				plane->surfaces.lights.taxiLights = config.lights().taxi_lights_on();
 			}
 		}
 		if (config.has_engines_on())
 		{
-			if (config.engines_on() != plane->engines_running)
-			{
-				plane->engines_running = config.engines_on();
-			}
+			plane->engines_running = config.engines_on();
 		}
 		if (config.has_reverse_thrust())
 		{
-			if (config.reverse_thrust() != plane->reverse_thrust)
-			{
-				plane->reverse_thrust = config.reverse_thrust();
-			}
+			plane->reverse_thrust = config.reverse_thrust();
 		}
 		if (config.has_on_ground())
 		{
-			if (config.on_ground() != plane->on_ground)
-			{
-				plane->on_ground = config.on_ground();
-				plane->just_touched_down = config.on_ground();
-			}
+			plane->on_ground = config.on_ground();
 		}
 	}
 }

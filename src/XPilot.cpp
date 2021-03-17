@@ -284,41 +284,23 @@ namespace xpilot
 
 	void XPilot::checkDatarefs()
 	{
-		auto ts1 = new google::protobuf::Timestamp{};
-		ts1->set_seconds(time(NULL));
-		ts1->set_nanos(0);
+		auto ts = new google::protobuf::Timestamp{};
+		ts->set_seconds(time(NULL));
+		ts->set_nanos(0);
 
-		auto ts2 = new google::protobuf::Timestamp{};
-		ts2->set_seconds(time(NULL));
-		ts2->set_nanos(0);
+		xpilot::Wrapper msg{};
+		msg.set_allocated_timestamp(ts);
+		xpilot::XplaneData* data = new xpilot::XplaneData();
+		msg.set_allocated_xplane_data(data);
 
-		auto ts3 = new google::protobuf::Timestamp{};
-		ts3->set_seconds(time(NULL));
-		ts3->set_nanos(0);
+		xpilot::XplaneData_RadioStack* radiostack = new xpilot::XplaneData_RadioStack();
+		data->set_allocated_radio_stack(radiostack);
 
-		auto ts4 = new google::protobuf::Timestamp{};
-		ts4->set_seconds(time(NULL));
-		ts4->set_nanos(0);
+		xpilot::XplaneData_UserAircraftConfigData* useraircraftcfg = new xpilot::XplaneData_UserAircraftConfigData();
+		data->set_allocated_user_aircraft_config(useraircraftcfg);
 
-		xpilot::Wrapper radiostackMsg{};
-		radiostackMsg.set_allocated_timestamp(ts1);
-		xpilot::RadioStack* radiostack = new xpilot::RadioStack();
-		radiostackMsg.set_allocated_radio_stack(radiostack);
-
-		xpilot::Wrapper userAircraftMsg{};
-		userAircraftMsg.set_allocated_timestamp(ts2);
-		xpilot::UserAircraftData* useraircraft = new xpilot::UserAircraftData();
-		userAircraftMsg.set_allocated_user_aircraft_data(useraircraft);
-
-		xpilot::Wrapper userAircraftCfgMsg{};
-		userAircraftCfgMsg.set_allocated_timestamp(ts3);
-		xpilot::UserAircraftConfigData* useraircraftcfg = new xpilot::UserAircraftConfigData();
-		userAircraftCfgMsg.set_allocated_user_aircraft_config(useraircraftcfg);
-
-		xpilot::Wrapper xplaneMsg{};
-		xplaneMsg.set_allocated_timestamp(ts4);
-		xpilot::XplaneDatarefs* xplane = new xpilot::XplaneDatarefs();
-		xplaneMsg.set_allocated_xplane_datarefs(xplane);
+		xpilot::XplaneData_UserAircraftData* useraircraft = new xpilot::XplaneData_UserAircraftData();
+		data->set_allocated_user_aircraft_data(useraircraft);
 
 		// radio stack
 		radiostack->set_audio_com_selection(m_audioComSelection);
@@ -393,12 +375,9 @@ namespace xpilot
 		useraircraft->set_velocity_bank(m_velocityBank * -1.0);
 
 		// misc
-		xplane->set_replay_mode(m_replayMode);
+		data->set_replay_mode(m_replayMode);
 
-		sendPbArray(radiostackMsg);
-		sendPbArray(userAircraftMsg);
-		sendPbArray(userAircraftCfgMsg);
-		sendPbArray(xplaneMsg);
+		sendPbArray(msg);
 	}
 
 	void XPilot::zmqWorker()
@@ -505,7 +484,7 @@ namespace xpilot
 					Vector3 rotationalVector{};
 					rotationalVector.X = msg.velocity_pitch() * -1;
 					rotationalVector.Y = msg.velocity_heading();
-					rotationalVector.Z = msg.velocity_bank();
+					rotationalVector.Z = msg.velocity_bank() * -1;
 
 					if (msg.has_callsign())
 					{
@@ -866,10 +845,12 @@ namespace xpilot
 
 	int CBIntPrefsFunc(const char*, [[maybe_unused]] const char* item, int defaultVal)
 	{
-		if (!strcmp(item, "model_matching"))
+		if (!strcmp(item, XPMP_CFG_ITM_MODELMATCHING))
 			return Config::Instance().getDebugModelMatching();
-		if (!strcmp(item, "log_level"))
+		if (!strcmp(item, XPMP_CFG_ITM_LOGLEVEL))
 			return Config::Instance().getLogLevel();
+		if (!strcmp(item, XPMP_CFG_ITM_REPLDATAREFS))
+			return 1;
 		return defaultVal;
 	}
 

@@ -72,7 +72,6 @@ namespace xpilot
         std::chrono::system_clock::time_point previousSurfaceUpdateTime;
 
         double terrain_altitude;
-        bool just_touched_down;
 
         AircraftVisualState remote_visual_state;
         AircraftVisualState current_visual_state;
