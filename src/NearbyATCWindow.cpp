@@ -32,7 +32,7 @@ namespace xpilot {
 		m_env(instance)
 	{
 		SetWindowTitle("Nearby ATC");
-		SetWindowResizingLimits(500, 300, 500, 300);
+		SetWindowResizingLimits(535, 300, 535, 300);
 	}
 
 	void NearbyATCWindow::UpdateList(xpilot::NearbyControllers data)
@@ -64,10 +64,12 @@ namespace xpilot {
 
 		ImGui::PushFont(0);
 
-		ImGui::Columns(3, "whosonline");
+		ImGui::Columns(4, "whosonline");
 		ImGui::SetColumnWidth(0, 150);
 		ImGui::SetColumnWidth(1, 200);
 		ImGui::SetColumnWidth(2, 100);
+		ImGui::SetColumnWidth(3, 50);
+	
 
 		ImGui::Separator();
 
@@ -77,6 +79,8 @@ namespace xpilot {
 		ImGui::NextColumn();
 		ImGui::Text("Frequency");
 		ImGui::NextColumn();
+		ImGui::Text("Actions");
+		ImGui::NextColumn();
 
 		ImGui::Separator();
 
@@ -84,20 +88,21 @@ namespace xpilot {
 		{
 			for (auto& e : NearbyList)
 			{
-				ImGui::Selectable(e.getCallsign().c_str(), false, ImGuiSelectableFlags_SpanAllColumns);
-				if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(0))
-				{
-					m_env->requestControllerAtis(e.getCallsign());
-				}
-				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0))
-				{
-					m_com1Frequency = e.getXplaneFrequency();
-				}
+				ImGui::Text(e.getCallsign().c_str());
 				ImGui::NextColumn();
 				ImGui::Text(e.getRealName().c_str());
 				ImGui::NextColumn();
 				ImGui::Text(e.getFrequency().c_str());
 				ImGui::NextColumn();
+				if (ImGui::ButtonIcon(ICON_FA_INFO, "Request Station Information"))
+				{
+					m_env->requestControllerAtis(e.getCallsign());
+				}
+				ImGui::SameLine();
+				if (ImGui::ButtonIcon(ICON_FA_HEADSET, "Tune COM1 Frequency"))
+				{
+					m_com1Frequency = e.getXplaneFrequency();
+				}
 			}
 		}
 		ImGui::PopFont();

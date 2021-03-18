@@ -321,6 +321,8 @@ bool XPImgWindowInit()
     static ImVector<ImWchar> icon_ranges;
     ImFontGlyphRangesBuilder builder;
     builder.AddText(ICON_FA_QUESTION_CIRCLE);
+    builder.AddText(ICON_FA_HEADSET);
+    builder.AddText(ICON_FA_INFO);
     builder.BuildRanges(&icon_ranges);
 
     if (!ImgWindow::sFontAtlas->AddFontFromMemoryCompressedTTF(

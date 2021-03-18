@@ -49,6 +49,8 @@
 #include "FastPositionUpdate.pb.h"
 #include "PlaneAddedToSim.pb.h"
 #include "SetRadioStack.pb.h"
+#include "RequestStationInfo.pb.h"
+#include "TriggerDisconnect.pb.h"
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
 #define PROTOBUF_INTERNAL_EXPORT_Wrapper_2eproto
@@ -140,6 +142,8 @@ class Wrapper PROTOBUF_FINAL :
     kSetRadiostack = 16,
     kPluginInformation = 17,
     kCslValidation = 18,
+    kRequestStationInfo = 19,
+    kTriggerDisconnect = 20,
     MSG_NOT_SET = 0,
   };
 
@@ -236,6 +240,8 @@ class Wrapper PROTOBUF_FINAL :
     kSetRadiostackFieldNumber = 16,
     kPluginInformationFieldNumber = 17,
     kCslValidationFieldNumber = 18,
+    kRequestStationInfoFieldNumber = 19,
+    kTriggerDisconnectFieldNumber = 20,
   };
   // .google.protobuf.Timestamp timestamp = 1;
   bool has_timestamp() const;
@@ -561,6 +567,42 @@ class Wrapper PROTOBUF_FINAL :
       ::xpilot::CslValidation* csl_validation);
   ::xpilot::CslValidation* unsafe_arena_release_csl_validation();
 
+  // .xpilot.RequestStationInfo request_station_info = 19;
+  bool has_request_station_info() const;
+  private:
+  bool _internal_has_request_station_info() const;
+  public:
+  void clear_request_station_info();
+  const ::xpilot::RequestStationInfo& request_station_info() const;
+  ::xpilot::RequestStationInfo* release_request_station_info();
+  ::xpilot::RequestStationInfo* mutable_request_station_info();
+  void set_allocated_request_station_info(::xpilot::RequestStationInfo* request_station_info);
+  private:
+  const ::xpilot::RequestStationInfo& _internal_request_station_info() const;
+  ::xpilot::RequestStationInfo* _internal_mutable_request_station_info();
+  public:
+  void unsafe_arena_set_allocated_request_station_info(
+      ::xpilot::RequestStationInfo* request_station_info);
+  ::xpilot::RequestStationInfo* unsafe_arena_release_request_station_info();
+
+  // .xpilot.TriggerDisconnect trigger_disconnect = 20;
+  bool has_trigger_disconnect() const;
+  private:
+  bool _internal_has_trigger_disconnect() const;
+  public:
+  void clear_trigger_disconnect();
+  const ::xpilot::TriggerDisconnect& trigger_disconnect() const;
+  ::xpilot::TriggerDisconnect* release_trigger_disconnect();
+  ::xpilot::TriggerDisconnect* mutable_trigger_disconnect();
+  void set_allocated_trigger_disconnect(::xpilot::TriggerDisconnect* trigger_disconnect);
+  private:
+  const ::xpilot::TriggerDisconnect& _internal_trigger_disconnect() const;
+  ::xpilot::TriggerDisconnect* _internal_mutable_trigger_disconnect();
+  public:
+  void unsafe_arena_set_allocated_trigger_disconnect(
+      ::xpilot::TriggerDisconnect* trigger_disconnect);
+  ::xpilot::TriggerDisconnect* unsafe_arena_release_trigger_disconnect();
+
   void clear_msg();
   MsgCase msg_case() const;
   // @@protoc_insertion_point(class_scope:xpilot.Wrapper)
@@ -583,6 +625,8 @@ class Wrapper PROTOBUF_FINAL :
   void set_has_set_radiostack();
   void set_has_plugin_information();
   void set_has_csl_validation();
+  void set_has_request_station_info();
+  void set_has_trigger_disconnect();
 
   inline bool has_msg() const;
   inline void clear_has_msg();
@@ -611,6 +655,8 @@ class Wrapper PROTOBUF_FINAL :
     ::xpilot::SetRadioStack* set_radiostack_;
     ::xpilot::PluginInformation* plugin_information_;
     ::xpilot::CslValidation* csl_validation_;
+    ::xpilot::RequestStationInfo* request_station_info_;
+    ::xpilot::TriggerDisconnect* trigger_disconnect_;
   } msg_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::uint32 _oneof_case_[1];
@@ -1808,6 +1854,136 @@ inline ::xpilot::CslValidation* Wrapper::_internal_mutable_csl_validation() {
 inline ::xpilot::CslValidation* Wrapper::mutable_csl_validation() {
   // @@protoc_insertion_point(field_mutable:xpilot.Wrapper.csl_validation)
   return _internal_mutable_csl_validation();
+}
+
+// .xpilot.RequestStationInfo request_station_info = 19;
+inline bool Wrapper::_internal_has_request_station_info() const {
+  return msg_case() == kRequestStationInfo;
+}
+inline bool Wrapper::has_request_station_info() const {
+  return _internal_has_request_station_info();
+}
+inline void Wrapper::set_has_request_station_info() {
+  _oneof_case_[0] = kRequestStationInfo;
+}
+inline ::xpilot::RequestStationInfo* Wrapper::release_request_station_info() {
+  // @@protoc_insertion_point(field_release:xpilot.Wrapper.request_station_info)
+  if (_internal_has_request_station_info()) {
+    clear_has_msg();
+      ::xpilot::RequestStationInfo* temp = msg_.request_station_info_;
+    if (GetArena() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    msg_.request_station_info_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::xpilot::RequestStationInfo& Wrapper::_internal_request_station_info() const {
+  return _internal_has_request_station_info()
+      ? *msg_.request_station_info_
+      : reinterpret_cast< ::xpilot::RequestStationInfo&>(::xpilot::_RequestStationInfo_default_instance_);
+}
+inline const ::xpilot::RequestStationInfo& Wrapper::request_station_info() const {
+  // @@protoc_insertion_point(field_get:xpilot.Wrapper.request_station_info)
+  return _internal_request_station_info();
+}
+inline ::xpilot::RequestStationInfo* Wrapper::unsafe_arena_release_request_station_info() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Wrapper.request_station_info)
+  if (_internal_has_request_station_info()) {
+    clear_has_msg();
+    ::xpilot::RequestStationInfo* temp = msg_.request_station_info_;
+    msg_.request_station_info_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Wrapper::unsafe_arena_set_allocated_request_station_info(::xpilot::RequestStationInfo* request_station_info) {
+  clear_msg();
+  if (request_station_info) {
+    set_has_request_station_info();
+    msg_.request_station_info_ = request_station_info;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Wrapper.request_station_info)
+}
+inline ::xpilot::RequestStationInfo* Wrapper::_internal_mutable_request_station_info() {
+  if (!_internal_has_request_station_info()) {
+    clear_msg();
+    set_has_request_station_info();
+    msg_.request_station_info_ = CreateMaybeMessage< ::xpilot::RequestStationInfo >(GetArena());
+  }
+  return msg_.request_station_info_;
+}
+inline ::xpilot::RequestStationInfo* Wrapper::mutable_request_station_info() {
+  // @@protoc_insertion_point(field_mutable:xpilot.Wrapper.request_station_info)
+  return _internal_mutable_request_station_info();
+}
+
+// .xpilot.TriggerDisconnect trigger_disconnect = 20;
+inline bool Wrapper::_internal_has_trigger_disconnect() const {
+  return msg_case() == kTriggerDisconnect;
+}
+inline bool Wrapper::has_trigger_disconnect() const {
+  return _internal_has_trigger_disconnect();
+}
+inline void Wrapper::set_has_trigger_disconnect() {
+  _oneof_case_[0] = kTriggerDisconnect;
+}
+inline ::xpilot::TriggerDisconnect* Wrapper::release_trigger_disconnect() {
+  // @@protoc_insertion_point(field_release:xpilot.Wrapper.trigger_disconnect)
+  if (_internal_has_trigger_disconnect()) {
+    clear_has_msg();
+      ::xpilot::TriggerDisconnect* temp = msg_.trigger_disconnect_;
+    if (GetArena() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    msg_.trigger_disconnect_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::xpilot::TriggerDisconnect& Wrapper::_internal_trigger_disconnect() const {
+  return _internal_has_trigger_disconnect()
+      ? *msg_.trigger_disconnect_
+      : reinterpret_cast< ::xpilot::TriggerDisconnect&>(::xpilot::_TriggerDisconnect_default_instance_);
+}
+inline const ::xpilot::TriggerDisconnect& Wrapper::trigger_disconnect() const {
+  // @@protoc_insertion_point(field_get:xpilot.Wrapper.trigger_disconnect)
+  return _internal_trigger_disconnect();
+}
+inline ::xpilot::TriggerDisconnect* Wrapper::unsafe_arena_release_trigger_disconnect() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Wrapper.trigger_disconnect)
+  if (_internal_has_trigger_disconnect()) {
+    clear_has_msg();
+    ::xpilot::TriggerDisconnect* temp = msg_.trigger_disconnect_;
+    msg_.trigger_disconnect_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Wrapper::unsafe_arena_set_allocated_trigger_disconnect(::xpilot::TriggerDisconnect* trigger_disconnect) {
+  clear_msg();
+  if (trigger_disconnect) {
+    set_has_trigger_disconnect();
+    msg_.trigger_disconnect_ = trigger_disconnect;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Wrapper.trigger_disconnect)
+}
+inline ::xpilot::TriggerDisconnect* Wrapper::_internal_mutable_trigger_disconnect() {
+  if (!_internal_has_trigger_disconnect()) {
+    clear_msg();
+    set_has_trigger_disconnect();
+    msg_.trigger_disconnect_ = CreateMaybeMessage< ::xpilot::TriggerDisconnect >(GetArena());
+  }
+  return msg_.trigger_disconnect_;
+}
+inline ::xpilot::TriggerDisconnect* Wrapper::mutable_trigger_disconnect() {
+  // @@protoc_insertion_point(field_mutable:xpilot.Wrapper.trigger_disconnect)
+  return _internal_mutable_trigger_disconnect();
 }
 
 inline bool Wrapper::has_msg() const {

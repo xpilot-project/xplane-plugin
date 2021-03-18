@@ -631,195 +631,6 @@ namespace xpilot
 						});
 					}
 				}
-
-				//std::string data(static_cast<char*>(msg.data()), msg.size());
-
-				/*if (!data.empty())
-				{
-					if (json::accept(data.c_str()))
-					{
-						json j = json::parse(data.c_str());
-
-						if (j.find("Type") != j.end())
-						{
-							std::string type(j["Type"]);
-
-							if (!type.empty())
-							{
-								if (type == "AddPlane")
-								{
-									std::string callsign(j["Data"]["Callsign"]);
-									std::string airline(j["Data"]["Airline"]);
-									std::string typeCode(j["Data"]["TypeCode"]);
-
-									if (!callsign.empty() && !typeCode.empty())
-									{
-										queueCallback([=]()
-										{
-											m_aircraftManager->addNewPlane(callsign, typeCode, airline);
-										});
-									}
-								}
-
-								else if (type == "ChangeModel")
-								{
-									std::string callsign(j["Data"]["Callsign"]);
-									std::string airline(j["Data"]["Airline"]);
-									std::string typeCode(j["Data"]["TypeCode"]);
-
-									if (!callsign.empty() && !typeCode.empty())
-									{
-										queueCallback([=]()
-										{
-											m_aircraftManager->changeModel(callsign, typeCode, airline);
-										});
-									}
-								}
-
-								else if (type == "PositionUpdate")
-								{
-									std::string callsign(j["Data"]["Callsign"]);
-
-									XPMPPlanePosition_t pos;
-									pos.lat = static_cast<double>(j["Data"]["Latitude"]);
-									pos.lon = static_cast<double>(j["Data"]["Longitude"]);
-									pos.elevation = static_cast<double>(j["Data"]["Altitude"]);
-									pos.heading = static_cast<float>(j["Data"]["Heading"]);
-									pos.pitch = static_cast<float>(j["Data"]["Pitch"]);
-									pos.roll = static_cast<float>(j["Data"]["Bank"]);
-									float gs = static_cast<float>(j["Data"]["GroundSpeed"]);
-
-									XPMPPlaneRadar_t radar;
-									radar.code = static_cast<int>(j["Data"]["TransponderCode"]);
-									radar.mode = static_cast<bool>(j["Data"]["TransponderModeC"]) ? xpmpTransponderMode_ModeC : xpmpTransponderMode_Standby;
-
-									std::string origin(j["Data"]["Origin"]);
-									std::string destination(j["Data"]["Destination"]);
-
-									if (!callsign.empty())
-									{
-										queueCallback([=]()
-										{
-											m_aircraftManager->setPlanePosition(callsign, pos, radar, gs, origin, destination);
-										});
-									}
-								}
-
-								else if (type == "SurfaceUpdate")
-								{
-									auto acconfig = j.get<NetworkAircraftConfig>();
-									queueCallback([=]()
-									{
-										m_aircraftManager->updateAircraftConfig(acconfig.data.callsign, acconfig);
-									});
-								}
-
-								else if (type == "RemovePlane")
-								{
-									std::string callsign(j["Data"]["Callsign"]);
-									if (!callsign.empty())
-									{
-										queueCallback([=]()
-										{
-											m_aircraftManager->removePlane(callsign);
-										});
-									}
-								}
-
-								else if (type == "RemoveAllPlanes")
-								{
-									queueCallback([=]()
-									{
-										m_aircraftManager->removeAllPlanes();
-									});
-								}
-
-								else if (type == "NetworkConnected")
-								{
-									m_networkCallsign = j["Data"]["OurCallsign"];
-									queueCallback([=]()
-									{
-										onNetworkConnected();
-									});
-								}
-
-								else if (type == "NetworkDisconnected")
-								{
-									m_networkCallsign = "";
-									queueCallback([=]()
-									{
-										onNetworkDisconnected();
-									});
-								}
-
-								else if (type == "WhosOnline")
-								{
-									queueCallback([=]()
-									{
-										m_nearbyAtcWindow->UpdateList(j);
-									});
-								}
-
-								else if (type == "PluginVersion")
-								{
-									json reply;
-									reply["Type"] = "PluginVersion";
-									reply["Timestamp"] = UtcTimestamp();
-									reply["Data"]["Version"] = PLUGIN_VERSION;
-									sendSocketMsg(reply.dump());
-								}
-
-								else if (type == "PluginHash")
-								{
-									json j;
-									j["Type"] = "PluginHash";
-									j["Data"]["Hash"] = pluginHash;
-									j["Timestamp"] = UtcTimestamp();
-									sendSocketMsg(j.dump());
-								}
-
-								else if (type == "RadioMessage")
-								{
-									std::string msg(j["Data"]["Message"]);
-
-									int red = static_cast<int>(j["Data"]["R"]);
-									int green = static_cast<int>(j["Data"]["G"]);
-									int blue = static_cast<int>(j["Data"]["B"]);
-									bool direct = static_cast<bool>(j["Data"]["Direct"]);
-
-									addNotification(msg, red, green, blue);
-								}
-
-								else if (type == "PrivateMessageReceived")
-								{
-									std::string msg(j["Data"]["Message"]);
-									std::string from(j["Data"]["From"]);
-
-									addConsoleMessageTab(from, msg, ConsoleTabType::Incoming);
-									addNotificationPanelMessage(string_format("%s [pvt]:  %s", from, msg.c_str()), 230, 94, 230);
-								}
-
-								else if (type == "PrivateMessageSent")
-								{
-									std::string msg(j["Data"]["Message"]);
-									std::string from(j["Data"]["To"]);
-
-									addConsoleMessageTab(from, msg, ConsoleTabType::Outgoing);
-									addNotificationPanelMessage(string_format("%s [pvt: %s]:  %s", m_networkCallsign.value().c_str(), from.c_str(), msg.c_str()), 50, 205, 50);
-								}
-
-								else if (type == "ValidateCslPaths")
-								{
-									json j;
-									j["Type"] = "ValidateCslPaths";
-									j["Data"]["Result"] = Config::Instance().hasValidPaths() && XPMPGetNumberOfInstalledModels() > 0;
-									j["Timestamp"] = UtcTimestamp();
-									sendSocketMsg(j.dump());
-								}
-							}
-						}
-					}
-				}*/
 			}
 			catch (zmq::error_t& e)
 			{
@@ -875,21 +686,20 @@ namespace xpilot
 
 	void XPilot::forceDisconnect(std::string reason)
 	{
-		//json j;
-		//j["Type"] = "ForceDisconnect";
-		//j["Data"]["Reason"] = reason;
-		//j["Timestamp"] = UtcTimestamp();
-		//sendSocketMsg(j.dump());
+		xpilot::Wrapper msg;
+		xpilot::TriggerDisconnect* data = new xpilot::TriggerDisconnect();
+		msg.set_allocated_trigger_disconnect(data);
+		data->set_reason(reason);
+		sendPbArray(msg);
 	}
 
 	void XPilot::requestControllerAtis(std::string callsign)
 	{
-		//json j;
-		//j["Type"] = "RequestAtis";
-		//j["Timestamp"] = UtcTimestamp();
-		//j["Data"]["Callsign"] = callsign;
-
-		//sendSocketMsg(j.dump());
+		xpilot::Wrapper msg;
+		xpilot::RequestStationInfo* data = new xpilot::RequestStationInfo();
+		msg.set_allocated_request_station_info(data);
+		data->set_callsign(callsign);
+		sendPbArray(msg);
 	}
 
 	bool XPilot::initializeXPMP()

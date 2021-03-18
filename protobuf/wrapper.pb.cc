@@ -59,6 +59,8 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Wrapper_2eproto::offsets[] PRO
   ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
   ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
   ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
+  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
+  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
   PROTOBUF_FIELD_OFFSET(::xpilot::Wrapper, msg_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -81,34 +83,38 @@ const char descriptor_table_protodef_Wrapper_2eproto[] PROTOBUF_SECTION_VARIABLE
   "ved.proto\032\030PrivateMessageSent.proto\032\024Set"
   "Transponder.proto\032\030FastPositionUpdate.pr"
   "oto\032\025PlaneAddedToSim.proto\032\023SetRadioStac"
-  "k.proto\"\312\007\n\007Wrapper\022-\n\ttimestamp\030\001 \001(\0132\032"
-  ".google.protobuf.Timestamp\022)\n\013xplane_dat"
-  "a\030\002 \001(\0132\022.xpilot.XplaneDataH\000\0221\n\017positio"
-  "n_update\030\003 \001(\0132\026.xpilot.PositionUpdateH\000"
-  "\022:\n\024fast_position_update\030\004 \001(\0132\032.xpilot."
-  "FastPositionUpdateH\000\0221\n\017airplane_config\030"
-  "\005 \001(\0132\026.xpilot.AirplaneConfigH\000\022%\n\tadd_p"
-  "lane\030\006 \001(\0132\020.xpilot.AddPlaneH\000\0225\n\022plane_"
-  "added_to_sim\030\007 \001(\0132\027.xpilot.PlaneAddedTo"
-  "SimH\000\0226\n\022change_plane_model\030\010 \001(\0132\030.xpil"
-  "ot.ChangePlaneModelH\000\022+\n\014delete_plane\030\t "
-  "\001(\0132\023.xpilot.DeletePlaneH\000\022B\n\030private_me"
-  "ssage_received\030\n \001(\0132\036.xpilot.PrivateMes"
-  "sageReceivedH\000\022:\n\024private_message_sent\030\013"
-  " \001(\0132\032.xpilot.PrivateMessageSentH\000\0225\n\021ne"
-  "twork_connected\030\014 \001(\0132\030.xpilot.NetworkCo"
-  "nnectedH\000\022;\n\024network_disconnected\030\r \001(\0132"
-  "\033.xpilot.NetworkDisconnectedH\000\0227\n\022nearby"
-  "_controllers\030\016 \001(\0132\031.xpilot.NearbyContro"
-  "llersH\000\0221\n\017set_transponder\030\017 \001(\0132\026.xpilo"
-  "t.SetTransponderH\000\022/\n\016set_radiostack\030\020 \001"
-  "(\0132\025.xpilot.SetRadioStackH\000\0227\n\022plugin_in"
-  "formation\030\021 \001(\0132\031.xpilot.PluginInformati"
-  "onH\000\022/\n\016csl_validation\030\022 \001(\0132\025.xpilot.Cs"
-  "lValidationH\000B\005\n\003msgB\031\252\002\026Vatsim.Xpilot.P"
-  "rotobufb\006proto3"
+  "k.proto\032\030RequestStationInfo.proto\032\027Trigg"
+  "erDisconnect.proto\"\277\010\n\007Wrapper\022-\n\ttimest"
+  "amp\030\001 \001(\0132\032.google.protobuf.Timestamp\022)\n"
+  "\013xplane_data\030\002 \001(\0132\022.xpilot.XplaneDataH\000"
+  "\0221\n\017position_update\030\003 \001(\0132\026.xpilot.Posit"
+  "ionUpdateH\000\022:\n\024fast_position_update\030\004 \001("
+  "\0132\032.xpilot.FastPositionUpdateH\000\0221\n\017airpl"
+  "ane_config\030\005 \001(\0132\026.xpilot.AirplaneConfig"
+  "H\000\022%\n\tadd_plane\030\006 \001(\0132\020.xpilot.AddPlaneH"
+  "\000\0225\n\022plane_added_to_sim\030\007 \001(\0132\027.xpilot.P"
+  "laneAddedToSimH\000\0226\n\022change_plane_model\030\010"
+  " \001(\0132\030.xpilot.ChangePlaneModelH\000\022+\n\014dele"
+  "te_plane\030\t \001(\0132\023.xpilot.DeletePlaneH\000\022B\n"
+  "\030private_message_received\030\n \001(\0132\036.xpilot"
+  ".PrivateMessageReceivedH\000\022:\n\024private_mes"
+  "sage_sent\030\013 \001(\0132\032.xpilot.PrivateMessageS"
+  "entH\000\0225\n\021network_connected\030\014 \001(\0132\030.xpilo"
+  "t.NetworkConnectedH\000\022;\n\024network_disconne"
+  "cted\030\r \001(\0132\033.xpilot.NetworkDisconnectedH"
+  "\000\0227\n\022nearby_controllers\030\016 \001(\0132\031.xpilot.N"
+  "earbyControllersH\000\0221\n\017set_transponder\030\017 "
+  "\001(\0132\026.xpilot.SetTransponderH\000\022/\n\016set_rad"
+  "iostack\030\020 \001(\0132\025.xpilot.SetRadioStackH\000\0227"
+  "\n\022plugin_information\030\021 \001(\0132\031.xpilot.Plug"
+  "inInformationH\000\022/\n\016csl_validation\030\022 \001(\0132"
+  "\025.xpilot.CslValidationH\000\022:\n\024request_stat"
+  "ion_info\030\023 \001(\0132\032.xpilot.RequestStationIn"
+  "foH\000\0227\n\022trigger_disconnect\030\024 \001(\0132\031.xpilo"
+  "t.TriggerDisconnectH\000B\005\n\003msgB\031\252\002\026Vatsim."
+  "Xpilot.Protobufb\006proto3"
   ;
-static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Wrapper_2eproto_deps[18] = {
+static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Wrapper_2eproto_deps[20] = {
   &::descriptor_table_AddPlane_2eproto,
   &::descriptor_table_AirplaneConfig_2eproto,
   &::descriptor_table_ChangePlaneModel_2eproto,
@@ -123,15 +129,17 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor
   &::descriptor_table_PositionUpdate_2eproto,
   &::descriptor_table_PrivateMessageReceived_2eproto,
   &::descriptor_table_PrivateMessageSent_2eproto,
+  &::descriptor_table_RequestStationInfo_2eproto,
   &::descriptor_table_SetRadioStack_2eproto,
   &::descriptor_table_SetTransponder_2eproto,
+  &::descriptor_table_TriggerDisconnect_2eproto,
   &::descriptor_table_XplaneData_2eproto,
   &::descriptor_table_google_2fprotobuf_2ftimestamp_2eproto,
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Wrapper_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Wrapper_2eproto = {
-  false, false, 1455, descriptor_table_protodef_Wrapper_2eproto, "Wrapper.proto", 
-  &descriptor_table_Wrapper_2eproto_once, descriptor_table_Wrapper_2eproto_deps, 18, 1,
+  false, false, 1623, descriptor_table_protodef_Wrapper_2eproto, "Wrapper.proto", 
+  &descriptor_table_Wrapper_2eproto_once, descriptor_table_Wrapper_2eproto_deps, 20, 1,
   schemas, file_default_instances, TableStruct_Wrapper_2eproto::offsets,
   file_level_metadata_Wrapper_2eproto, file_level_enum_descriptors_Wrapper_2eproto, file_level_service_descriptors_Wrapper_2eproto,
 };
@@ -167,6 +175,8 @@ class Wrapper::_Internal {
   static const ::xpilot::SetRadioStack& set_radiostack(const Wrapper* msg);
   static const ::xpilot::PluginInformation& plugin_information(const Wrapper* msg);
   static const ::xpilot::CslValidation& csl_validation(const Wrapper* msg);
+  static const ::xpilot::RequestStationInfo& request_station_info(const Wrapper* msg);
+  static const ::xpilot::TriggerDisconnect& trigger_disconnect(const Wrapper* msg);
 };
 
 const PROTOBUF_NAMESPACE_ID::Timestamp&
@@ -240,6 +250,14 @@ Wrapper::_Internal::plugin_information(const Wrapper* msg) {
 const ::xpilot::CslValidation&
 Wrapper::_Internal::csl_validation(const Wrapper* msg) {
   return *msg->msg_.csl_validation_;
+}
+const ::xpilot::RequestStationInfo&
+Wrapper::_Internal::request_station_info(const Wrapper* msg) {
+  return *msg->msg_.request_station_info_;
+}
+const ::xpilot::TriggerDisconnect&
+Wrapper::_Internal::trigger_disconnect(const Wrapper* msg) {
+  return *msg->msg_.trigger_disconnect_;
 }
 void Wrapper::clear_timestamp() {
   if (GetArena() == nullptr && timestamp_ != nullptr) {
@@ -638,6 +656,52 @@ void Wrapper::clear_csl_validation() {
     clear_has_msg();
   }
 }
+void Wrapper::set_allocated_request_station_info(::xpilot::RequestStationInfo* request_station_info) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
+  clear_msg();
+  if (request_station_info) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(request_station_info)->GetArena();
+    if (message_arena != submessage_arena) {
+      request_station_info = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, request_station_info, submessage_arena);
+    }
+    set_has_request_station_info();
+    msg_.request_station_info_ = request_station_info;
+  }
+  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.request_station_info)
+}
+void Wrapper::clear_request_station_info() {
+  if (_internal_has_request_station_info()) {
+    if (GetArena() == nullptr) {
+      delete msg_.request_station_info_;
+    }
+    clear_has_msg();
+  }
+}
+void Wrapper::set_allocated_trigger_disconnect(::xpilot::TriggerDisconnect* trigger_disconnect) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
+  clear_msg();
+  if (trigger_disconnect) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(trigger_disconnect)->GetArena();
+    if (message_arena != submessage_arena) {
+      trigger_disconnect = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, trigger_disconnect, submessage_arena);
+    }
+    set_has_trigger_disconnect();
+    msg_.trigger_disconnect_ = trigger_disconnect;
+  }
+  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.trigger_disconnect)
+}
+void Wrapper::clear_trigger_disconnect() {
+  if (_internal_has_trigger_disconnect()) {
+    if (GetArena() == nullptr) {
+      delete msg_.trigger_disconnect_;
+    }
+    clear_has_msg();
+  }
+}
 Wrapper::Wrapper(::PROTOBUF_NAMESPACE_ID::Arena* arena)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
   SharedCtor();
@@ -720,6 +784,14 @@ Wrapper::Wrapper(const Wrapper& from)
     }
     case kCslValidation: {
       _internal_mutable_csl_validation()->::xpilot::CslValidation::MergeFrom(from._internal_csl_validation());
+      break;
+    }
+    case kRequestStationInfo: {
+      _internal_mutable_request_station_info()->::xpilot::RequestStationInfo::MergeFrom(from._internal_request_station_info());
+      break;
+    }
+    case kTriggerDisconnect: {
+      _internal_mutable_trigger_disconnect()->::xpilot::TriggerDisconnect::MergeFrom(from._internal_trigger_disconnect());
       break;
     }
     case MSG_NOT_SET: {
@@ -860,6 +932,18 @@ void Wrapper::clear_msg() {
     case kCslValidation: {
       if (GetArena() == nullptr) {
         delete msg_.csl_validation_;
+      }
+      break;
+    }
+    case kRequestStationInfo: {
+      if (GetArena() == nullptr) {
+        delete msg_.request_station_info_;
+      }
+      break;
+    }
+    case kTriggerDisconnect: {
+      if (GetArena() == nullptr) {
+        delete msg_.trigger_disconnect_;
       }
       break;
     }
@@ -1015,6 +1099,20 @@ const char* Wrapper::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::in
       case 18:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 146)) {
           ptr = ctx->ParseMessage(_internal_mutable_csl_validation(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .xpilot.RequestStationInfo request_station_info = 19;
+      case 19:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 154)) {
+          ptr = ctx->ParseMessage(_internal_mutable_request_station_info(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .xpilot.TriggerDisconnect trigger_disconnect = 20;
+      case 20:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 162)) {
+          ptr = ctx->ParseMessage(_internal_mutable_trigger_disconnect(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -1190,6 +1288,22 @@ failure:
         18, _Internal::csl_validation(this), target, stream);
   }
 
+  // .xpilot.RequestStationInfo request_station_info = 19;
+  if (_internal_has_request_station_info()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        19, _Internal::request_station_info(this), target, stream);
+  }
+
+  // .xpilot.TriggerDisconnect trigger_disconnect = 20;
+  if (_internal_has_trigger_disconnect()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        20, _Internal::trigger_disconnect(this), target, stream);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -1333,6 +1447,20 @@ size_t Wrapper::ByteSizeLong() const {
           *msg_.csl_validation_);
       break;
     }
+    // .xpilot.RequestStationInfo request_station_info = 19;
+    case kRequestStationInfo: {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *msg_.request_station_info_);
+      break;
+    }
+    // .xpilot.TriggerDisconnect trigger_disconnect = 20;
+    case kTriggerDisconnect: {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *msg_.trigger_disconnect_);
+      break;
+    }
     case MSG_NOT_SET: {
       break;
     }
@@ -1438,6 +1566,14 @@ void Wrapper::MergeFrom(const Wrapper& from) {
     }
     case kCslValidation: {
       _internal_mutable_csl_validation()->::xpilot::CslValidation::MergeFrom(from._internal_csl_validation());
+      break;
+    }
+    case kRequestStationInfo: {
+      _internal_mutable_request_station_info()->::xpilot::RequestStationInfo::MergeFrom(from._internal_request_station_info());
+      break;
+    }
+    case kTriggerDisconnect: {
+      _internal_mutable_trigger_disconnect()->::xpilot::TriggerDisconnect::MergeFrom(from._internal_trigger_disconnect());
       break;
     }
     case MSG_NOT_SET: {
