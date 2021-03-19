@@ -87,7 +87,8 @@ namespace xpilot
 		m_enginesRunning("sim/flightmodel/engine/ENGN_running", ReadOnly),
 		m_onGround("sim/flightmodel/failures/onground_any", ReadOnly),
 		m_replayMode("sim/operation/prefs/replay_mode", ReadOnly),
-		m_frameRatePeriod("sim/operation/misc/frame_rate_period", ReadOnly)
+		m_frameRatePeriod("sim/operation/misc/frame_rate_period", ReadOnly),
+		m_paused("sim/time/paused", ReadOnly)
 	{
 		thisThreadIsXP();
 
@@ -376,6 +377,7 @@ namespace xpilot
 
 		// misc
 		data->set_replay_mode(m_replayMode);
+		data->set_sim_paused(m_paused);
 
 		sendPbArray(msg);
 	}

@@ -1210,6 +1210,7 @@ class XplaneData PROTOBUF_FINAL :
     kUserAircraftConfigFieldNumber = 2,
     kRadioStackFieldNumber = 3,
     kReplayModeFieldNumber = 4,
+    kSimPausedFieldNumber = 5,
   };
   // .xpilot.XplaneData.UserAircraftData user_aircraft_data = 1;
   bool has_user_aircraft_data() const;
@@ -1278,6 +1279,19 @@ class XplaneData PROTOBUF_FINAL :
   void _internal_set_replay_mode(bool value);
   public:
 
+  // bool sim_paused = 5;
+  bool has_sim_paused() const;
+  private:
+  bool _internal_has_sim_paused() const;
+  public:
+  void clear_sim_paused();
+  bool sim_paused() const;
+  void set_sim_paused(bool value);
+  private:
+  bool _internal_sim_paused() const;
+  void _internal_set_sim_paused(bool value);
+  public:
+
   // @@protoc_insertion_point(class_scope:xpilot.XplaneData)
  private:
   class _Internal;
@@ -1291,6 +1305,7 @@ class XplaneData PROTOBUF_FINAL :
   ::xpilot::XplaneData_UserAircraftConfigData* user_aircraft_config_;
   ::xpilot::XplaneData_RadioStack* radio_stack_;
   bool replay_mode_;
+  bool sim_paused_;
   friend struct ::TableStruct_XplaneData_2eproto;
 };
 // ===================================================================
@@ -2776,6 +2791,34 @@ inline void XplaneData::_internal_set_replay_mode(bool value) {
 inline void XplaneData::set_replay_mode(bool value) {
   _internal_set_replay_mode(value);
   // @@protoc_insertion_point(field_set:xpilot.XplaneData.replay_mode)
+}
+
+// bool sim_paused = 5;
+inline bool XplaneData::_internal_has_sim_paused() const {
+  bool value = (_has_bits_[0] & 0x00000010u) != 0;
+  return value;
+}
+inline bool XplaneData::has_sim_paused() const {
+  return _internal_has_sim_paused();
+}
+inline void XplaneData::clear_sim_paused() {
+  sim_paused_ = false;
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline bool XplaneData::_internal_sim_paused() const {
+  return sim_paused_;
+}
+inline bool XplaneData::sim_paused() const {
+  // @@protoc_insertion_point(field_get:xpilot.XplaneData.sim_paused)
+  return _internal_sim_paused();
+}
+inline void XplaneData::_internal_set_sim_paused(bool value) {
+  _has_bits_[0] |= 0x00000010u;
+  sim_paused_ = value;
+}
+inline void XplaneData::set_sim_paused(bool value) {
+  _internal_set_sim_paused(value);
+  // @@protoc_insertion_point(field_set:xpilot.XplaneData.sim_paused)
 }
 
 #ifdef __GNUC__

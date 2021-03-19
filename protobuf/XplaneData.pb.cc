@@ -97,7 +97,8 @@ constexpr XplaneData::XplaneData(
   : user_aircraft_data_(nullptr)
   , user_aircraft_config_(nullptr)
   , radio_stack_(nullptr)
-  , replay_mode_(false){}
+  , replay_mode_(false)
+  , sim_paused_(false){}
 struct XplaneDataDefaultTypeInternal {
   constexpr XplaneDataDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -221,16 +222,18 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_XplaneData_2eproto::offsets[] 
   PROTOBUF_FIELD_OFFSET(::xpilot::XplaneData, user_aircraft_config_),
   PROTOBUF_FIELD_OFFSET(::xpilot::XplaneData, radio_stack_),
   PROTOBUF_FIELD_OFFSET(::xpilot::XplaneData, replay_mode_),
+  PROTOBUF_FIELD_OFFSET(::xpilot::XplaneData, sim_paused_),
   0,
   1,
   2,
   3,
+  4,
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, 19, sizeof(::xpilot::XplaneData_UserAircraftData)},
   { 33, 52, sizeof(::xpilot::XplaneData_UserAircraftConfigData)},
   { 66, 85, sizeof(::xpilot::XplaneData_RadioStack)},
-  { 99, 108, sizeof(::xpilot::XplaneData)},
+  { 99, 109, sizeof(::xpilot::XplaneData)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -241,70 +244,71 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 };
 
 const char descriptor_table_protodef_XplaneData_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\020XplaneData.proto\022\006xpilot\"\200\022\n\nXplaneDat"
+  "\n\020XplaneData.proto\022\006xpilot\"\250\022\n\nXplaneDat"
   "a\022D\n\022user_aircraft_data\030\001 \001(\0132#.xpilot.X"
   "planeData.UserAircraftDataH\000\210\001\001\022L\n\024user_"
   "aircraft_config\030\002 \001(\0132).xpilot.XplaneDat"
   "a.UserAircraftConfigDataH\001\210\001\001\0227\n\013radio_s"
   "tack\030\003 \001(\0132\035.xpilot.XplaneData.RadioStac"
-  "kH\002\210\001\001\022\030\n\013replay_mode\030\004 \001(\010H\003\210\001\001\032\352\004\n\020Use"
-  "rAircraftData\022\026\n\tlongitude\030\001 \001(\001H\000\210\001\001\022\025\n"
-  "\010latitude\030\002 \001(\001H\001\210\001\001\022\031\n\014altitude_msl\030\003 \001"
-  "(\001H\002\210\001\001\022\031\n\014altitude_agl\030\004 \001(\001H\003\210\001\001\022\031\n\014gr"
-  "ound_speed\030\005 \001(\001H\004\210\001\001\022\022\n\005pitch\030\006 \001(\001H\005\210\001"
-  "\001\022\021\n\004roll\030\007 \001(\001H\006\210\001\001\022\020\n\003yaw\030\010 \001(\001H\007\210\001\001\022\036"
-  "\n\021velocity_latitude\030\t \001(\001H\010\210\001\001\022\036\n\021veloci"
-  "ty_altitude\030\n \001(\001H\t\210\001\001\022\037\n\022velocity_longi"
-  "tude\030\013 \001(\001H\n\210\001\001\022\033\n\016velocity_pitch\030\014 \001(\001H"
-  "\013\210\001\001\022\035\n\020velocity_heading\030\r \001(\001H\014\210\001\001\022\032\n\rv"
-  "elocity_bank\030\016 \001(\001H\r\210\001\001B\014\n\n_longitudeB\013\n"
-  "\t_latitudeB\017\n\r_altitude_mslB\017\n\r_altitude"
-  "_aglB\017\n\r_ground_speedB\010\n\006_pitchB\007\n\005_roll"
-  "B\006\n\004_yawB\024\n\022_velocity_latitudeB\024\n\022_veloc"
-  "ity_altitudeB\025\n\023_velocity_longitudeB\021\n\017_"
-  "velocity_pitchB\023\n\021_velocity_headingB\020\n\016_"
-  "velocity_bank\032\236\005\n\026UserAircraftConfigData"
-  "\022\035\n\020beacon_lights_on\030\001 \001(\010H\000\210\001\001\022\036\n\021landi"
-  "ng_lights_on\030\002 \001(\010H\001\210\001\001\022\032\n\rnav_lights_on"
-  "\030\003 \001(\010H\002\210\001\001\022\035\n\020strobe_lights_on\030\004 \001(\010H\003\210"
-  "\001\001\022\033\n\016taxi_lights_on\030\005 \001(\010H\004\210\001\001\022\022\n\005flaps"
-  "\030\006 \001(\001H\005\210\001\001\022\026\n\tgear_down\030\007 \001(\010H\006\210\001\001\022\031\n\014s"
-  "peed_brakes\030\010 \001(\001H\007\210\001\001\022\031\n\014engine_count\030\t"
-  " \001(\005H\010\210\001\001\022\034\n\017engine1_running\030\n \001(\010H\t\210\001\001\022"
-  "\034\n\017engine2_running\030\013 \001(\010H\n\210\001\001\022\034\n\017engine3"
-  "_running\030\014 \001(\010H\013\210\001\001\022\034\n\017engine4_running\030\r"
-  " \001(\010H\014\210\001\001\022\026\n\ton_ground\030\016 \001(\010H\r\210\001\001B\023\n\021_be"
-  "acon_lights_onB\024\n\022_landing_lights_onB\020\n\016"
-  "_nav_lights_onB\023\n\021_strobe_lights_onB\021\n\017_"
-  "taxi_lights_onB\010\n\006_flapsB\014\n\n_gear_downB\017"
-  "\n\r_speed_brakesB\017\n\r_engine_countB\022\n\020_eng"
-  "ine1_runningB\022\n\020_engine2_runningB\022\n\020_eng"
-  "ine3_runningB\022\n\020_engine4_runningB\014\n\n_on_"
-  "ground\032\254\005\n\nRadioStack\022 \n\023audio_com_selec"
-  "tion\030\001 \001(\005H\000\210\001\001\022\027\n\ncom1_power\030\002 \001(\010H\001\210\001\001"
-  "\022\026\n\tcom1_freq\030\003 \001(\005H\002\210\001\001\022!\n\024com1_audio_s"
-  "election\030\004 \001(\010H\003\210\001\001\022\030\n\013com1_volume\030\005 \001(\002"
-  "H\004\210\001\001\022\027\n\ncom2_power\030\006 \001(\010H\005\210\001\001\022\026\n\tcom2_f"
-  "req\030\007 \001(\005H\006\210\001\001\022!\n\024com2_audio_selection\030\010"
-  " \001(\010H\007\210\001\001\022\030\n\013com2_volume\030\t \001(\002H\010\210\001\001\022\036\n\021a"
-  "vionics_power_on\030\n \001(\010H\t\210\001\001\022\035\n\020transpond"
-  "er_code\030\013 \001(\005H\n\210\001\001\022\035\n\020transponder_mode\030\014"
-  " \001(\005H\013\210\001\001\022\036\n\021transponder_ident\030\r \001(\010H\014\210\001"
-  "\001\022\030\n\013ptt_pressed\030\016 \001(\010H\r\210\001\001B\026\n\024_audio_co"
-  "m_selectionB\r\n\013_com1_powerB\014\n\n_com1_freq"
-  "B\027\n\025_com1_audio_selectionB\016\n\014_com1_volum"
-  "eB\r\n\013_com2_powerB\014\n\n_com2_freqB\027\n\025_com2_"
-  "audio_selectionB\016\n\014_com2_volumeB\024\n\022_avio"
-  "nics_power_onB\023\n\021_transponder_codeB\023\n\021_t"
-  "ransponder_modeB\024\n\022_transponder_identB\016\n"
-  "\014_ptt_pressedB\025\n\023_user_aircraft_dataB\027\n\025"
-  "_user_aircraft_configB\016\n\014_radio_stackB\016\n"
-  "\014_replay_modeB\031\252\002\026Vatsim.Xpilot.Protobuf"
+  "kH\002\210\001\001\022\030\n\013replay_mode\030\004 \001(\010H\003\210\001\001\022\027\n\nsim_"
+  "paused\030\005 \001(\010H\004\210\001\001\032\352\004\n\020UserAircraftData\022\026"
+  "\n\tlongitude\030\001 \001(\001H\000\210\001\001\022\025\n\010latitude\030\002 \001(\001"
+  "H\001\210\001\001\022\031\n\014altitude_msl\030\003 \001(\001H\002\210\001\001\022\031\n\014alti"
+  "tude_agl\030\004 \001(\001H\003\210\001\001\022\031\n\014ground_speed\030\005 \001("
+  "\001H\004\210\001\001\022\022\n\005pitch\030\006 \001(\001H\005\210\001\001\022\021\n\004roll\030\007 \001(\001"
+  "H\006\210\001\001\022\020\n\003yaw\030\010 \001(\001H\007\210\001\001\022\036\n\021velocity_lati"
+  "tude\030\t \001(\001H\010\210\001\001\022\036\n\021velocity_altitude\030\n \001"
+  "(\001H\t\210\001\001\022\037\n\022velocity_longitude\030\013 \001(\001H\n\210\001\001"
+  "\022\033\n\016velocity_pitch\030\014 \001(\001H\013\210\001\001\022\035\n\020velocit"
+  "y_heading\030\r \001(\001H\014\210\001\001\022\032\n\rvelocity_bank\030\016 "
+  "\001(\001H\r\210\001\001B\014\n\n_longitudeB\013\n\t_latitudeB\017\n\r_"
+  "altitude_mslB\017\n\r_altitude_aglB\017\n\r_ground"
+  "_speedB\010\n\006_pitchB\007\n\005_rollB\006\n\004_yawB\024\n\022_ve"
+  "locity_latitudeB\024\n\022_velocity_altitudeB\025\n"
+  "\023_velocity_longitudeB\021\n\017_velocity_pitchB"
+  "\023\n\021_velocity_headingB\020\n\016_velocity_bank\032\236"
+  "\005\n\026UserAircraftConfigData\022\035\n\020beacon_ligh"
+  "ts_on\030\001 \001(\010H\000\210\001\001\022\036\n\021landing_lights_on\030\002 "
+  "\001(\010H\001\210\001\001\022\032\n\rnav_lights_on\030\003 \001(\010H\002\210\001\001\022\035\n\020"
+  "strobe_lights_on\030\004 \001(\010H\003\210\001\001\022\033\n\016taxi_ligh"
+  "ts_on\030\005 \001(\010H\004\210\001\001\022\022\n\005flaps\030\006 \001(\001H\005\210\001\001\022\026\n\t"
+  "gear_down\030\007 \001(\010H\006\210\001\001\022\031\n\014speed_brakes\030\010 \001"
+  "(\001H\007\210\001\001\022\031\n\014engine_count\030\t \001(\005H\010\210\001\001\022\034\n\017en"
+  "gine1_running\030\n \001(\010H\t\210\001\001\022\034\n\017engine2_runn"
+  "ing\030\013 \001(\010H\n\210\001\001\022\034\n\017engine3_running\030\014 \001(\010H"
+  "\013\210\001\001\022\034\n\017engine4_running\030\r \001(\010H\014\210\001\001\022\026\n\ton"
+  "_ground\030\016 \001(\010H\r\210\001\001B\023\n\021_beacon_lights_onB"
+  "\024\n\022_landing_lights_onB\020\n\016_nav_lights_onB"
+  "\023\n\021_strobe_lights_onB\021\n\017_taxi_lights_onB"
+  "\010\n\006_flapsB\014\n\n_gear_downB\017\n\r_speed_brakes"
+  "B\017\n\r_engine_countB\022\n\020_engine1_runningB\022\n"
+  "\020_engine2_runningB\022\n\020_engine3_runningB\022\n"
+  "\020_engine4_runningB\014\n\n_on_ground\032\254\005\n\nRadi"
+  "oStack\022 \n\023audio_com_selection\030\001 \001(\005H\000\210\001\001"
+  "\022\027\n\ncom1_power\030\002 \001(\010H\001\210\001\001\022\026\n\tcom1_freq\030\003"
+  " \001(\005H\002\210\001\001\022!\n\024com1_audio_selection\030\004 \001(\010H"
+  "\003\210\001\001\022\030\n\013com1_volume\030\005 \001(\002H\004\210\001\001\022\027\n\ncom2_p"
+  "ower\030\006 \001(\010H\005\210\001\001\022\026\n\tcom2_freq\030\007 \001(\005H\006\210\001\001\022"
+  "!\n\024com2_audio_selection\030\010 \001(\010H\007\210\001\001\022\030\n\013co"
+  "m2_volume\030\t \001(\002H\010\210\001\001\022\036\n\021avionics_power_o"
+  "n\030\n \001(\010H\t\210\001\001\022\035\n\020transponder_code\030\013 \001(\005H\n"
+  "\210\001\001\022\035\n\020transponder_mode\030\014 \001(\005H\013\210\001\001\022\036\n\021tr"
+  "ansponder_ident\030\r \001(\010H\014\210\001\001\022\030\n\013ptt_presse"
+  "d\030\016 \001(\010H\r\210\001\001B\026\n\024_audio_com_selectionB\r\n\013"
+  "_com1_powerB\014\n\n_com1_freqB\027\n\025_com1_audio"
+  "_selectionB\016\n\014_com1_volumeB\r\n\013_com2_powe"
+  "rB\014\n\n_com2_freqB\027\n\025_com2_audio_selection"
+  "B\016\n\014_com2_volumeB\024\n\022_avionics_power_onB\023"
+  "\n\021_transponder_codeB\023\n\021_transponder_mode"
+  "B\024\n\022_transponder_identB\016\n\014_ptt_pressedB\025"
+  "\n\023_user_aircraft_dataB\027\n\025_user_aircraft_"
+  "configB\016\n\014_radio_stackB\016\n\014_replay_modeB\r"
+  "\n\013_sim_pausedB\031\252\002\026Vatsim.Xpilot.Protobuf"
   "b\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_XplaneData_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_XplaneData_2eproto = {
-  false, false, 2368, descriptor_table_protodef_XplaneData_2eproto, "XplaneData.proto", 
+  false, false, 2408, descriptor_table_protodef_XplaneData_2eproto, "XplaneData.proto", 
   &descriptor_table_XplaneData_2eproto_once, nullptr, 0, 4,
   schemas, file_default_instances, TableStruct_XplaneData_2eproto::offsets,
   file_level_metadata_XplaneData_2eproto, file_level_enum_descriptors_XplaneData_2eproto, file_level_service_descriptors_XplaneData_2eproto,
@@ -2013,6 +2017,9 @@ class XplaneData::_Internal {
   static void set_has_replay_mode(HasBits* has_bits) {
     (*has_bits)[0] |= 8u;
   }
+  static void set_has_sim_paused(HasBits* has_bits) {
+    (*has_bits)[0] |= 16u;
+  }
 };
 
 const ::xpilot::XplaneData_UserAircraftData&
@@ -2052,15 +2059,17 @@ XplaneData::XplaneData(const XplaneData& from)
   } else {
     radio_stack_ = nullptr;
   }
-  replay_mode_ = from.replay_mode_;
+  ::memcpy(&replay_mode_, &from.replay_mode_,
+    static_cast<size_t>(reinterpret_cast<char*>(&sim_paused_) -
+    reinterpret_cast<char*>(&replay_mode_)) + sizeof(sim_paused_));
   // @@protoc_insertion_point(copy_constructor:xpilot.XplaneData)
 }
 
 void XplaneData::SharedCtor() {
 ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
     reinterpret_cast<char*>(&user_aircraft_data_) - reinterpret_cast<char*>(this)),
-    0, static_cast<size_t>(reinterpret_cast<char*>(&replay_mode_) -
-    reinterpret_cast<char*>(&user_aircraft_data_)) + sizeof(replay_mode_));
+    0, static_cast<size_t>(reinterpret_cast<char*>(&sim_paused_) -
+    reinterpret_cast<char*>(&user_aircraft_data_)) + sizeof(sim_paused_));
 }
 
 XplaneData::~XplaneData() {
@@ -2113,7 +2122,9 @@ void XplaneData::Clear() {
       radio_stack_ = nullptr;
     }
   }
-  replay_mode_ = false;
+  ::memset(&replay_mode_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&sim_paused_) -
+      reinterpret_cast<char*>(&replay_mode_)) + sizeof(sim_paused_));
   _has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
@@ -2152,6 +2163,14 @@ const char* XplaneData::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32)) {
           _Internal::set_has_replay_mode(&has_bits);
           replay_mode_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // bool sim_paused = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 40)) {
+          _Internal::set_has_sim_paused(&has_bits);
+          sim_paused_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -2214,6 +2233,12 @@ failure:
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(4, this->_internal_replay_mode(), target);
   }
 
+  // bool sim_paused = 5;
+  if (_internal_has_sim_paused()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(5, this->_internal_sim_paused(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -2231,7 +2256,7 @@ size_t XplaneData::ByteSizeLong() const {
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x0000000fu) {
+  if (cached_has_bits & 0x0000001fu) {
     // .xpilot.XplaneData.UserAircraftData user_aircraft_data = 1;
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
@@ -2255,6 +2280,11 @@ size_t XplaneData::ByteSizeLong() const {
 
     // bool replay_mode = 4;
     if (cached_has_bits & 0x00000008u) {
+      total_size += 1 + 1;
+    }
+
+    // bool sim_paused = 5;
+    if (cached_has_bits & 0x00000010u) {
       total_size += 1 + 1;
     }
 
@@ -2291,7 +2321,7 @@ void XplaneData::MergeFrom(const XplaneData& from) {
   (void) cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 0x0000000fu) {
+  if (cached_has_bits & 0x0000001fu) {
     if (cached_has_bits & 0x00000001u) {
       _internal_mutable_user_aircraft_data()->::xpilot::XplaneData_UserAircraftData::MergeFrom(from._internal_user_aircraft_data());
     }
@@ -2303,6 +2333,9 @@ void XplaneData::MergeFrom(const XplaneData& from) {
     }
     if (cached_has_bits & 0x00000008u) {
       replay_mode_ = from.replay_mode_;
+    }
+    if (cached_has_bits & 0x00000010u) {
+      sim_paused_ = from.sim_paused_;
     }
     _has_bits_[0] |= cached_has_bits;
   }
@@ -2331,8 +2364,8 @@ void XplaneData::InternalSwap(XplaneData* other) {
   _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(XplaneData, replay_mode_)
-      + sizeof(XplaneData::replay_mode_)
+      PROTOBUF_FIELD_OFFSET(XplaneData, sim_paused_)
+      + sizeof(XplaneData::sim_paused_)
       - PROTOBUF_FIELD_OFFSET(XplaneData, user_aircraft_data_)>(
           reinterpret_cast<char*>(&user_aircraft_data_),
           reinterpret_cast<char*>(&other->user_aircraft_data_));

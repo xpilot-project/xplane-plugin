@@ -163,6 +163,7 @@ namespace xpilot
 		DataRefAccess<std::vector<int>> m_enginesRunning;
 		DataRefAccess<int> m_onGround;
 
+		DataRefAccess<int> m_paused;
 		DataRefAccess<int> m_replayMode;
 		XPLMCommandRef m_cmdTransponderId;
 
