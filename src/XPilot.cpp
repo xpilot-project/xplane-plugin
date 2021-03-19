@@ -482,9 +482,9 @@ namespace xpilot
 					positionalVector.Z = msg.velocity_latitude();
 
 					Vector3 rotationalVector{};
-					rotationalVector.X = msg.velocity_pitch() * -1;
+					rotationalVector.X = msg.velocity_pitch();
 					rotationalVector.Y = msg.velocity_heading();
-					rotationalVector.Z = msg.velocity_bank() * -1;
+					rotationalVector.Z = msg.velocity_bank();
 
 					if (msg.has_callsign())
 					{
