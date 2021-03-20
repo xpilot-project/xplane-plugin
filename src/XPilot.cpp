@@ -484,9 +484,9 @@ namespace xpilot
 					positionalVector.Z = msg.velocity_latitude();
 
 					Vector3 rotationalVector{};
-					rotationalVector.X = msg.velocity_pitch();
+					rotationalVector.X = msg.velocity_pitch() * -1;
 					rotationalVector.Y = msg.velocity_heading();
-					rotationalVector.Z = msg.velocity_bank();
+					rotationalVector.Z = msg.velocity_bank() * -1;
 
 					if (msg.has_callsign())
 					{
@@ -664,6 +664,8 @@ namespace xpilot
 			return Config::Instance().getLogLevel();
 		if (!strcmp(item, XPMP_CFG_ITM_REPLDATAREFS))
 			return 1;
+		if (!strcmp(item, XPMP_CFG_ITM_CLAMPALL))
+			return 0;
 		return defaultVal;
 	}
 

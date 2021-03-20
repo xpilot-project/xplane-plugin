@@ -110,28 +110,23 @@ namespace xpilot
         double alt_change = velocityVector.Y * interval * 3.28084;
 
         // Terrain offset
-        terrain_altitude = 0.0;
         if (current_visual_state.Altitude < 18000)
         {
-            terrain_altitude = terrain_probe.getTerrainElevation(current_visual_state.Lat, current_visual_state.Lon);
-            if (on_ground || (current_visual_state.Altitude < terrain_altitude && current_visual_state.Altitude < 50.0))
+            double terrain_altitude = terrain_probe.getTerrainElevation(current_visual_state.Lat, current_visual_state.Lon);
+            if (on_ground)
             {
-                if (fast_positions_received_count > 1)
-                {
-                    const double diff = (terrain_altitude - (current_visual_state.Altitude + alt_change)) * interval;
-                    if (std::abs(diff) > 0.0)
-                    {
-                        current_visual_state.Altitude += std::copysign(diff, diff);
-                    }
-                }
-                else
-                {
-                    current_visual_state.Altitude = terrain_altitude;
-                }
+                current_visual_state.Altitude = terrain_altitude;
             }
             else
             {
-                current_visual_state.Altitude += alt_change;
+                if (current_visual_state.Altitude < 50.0 && current_visual_state.Altitude < terrain_altitude)
+                {
+                    current_visual_state.Altitude = terrain_altitude;
+                }
+                else
+                {
+                    current_visual_state.Altitude += alt_change;
+                }
             }
         }
         else
