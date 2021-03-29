@@ -57,6 +57,17 @@ namespace xpilot
         return rpm / 60.0f * float(s) * 360.0f;
     }
 
+    inline double LinearInterpolate(double y1, double y2, double mu)
+    {
+        return y1 + (mu * (y2 - y1));
+    }
+
+    inline double SmoothStepInterpolate(double y1, double y2, double mu)
+    {
+        double mu2 = std::pow(mu, 2) * (3 - (2 * mu));
+        return LinearInterpolate(y1, y2, mu2);
+    }
+
     NetworkAircraft::NetworkAircraft(
         const std::string& _callsign,
         const AircraftVisualState& _visualState,
@@ -71,7 +82,7 @@ namespace xpilot
         on_ground(false),
         fast_positions_received_count(0),
         reverse_thrust(false),
-        spoilersDeployed(false),
+        spoilers_deployed(false),
         target_flaps_position(0.0f),
         target_gear_position(0.0f),
         target_spoiler_position(0.0f),
@@ -101,6 +112,9 @@ namespace xpilot
         Vector3 rotationVector,
         double interval)
     {
+        double lat, lon, alt;
+        GetLocation(lat, lon, alt);
+
         double lat_change = MetersToDegrees(velocityVector.Z * interval);
         double new_lat = NormalizeDegrees(current_visual_state.Lat + lat_change, -90.0, 90.0);
 
@@ -108,33 +122,7 @@ namespace xpilot
         double new_lon = NormalizeDegrees(current_visual_state.Lon + lon_change, -180.0, 180.0);
 
         double alt_change = velocityVector.Y * interval * 3.28084;
-
-        // Terrain offset
-        if (current_visual_state.Altitude < 18000)
-        {
-            double terrain_altitude = terrain_probe.getTerrainElevation(current_visual_state.Lat, current_visual_state.Lon);
-            if (on_ground)
-            {
-                current_visual_state.Altitude = terrain_altitude;
-            }
-            else
-            {
-                if (current_visual_state.Altitude < 50.0 && current_visual_state.Altitude < terrain_altitude)
-                {
-                    current_visual_state.Altitude = terrain_altitude;
-                }
-                else
-                {
-                    current_visual_state.Altitude += alt_change;
-                }
-            }
-        }
-        else
-        {
-            current_visual_state.Altitude += alt_change;
-        }
-
-        double new_alt = current_visual_state.Altitude;
+        double new_alt = AutoLevel(current_visual_state.Altitude + alt_change, interval);
 
         SetLocation(new_lat, new_lon, new_alt);
 
@@ -174,6 +162,101 @@ namespace xpilot
         SetPitch(new_pitch);
         SetHeading(new_heading);
         SetRoll(new_roll);
+    }
+
+    double NetworkAircraft::AutoLevel(double alt, double interval)
+    {
+        const double TERRAIN_HEIGHT_TOLERANCE = 200.0;
+
+        if (alt < 18000.0)
+        {
+            terrain_altitude = terrain_probe.getTerrainElevation(current_visual_state.Lat, current_visual_state.Lon);
+        }
+
+        if (!terrain_altitude.has_value())
+        {
+            return alt;
+        }
+
+        double smoothedTerrainOffset = 0.0;
+
+        if (target_terrain_offset.has_value() && !on_ground)
+        {
+            previous_terrain_offset = terrain_offset;
+        }
+
+        if (on_ground)
+        {
+            // The aircraft just touched down. Calculate the necessary terrain offset.
+            double alt_agl = alt - terrain_altitude.value();
+            if (std::abs(alt_agl) < TERRAIN_HEIGHT_TOLERANCE)
+            {
+                target_terrain_offset = terrain_altitude.value() - alt;
+                terrain_offset = target_terrain_offset.value();
+                smoothedTerrainOffset = terrain_offset;
+            }
+        }
+        else if (target_terrain_offset.has_value())
+        {
+            // Update the target terrain offset as the aircraft moves around on the ground, since it may have uneven terrain.
+            if (on_ground)
+            {
+                target_terrain_offset = terrain_altitude.value() - alt;
+            }
+
+            // Aircraft is transitioning to local terrain height. Interpolate the terrain offset so that the altitude doesn't jump.
+            if (terrain_offset != target_terrain_offset.value())
+            {
+                if (target_terrain_offset.value() == 0.0)
+                {
+                    terrain_offset = 0.0;
+                    smoothedTerrainOffset = 0.0;
+                }
+                else
+                {
+                    terrain_offset += target_terrain_offset.value() / (interval / 2.0);
+                    if (std::abs(terrain_offset) > std::abs(target_terrain_offset.value()))
+                    {
+                        terrain_offset = target_terrain_offset.value();
+                    }
+                    smoothedTerrainOffset = SmoothStepInterpolate(0.0, target_terrain_offset.value(), terrain_offset / target_terrain_offset.value());
+                }
+            }
+            else
+            {
+                smoothedTerrainOffset = terrain_offset;
+            }
+        }
+        else if (!target_terrain_offset.has_value() && (terrain_offset != 0.0))
+        {
+            // Aircraft is climbing out. Slowly interpolate the terrain offset back to zero.
+            terrain_offset -= previous_terrain_offset / (interval * 10.0);
+            if (previous_terrain_offset > 0.0)
+            {
+                if (terrain_offset < 0.0)
+                {
+                    terrain_offset = 0.0;
+                }
+            }
+            else
+            {
+                if (terrain_offset > 0.0)
+                {
+                    terrain_offset = 0.0;
+                }
+            }
+            smoothedTerrainOffset = terrain_offset;
+        }
+
+        double adjusted_altitude = alt + smoothedTerrainOffset;
+
+        // Ensure the aircraft is above ground.
+        if (adjusted_altitude < terrain_altitude)
+        {
+            adjusted_altitude = terrain_altitude.value();
+        }
+
+        return adjusted_altitude;
     }
 
     void NetworkAircraft::UpdateErrorVectors(double interval)
@@ -261,10 +344,10 @@ namespace xpilot
 
         const auto now = std::chrono::system_clock::now();
         static const float epsilon = std::numeric_limits<float>::epsilon();
-        const auto diffMs = std::chrono::duration_cast<std::chrono::milliseconds>(now - previousSurfaceUpdateTime);
+        const auto diffMs = std::chrono::duration_cast<std::chrono::milliseconds>(now - prev_surface_update_time);
 
         target_gear_position = gear_down ? 1.0f : 0.0f;
-        target_spoiler_position = spoilersDeployed ? 1.0f : 0.0f;
+        target_spoiler_position = spoilers_deployed ? 1.0f : 0.0f;
 
         if (fast_positions_received_count <= 2)
         {
@@ -313,7 +396,7 @@ namespace xpilot
                 surfaces.spoilerRatio = (std::max)(0.0f, (std::min)(surfaces.spoilerRatio, 1.0f));
             }
 
-            previousSurfaceUpdateTime = now;
+            prev_surface_update_time = now;
         }
 
         SetGearRatio(surfaces.gearPosition);
@@ -361,7 +444,7 @@ namespace xpilot
         pOut->alt_ft = alt;
         pOut->pitch = GetPitch();
         pOut->roll = GetRoll();
-        pOut->terrainAlt_ft = (float)terrain_altitude;
+        pOut->terrainAlt_ft = (float)terrain_altitude.value();
         pOut->speed_kt = (float)ground_speed;
         pOut->heading = GetHeading();
         pOut->flaps = (float)surfaces.flapRatio;

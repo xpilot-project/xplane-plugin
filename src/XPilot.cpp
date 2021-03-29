@@ -23,7 +23,6 @@
 #include "Utilities.h"
 #include "AircraftManager.h"
 #include "NetworkAircraft.h"
-#include "NetworkAircraftConfig.h"
 #include "FrameRateMonitor.h"
 #include "NearbyATCWindow.h"
 #include "SettingsWindow.h"

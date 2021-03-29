@@ -251,7 +251,7 @@ namespace xpilot
 		}
 		if (config.has_spoilers_deployed())
 		{
-			plane->spoilersDeployed = config.spoilers_deployed();
+			plane->spoilers_deployed = config.spoilers_deployed();
 		}
 		if (config.has_lights())
 		{

@@ -30,6 +30,7 @@
 #include "XPMPMultiplayer.h"
 
 #include "Vector3.hpp"
+#include <optional>
 
 namespace xpilot
 {
@@ -57,21 +58,25 @@ namespace xpilot
         bool gear_down;
         bool engines_running;
         bool reverse_thrust;
-        XPMPPlaneSurfaces_t surfaces;
-        XPMPPlanePosition_t position;
-        XPMPPlaneRadar_t radar;
-        TerrainProbe terrain_probe;
         float ground_speed;
         float target_gear_position;
         float target_flaps_position;
         float target_spoiler_position;
-        bool spoilersDeployed;
-        int fast_positions_received_count;
+        bool spoilers_deployed;
+        XPMPPlaneSurfaces_t surfaces;
         std::string origin;
         std::string destination;
-        std::chrono::system_clock::time_point previousSurfaceUpdateTime;
+        std::chrono::system_clock::time_point prev_surface_update_time;
+        int fast_positions_received_count;
 
-        double terrain_altitude;
+        XPMPPlanePosition_t position;
+        XPMPPlaneRadar_t radar;
+
+        double terrain_offset;
+        double previous_terrain_offset;
+        std::optional<double> terrain_altitude = {};
+        std::optional<double> target_terrain_offset = {};
+        TerrainProbe terrain_probe;
 
         AircraftVisualState remote_visual_state;
         AircraftVisualState current_visual_state;
@@ -87,6 +92,7 @@ namespace xpilot
     protected:
         virtual void UpdatePosition(float, int);
         void Extrapolate(Vector3 velocityVector, Vector3 rotationVector, double interval);
+        double AutoLevel(double alt, double interval);
         static double NormalizeDegrees(double value, double lowerBound, double upperBound);
     };
 }
