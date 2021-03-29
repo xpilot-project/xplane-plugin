@@ -63,10 +63,9 @@ namespace xpilot {
 	public:
 		TextMessageConsole(XPilot* instance);
 		void createTabIfNotExists(const std::string& tabName);
-		void addMessageToTab(const std::string& msg, const std::string& recipient, ConsoleTabType tabType);
-		void addIncomingMessage(std::string message, double red = 255, double green = 255, double blue = 255);
-		void addOutgoingMessage(std::string message);
-		void sendSocketMessage(const std::string& msg);
+		void PrivateMessageReceived(const std::string& msg, const std::string& recipient, ConsoleTabType tabType);
+		void RadioMessageReceived(std::string message, double red = 255, double green = 255, double blue = 255);
+		void SendRadioMessage(const std::string& msg);
 		void sendPrivateMessage(const std::string& tabName, const std::string& msg);
 	protected:
 		void buildInterface() override;

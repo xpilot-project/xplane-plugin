@@ -61,18 +61,27 @@ namespace xpilot
 		SetWindowTitle("Text Message Console");
 	}
 
-	void TextMessageConsole::sendSocketMessage(const std::string& msg)
+	void TextMessageConsole::SendRadioMessage(const std::string& message)
 	{
 		if (m_env->isNetworkConnected())
 		{
-			//json j;
-			//j["Type"] = "SocketMessage";
-			//j["Data"]["Message"] = msg.c_str();
-			//m_env->sendSocketMsg(j.dump());
+			ConsoleMessage m;
+			m.setMessage(string_format("[%s] %s: %s", UtcTimestamp().c_str(), m_env->ourCallsign(), message.c_str()));
+			m.setRed(255);
+			m.setGreen(255);
+			m.setBlue(255);
+			MessageHistory.push_back(m);
+			m_scrollToBottom = true;
+
+			xpilot::Wrapper reply;
+			xpilot::RadioMessageSent* msg = new xpilot::RadioMessageSent();
+			reply.set_allocated_radio_message_sent(msg);
+			msg->set_message(message);
+			m_env->sendPbArray(reply);
 		}
 	}
 
-	void TextMessageConsole::addIncomingMessage(std::string msg, double red, double green, double blue)
+	void TextMessageConsole::RadioMessageReceived(std::string msg, double red, double green, double blue)
 	{
 		if (!msg.empty())
 		{
@@ -84,18 +93,6 @@ namespace xpilot
 			MessageHistory.push_back(m);
 			m_scrollToBottom = true;
 		}
-	}
-
-	void TextMessageConsole::addOutgoingMessage(std::string msg)
-	{
-		ConsoleMessage m;
-		m.setMessage(string_format("[%s] %s: %s", UtcTimestamp().c_str(), m_env->ourCallsign(), msg.c_str()));
-		m.setRed(255);
-		m.setGreen(255);
-		m.setBlue(255);
-		MessageHistory.push_back(m);
-		sendSocketMessage(msg);
-		m_scrollToBottom = true;
 	}
 
 	void TextMessageConsole::errorMessage(std::string error)
@@ -128,17 +125,18 @@ namespace xpilot
 		}
 	}
 
-	void TextMessageConsole::sendPrivateMessage(const std::string& tabName, const std::string& msg)
+	void TextMessageConsole::sendPrivateMessage(const std::string& tabName, const std::string& message)
 	{
-		if (!tabName.empty() && !msg.empty())
+		if (!tabName.empty() && !message.empty())
 		{
 			if (m_env->isNetworkConnected())
 			{
-				//json j;
-				//j["Type"] = "PrivateMessageSent";
-				//j["Data"]["Message"] = msg.c_str();
-				//j["Data"]["To"] = str_toupper(tabName).c_str();
-				//m_env->sendSocketMsg(j.dump());
+				xpilot::Wrapper reply;
+				xpilot::PrivateMessageSent* msg = new xpilot::PrivateMessageSent();
+				reply.set_allocated_private_message_sent(msg);
+				msg->set_to(str_toupper(tabName));
+				msg->set_message(message);
+				m_env->sendPbArray(reply);
 			}
 		}
 	}
@@ -160,7 +158,7 @@ namespace xpilot
 		}
 	}
 
-	void TextMessageConsole::addMessageToTab(const std::string& recipient, const std::string& msg, ConsoleTabType tabType)
+	void TextMessageConsole::PrivateMessageReceived(const std::string& recipient, const std::string& msg, ConsoleTabType tabType)
 	{
 		switch (tabType)
 		{
@@ -185,7 +183,7 @@ namespace xpilot
 			else
 			{
 				createTabIfNotExists(recipient);
-				addMessageToTab(recipient, msg, ConsoleTabType::Outgoing);
+				PrivateMessageReceived(recipient, msg, ConsoleTabType::Outgoing);
 			}
 		}
 		break;
@@ -210,7 +208,7 @@ namespace xpilot
 			else
 			{
 				createTabIfNotExists(recipient);
-				addMessageToTab(recipient, msg, ConsoleTabType::Incoming);
+				PrivateMessageReceived(recipient, msg, ConsoleTabType::Incoming);
 			}
 		}
 		break;
@@ -327,7 +325,7 @@ namespace xpilot
 								}
 								else
 								{
-									addOutgoingMessage(InputValue);
+									SendRadioMessage(InputValue);
 									InputValue = "";
 								}
 								break;

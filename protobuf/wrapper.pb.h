@@ -51,6 +51,8 @@
 #include "SetRadioStack.pb.h"
 #include "RequestStationInfo.pb.h"
 #include "TriggerDisconnect.pb.h"
+#include "RadioMessageReceived.pb.h"
+#include "RadioMessageSent.pb.h"
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
 #define PROTOBUF_INTERNAL_EXPORT_Wrapper_2eproto
@@ -135,15 +137,17 @@ class Wrapper PROTOBUF_FINAL :
     kDeletePlane = 9,
     kPrivateMessageReceived = 10,
     kPrivateMessageSent = 11,
-    kNetworkConnected = 12,
-    kNetworkDisconnected = 13,
-    kNearbyControllers = 14,
-    kSetTransponder = 15,
-    kSetRadiostack = 16,
-    kPluginInformation = 17,
-    kCslValidation = 18,
-    kRequestStationInfo = 19,
-    kTriggerDisconnect = 20,
+    kRadioMessageReceived = 12,
+    kRadioMessageSent = 13,
+    kNetworkConnected = 14,
+    kNetworkDisconnected = 15,
+    kNearbyControllers = 16,
+    kSetTransponder = 17,
+    kSetRadiostack = 18,
+    kPluginInformation = 19,
+    kCslValidation = 20,
+    kRequestStationInfo = 21,
+    kTriggerDisconnect = 22,
     MSG_NOT_SET = 0,
   };
 
@@ -233,15 +237,17 @@ class Wrapper PROTOBUF_FINAL :
     kDeletePlaneFieldNumber = 9,
     kPrivateMessageReceivedFieldNumber = 10,
     kPrivateMessageSentFieldNumber = 11,
-    kNetworkConnectedFieldNumber = 12,
-    kNetworkDisconnectedFieldNumber = 13,
-    kNearbyControllersFieldNumber = 14,
-    kSetTransponderFieldNumber = 15,
-    kSetRadiostackFieldNumber = 16,
-    kPluginInformationFieldNumber = 17,
-    kCslValidationFieldNumber = 18,
-    kRequestStationInfoFieldNumber = 19,
-    kTriggerDisconnectFieldNumber = 20,
+    kRadioMessageReceivedFieldNumber = 12,
+    kRadioMessageSentFieldNumber = 13,
+    kNetworkConnectedFieldNumber = 14,
+    kNetworkDisconnectedFieldNumber = 15,
+    kNearbyControllersFieldNumber = 16,
+    kSetTransponderFieldNumber = 17,
+    kSetRadiostackFieldNumber = 18,
+    kPluginInformationFieldNumber = 19,
+    kCslValidationFieldNumber = 20,
+    kRequestStationInfoFieldNumber = 21,
+    kTriggerDisconnectFieldNumber = 22,
   };
   // .google.protobuf.Timestamp timestamp = 1;
   bool has_timestamp() const;
@@ -441,7 +447,43 @@ class Wrapper PROTOBUF_FINAL :
       ::xpilot::PrivateMessageSent* private_message_sent);
   ::xpilot::PrivateMessageSent* unsafe_arena_release_private_message_sent();
 
-  // .xpilot.NetworkConnected network_connected = 12;
+  // .xpilot.RadioMessageReceived radio_message_received = 12;
+  bool has_radio_message_received() const;
+  private:
+  bool _internal_has_radio_message_received() const;
+  public:
+  void clear_radio_message_received();
+  const ::xpilot::RadioMessageReceived& radio_message_received() const;
+  ::xpilot::RadioMessageReceived* release_radio_message_received();
+  ::xpilot::RadioMessageReceived* mutable_radio_message_received();
+  void set_allocated_radio_message_received(::xpilot::RadioMessageReceived* radio_message_received);
+  private:
+  const ::xpilot::RadioMessageReceived& _internal_radio_message_received() const;
+  ::xpilot::RadioMessageReceived* _internal_mutable_radio_message_received();
+  public:
+  void unsafe_arena_set_allocated_radio_message_received(
+      ::xpilot::RadioMessageReceived* radio_message_received);
+  ::xpilot::RadioMessageReceived* unsafe_arena_release_radio_message_received();
+
+  // .xpilot.RadioMessageSent radio_message_sent = 13;
+  bool has_radio_message_sent() const;
+  private:
+  bool _internal_has_radio_message_sent() const;
+  public:
+  void clear_radio_message_sent();
+  const ::xpilot::RadioMessageSent& radio_message_sent() const;
+  ::xpilot::RadioMessageSent* release_radio_message_sent();
+  ::xpilot::RadioMessageSent* mutable_radio_message_sent();
+  void set_allocated_radio_message_sent(::xpilot::RadioMessageSent* radio_message_sent);
+  private:
+  const ::xpilot::RadioMessageSent& _internal_radio_message_sent() const;
+  ::xpilot::RadioMessageSent* _internal_mutable_radio_message_sent();
+  public:
+  void unsafe_arena_set_allocated_radio_message_sent(
+      ::xpilot::RadioMessageSent* radio_message_sent);
+  ::xpilot::RadioMessageSent* unsafe_arena_release_radio_message_sent();
+
+  // .xpilot.NetworkConnected network_connected = 14;
   bool has_network_connected() const;
   private:
   bool _internal_has_network_connected() const;
@@ -459,7 +501,7 @@ class Wrapper PROTOBUF_FINAL :
       ::xpilot::NetworkConnected* network_connected);
   ::xpilot::NetworkConnected* unsafe_arena_release_network_connected();
 
-  // .xpilot.NetworkDisconnected network_disconnected = 13;
+  // .xpilot.NetworkDisconnected network_disconnected = 15;
   bool has_network_disconnected() const;
   private:
   bool _internal_has_network_disconnected() const;
@@ -477,7 +519,7 @@ class Wrapper PROTOBUF_FINAL :
       ::xpilot::NetworkDisconnected* network_disconnected);
   ::xpilot::NetworkDisconnected* unsafe_arena_release_network_disconnected();
 
-  // .xpilot.NearbyControllers nearby_controllers = 14;
+  // .xpilot.NearbyControllers nearby_controllers = 16;
   bool has_nearby_controllers() const;
   private:
   bool _internal_has_nearby_controllers() const;
@@ -495,7 +537,7 @@ class Wrapper PROTOBUF_FINAL :
       ::xpilot::NearbyControllers* nearby_controllers);
   ::xpilot::NearbyControllers* unsafe_arena_release_nearby_controllers();
 
-  // .xpilot.SetTransponder set_transponder = 15;
+  // .xpilot.SetTransponder set_transponder = 17;
   bool has_set_transponder() const;
   private:
   bool _internal_has_set_transponder() const;
@@ -513,7 +555,7 @@ class Wrapper PROTOBUF_FINAL :
       ::xpilot::SetTransponder* set_transponder);
   ::xpilot::SetTransponder* unsafe_arena_release_set_transponder();
 
-  // .xpilot.SetRadioStack set_radiostack = 16;
+  // .xpilot.SetRadioStack set_radiostack = 18;
   bool has_set_radiostack() const;
   private:
   bool _internal_has_set_radiostack() const;
@@ -531,7 +573,7 @@ class Wrapper PROTOBUF_FINAL :
       ::xpilot::SetRadioStack* set_radiostack);
   ::xpilot::SetRadioStack* unsafe_arena_release_set_radiostack();
 
-  // .xpilot.PluginInformation plugin_information = 17;
+  // .xpilot.PluginInformation plugin_information = 19;
   bool has_plugin_information() const;
   private:
   bool _internal_has_plugin_information() const;
@@ -549,7 +591,7 @@ class Wrapper PROTOBUF_FINAL :
       ::xpilot::PluginInformation* plugin_information);
   ::xpilot::PluginInformation* unsafe_arena_release_plugin_information();
 
-  // .xpilot.CslValidation csl_validation = 18;
+  // .xpilot.CslValidation csl_validation = 20;
   bool has_csl_validation() const;
   private:
   bool _internal_has_csl_validation() const;
@@ -567,7 +609,7 @@ class Wrapper PROTOBUF_FINAL :
       ::xpilot::CslValidation* csl_validation);
   ::xpilot::CslValidation* unsafe_arena_release_csl_validation();
 
-  // .xpilot.RequestStationInfo request_station_info = 19;
+  // .xpilot.RequestStationInfo request_station_info = 21;
   bool has_request_station_info() const;
   private:
   bool _internal_has_request_station_info() const;
@@ -585,7 +627,7 @@ class Wrapper PROTOBUF_FINAL :
       ::xpilot::RequestStationInfo* request_station_info);
   ::xpilot::RequestStationInfo* unsafe_arena_release_request_station_info();
 
-  // .xpilot.TriggerDisconnect trigger_disconnect = 20;
+  // .xpilot.TriggerDisconnect trigger_disconnect = 22;
   bool has_trigger_disconnect() const;
   private:
   bool _internal_has_trigger_disconnect() const;
@@ -618,6 +660,8 @@ class Wrapper PROTOBUF_FINAL :
   void set_has_delete_plane();
   void set_has_private_message_received();
   void set_has_private_message_sent();
+  void set_has_radio_message_received();
+  void set_has_radio_message_sent();
   void set_has_network_connected();
   void set_has_network_disconnected();
   void set_has_nearby_controllers();
@@ -648,6 +692,8 @@ class Wrapper PROTOBUF_FINAL :
     ::xpilot::DeletePlane* delete_plane_;
     ::xpilot::PrivateMessageReceived* private_message_received_;
     ::xpilot::PrivateMessageSent* private_message_sent_;
+    ::xpilot::RadioMessageReceived* radio_message_received_;
+    ::xpilot::RadioMessageSent* radio_message_sent_;
     ::xpilot::NetworkConnected* network_connected_;
     ::xpilot::NetworkDisconnected* network_disconnected_;
     ::xpilot::NearbyControllers* nearby_controllers_;
@@ -1401,7 +1447,137 @@ inline ::xpilot::PrivateMessageSent* Wrapper::mutable_private_message_sent() {
   return _internal_mutable_private_message_sent();
 }
 
-// .xpilot.NetworkConnected network_connected = 12;
+// .xpilot.RadioMessageReceived radio_message_received = 12;
+inline bool Wrapper::_internal_has_radio_message_received() const {
+  return msg_case() == kRadioMessageReceived;
+}
+inline bool Wrapper::has_radio_message_received() const {
+  return _internal_has_radio_message_received();
+}
+inline void Wrapper::set_has_radio_message_received() {
+  _oneof_case_[0] = kRadioMessageReceived;
+}
+inline ::xpilot::RadioMessageReceived* Wrapper::release_radio_message_received() {
+  // @@protoc_insertion_point(field_release:xpilot.Wrapper.radio_message_received)
+  if (_internal_has_radio_message_received()) {
+    clear_has_msg();
+      ::xpilot::RadioMessageReceived* temp = msg_.radio_message_received_;
+    if (GetArena() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    msg_.radio_message_received_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::xpilot::RadioMessageReceived& Wrapper::_internal_radio_message_received() const {
+  return _internal_has_radio_message_received()
+      ? *msg_.radio_message_received_
+      : reinterpret_cast< ::xpilot::RadioMessageReceived&>(::xpilot::_RadioMessageReceived_default_instance_);
+}
+inline const ::xpilot::RadioMessageReceived& Wrapper::radio_message_received() const {
+  // @@protoc_insertion_point(field_get:xpilot.Wrapper.radio_message_received)
+  return _internal_radio_message_received();
+}
+inline ::xpilot::RadioMessageReceived* Wrapper::unsafe_arena_release_radio_message_received() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Wrapper.radio_message_received)
+  if (_internal_has_radio_message_received()) {
+    clear_has_msg();
+    ::xpilot::RadioMessageReceived* temp = msg_.radio_message_received_;
+    msg_.radio_message_received_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Wrapper::unsafe_arena_set_allocated_radio_message_received(::xpilot::RadioMessageReceived* radio_message_received) {
+  clear_msg();
+  if (radio_message_received) {
+    set_has_radio_message_received();
+    msg_.radio_message_received_ = radio_message_received;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Wrapper.radio_message_received)
+}
+inline ::xpilot::RadioMessageReceived* Wrapper::_internal_mutable_radio_message_received() {
+  if (!_internal_has_radio_message_received()) {
+    clear_msg();
+    set_has_radio_message_received();
+    msg_.radio_message_received_ = CreateMaybeMessage< ::xpilot::RadioMessageReceived >(GetArena());
+  }
+  return msg_.radio_message_received_;
+}
+inline ::xpilot::RadioMessageReceived* Wrapper::mutable_radio_message_received() {
+  // @@protoc_insertion_point(field_mutable:xpilot.Wrapper.radio_message_received)
+  return _internal_mutable_radio_message_received();
+}
+
+// .xpilot.RadioMessageSent radio_message_sent = 13;
+inline bool Wrapper::_internal_has_radio_message_sent() const {
+  return msg_case() == kRadioMessageSent;
+}
+inline bool Wrapper::has_radio_message_sent() const {
+  return _internal_has_radio_message_sent();
+}
+inline void Wrapper::set_has_radio_message_sent() {
+  _oneof_case_[0] = kRadioMessageSent;
+}
+inline ::xpilot::RadioMessageSent* Wrapper::release_radio_message_sent() {
+  // @@protoc_insertion_point(field_release:xpilot.Wrapper.radio_message_sent)
+  if (_internal_has_radio_message_sent()) {
+    clear_has_msg();
+      ::xpilot::RadioMessageSent* temp = msg_.radio_message_sent_;
+    if (GetArena() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    msg_.radio_message_sent_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::xpilot::RadioMessageSent& Wrapper::_internal_radio_message_sent() const {
+  return _internal_has_radio_message_sent()
+      ? *msg_.radio_message_sent_
+      : reinterpret_cast< ::xpilot::RadioMessageSent&>(::xpilot::_RadioMessageSent_default_instance_);
+}
+inline const ::xpilot::RadioMessageSent& Wrapper::radio_message_sent() const {
+  // @@protoc_insertion_point(field_get:xpilot.Wrapper.radio_message_sent)
+  return _internal_radio_message_sent();
+}
+inline ::xpilot::RadioMessageSent* Wrapper::unsafe_arena_release_radio_message_sent() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Wrapper.radio_message_sent)
+  if (_internal_has_radio_message_sent()) {
+    clear_has_msg();
+    ::xpilot::RadioMessageSent* temp = msg_.radio_message_sent_;
+    msg_.radio_message_sent_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Wrapper::unsafe_arena_set_allocated_radio_message_sent(::xpilot::RadioMessageSent* radio_message_sent) {
+  clear_msg();
+  if (radio_message_sent) {
+    set_has_radio_message_sent();
+    msg_.radio_message_sent_ = radio_message_sent;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Wrapper.radio_message_sent)
+}
+inline ::xpilot::RadioMessageSent* Wrapper::_internal_mutable_radio_message_sent() {
+  if (!_internal_has_radio_message_sent()) {
+    clear_msg();
+    set_has_radio_message_sent();
+    msg_.radio_message_sent_ = CreateMaybeMessage< ::xpilot::RadioMessageSent >(GetArena());
+  }
+  return msg_.radio_message_sent_;
+}
+inline ::xpilot::RadioMessageSent* Wrapper::mutable_radio_message_sent() {
+  // @@protoc_insertion_point(field_mutable:xpilot.Wrapper.radio_message_sent)
+  return _internal_mutable_radio_message_sent();
+}
+
+// .xpilot.NetworkConnected network_connected = 14;
 inline bool Wrapper::_internal_has_network_connected() const {
   return msg_case() == kNetworkConnected;
 }
@@ -1466,7 +1642,7 @@ inline ::xpilot::NetworkConnected* Wrapper::mutable_network_connected() {
   return _internal_mutable_network_connected();
 }
 
-// .xpilot.NetworkDisconnected network_disconnected = 13;
+// .xpilot.NetworkDisconnected network_disconnected = 15;
 inline bool Wrapper::_internal_has_network_disconnected() const {
   return msg_case() == kNetworkDisconnected;
 }
@@ -1531,7 +1707,7 @@ inline ::xpilot::NetworkDisconnected* Wrapper::mutable_network_disconnected() {
   return _internal_mutable_network_disconnected();
 }
 
-// .xpilot.NearbyControllers nearby_controllers = 14;
+// .xpilot.NearbyControllers nearby_controllers = 16;
 inline bool Wrapper::_internal_has_nearby_controllers() const {
   return msg_case() == kNearbyControllers;
 }
@@ -1596,7 +1772,7 @@ inline ::xpilot::NearbyControllers* Wrapper::mutable_nearby_controllers() {
   return _internal_mutable_nearby_controllers();
 }
 
-// .xpilot.SetTransponder set_transponder = 15;
+// .xpilot.SetTransponder set_transponder = 17;
 inline bool Wrapper::_internal_has_set_transponder() const {
   return msg_case() == kSetTransponder;
 }
@@ -1661,7 +1837,7 @@ inline ::xpilot::SetTransponder* Wrapper::mutable_set_transponder() {
   return _internal_mutable_set_transponder();
 }
 
-// .xpilot.SetRadioStack set_radiostack = 16;
+// .xpilot.SetRadioStack set_radiostack = 18;
 inline bool Wrapper::_internal_has_set_radiostack() const {
   return msg_case() == kSetRadiostack;
 }
@@ -1726,7 +1902,7 @@ inline ::xpilot::SetRadioStack* Wrapper::mutable_set_radiostack() {
   return _internal_mutable_set_radiostack();
 }
 
-// .xpilot.PluginInformation plugin_information = 17;
+// .xpilot.PluginInformation plugin_information = 19;
 inline bool Wrapper::_internal_has_plugin_information() const {
   return msg_case() == kPluginInformation;
 }
@@ -1791,7 +1967,7 @@ inline ::xpilot::PluginInformation* Wrapper::mutable_plugin_information() {
   return _internal_mutable_plugin_information();
 }
 
-// .xpilot.CslValidation csl_validation = 18;
+// .xpilot.CslValidation csl_validation = 20;
 inline bool Wrapper::_internal_has_csl_validation() const {
   return msg_case() == kCslValidation;
 }
@@ -1856,7 +2032,7 @@ inline ::xpilot::CslValidation* Wrapper::mutable_csl_validation() {
   return _internal_mutable_csl_validation();
 }
 
-// .xpilot.RequestStationInfo request_station_info = 19;
+// .xpilot.RequestStationInfo request_station_info = 21;
 inline bool Wrapper::_internal_has_request_station_info() const {
   return msg_case() == kRequestStationInfo;
 }
@@ -1921,7 +2097,7 @@ inline ::xpilot::RequestStationInfo* Wrapper::mutable_request_station_info() {
   return _internal_mutable_request_station_info();
 }
 
-// .xpilot.TriggerDisconnect trigger_disconnect = 20;
+// .xpilot.TriggerDisconnect trigger_disconnect = 22;
 inline bool Wrapper::_internal_has_trigger_disconnect() const {
   return msg_case() == kTriggerDisconnect;
 }

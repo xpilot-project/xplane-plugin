@@ -36,7 +36,6 @@ set(Header_Files
     include/InterpolatedState.h
     include/NearbyATCWindow.h
     include/NetworkAircraft.h
-    include/NetworkAircraftConfig.h
     include/NotificationPanel.h
     include/OwnedDataRef.h
     include/Plugin.h
@@ -77,7 +76,6 @@ set(Source_Files
     src/FrameRateMonitor.cpp
     src/NearbyATCWindow.cpp
     src/NetworkAircraft.cpp
-    src/NetworkAircraftConfig.cpp
     src/NotificationPanel.cpp
     src/OwnedDataRef.cpp
     src/Plugin.cpp

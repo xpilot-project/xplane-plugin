@@ -757,7 +757,7 @@ namespace xpilot
 		{
 			queueCallback([=]()
 			{
-				m_textMessageConsole->addMessageToTab(recipient, msg, tabType);
+				m_textMessageConsole->PrivateMessageReceived(recipient, msg, tabType);
 			});
 		}
 	}
@@ -768,7 +768,7 @@ namespace xpilot
 		{
 			queueCallback([=]()
 			{
-				m_textMessageConsole->addIncomingMessage(msg.c_str(), red, green, blue);
+				m_textMessageConsole->RadioMessageReceived(msg.c_str(), red, green, blue);
 			});
 		}
 	}
