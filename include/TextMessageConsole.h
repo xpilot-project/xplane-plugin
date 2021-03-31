@@ -54,22 +54,22 @@ namespace xpilot {
 
 	enum class ConsoleTabType
 	{
-		Incoming,
-		Outgoing
+		Received,
+		Sent
 	};
 
 	class TextMessageConsole : public XPImgWindow 
 	{
 	public:
 		TextMessageConsole(XPilot* instance);
-		void createTabIfNotExists(const std::string& tabName);
+		void CreateNonExistingTab(const std::string& tabName);
 		void PrivateMessageReceived(const std::string& msg, const std::string& recipient, ConsoleTabType tabType);
 		void RadioMessageReceived(std::string message, double red = 255, double green = 255, double blue = 255);
 		void SendRadioMessage(const std::string& msg);
-		void sendPrivateMessage(const std::string& tabName, const std::string& msg);
+		void SendPrivateMessage(const std::string& tabName, const std::string& msg);
 	protected:
 		void buildInterface() override;
-		void errorMessage(std::string error);
+		void ShowErrorMessage(std::string error);
 	private:
 		bool m_scrollToBottom;
 		XPilot* m_env;

@@ -181,6 +181,7 @@ class RadioMessageReceived PROTOBUF_FINAL :
   enum : int {
     kFromFieldNumber = 1,
     kMessageFieldNumber = 2,
+    kColorFieldNumber = 3,
   };
   // string from = 1;
   bool has_from() const;
@@ -222,6 +223,19 @@ class RadioMessageReceived PROTOBUF_FINAL :
   std::string* _internal_mutable_message();
   public:
 
+  // int32 color = 3;
+  bool has_color() const;
+  private:
+  bool _internal_has_color() const;
+  public:
+  void clear_color();
+  ::PROTOBUF_NAMESPACE_ID::int32 color() const;
+  void set_color(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_color() const;
+  void _internal_set_color(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
   // @@protoc_insertion_point(class_scope:xpilot.RadioMessageReceived)
  private:
   class _Internal;
@@ -233,6 +247,7 @@ class RadioMessageReceived PROTOBUF_FINAL :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr from_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
+  ::PROTOBUF_NAMESPACE_ID::int32 color_;
   friend struct ::TableStruct_RadioMessageReceived_2eproto;
 };
 // ===================================================================
@@ -390,6 +405,34 @@ inline void RadioMessageReceived::set_allocated_message(std::string* message) {
   message_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), message,
       GetArena());
   // @@protoc_insertion_point(field_set_allocated:xpilot.RadioMessageReceived.message)
+}
+
+// int32 color = 3;
+inline bool RadioMessageReceived::_internal_has_color() const {
+  bool value = (_has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline bool RadioMessageReceived::has_color() const {
+  return _internal_has_color();
+}
+inline void RadioMessageReceived::clear_color() {
+  color_ = 0;
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 RadioMessageReceived::_internal_color() const {
+  return color_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 RadioMessageReceived::color() const {
+  // @@protoc_insertion_point(field_get:xpilot.RadioMessageReceived.color)
+  return _internal_color();
+}
+inline void RadioMessageReceived::_internal_set_color(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000004u;
+  color_ = value;
+}
+inline void RadioMessageReceived::set_color(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_color(value);
+  // @@protoc_insertion_point(field_set:xpilot.RadioMessageReceived.color)
 }
 
 #ifdef __GNUC__

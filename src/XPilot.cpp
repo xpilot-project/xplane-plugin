@@ -560,18 +560,26 @@ namespace xpilot
 					});
 				}
 
+				if (wrapper.has_radio_message_received())
+				{
+					xpilot::RadioMessageReceived msg = wrapper.radio_message_received();
+					rgb c = IntToRgb(msg.color());
+					RadioMessageReceived(msg.message(), c.r, c.g, c.b);
+					AddNotificationPanelMessage(msg.message(), c.r, c.g, c.b);
+				}
+
 				if (wrapper.has_private_message_received())
 				{
 					xpilot::PrivateMessageReceived msg = wrapper.private_message_received();
-					addConsoleMessageTab(msg.from(), msg.message(), ConsoleTabType::Incoming);
-					addNotificationPanelMessage(string_format("%s [pvt]:  %s", msg.from(), msg.message().c_str()), 230, 94, 230);
+					AddPrivateMessage(msg.from(), msg.message(), ConsoleTabType::Received);
+					AddNotificationPanelMessage(string_format("%s [pvt]:  %s", msg.from(), msg.message().c_str()), 255, 255, 255);
 				}
 
 				if (wrapper.has_private_message_sent())
 				{
 					xpilot::PrivateMessageSent msg = wrapper.private_message_sent();
-					addConsoleMessageTab(msg.to(), msg.message(), ConsoleTabType::Outgoing);
-					addNotificationPanelMessage(string_format("%s [pvt: %s]:  %s", m_networkCallsign.value().c_str(), msg.to(), msg.message().c_str()), 50, 205, 50);
+					AddPrivateMessage(msg.to(), msg.message(), ConsoleTabType::Sent);
+					AddNotificationPanelMessage(string_format("%s [pvt: %s]:  %s", m_networkCallsign.value().c_str(), msg.to(), msg.message().c_str()), 0, 255, 255);
 				}
 
 				if (wrapper.has_set_radiostack())
@@ -751,7 +759,7 @@ namespace xpilot
 		return true;
 	}
 
-	void XPilot::addConsoleMessageTab(const std::string& recipient, const std::string& msg, ConsoleTabType tabType)
+	void XPilot::AddPrivateMessage(const std::string& recipient, const std::string& msg, ConsoleTabType tabType)
 	{
 		if (!recipient.empty() && !msg.empty())
 		{
@@ -762,7 +770,7 @@ namespace xpilot
 		}
 	}
 
-	void XPilot::addConsoleMessage(const std::string& msg, double red, double green, double blue)
+	void XPilot::RadioMessageReceived(const std::string& msg, double red, double green, double blue)
 	{
 		if (!msg.empty())
 		{
@@ -773,21 +781,21 @@ namespace xpilot
 		}
 	}
 
-	void XPilot::addNotificationPanelMessage(const std::string& msg, double red, double green, double blue)
+	void XPilot::AddNotificationPanelMessage(const std::string& msg, double red, double green, double blue)
 	{
 		if (!msg.empty())
 		{
 			queueCallback([=]()
 			{
-				m_notificationPanel->addNotificationPanelMessage(msg, red, green, blue);
+				m_notificationPanel->AddNotificationPanelMessage(msg, red, green, blue);
 			});
 		}
 	}
 
 	void XPilot::addNotification(const std::string& msg, double red, double green, double blue)
 	{
-		addConsoleMessage(msg, red, green, blue);
-		addNotificationPanelMessage(msg, red, green, blue);
+		RadioMessageReceived(msg, red, green, blue);
+		AddNotificationPanelMessage(msg, red, green, blue);
 	}
 
 	void XPilot::queueCallback(const std::function<void()> &cb)

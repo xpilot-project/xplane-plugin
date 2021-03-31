@@ -201,6 +201,22 @@ inline bool CheckEverySoOften(float& _lastCheck, float _interval)
 	return CheckEverySoOften(_lastCheck, _interval, GetNetworkTime());
 }
 
+struct rgb
+{
+	float r;
+	float g;
+	float b;
+};
+
+inline rgb IntToRgb(int v)
+{
+	rgb result{};
+	result.r = (v >> 0) & 255;
+	result.g = (v >> 8) & 255;
+	result.b = (v >> 16) & 255;
+	return result;
+}
+
 inline void HexToRgb(int inCol, float outColor[4])
 {
 	outColor[0] = float((inCol & 0xFF0000) >> 16) / 255.0f;

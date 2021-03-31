@@ -48,6 +48,7 @@
 #include "SetTransponder.pb.h"
 #include "FastPositionUpdate.pb.h"
 #include "PlaneAddedToSim.pb.h"
+#include "PlaneRemovedFromSim.pb.h"
 #include "SetRadioStack.pb.h"
 #include "RequestStationInfo.pb.h"
 #include "TriggerDisconnect.pb.h"
@@ -148,6 +149,7 @@ class Wrapper PROTOBUF_FINAL :
     kCslValidation = 20,
     kRequestStationInfo = 21,
     kTriggerDisconnect = 22,
+    kPlaneRemovedFromSim = 23,
     MSG_NOT_SET = 0,
   };
 
@@ -248,6 +250,7 @@ class Wrapper PROTOBUF_FINAL :
     kCslValidationFieldNumber = 20,
     kRequestStationInfoFieldNumber = 21,
     kTriggerDisconnectFieldNumber = 22,
+    kPlaneRemovedFromSimFieldNumber = 23,
   };
   // .google.protobuf.Timestamp timestamp = 1;
   bool has_timestamp() const;
@@ -645,6 +648,24 @@ class Wrapper PROTOBUF_FINAL :
       ::xpilot::TriggerDisconnect* trigger_disconnect);
   ::xpilot::TriggerDisconnect* unsafe_arena_release_trigger_disconnect();
 
+  // .xpilot.PlaneRemovedFromSim plane_removed_from_sim = 23;
+  bool has_plane_removed_from_sim() const;
+  private:
+  bool _internal_has_plane_removed_from_sim() const;
+  public:
+  void clear_plane_removed_from_sim();
+  const ::xpilot::PlaneRemovedFromSim& plane_removed_from_sim() const;
+  ::xpilot::PlaneRemovedFromSim* release_plane_removed_from_sim();
+  ::xpilot::PlaneRemovedFromSim* mutable_plane_removed_from_sim();
+  void set_allocated_plane_removed_from_sim(::xpilot::PlaneRemovedFromSim* plane_removed_from_sim);
+  private:
+  const ::xpilot::PlaneRemovedFromSim& _internal_plane_removed_from_sim() const;
+  ::xpilot::PlaneRemovedFromSim* _internal_mutable_plane_removed_from_sim();
+  public:
+  void unsafe_arena_set_allocated_plane_removed_from_sim(
+      ::xpilot::PlaneRemovedFromSim* plane_removed_from_sim);
+  ::xpilot::PlaneRemovedFromSim* unsafe_arena_release_plane_removed_from_sim();
+
   void clear_msg();
   MsgCase msg_case() const;
   // @@protoc_insertion_point(class_scope:xpilot.Wrapper)
@@ -671,6 +692,7 @@ class Wrapper PROTOBUF_FINAL :
   void set_has_csl_validation();
   void set_has_request_station_info();
   void set_has_trigger_disconnect();
+  void set_has_plane_removed_from_sim();
 
   inline bool has_msg() const;
   inline void clear_has_msg();
@@ -703,6 +725,7 @@ class Wrapper PROTOBUF_FINAL :
     ::xpilot::CslValidation* csl_validation_;
     ::xpilot::RequestStationInfo* request_station_info_;
     ::xpilot::TriggerDisconnect* trigger_disconnect_;
+    ::xpilot::PlaneRemovedFromSim* plane_removed_from_sim_;
   } msg_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::uint32 _oneof_case_[1];
@@ -2160,6 +2183,71 @@ inline ::xpilot::TriggerDisconnect* Wrapper::_internal_mutable_trigger_disconnec
 inline ::xpilot::TriggerDisconnect* Wrapper::mutable_trigger_disconnect() {
   // @@protoc_insertion_point(field_mutable:xpilot.Wrapper.trigger_disconnect)
   return _internal_mutable_trigger_disconnect();
+}
+
+// .xpilot.PlaneRemovedFromSim plane_removed_from_sim = 23;
+inline bool Wrapper::_internal_has_plane_removed_from_sim() const {
+  return msg_case() == kPlaneRemovedFromSim;
+}
+inline bool Wrapper::has_plane_removed_from_sim() const {
+  return _internal_has_plane_removed_from_sim();
+}
+inline void Wrapper::set_has_plane_removed_from_sim() {
+  _oneof_case_[0] = kPlaneRemovedFromSim;
+}
+inline ::xpilot::PlaneRemovedFromSim* Wrapper::release_plane_removed_from_sim() {
+  // @@protoc_insertion_point(field_release:xpilot.Wrapper.plane_removed_from_sim)
+  if (_internal_has_plane_removed_from_sim()) {
+    clear_has_msg();
+      ::xpilot::PlaneRemovedFromSim* temp = msg_.plane_removed_from_sim_;
+    if (GetArena() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    msg_.plane_removed_from_sim_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::xpilot::PlaneRemovedFromSim& Wrapper::_internal_plane_removed_from_sim() const {
+  return _internal_has_plane_removed_from_sim()
+      ? *msg_.plane_removed_from_sim_
+      : reinterpret_cast< ::xpilot::PlaneRemovedFromSim&>(::xpilot::_PlaneRemovedFromSim_default_instance_);
+}
+inline const ::xpilot::PlaneRemovedFromSim& Wrapper::plane_removed_from_sim() const {
+  // @@protoc_insertion_point(field_get:xpilot.Wrapper.plane_removed_from_sim)
+  return _internal_plane_removed_from_sim();
+}
+inline ::xpilot::PlaneRemovedFromSim* Wrapper::unsafe_arena_release_plane_removed_from_sim() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Wrapper.plane_removed_from_sim)
+  if (_internal_has_plane_removed_from_sim()) {
+    clear_has_msg();
+    ::xpilot::PlaneRemovedFromSim* temp = msg_.plane_removed_from_sim_;
+    msg_.plane_removed_from_sim_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Wrapper::unsafe_arena_set_allocated_plane_removed_from_sim(::xpilot::PlaneRemovedFromSim* plane_removed_from_sim) {
+  clear_msg();
+  if (plane_removed_from_sim) {
+    set_has_plane_removed_from_sim();
+    msg_.plane_removed_from_sim_ = plane_removed_from_sim;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Wrapper.plane_removed_from_sim)
+}
+inline ::xpilot::PlaneRemovedFromSim* Wrapper::_internal_mutable_plane_removed_from_sim() {
+  if (!_internal_has_plane_removed_from_sim()) {
+    clear_msg();
+    set_has_plane_removed_from_sim();
+    msg_.plane_removed_from_sim_ = CreateMaybeMessage< ::xpilot::PlaneRemovedFromSim >(GetArena());
+  }
+  return msg_.plane_removed_from_sim_;
+}
+inline ::xpilot::PlaneRemovedFromSim* Wrapper::mutable_plane_removed_from_sim() {
+  // @@protoc_insertion_point(field_mutable:xpilot.Wrapper.plane_removed_from_sim)
+  return _internal_mutable_plane_removed_from_sim();
 }
 
 inline bool Wrapper::has_msg() const {

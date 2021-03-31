@@ -27,14 +27,18 @@ using json = nlohmann::json;
 
 namespace xpilot
 {
-	static std::string InputValue;
-	static std::list<ConsoleMessage> MessageHistory;
-	static std::list<Tab> Tabs;
+	static std::string m_inputValue;
+	static std::list<ConsoleMessage> m_messageHistory;
+	static std::list<Tab> m_tabs;
 
 	enum class CommandOptions
 	{
 		Chat,
 		RequestAtis,
+		MetarRequest,
+		SetRadioFrequency,
+		OverrideRx,
+		OverrideTx,
 		Close,
 		CloseAll,
 		Clear,
@@ -44,8 +48,12 @@ namespace xpilot
 	CommandOptions resolveOption(std::string input)
 	{
 		std::string v(str_tolower(input));
-		if (v == ".chat") return xpilot::CommandOptions::Chat;
+		if (v == ".chat" || v == ".msg") return xpilot::CommandOptions::Chat;
 		if (v == ".atis") return xpilot::CommandOptions::RequestAtis;
+		if (v == ".metar" || v == ".wx") return xpilot::CommandOptions::MetarRequest;
+		if (v == ".com1" || v == ".com2") return xpilot::CommandOptions::SetRadioFrequency;
+		if (v == ".tx") return xpilot::CommandOptions::OverrideTx;
+		if (v == ".rx") return xpilot::CommandOptions::OverrideRx;
 		if (v == ".clear") return xpilot::CommandOptions::Clear;
 		if (v == ".close") return xpilot::CommandOptions::Close;
 		if (v == ".closeall") return xpilot::CommandOptions::CloseAll;
@@ -65,14 +73,6 @@ namespace xpilot
 	{
 		if (m_env->isNetworkConnected())
 		{
-			ConsoleMessage m;
-			m.setMessage(string_format("[%s] %s: %s", UtcTimestamp().c_str(), m_env->ourCallsign(), message.c_str()));
-			m.setRed(255);
-			m.setGreen(255);
-			m.setBlue(255);
-			MessageHistory.push_back(m);
-			m_scrollToBottom = true;
-
 			xpilot::Wrapper reply;
 			xpilot::RadioMessageSent* msg = new xpilot::RadioMessageSent();
 			reply.set_allocated_radio_message_sent(msg);
@@ -90,23 +90,23 @@ namespace xpilot
 			m.setRed(red);
 			m.setGreen(green);
 			m.setBlue(blue);
-			MessageHistory.push_back(m);
+			m_messageHistory.push_back(m);
 			m_scrollToBottom = true;
 		}
 	}
 
-	void TextMessageConsole::errorMessage(std::string error)
+	void TextMessageConsole::ShowErrorMessage(std::string error)
 	{
 		ConsoleMessage m;
 		m.setMessage(string_format("[%s] %s", UtcTimestamp().c_str(), error.c_str()));
 		m.setRed(192);
 		m.setGreen(57);
 		m.setBlue(43);
-		MessageHistory.push_back(m);
+		m_messageHistory.push_back(m);
 		m_scrollToBottom = true;
 	}
 
-	void tabErrorMessage(std::string tabName, std::string error)
+	void PrivateMessageError(std::string tabName, std::string error)
 	{
 		ConsoleMessage m;
 		m.setMessage(string_format("[%s] %s", UtcTimestamp().c_str(), error.c_str()));
@@ -114,18 +114,18 @@ namespace xpilot
 		m.setGreen(57);
 		m.setBlue(43);
 
-		auto it = std::find_if(Tabs.begin(), Tabs.end(), [&tabName](const Tab& t)
+		auto it = std::find_if(m_tabs.begin(), m_tabs.end(), [&tabName](const Tab& t)
 		{
 			return t.tabName == tabName;
 		});
 
-		if (it != Tabs.end())
+		if (it != m_tabs.end())
 		{
 			it->scrollToBottom = true;
 		}
 	}
 
-	void TextMessageConsole::sendPrivateMessage(const std::string& tabName, const std::string& message)
+	void TextMessageConsole::SendPrivateMessage(const std::string& tabName, const std::string& message)
 	{
 		if (!tabName.empty() && !message.empty())
 		{
@@ -141,20 +141,20 @@ namespace xpilot
 		}
 	}
 
-	void TextMessageConsole::createTabIfNotExists(const std::string& tabName)
+	void TextMessageConsole::CreateNonExistingTab(const std::string& tabName)
 	{
-		auto it = std::find_if(Tabs.begin(), Tabs.end(), [&tabName](const Tab& t)
+		auto it = std::find_if(m_tabs.begin(), m_tabs.end(), [&tabName](const Tab& t)
 		{
 			return t.tabName == tabName;
 		});
 
-		if (it == Tabs.end())
+		if (it == m_tabs.end())
 		{
 			Tab tab;
 			tab.tabName = tabName;
 			tab.isOpen = true;
 			tab.messageHistory = std::list<ConsoleMessage>();
-			Tabs.push_back(tab);
+			m_tabs.push_back(tab);
 		}
 	}
 
@@ -162,53 +162,53 @@ namespace xpilot
 	{
 		switch (tabType)
 		{
-		case ConsoleTabType::Outgoing:
+		case ConsoleTabType::Sent:
 		{
 			ConsoleMessage m;
 			m.setMessage(string_format("[%s] %s: %s", UtcTimestamp().c_str(), m_env->ourCallsign(), msg.c_str()));
+			m.setRed(0);
+			m.setGreen(255);
+			m.setBlue(255);
+
+			auto it = std::find_if(m_tabs.begin(), m_tabs.end(), [&recipient](const Tab& t)
+			{
+				return t.tabName == recipient;
+			});
+
+			if (it != m_tabs.end())
+			{
+				it->messageHistory.push_back(m);
+				it->scrollToBottom = true;
+			}
+			else
+			{
+				CreateNonExistingTab(recipient);
+				PrivateMessageReceived(recipient, msg, ConsoleTabType::Sent);
+			}
+		}
+		break;
+		case ConsoleTabType::Received:
+		{
+			ConsoleMessage m;
+			m.setMessage(string_format("[%s] %s: %s", UtcTimestamp().c_str(), recipient.c_str(), msg.c_str()));
 			m.setRed(255);
 			m.setGreen(255);
 			m.setBlue(255);
 
-			auto it = std::find_if(Tabs.begin(), Tabs.end(), [&recipient](const Tab& t)
+			auto it = std::find_if(m_tabs.begin(), m_tabs.end(), [&recipient](const Tab& t)
 			{
 				return t.tabName == recipient;
 			});
 
-			if (it != Tabs.end())
+			if (it != m_tabs.end())
 			{
 				it->messageHistory.push_back(m);
 				it->scrollToBottom = true;
 			}
 			else
 			{
-				createTabIfNotExists(recipient);
-				PrivateMessageReceived(recipient, msg, ConsoleTabType::Outgoing);
-			}
-		}
-		break;
-		case ConsoleTabType::Incoming:
-		{
-			ConsoleMessage m;
-			m.setMessage(string_format("[%s] %s: %s", UtcTimestamp().c_str(), recipient.c_str(), msg.c_str()));
-			m.setRed(39);
-			m.setGreen(174);
-			m.setBlue(96);
-
-			auto it = std::find_if(Tabs.begin(), Tabs.end(), [&recipient](const Tab& t)
-			{
-				return t.tabName == recipient;
-			});
-
-			if (it != Tabs.end())
-			{
-				it->messageHistory.push_back(m);
-				it->scrollToBottom = true;
-			}
-			else
-			{
-				createTabIfNotExists(recipient);
-				PrivateMessageReceived(recipient, msg, ConsoleTabType::Incoming);
+				CreateNonExistingTab(recipient);
+				PrivateMessageReceived(recipient, msg, ConsoleTabType::Received);
 			}
 		}
 		break;
@@ -217,13 +217,13 @@ namespace xpilot
 
 	void CloseTab(const std::string& tabName)
 	{
-		auto it = std::find_if(Tabs.begin(), Tabs.end(), [&tabName](const Tab& t)
+		auto it = std::find_if(m_tabs.begin(), m_tabs.end(), [&tabName](const Tab& t)
 		{
 			return t.tabName == tabName;
 		});
-		if (it != Tabs.end())
+		if (it != m_tabs.end())
 		{
-			Tabs.erase(it);
+			m_tabs.erase(it);
 		}
 	}
 
@@ -237,7 +237,7 @@ namespace xpilot
 			{
 				ImGui::BeginChild("##Messages", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()), false);
 				{
-					for (auto& e : MessageHistory)
+					for (auto& e : m_messageHistory)
 					{
 						const ImVec4& color = ImVec4(e.getRed(), e.getGreen(), e.getBlue(), 1.0f);
 						ImGui::PushStyleColor(ImGuiCol_Text, color);
@@ -252,19 +252,20 @@ namespace xpilot
 				}
 				ImGui::EndChild();
 				ImGui::PushItemWidth(-1.0f);
-				if (ImGui::InputTextStd("##MessagesInput", &InputValue, ImGuiInputTextFlags_EnterReturnsTrue))
+				ImGui::SetKeyboardFocusHere();
+				if (ImGui::InputTextStd("##MessagesInput", &m_inputValue, ImGuiInputTextFlags_EnterReturnsTrue))
 				{
-					if (!InputValue.empty())
+					if (!m_inputValue.empty())
 					{
 						std::vector<std::string> args;
-						tokenize(InputValue, args, " ", true);
+						tokenize(m_inputValue, args, " ", true);
 						if (args.size() > 0)
 						{
 							switch (resolveOption(args.at(0)))
 							{
 							case xpilot::CommandOptions::Chat:
 								if (!m_env->isNetworkConnected()) {
-									errorMessage("Not connected to the network.");
+									ShowErrorMessage("Not connected to network.");
 								}
 								else
 								{
@@ -275,26 +276,26 @@ namespace xpilot
 											std::string m;
 											join(args, ' ', m);
 
-											createTabIfNotExists(str_toupper(args.at(1)));
-											sendPrivateMessage(str_toupper(args.at(1)), m);
+											CreateNonExistingTab(str_toupper(args.at(1)));
+											SendPrivateMessage(str_toupper(args.at(1)), m);
 										}
 										else
 										{
-											createTabIfNotExists(str_toupper(args.at(1)));
+											CreateNonExistingTab(str_toupper(args.at(1)));
 										}
-										InputValue = "";
+										m_inputValue = "";
 									}
 									else
 									{
-										errorMessage("Invalid parameters. To open a new chat tab, use the command .chat <callsign> <message>");
-										InputValue = "";
+										ShowErrorMessage("Invalid parameters. To open a new chat tab, use the command .chat <callsign> <message>");
+										m_inputValue = "";
 									}
 								}
 								break;
 							case xpilot::CommandOptions::RequestAtis:
 								if (!m_env->isNetworkConnected())
 								{
-									errorMessage("Not connected to the network.");
+									ShowErrorMessage("Not connected to the network.");
 								}
 								else
 								{
@@ -304,29 +305,29 @@ namespace xpilot
 									}
 									else
 									{
-										errorMessage("Invalid parameters. To request an ATIS, use the command .atis <callsign>");
-										InputValue = "";
+										ShowErrorMessage("Invalid parameters. To request an ATIS, use the command .atis <callsign>");
+										m_inputValue = "";
 									}
 								}
 								break;
 							case xpilot::CommandOptions::Clear:
-								MessageHistory.clear();
-								InputValue = "";
+								m_messageHistory.clear();
+								m_inputValue = "";
 								break;
 							case xpilot::CommandOptions::CloseAll:
-								Tabs.clear();
-								InputValue = "";
+								m_tabs.clear();
+								m_inputValue = "";
 								break;
 							case xpilot::CommandOptions::Close:
 							default:
 								if (!m_env->isNetworkConnected())
 								{
-									errorMessage("Not connected to the network.");
+									ShowErrorMessage("Not connected to network.");
 								}
 								else
 								{
-									SendRadioMessage(InputValue);
-									InputValue = "";
+									SendRadioMessage(m_inputValue);
+									m_inputValue = "";
 								}
 								break;
 							}
@@ -335,20 +336,20 @@ namespace xpilot
 				}
 				if (ImGui::IsItemDeactivated() && ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
 				{
-					InputValue = "";
+					m_inputValue = "";
 				}
 				ImGui::EndTabItem();
 			}
 
-			for (auto it = Tabs.begin(); it != Tabs.end(); ++it)
+			for (auto it = m_tabs.begin(); it != m_tabs.end(); ++it)
 			{
 				if (!it->isOpen)
 				{
-					Tabs.erase(it);
+					m_tabs.erase(it);
 				}
 			}
 
-			for (auto it = Tabs.begin(); it != Tabs.end(); ++it)
+			for (auto it = m_tabs.begin(); it != m_tabs.end(); ++it)
 			{
 				std::string key = it->tabName;
 
@@ -393,11 +394,11 @@ namespace xpilot
 								default:
 									if (!m_env->isNetworkConnected())
 									{
-										tabErrorMessage(it->tabName, "Not connected to the network.");
+										PrivateMessageError(it->tabName, "Not connected to network.");
 									}
 									else
 									{
-										sendPrivateMessage(it->tabName, it->textInput);
+										SendPrivateMessage(it->tabName, it->textInput);
 										it->textInput = "";
 									}
 									break;
@@ -407,7 +408,7 @@ namespace xpilot
 					}
 					if (ImGui::IsItemDeactivated() && ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
 					{
-						InputValue = "";
+						m_inputValue = "";
 					}
 					ImGui::PopID();
 					ImGui::EndTabItem();

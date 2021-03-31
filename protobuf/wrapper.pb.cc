@@ -63,6 +63,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Wrapper_2eproto::offsets[] PRO
   ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
   ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
   ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
+  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
   PROTOBUF_FIELD_OFFSET(::xpilot::Wrapper, msg_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -84,43 +85,46 @@ const char descriptor_table_protodef_Wrapper_2eproto[] PROTOBUF_SECTION_VARIABLE
   "byControllers.proto\032\034PrivateMessageRecei"
   "ved.proto\032\030PrivateMessageSent.proto\032\024Set"
   "Transponder.proto\032\030FastPositionUpdate.pr"
-  "oto\032\025PlaneAddedToSim.proto\032\023SetRadioStac"
-  "k.proto\032\030RequestStationInfo.proto\032\027Trigg"
-  "erDisconnect.proto\032\032RadioMessageReceived"
-  ".proto\032\026RadioMessageSent.proto\"\267\t\n\007Wrapp"
-  "er\022-\n\ttimestamp\030\001 \001(\0132\032.google.protobuf."
-  "Timestamp\022)\n\013xplane_data\030\002 \001(\0132\022.xpilot."
-  "XplaneDataH\000\0221\n\017position_update\030\003 \001(\0132\026."
-  "xpilot.PositionUpdateH\000\022:\n\024fast_position"
-  "_update\030\004 \001(\0132\032.xpilot.FastPositionUpdat"
-  "eH\000\0221\n\017airplane_config\030\005 \001(\0132\026.xpilot.Ai"
-  "rplaneConfigH\000\022%\n\tadd_plane\030\006 \001(\0132\020.xpil"
-  "ot.AddPlaneH\000\0225\n\022plane_added_to_sim\030\007 \001("
-  "\0132\027.xpilot.PlaneAddedToSimH\000\0226\n\022change_p"
-  "lane_model\030\010 \001(\0132\030.xpilot.ChangePlaneMod"
-  "elH\000\022+\n\014delete_plane\030\t \001(\0132\023.xpilot.Dele"
-  "tePlaneH\000\022B\n\030private_message_received\030\n "
-  "\001(\0132\036.xpilot.PrivateMessageReceivedH\000\022:\n"
-  "\024private_message_sent\030\013 \001(\0132\032.xpilot.Pri"
-  "vateMessageSentH\000\022>\n\026radio_message_recei"
-  "ved\030\014 \001(\0132\034.xpilot.RadioMessageReceivedH"
-  "\000\0226\n\022radio_message_sent\030\r \001(\0132\030.xpilot.R"
-  "adioMessageSentH\000\0225\n\021network_connected\030\016"
-  " \001(\0132\030.xpilot.NetworkConnectedH\000\022;\n\024netw"
-  "ork_disconnected\030\017 \001(\0132\033.xpilot.NetworkD"
-  "isconnectedH\000\0227\n\022nearby_controllers\030\020 \001("
-  "\0132\031.xpilot.NearbyControllersH\000\0221\n\017set_tr"
-  "ansponder\030\021 \001(\0132\026.xpilot.SetTransponderH"
-  "\000\022/\n\016set_radiostack\030\022 \001(\0132\025.xpilot.SetRa"
-  "dioStackH\000\0227\n\022plugin_information\030\023 \001(\0132\031"
-  ".xpilot.PluginInformationH\000\022/\n\016csl_valid"
-  "ation\030\024 \001(\0132\025.xpilot.CslValidationH\000\022:\n\024"
-  "request_station_info\030\025 \001(\0132\032.xpilot.Requ"
-  "estStationInfoH\000\0227\n\022trigger_disconnect\030\026"
-  " \001(\0132\031.xpilot.TriggerDisconnectH\000B\005\n\003msg"
-  "B\031\252\002\026Vatsim.Xpilot.Protobufb\006proto3"
+  "oto\032\025PlaneAddedToSim.proto\032\031PlaneRemoved"
+  "FromSim.proto\032\023SetRadioStack.proto\032\030Requ"
+  "estStationInfo.proto\032\027TriggerDisconnect."
+  "proto\032\032RadioMessageReceived.proto\032\026Radio"
+  "MessageSent.proto\"\366\t\n\007Wrapper\022-\n\ttimesta"
+  "mp\030\001 \001(\0132\032.google.protobuf.Timestamp\022)\n\013"
+  "xplane_data\030\002 \001(\0132\022.xpilot.XplaneDataH\000\022"
+  "1\n\017position_update\030\003 \001(\0132\026.xpilot.Positi"
+  "onUpdateH\000\022:\n\024fast_position_update\030\004 \001(\013"
+  "2\032.xpilot.FastPositionUpdateH\000\0221\n\017airpla"
+  "ne_config\030\005 \001(\0132\026.xpilot.AirplaneConfigH"
+  "\000\022%\n\tadd_plane\030\006 \001(\0132\020.xpilot.AddPlaneH\000"
+  "\0225\n\022plane_added_to_sim\030\007 \001(\0132\027.xpilot.Pl"
+  "aneAddedToSimH\000\0226\n\022change_plane_model\030\010 "
+  "\001(\0132\030.xpilot.ChangePlaneModelH\000\022+\n\014delet"
+  "e_plane\030\t \001(\0132\023.xpilot.DeletePlaneH\000\022B\n\030"
+  "private_message_received\030\n \001(\0132\036.xpilot."
+  "PrivateMessageReceivedH\000\022:\n\024private_mess"
+  "age_sent\030\013 \001(\0132\032.xpilot.PrivateMessageSe"
+  "ntH\000\022>\n\026radio_message_received\030\014 \001(\0132\034.x"
+  "pilot.RadioMessageReceivedH\000\0226\n\022radio_me"
+  "ssage_sent\030\r \001(\0132\030.xpilot.RadioMessageSe"
+  "ntH\000\0225\n\021network_connected\030\016 \001(\0132\030.xpilot"
+  ".NetworkConnectedH\000\022;\n\024network_disconnec"
+  "ted\030\017 \001(\0132\033.xpilot.NetworkDisconnectedH\000"
+  "\0227\n\022nearby_controllers\030\020 \001(\0132\031.xpilot.Ne"
+  "arbyControllersH\000\0221\n\017set_transponder\030\021 \001"
+  "(\0132\026.xpilot.SetTransponderH\000\022/\n\016set_radi"
+  "ostack\030\022 \001(\0132\025.xpilot.SetRadioStackH\000\0227\n"
+  "\022plugin_information\030\023 \001(\0132\031.xpilot.Plugi"
+  "nInformationH\000\022/\n\016csl_validation\030\024 \001(\0132\025"
+  ".xpilot.CslValidationH\000\022:\n\024request_stati"
+  "on_info\030\025 \001(\0132\032.xpilot.RequestStationInf"
+  "oH\000\0227\n\022trigger_disconnect\030\026 \001(\0132\031.xpilot"
+  ".TriggerDisconnectH\000\022=\n\026plane_removed_fr"
+  "om_sim\030\027 \001(\0132\033.xpilot.PlaneRemovedFromSi"
+  "mH\000B\005\n\003msgB\031\252\002\026Vatsim.Xpilot.Protobufb\006p"
+  "roto3"
   ;
-static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Wrapper_2eproto_deps[22] = {
+static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Wrapper_2eproto_deps[23] = {
   &::descriptor_table_AddPlane_2eproto,
   &::descriptor_table_AirplaneConfig_2eproto,
   &::descriptor_table_ChangePlaneModel_2eproto,
@@ -131,6 +135,7 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor
   &::descriptor_table_NetworkConnected_2eproto,
   &::descriptor_table_NetworkDisconnected_2eproto,
   &::descriptor_table_PlaneAddedToSim_2eproto,
+  &::descriptor_table_PlaneRemovedFromSim_2eproto,
   &::descriptor_table_PluginInformation_2eproto,
   &::descriptor_table_PositionUpdate_2eproto,
   &::descriptor_table_PrivateMessageReceived_2eproto,
@@ -146,8 +151,8 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Wrapper_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Wrapper_2eproto = {
-  false, false, 1795, descriptor_table_protodef_Wrapper_2eproto, "Wrapper.proto", 
-  &descriptor_table_Wrapper_2eproto_once, descriptor_table_Wrapper_2eproto_deps, 22, 1,
+  false, false, 1885, descriptor_table_protodef_Wrapper_2eproto, "Wrapper.proto", 
+  &descriptor_table_Wrapper_2eproto_once, descriptor_table_Wrapper_2eproto_deps, 23, 1,
   schemas, file_default_instances, TableStruct_Wrapper_2eproto::offsets,
   file_level_metadata_Wrapper_2eproto, file_level_enum_descriptors_Wrapper_2eproto, file_level_service_descriptors_Wrapper_2eproto,
 };
@@ -187,6 +192,7 @@ class Wrapper::_Internal {
   static const ::xpilot::CslValidation& csl_validation(const Wrapper* msg);
   static const ::xpilot::RequestStationInfo& request_station_info(const Wrapper* msg);
   static const ::xpilot::TriggerDisconnect& trigger_disconnect(const Wrapper* msg);
+  static const ::xpilot::PlaneRemovedFromSim& plane_removed_from_sim(const Wrapper* msg);
 };
 
 const PROTOBUF_NAMESPACE_ID::Timestamp&
@@ -276,6 +282,10 @@ Wrapper::_Internal::request_station_info(const Wrapper* msg) {
 const ::xpilot::TriggerDisconnect&
 Wrapper::_Internal::trigger_disconnect(const Wrapper* msg) {
   return *msg->msg_.trigger_disconnect_;
+}
+const ::xpilot::PlaneRemovedFromSim&
+Wrapper::_Internal::plane_removed_from_sim(const Wrapper* msg) {
+  return *msg->msg_.plane_removed_from_sim_;
 }
 void Wrapper::clear_timestamp() {
   if (GetArena() == nullptr && timestamp_ != nullptr) {
@@ -766,6 +776,29 @@ void Wrapper::clear_trigger_disconnect() {
     clear_has_msg();
   }
 }
+void Wrapper::set_allocated_plane_removed_from_sim(::xpilot::PlaneRemovedFromSim* plane_removed_from_sim) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
+  clear_msg();
+  if (plane_removed_from_sim) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(plane_removed_from_sim)->GetArena();
+    if (message_arena != submessage_arena) {
+      plane_removed_from_sim = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, plane_removed_from_sim, submessage_arena);
+    }
+    set_has_plane_removed_from_sim();
+    msg_.plane_removed_from_sim_ = plane_removed_from_sim;
+  }
+  // @@protoc_insertion_point(field_set_allocated:xpilot.Wrapper.plane_removed_from_sim)
+}
+void Wrapper::clear_plane_removed_from_sim() {
+  if (_internal_has_plane_removed_from_sim()) {
+    if (GetArena() == nullptr) {
+      delete msg_.plane_removed_from_sim_;
+    }
+    clear_has_msg();
+  }
+}
 Wrapper::Wrapper(::PROTOBUF_NAMESPACE_ID::Arena* arena)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
   SharedCtor();
@@ -864,6 +897,10 @@ Wrapper::Wrapper(const Wrapper& from)
     }
     case kTriggerDisconnect: {
       _internal_mutable_trigger_disconnect()->::xpilot::TriggerDisconnect::MergeFrom(from._internal_trigger_disconnect());
+      break;
+    }
+    case kPlaneRemovedFromSim: {
+      _internal_mutable_plane_removed_from_sim()->::xpilot::PlaneRemovedFromSim::MergeFrom(from._internal_plane_removed_from_sim());
       break;
     }
     case MSG_NOT_SET: {
@@ -1028,6 +1065,12 @@ void Wrapper::clear_msg() {
     case kTriggerDisconnect: {
       if (GetArena() == nullptr) {
         delete msg_.trigger_disconnect_;
+      }
+      break;
+    }
+    case kPlaneRemovedFromSim: {
+      if (GetArena() == nullptr) {
+        delete msg_.plane_removed_from_sim_;
       }
       break;
     }
@@ -1211,6 +1254,13 @@ const char* Wrapper::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::in
       case 22:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 178)) {
           ptr = ctx->ParseMessage(_internal_mutable_trigger_disconnect(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .xpilot.PlaneRemovedFromSim plane_removed_from_sim = 23;
+      case 23:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 186)) {
+          ptr = ctx->ParseMessage(_internal_mutable_plane_removed_from_sim(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -1418,6 +1468,14 @@ failure:
         22, _Internal::trigger_disconnect(this), target, stream);
   }
 
+  // .xpilot.PlaneRemovedFromSim plane_removed_from_sim = 23;
+  if (_internal_has_plane_removed_from_sim()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        23, _Internal::plane_removed_from_sim(this), target, stream);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -1589,6 +1647,13 @@ size_t Wrapper::ByteSizeLong() const {
           *msg_.trigger_disconnect_);
       break;
     }
+    // .xpilot.PlaneRemovedFromSim plane_removed_from_sim = 23;
+    case kPlaneRemovedFromSim: {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *msg_.plane_removed_from_sim_);
+      break;
+    }
     case MSG_NOT_SET: {
       break;
     }
@@ -1710,6 +1775,10 @@ void Wrapper::MergeFrom(const Wrapper& from) {
     }
     case kTriggerDisconnect: {
       _internal_mutable_trigger_disconnect()->::xpilot::TriggerDisconnect::MergeFrom(from._internal_trigger_disconnect());
+      break;
+    }
+    case kPlaneRemovedFromSim: {
+      _internal_mutable_plane_removed_from_sim()->::xpilot::PlaneRemovedFromSim::MergeFrom(from._internal_plane_removed_from_sim());
       break;
     }
     case MSG_NOT_SET: {

@@ -115,10 +115,30 @@ namespace xpilot
 		if (!aircraft) return;
 
 		mapPlanes.erase(callsign);
+
+		xpilot::Wrapper reply;
+		xpilot::PlaneRemovedFromSim* msg = new xpilot::PlaneRemovedFromSim();
+		reply.set_allocated_plane_removed_from_sim(msg);
+		msg->set_callsign(callsign);
+		if (mEnv)
+		{
+			mEnv->sendPbArray(reply);
+		}
 	}
 
 	void AircraftManager::DeleteAllAircraft()
 	{
+		for (auto const& plane : mapPlanes)
+		{
+			xpilot::Wrapper reply;
+			xpilot::PlaneRemovedFromSim* msg = new xpilot::PlaneRemovedFromSim();
+			reply.set_allocated_plane_removed_from_sim(msg);
+			msg->set_callsign(plane.first);
+			if (mEnv)
+			{
+				mEnv->sendPbArray(reply);
+			}
+		}
 		mapPlanes.clear();
 	}
 

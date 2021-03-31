@@ -20,7 +20,8 @@ namespace xpilot {
 constexpr RadioMessageReceived::RadioMessageReceived(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : from_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
-  , message_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
+  , message_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , color_(0){}
 struct RadioMessageReceivedDefaultTypeInternal {
   constexpr RadioMessageReceivedDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -43,11 +44,13 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_RadioMessageReceived_2eproto::
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::xpilot::RadioMessageReceived, from_),
   PROTOBUF_FIELD_OFFSET(::xpilot::RadioMessageReceived, message_),
+  PROTOBUF_FIELD_OFFSET(::xpilot::RadioMessageReceived, color_),
   0,
   1,
+  2,
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, 7, sizeof(::xpilot::RadioMessageReceived)},
+  { 0, 8, sizeof(::xpilot::RadioMessageReceived)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -55,14 +58,15 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 };
 
 const char descriptor_table_protodef_RadioMessageReceived_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\032RadioMessageReceived.proto\022\006xpilot\"T\n\024"
+  "\n\032RadioMessageReceived.proto\022\006xpilot\"r\n\024"
   "RadioMessageReceived\022\021\n\004from\030\001 \001(\tH\000\210\001\001\022"
-  "\024\n\007message\030\002 \001(\tH\001\210\001\001B\007\n\005_fromB\n\n\010_messa"
-  "geB\031\252\002\026Vatsim.Xpilot.Protobufb\006proto3"
+  "\024\n\007message\030\002 \001(\tH\001\210\001\001\022\022\n\005color\030\003 \001(\005H\002\210\001"
+  "\001B\007\n\005_fromB\n\n\010_messageB\010\n\006_colorB\031\252\002\026Vat"
+  "sim.Xpilot.Protobufb\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_RadioMessageReceived_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_RadioMessageReceived_2eproto = {
-  false, false, 157, descriptor_table_protodef_RadioMessageReceived_2eproto, "RadioMessageReceived.proto", 
+  false, false, 187, descriptor_table_protodef_RadioMessageReceived_2eproto, "RadioMessageReceived.proto", 
   &descriptor_table_RadioMessageReceived_2eproto_once, nullptr, 0, 1,
   schemas, file_default_instances, TableStruct_RadioMessageReceived_2eproto::offsets,
   file_level_metadata_RadioMessageReceived_2eproto, file_level_enum_descriptors_RadioMessageReceived_2eproto, file_level_service_descriptors_RadioMessageReceived_2eproto,
@@ -88,6 +92,9 @@ class RadioMessageReceived::_Internal {
   static void set_has_message(HasBits* has_bits) {
     (*has_bits)[0] |= 2u;
   }
+  static void set_has_color(HasBits* has_bits) {
+    (*has_bits)[0] |= 4u;
+  }
 };
 
 RadioMessageReceived::RadioMessageReceived(::PROTOBUF_NAMESPACE_ID::Arena* arena)
@@ -110,12 +117,14 @@ RadioMessageReceived::RadioMessageReceived(const RadioMessageReceived& from)
     message_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_message(), 
       GetArena());
   }
+  color_ = from.color_;
   // @@protoc_insertion_point(copy_constructor:xpilot.RadioMessageReceived)
 }
 
 void RadioMessageReceived::SharedCtor() {
 from_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 message_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+color_ = 0;
 }
 
 RadioMessageReceived::~RadioMessageReceived() {
@@ -155,6 +164,7 @@ void RadioMessageReceived::Clear() {
       message_.ClearNonDefaultToEmpty();
     }
   }
+  color_ = 0;
   _has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
@@ -182,6 +192,14 @@ const char* RadioMessageReceived::_InternalParse(const char* ptr, ::PROTOBUF_NAM
           auto str = _internal_mutable_message();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "xpilot.RadioMessageReceived.message"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 color = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
+          _Internal::set_has_color(&has_bits);
+          color_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -234,6 +252,12 @@ failure:
         2, this->_internal_message(), target);
   }
 
+  // int32 color = 3;
+  if (_internal_has_color()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_color(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -251,7 +275,7 @@ size_t RadioMessageReceived::ByteSizeLong() const {
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
+  if (cached_has_bits & 0x00000007u) {
     // string from = 1;
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
@@ -264,6 +288,13 @@ size_t RadioMessageReceived::ByteSizeLong() const {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
           this->_internal_message());
+    }
+
+    // int32 color = 3;
+    if (cached_has_bits & 0x00000004u) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+          this->_internal_color());
     }
 
   }
@@ -299,13 +330,17 @@ void RadioMessageReceived::MergeFrom(const RadioMessageReceived& from) {
   (void) cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
+  if (cached_has_bits & 0x00000007u) {
     if (cached_has_bits & 0x00000001u) {
       _internal_set_from(from._internal_from());
     }
     if (cached_has_bits & 0x00000002u) {
       _internal_set_message(from._internal_message());
     }
+    if (cached_has_bits & 0x00000004u) {
+      color_ = from.color_;
+    }
+    _has_bits_[0] |= cached_has_bits;
   }
 }
 
@@ -333,6 +368,7 @@ void RadioMessageReceived::InternalSwap(RadioMessageReceived* other) {
   swap(_has_bits_[0], other->_has_bits_[0]);
   from_.Swap(&other->from_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
   message_.Swap(&other->message_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  swap(color_, other->color_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata RadioMessageReceived::GetMetadata() const {

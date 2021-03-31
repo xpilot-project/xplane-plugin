@@ -103,7 +103,7 @@ namespace xpilot
         return -1.0f;
     }
 
-    void NotificationPanel::addNotificationPanelMessage(const std::string& message, float red, float green, float blue)
+    void NotificationPanel::AddNotificationPanelMessage(const std::string& message, float red, float green, float blue)
     {
         if (!message.empty())
         {

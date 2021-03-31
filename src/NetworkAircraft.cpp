@@ -444,7 +444,7 @@ namespace xpilot
         pOut->alt_ft = alt;
         pOut->pitch = GetPitch();
         pOut->roll = GetRoll();
-        pOut->terrainAlt_ft = (float)terrain_altitude.value();
+        pOut->terrainAlt_ft = (float)terrain_altitude.value_or(0.0f);
         pOut->speed_kt = (float)ground_speed;
         pOut->heading = GetHeading();
         pOut->flaps = (float)surfaces.flapRatio;

@@ -79,8 +79,8 @@ namespace xpilot
 			{
 				if (!monitor->m_gaveFirstWarning)
 				{
-					monitor->m_environment->addNotificationPanelMessage(warningMsg.str(), 241, 196, 15);
-					monitor->m_environment->addConsoleMessage(warningMsg.str(), 241, 196, 15);
+					monitor->m_environment->AddNotificationPanelMessage(warningMsg.str(), 241, 196, 15);
+					monitor->m_environment->RadioMessageReceived(warningMsg.str(), 241, 196, 15);
 					LOG_MSG(logMSG, warningMsg.str().c_str());
 					monitor->m_gaveFirstWarning = true;
 				}
@@ -89,8 +89,8 @@ namespace xpilot
 			{
 				if (monitor->m_gaveFirstWarning && !monitor->m_gaveSecondWarning)
 				{
-					monitor->m_environment->addNotificationPanelMessage(warningMsg.str(), 241, 196, 15);
-					monitor->m_environment->addConsoleMessage(warningMsg.str(), 241, 196, 15);
+					monitor->m_environment->AddNotificationPanelMessage(warningMsg.str(), 241, 196, 15);
+					monitor->m_environment->RadioMessageReceived(warningMsg.str(), 241, 196, 15);
 					LOG_MSG(logMSG, warningMsg.str().c_str());
 					monitor->m_gaveSecondWarning = true;
 				}
@@ -100,8 +100,8 @@ namespace xpilot
 				if (monitor->m_gaveFirstWarning && monitor->m_gaveSecondWarning && !monitor->m_gaveDisconnectWarning)
 				{
 					std::string msg = "Disconnecting from VATSIM because your frame rates have been less than 20fps for more than 30 seconds. Please adjust your X-Plane performance before reconnecting to the network.";
-					monitor->m_environment->addNotificationPanelMessage(msg, 241, 196, 15);
-					monitor->m_environment->addConsoleMessage(msg, 241, 196, 15);
+					monitor->m_environment->AddNotificationPanelMessage(msg, 241, 196, 15);
+					monitor->m_environment->RadioMessageReceived(msg, 241, 196, 15);
 					monitor->m_environment->forceDisconnect(msg);
 					LOG_MSG(logMSG, msg.c_str());
 					monitor->m_gaveDisconnectWarning = true;
@@ -113,8 +113,8 @@ namespace xpilot
 			if ((monitor->m_gaveFirstWarning || monitor->m_gaveSecondWarning) && !monitor->m_gaveHealthyWarning)
 			{
 				std::string msg = "X-Plane is now running in real time. The automatic disconnect has been cancelled.";
-				monitor->m_environment->addNotificationPanelMessage(msg, 241, 196, 15);
-				monitor->m_environment->addConsoleMessage(msg, 241, 196, 15);
+				monitor->m_environment->AddNotificationPanelMessage(msg, 241, 196, 15);
+				monitor->m_environment->RadioMessageReceived(msg, 241, 196, 15);
 				LOG_MSG(logMSG, msg.c_str());
 				monitor->m_gaveHealthyWarning = true;
 			}

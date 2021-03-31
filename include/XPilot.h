@@ -65,9 +65,9 @@ namespace xpilot
 		XPilot();
 		~XPilot();
 
-		void addConsoleMessage(const std::string& msg, double red = 255, double green = 255, double blue = 255);
-		void addConsoleMessageTab(const std::string& recipient, const std::string& msg, ConsoleTabType tabType);
-		void addNotificationPanelMessage(const std::string& msg, double red = 255, double green = 255, double blue = 255);
+		void RadioMessageReceived(const std::string& msg, double red = 255, double green = 255, double blue = 255);
+		void AddPrivateMessage(const std::string& recipient, const std::string& msg, ConsoleTabType tabType);
+		void AddNotificationPanelMessage(const std::string& msg, double red = 255, double green = 255, double blue = 255);
 		void addNotification(const std::string& msg, double red = 255, double green = 255, double blue = 255);
 
 		void sendPbArray(xpilot::Wrapper& wrapper);
