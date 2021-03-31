@@ -45,7 +45,7 @@ namespace xpilot
             return j.get<std::string>();
         }
 
-        return j.dump();
+        return j.dump(1);
     }
 
     Config& Config::Instance()
@@ -183,7 +183,7 @@ namespace xpilot
             j["CSL"] = jsonObjects;
         }
 
-        file << j;
+        file << j.dump(1);
 
         if (file.fail()) 
             return false;

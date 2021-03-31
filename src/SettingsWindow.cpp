@@ -35,7 +35,6 @@ namespace xpilot
 	static bool debugModelMatching;
 	static int logLevel;
 	static std::string fallbackTypeCode;
-	static std::string tcpPort = "52300";
 	static bool overrideContactAtcCommand;
 	static bool showMessagePreview = true;
 	static int messagePreviewTimeout = 2;
@@ -48,10 +47,10 @@ namespace xpilot
 	static int currentNode = -1;
 
 	SettingsWindow::SettingsWindow(WndMode _mode) :
-		XPImgWindow(_mode, WND_STYLE_SOLID, WndRect(0, 345, 600, 0))
+		XPImgWindow(_mode, WND_STYLE_SOLID, WndRect(0, 325, 600, 0))
 	{
 		SetWindowTitle(string_format("xPilot %s Settings", PLUGIN_VERSION_STRING));
-		SetWindowResizingLimits(600, 345, 600, 345);
+		SetWindowResizingLimits(600, 325, 600, 325);
 
 		fileBrowser.SetTitle("Browse...");
 		fileBrowser.SetWindowSize(450, 250);
@@ -75,7 +74,6 @@ namespace xpilot
 		debugModelMatching = xpilot::Config::Instance().getDebugModelMatching();
 		showHideLabels = xpilot::Config::Instance().getShowHideLabels();
 		fallbackTypeCode = xpilot::Config::Instance().getDefaultAcIcaoType();
-		tcpPort = xpilot::Config::Instance().getTcpPort();
 		showMessagePreview = xpilot::Config::Instance().getShowNotificationBar();
 		messagePreviewTimeout = xpilot::Config::Instance().getNotificationBarDisappaerTime();
 		overrideContactAtcCommand = xpilot::Config::Instance().getOverrideContactAtcCommand();
@@ -302,31 +300,6 @@ namespace xpilot
 					if (ImGui::InputTextStd("##Fallback", &fallbackTypeCode, ImGuiInputTextFlags_CharsUppercase))
 					{
 						xpilot::Config::Instance().setDefaultAcIcaoType(fallbackTypeCode);
-						Save();
-					}
-
-					ImGui::TableNextRow();
-					ImGui::TableSetColumnIndex(0);
-					ImGui::AlignTextToFramePadding();
-					ImGui::Text("TCP Port");
-					ImGui::SameLine();
-					ImGui::ButtonIcon(ICON_FA_QUESTION_CIRCLE, "This port number allows xPilot to communicate with X-Plane.\n\nOnly change this port number if you know what you are doing.\n\nYou must restart X-Plane and xPilot after changing the port number.");
-					ImGui::TableSetColumnIndex(1);
-					if (ImGui::InputTextStd("##Port", &tcpPort, ImGuiInputTextFlags_CallbackCharFilter, TextFilters::FilterNumbersOnly))
-					{
-						if (is_number(tcpPort))
-						{
-							int t = std::stoi(tcpPort);
-							if (t > 65535)
-							{
-								tcpPort = "65535";
-							}
-							if (t < 1025)
-							{
-								tcpPort = "1025";
-							}
-						}
-						xpilot::Config::Instance().setTcpPort(tcpPort);
 						Save();
 					}
 
