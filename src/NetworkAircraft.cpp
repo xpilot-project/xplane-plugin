@@ -332,14 +332,17 @@ namespace xpilot
             _elapsedSinceLastCall
         );
         
-        double rpm = (60 / (2 * M_PI * 3.2)) * positional_velocity_vector.X * -1;
-        double rpmDeg = RpmToDegree(GetTireRotRpm(), _elapsedSinceLastCall);
-
-        SetTireRotRpm(rpm);
-        SetTireRotAngle(GetTireRotAngle() + rpmDeg);
-        while (GetTireRotAngle() >= 360.0f)
+        if (on_ground)
         {
-            SetTireRotAngle(GetTireRotAngle() - 360.0f);
+            double rpm = (60 / (2 * M_PI * 3.2)) * positional_velocity_vector.X * -1;
+            double rpmDeg = RpmToDegree(GetTireRotRpm(), _elapsedSinceLastCall);
+
+            SetTireRotRpm(rpm);
+            SetTireRotAngle(GetTireRotAngle() + rpmDeg);
+            while (GetTireRotAngle() >= 360.0f)
+            {
+                SetTireRotAngle(GetTireRotAngle() - 360.0f);
+            }
         }
 
         const auto now = std::chrono::system_clock::now();
