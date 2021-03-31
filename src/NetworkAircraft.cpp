@@ -251,7 +251,7 @@ namespace xpilot
         double adjusted_altitude = alt + smoothedTerrainOffset;
 
         // Ensure the aircraft is above ground.
-        if (adjusted_altitude < terrain_altitude)
+        if (adjusted_altitude < terrain_altitude.value())
         {
             adjusted_altitude = terrain_altitude.value();
         }
