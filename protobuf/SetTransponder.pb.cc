@@ -71,10 +71,8 @@ const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_SetTra
   schemas, file_default_instances, TableStruct_SetTransponder_2eproto::offsets,
   file_level_metadata_SetTransponder_2eproto, file_level_enum_descriptors_SetTransponder_2eproto, file_level_service_descriptors_SetTransponder_2eproto,
 };
-PROTOBUF_ATTRIBUTE_WEAK ::PROTOBUF_NAMESPACE_ID::Metadata
-descriptor_table_SetTransponder_2eproto_metadata_getter(int index) {
-  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_SetTransponder_2eproto);
-  return descriptor_table_SetTransponder_2eproto.file_level_metadata[index];
+PROTOBUF_ATTRIBUTE_WEAK const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable* descriptor_table_SetTransponder_2eproto_getter() {
+  return &descriptor_table_SetTransponder_2eproto;
 }
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -127,7 +125,7 @@ SetTransponder::~SetTransponder() {
 }
 
 void SetTransponder::SharedDtor() {
-  GOOGLE_DCHECK(GetArena() == nullptr);
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
 }
 
 void SetTransponder::ArenaDtor(void* object) {
@@ -162,9 +160,8 @@ const char* SetTransponder::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
-    CHK_(ptr);
     switch (tag >> 3) {
-      // int32 code = 1;
+      // optional int32 code = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
           _Internal::set_has_code(&has_bits);
@@ -172,7 +169,7 @@ const char* SetTransponder::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // bool mode_c = 2;
+      // optional bool mode_c = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
           _Internal::set_has_mode_c(&has_bits);
@@ -180,7 +177,7 @@ const char* SetTransponder::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // bool ident = 3;
+      // optional bool ident = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
           _Internal::set_has_ident(&has_bits);
@@ -190,7 +187,8 @@ const char* SetTransponder::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
         continue;
       default: {
       handle_unusual:
-        if ((tag & 7) == 4 || tag == 0) {
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
           ctx->SetLastTag(tag);
           goto success;
         }
@@ -217,19 +215,19 @@ failure:
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // int32 code = 1;
+  // optional int32 code = 1;
   if (_internal_has_code()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_code(), target);
   }
 
-  // bool mode_c = 2;
+  // optional bool mode_c = 2;
   if (_internal_has_mode_c()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(2, this->_internal_mode_c(), target);
   }
 
-  // bool ident = 3;
+  // optional bool ident = 3;
   if (_internal_has_ident()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(3, this->_internal_ident(), target);
@@ -253,19 +251,19 @@ size_t SetTransponder::ByteSizeLong() const {
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 0x00000007u) {
-    // int32 code = 1;
+    // optional int32 code = 1;
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
           this->_internal_code());
     }
 
-    // bool mode_c = 2;
+    // optional bool mode_c = 2;
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 + 1;
     }
 
-    // bool ident = 3;
+    // optional bool ident = 3;
     if (cached_has_bits & 0x00000004u) {
       total_size += 1 + 1;
     }
@@ -337,7 +335,7 @@ bool SetTransponder::IsInitialized() const {
 
 void SetTransponder::InternalSwap(SetTransponder* other) {
   using std::swap;
-  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(SetTransponder, ident_)
@@ -348,9 +346,10 @@ void SetTransponder::InternalSwap(SetTransponder* other) {
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata SetTransponder::GetMetadata() const {
-  return GetMetadataStatic();
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_SetTransponder_2eproto_getter, &descriptor_table_SetTransponder_2eproto_once,
+      file_level_metadata_SetTransponder_2eproto[0]);
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace xpilot

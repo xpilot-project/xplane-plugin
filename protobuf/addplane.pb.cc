@@ -118,10 +118,8 @@ const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_AddPla
   schemas, file_default_instances, TableStruct_AddPlane_2eproto::offsets,
   file_level_metadata_AddPlane_2eproto, file_level_enum_descriptors_AddPlane_2eproto, file_level_service_descriptors_AddPlane_2eproto,
 };
-PROTOBUF_ATTRIBUTE_WEAK ::PROTOBUF_NAMESPACE_ID::Metadata
-descriptor_table_AddPlane_2eproto_metadata_getter(int index) {
-  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_AddPlane_2eproto);
-  return descriptor_table_AddPlane_2eproto.file_level_metadata[index];
+PROTOBUF_ATTRIBUTE_WEAK const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable* descriptor_table_AddPlane_2eproto_getter() {
+  return &descriptor_table_AddPlane_2eproto;
 }
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -183,7 +181,7 @@ AddPlane_AircraftVisualState::~AddPlane_AircraftVisualState() {
 }
 
 void AddPlane_AircraftVisualState::SharedDtor() {
-  GOOGLE_DCHECK(GetArena() == nullptr);
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
 }
 
 void AddPlane_AircraftVisualState::ArenaDtor(void* object) {
@@ -218,9 +216,8 @@ const char* AddPlane_AircraftVisualState::_InternalParse(const char* ptr, ::PROT
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
-    CHK_(ptr);
     switch (tag >> 3) {
-      // double latitude = 1;
+      // optional double latitude = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 9)) {
           _Internal::set_has_latitude(&has_bits);
@@ -228,7 +225,7 @@ const char* AddPlane_AircraftVisualState::_InternalParse(const char* ptr, ::PROT
           ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
-      // double longitude = 2;
+      // optional double longitude = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 17)) {
           _Internal::set_has_longitude(&has_bits);
@@ -236,7 +233,7 @@ const char* AddPlane_AircraftVisualState::_InternalParse(const char* ptr, ::PROT
           ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
-      // double altitude = 3;
+      // optional double altitude = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 25)) {
           _Internal::set_has_altitude(&has_bits);
@@ -244,7 +241,7 @@ const char* AddPlane_AircraftVisualState::_InternalParse(const char* ptr, ::PROT
           ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
-      // double pitch = 4;
+      // optional double pitch = 4;
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 33)) {
           _Internal::set_has_pitch(&has_bits);
@@ -252,7 +249,7 @@ const char* AddPlane_AircraftVisualState::_InternalParse(const char* ptr, ::PROT
           ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
-      // double heading = 5;
+      // optional double heading = 5;
       case 5:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 41)) {
           _Internal::set_has_heading(&has_bits);
@@ -260,7 +257,7 @@ const char* AddPlane_AircraftVisualState::_InternalParse(const char* ptr, ::PROT
           ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
-      // double bank = 6;
+      // optional double bank = 6;
       case 6:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 49)) {
           _Internal::set_has_bank(&has_bits);
@@ -270,7 +267,8 @@ const char* AddPlane_AircraftVisualState::_InternalParse(const char* ptr, ::PROT
         continue;
       default: {
       handle_unusual:
-        if ((tag & 7) == 4 || tag == 0) {
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
           ctx->SetLastTag(tag);
           goto success;
         }
@@ -297,37 +295,37 @@ failure:
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // double latitude = 1;
+  // optional double latitude = 1;
   if (_internal_has_latitude()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(1, this->_internal_latitude(), target);
   }
 
-  // double longitude = 2;
+  // optional double longitude = 2;
   if (_internal_has_longitude()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(2, this->_internal_longitude(), target);
   }
 
-  // double altitude = 3;
+  // optional double altitude = 3;
   if (_internal_has_altitude()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(3, this->_internal_altitude(), target);
   }
 
-  // double pitch = 4;
+  // optional double pitch = 4;
   if (_internal_has_pitch()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(4, this->_internal_pitch(), target);
   }
 
-  // double heading = 5;
+  // optional double heading = 5;
   if (_internal_has_heading()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(5, this->_internal_heading(), target);
   }
 
-  // double bank = 6;
+  // optional double bank = 6;
   if (_internal_has_bank()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(6, this->_internal_bank(), target);
@@ -351,32 +349,32 @@ size_t AddPlane_AircraftVisualState::ByteSizeLong() const {
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 0x0000003fu) {
-    // double latitude = 1;
+    // optional double latitude = 1;
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 + 8;
     }
 
-    // double longitude = 2;
+    // optional double longitude = 2;
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 + 8;
     }
 
-    // double altitude = 3;
+    // optional double altitude = 3;
     if (cached_has_bits & 0x00000004u) {
       total_size += 1 + 8;
     }
 
-    // double pitch = 4;
+    // optional double pitch = 4;
     if (cached_has_bits & 0x00000008u) {
       total_size += 1 + 8;
     }
 
-    // double heading = 5;
+    // optional double heading = 5;
     if (cached_has_bits & 0x00000010u) {
       total_size += 1 + 8;
     }
 
-    // double bank = 6;
+    // optional double bank = 6;
     if (cached_has_bits & 0x00000020u) {
       total_size += 1 + 8;
     }
@@ -457,7 +455,7 @@ bool AddPlane_AircraftVisualState::IsInitialized() const {
 
 void AddPlane_AircraftVisualState::InternalSwap(AddPlane_AircraftVisualState* other) {
   using std::swap;
-  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(AddPlane_AircraftVisualState, bank_)
@@ -468,9 +466,10 @@ void AddPlane_AircraftVisualState::InternalSwap(AddPlane_AircraftVisualState* ot
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata AddPlane_AircraftVisualState::GetMetadata() const {
-  return GetMetadataStatic();
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_AddPlane_2eproto_getter, &descriptor_table_AddPlane_2eproto_once,
+      file_level_metadata_AddPlane_2eproto[0]);
 }
-
 
 // ===================================================================
 
@@ -509,17 +508,17 @@ AddPlane::AddPlane(const AddPlane& from)
   callsign_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (from._internal_has_callsign()) {
     callsign_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_callsign(), 
-      GetArena());
+      GetArenaForAllocation());
   }
   airline_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (from._internal_has_airline()) {
     airline_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_airline(), 
-      GetArena());
+      GetArenaForAllocation());
   }
   equipment_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (from._internal_has_equipment()) {
     equipment_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_equipment(), 
-      GetArena());
+      GetArenaForAllocation());
   }
   if (from._internal_has_visual_state()) {
     visual_state_ = new ::xpilot::AddPlane_AircraftVisualState(*from.visual_state_);
@@ -543,7 +542,7 @@ AddPlane::~AddPlane() {
 }
 
 void AddPlane::SharedDtor() {
-  GOOGLE_DCHECK(GetArena() == nullptr);
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   callsign_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   airline_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   equipment_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
@@ -578,10 +577,8 @@ void AddPlane::Clear() {
       equipment_.ClearNonDefaultToEmpty();
     }
     if (cached_has_bits & 0x00000008u) {
-      if (GetArena() == nullptr && visual_state_ != nullptr) {
-        delete visual_state_;
-      }
-      visual_state_ = nullptr;
+      GOOGLE_DCHECK(visual_state_ != nullptr);
+      visual_state_->Clear();
     }
   }
   _has_bits_.Clear();
@@ -594,9 +591,8 @@ const char* AddPlane::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
-    CHK_(ptr);
     switch (tag >> 3) {
-      // string callsign = 1;
+      // optional string callsign = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
           auto str = _internal_mutable_callsign();
@@ -605,14 +601,14 @@ const char* AddPlane::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // .xpilot.AddPlane.AircraftVisualState visual_state = 2;
+      // optional .xpilot.AddPlane.AircraftVisualState visual_state = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
           ptr = ctx->ParseMessage(_internal_mutable_visual_state(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // string airline = 3;
+      // optional string airline = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
           auto str = _internal_mutable_airline();
@@ -621,7 +617,7 @@ const char* AddPlane::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // string equipment = 4;
+      // optional string equipment = 4;
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
           auto str = _internal_mutable_equipment();
@@ -632,7 +628,8 @@ const char* AddPlane::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
         continue;
       default: {
       handle_unusual:
-        if ((tag & 7) == 4 || tag == 0) {
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
           ctx->SetLastTag(tag);
           goto success;
         }
@@ -659,7 +656,7 @@ failure:
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string callsign = 1;
+  // optional string callsign = 1;
   if (_internal_has_callsign()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_callsign().data(), static_cast<int>(this->_internal_callsign().length()),
@@ -669,7 +666,7 @@ failure:
         1, this->_internal_callsign(), target);
   }
 
-  // .xpilot.AddPlane.AircraftVisualState visual_state = 2;
+  // optional .xpilot.AddPlane.AircraftVisualState visual_state = 2;
   if (_internal_has_visual_state()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
@@ -677,7 +674,7 @@ failure:
         2, _Internal::visual_state(this), target, stream);
   }
 
-  // string airline = 3;
+  // optional string airline = 3;
   if (_internal_has_airline()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_airline().data(), static_cast<int>(this->_internal_airline().length()),
@@ -687,7 +684,7 @@ failure:
         3, this->_internal_airline(), target);
   }
 
-  // string equipment = 4;
+  // optional string equipment = 4;
   if (_internal_has_equipment()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_equipment().data(), static_cast<int>(this->_internal_equipment().length()),
@@ -715,28 +712,28 @@ size_t AddPlane::ByteSizeLong() const {
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 0x0000000fu) {
-    // string callsign = 1;
+    // optional string callsign = 1;
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
           this->_internal_callsign());
     }
 
-    // string airline = 3;
+    // optional string airline = 3;
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
           this->_internal_airline());
     }
 
-    // string equipment = 4;
+    // optional string equipment = 4;
     if (cached_has_bits & 0x00000004u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
           this->_internal_equipment());
     }
 
-    // .xpilot.AddPlane.AircraftVisualState visual_state = 2;
+    // optional .xpilot.AddPlane.AircraftVisualState visual_state = 2;
     if (cached_has_bits & 0x00000008u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
@@ -812,18 +809,31 @@ bool AddPlane::IsInitialized() const {
 
 void AddPlane::InternalSwap(AddPlane* other) {
   using std::swap;
-  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
-  callsign_.Swap(&other->callsign_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
-  airline_.Swap(&other->airline_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
-  equipment_.Swap(&other->equipment_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &callsign_, GetArenaForAllocation(),
+      &other->callsign_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &airline_, GetArenaForAllocation(),
+      &other->airline_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &equipment_, GetArenaForAllocation(),
+      &other->equipment_, other->GetArenaForAllocation()
+  );
   swap(visual_state_, other->visual_state_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata AddPlane::GetMetadata() const {
-  return GetMetadataStatic();
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_AddPlane_2eproto_getter, &descriptor_table_AddPlane_2eproto_once,
+      file_level_metadata_AddPlane_2eproto[1]);
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace xpilot

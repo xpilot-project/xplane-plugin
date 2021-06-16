@@ -71,10 +71,8 @@ const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Change
   schemas, file_default_instances, TableStruct_ChangePlaneModel_2eproto::offsets,
   file_level_metadata_ChangePlaneModel_2eproto, file_level_enum_descriptors_ChangePlaneModel_2eproto, file_level_service_descriptors_ChangePlaneModel_2eproto,
 };
-PROTOBUF_ATTRIBUTE_WEAK ::PROTOBUF_NAMESPACE_ID::Metadata
-descriptor_table_ChangePlaneModel_2eproto_metadata_getter(int index) {
-  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_ChangePlaneModel_2eproto);
-  return descriptor_table_ChangePlaneModel_2eproto.file_level_metadata[index];
+PROTOBUF_ATTRIBUTE_WEAK const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable* descriptor_table_ChangePlaneModel_2eproto_getter() {
+  return &descriptor_table_ChangePlaneModel_2eproto;
 }
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -110,17 +108,17 @@ ChangePlaneModel::ChangePlaneModel(const ChangePlaneModel& from)
   callsign_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (from._internal_has_callsign()) {
     callsign_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_callsign(), 
-      GetArena());
+      GetArenaForAllocation());
   }
   airline_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (from._internal_has_airline()) {
     airline_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_airline(), 
-      GetArena());
+      GetArenaForAllocation());
   }
   equipment_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (from._internal_has_equipment()) {
     equipment_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_equipment(), 
-      GetArena());
+      GetArenaForAllocation());
   }
   // @@protoc_insertion_point(copy_constructor:xpilot.ChangePlaneModel)
 }
@@ -138,7 +136,7 @@ ChangePlaneModel::~ChangePlaneModel() {
 }
 
 void ChangePlaneModel::SharedDtor() {
-  GOOGLE_DCHECK(GetArena() == nullptr);
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   callsign_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   airline_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   equipment_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
@@ -182,9 +180,8 @@ const char* ChangePlaneModel::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPA
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
-    CHK_(ptr);
     switch (tag >> 3) {
-      // string callsign = 1;
+      // optional string callsign = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
           auto str = _internal_mutable_callsign();
@@ -193,7 +190,7 @@ const char* ChangePlaneModel::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPA
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // string airline = 2;
+      // optional string airline = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
           auto str = _internal_mutable_airline();
@@ -202,7 +199,7 @@ const char* ChangePlaneModel::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPA
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // string equipment = 3;
+      // optional string equipment = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
           auto str = _internal_mutable_equipment();
@@ -213,7 +210,8 @@ const char* ChangePlaneModel::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPA
         continue;
       default: {
       handle_unusual:
-        if ((tag & 7) == 4 || tag == 0) {
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
           ctx->SetLastTag(tag);
           goto success;
         }
@@ -240,7 +238,7 @@ failure:
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string callsign = 1;
+  // optional string callsign = 1;
   if (_internal_has_callsign()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_callsign().data(), static_cast<int>(this->_internal_callsign().length()),
@@ -250,7 +248,7 @@ failure:
         1, this->_internal_callsign(), target);
   }
 
-  // string airline = 2;
+  // optional string airline = 2;
   if (_internal_has_airline()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_airline().data(), static_cast<int>(this->_internal_airline().length()),
@@ -260,7 +258,7 @@ failure:
         2, this->_internal_airline(), target);
   }
 
-  // string equipment = 3;
+  // optional string equipment = 3;
   if (_internal_has_equipment()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_equipment().data(), static_cast<int>(this->_internal_equipment().length()),
@@ -288,21 +286,21 @@ size_t ChangePlaneModel::ByteSizeLong() const {
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 0x00000007u) {
-    // string callsign = 1;
+    // optional string callsign = 1;
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
           this->_internal_callsign());
     }
 
-    // string airline = 2;
+    // optional string airline = 2;
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
           this->_internal_airline());
     }
 
-    // string equipment = 3;
+    // optional string equipment = 3;
     if (cached_has_bits & 0x00000004u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
@@ -375,17 +373,30 @@ bool ChangePlaneModel::IsInitialized() const {
 
 void ChangePlaneModel::InternalSwap(ChangePlaneModel* other) {
   using std::swap;
-  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
-  callsign_.Swap(&other->callsign_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
-  airline_.Swap(&other->airline_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
-  equipment_.Swap(&other->equipment_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &callsign_, GetArenaForAllocation(),
+      &other->callsign_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &airline_, GetArenaForAllocation(),
+      &other->airline_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &equipment_, GetArenaForAllocation(),
+      &other->equipment_, other->GetArenaForAllocation()
+  );
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata ChangePlaneModel::GetMetadata() const {
-  return GetMetadataStatic();
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_ChangePlaneModel_2eproto_getter, &descriptor_table_ChangePlaneModel_2eproto_once,
+      file_level_metadata_ChangePlaneModel_2eproto[0]);
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace xpilot

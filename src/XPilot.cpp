@@ -31,8 +31,16 @@
 #include "sha512.hh"
 #include "json.hpp"
 #include "../protobuf/Wrapper.pb.h"
+#include <boost/process.hpp>
+#include <boost/asio.hpp>
+#ifdef WIN32
+#include <boost/process/windows.hpp>
+#endif
 
 using json = nlohmann::json;
+namespace bp = boost::process;
+
+bp::child bridgeProcess;
 
 namespace xpilot
 {
@@ -157,9 +165,68 @@ namespace xpilot
 		auto* instance = static_cast<XPilot*>(ref);
 		if (instance)
 		{
+			instance->startBridgeProcess();
 			instance->startZmqServer();
 		}
 		return 0;
+	}
+
+	void XPilot::startBridgeProcess()
+	{
+		try
+		{
+			if (svcThread)
+			{
+				svcThread->join();
+				svcThread.reset();
+			}
+
+			if (bridgeProcess.running())
+			{
+				// this should never happen... but just in case
+				bridgeProcess.terminate();
+			}
+
+			std::vector<std::string> args;
+
+			#ifdef WIN32
+			bridgeProcess = bp::child(GetPluginPath() + "\\Resources\\XplaneBridge\\XplaneBridge.exe", bp::args(args), bp::windows::hide);
+			#else
+			bridgeProcess = bp::child(GetPluginPath() + "/Resources/XplaneBridge/XplaneBridge", bp::args(args));
+			#endif
+
+			if (bridgeProcess.running())
+			{
+				LOG_MSG(logMSG, "XplaneBridge process started");
+			}
+		}
+		catch (std::exception const& ex)
+		{
+			LOG_MSG(logERROR, "Error starting XplaneBridge: %s", ex.what());
+		}
+	}
+
+	void XPilot::stopBridgeProcess()
+	{
+		try
+		{
+			if (bridgeProcess.running())
+			{
+				LOG_MSG(logMSG, "Stopping XplaneBridge service");
+				bridgeProcess.terminate();
+				LOG_MSG(logMSG, "XplaneBridge service stopped");
+			}
+
+			if (svcThread)
+			{
+				svcThread->join();
+				svcThread.reset();
+			}
+		}
+		catch (std::exception const& ex)
+		{
+			LOG_MSG(logERROR, "Error stopping XplaneBridge: %s", ex.what());
+		}
 	}
 
 	void XPilot::startZmqServer()
@@ -393,11 +460,11 @@ namespace xpilot
 				xpilot::Wrapper wrapper;
 				wrapper.ParseFromArray(zmqMsg.data(), zmqMsg.size());
 
-				if (wrapper.has_plugin_information())
+				if (wrapper.has_plugin_metadata())
 				{
 					xpilot::Wrapper reply;
-					xpilot::PluginInformation* msg = new xpilot::PluginInformation();
-					reply.set_allocated_plugin_information(msg);
+					xpilot::PluginMetadata* msg = new xpilot::PluginMetadata();
+					reply.set_allocated_plugin_metadata(msg);
 					msg->set_version(PLUGIN_VERSION);
 					msg->set_hash(m_pluginHash.c_str());
 					sendPbArray(reply);
@@ -698,8 +765,8 @@ namespace xpilot
 	void XPilot::forceDisconnect(std::string reason)
 	{
 		xpilot::Wrapper msg;
-		xpilot::TriggerDisconnect* data = new xpilot::TriggerDisconnect();
-		msg.set_allocated_trigger_disconnect(data);
+		xpilot::PerformDisconnect* data = new xpilot::PerformDisconnect();
+		msg.set_allocated_perform_disconnect(data);
 		data->set_reason(reason);
 		sendPbArray(msg);
 	}

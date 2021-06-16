@@ -76,10 +76,8 @@ const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_SetRad
   schemas, file_default_instances, TableStruct_SetRadioStack_2eproto::offsets,
   file_level_metadata_SetRadioStack_2eproto, file_level_enum_descriptors_SetRadioStack_2eproto, file_level_service_descriptors_SetRadioStack_2eproto,
 };
-PROTOBUF_ATTRIBUTE_WEAK ::PROTOBUF_NAMESPACE_ID::Metadata
-descriptor_table_SetRadioStack_2eproto_metadata_getter(int index) {
-  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_SetRadioStack_2eproto);
-  return descriptor_table_SetRadioStack_2eproto.file_level_metadata[index];
+PROTOBUF_ATTRIBUTE_WEAK const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable* descriptor_table_SetRadioStack_2eproto_getter() {
+  return &descriptor_table_SetRadioStack_2eproto;
 }
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -135,7 +133,7 @@ SetRadioStack::~SetRadioStack() {
 }
 
 void SetRadioStack::SharedDtor() {
-  GOOGLE_DCHECK(GetArena() == nullptr);
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
 }
 
 void SetRadioStack::ArenaDtor(void* object) {
@@ -170,9 +168,8 @@ const char* SetRadioStack::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
-    CHK_(ptr);
     switch (tag >> 3) {
-      // int32 radio = 1;
+      // optional int32 radio = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
           _Internal::set_has_radio(&has_bits);
@@ -180,7 +177,7 @@ const char* SetRadioStack::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // int32 frequency = 2;
+      // optional int32 frequency = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
           _Internal::set_has_frequency(&has_bits);
@@ -188,7 +185,7 @@ const char* SetRadioStack::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // bool transmit_enabled = 3;
+      // optional bool transmit_enabled = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
           _Internal::set_has_transmit_enabled(&has_bits);
@@ -196,7 +193,7 @@ const char* SetRadioStack::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // bool receive_enabled = 4;
+      // optional bool receive_enabled = 4;
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32)) {
           _Internal::set_has_receive_enabled(&has_bits);
@@ -206,7 +203,8 @@ const char* SetRadioStack::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_
         continue;
       default: {
       handle_unusual:
-        if ((tag & 7) == 4 || tag == 0) {
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
           ctx->SetLastTag(tag);
           goto success;
         }
@@ -233,25 +231,25 @@ failure:
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // int32 radio = 1;
+  // optional int32 radio = 1;
   if (_internal_has_radio()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_radio(), target);
   }
 
-  // int32 frequency = 2;
+  // optional int32 frequency = 2;
   if (_internal_has_frequency()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_frequency(), target);
   }
 
-  // bool transmit_enabled = 3;
+  // optional bool transmit_enabled = 3;
   if (_internal_has_transmit_enabled()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(3, this->_internal_transmit_enabled(), target);
   }
 
-  // bool receive_enabled = 4;
+  // optional bool receive_enabled = 4;
   if (_internal_has_receive_enabled()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(4, this->_internal_receive_enabled(), target);
@@ -275,26 +273,26 @@ size_t SetRadioStack::ByteSizeLong() const {
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 0x0000000fu) {
-    // int32 radio = 1;
+    // optional int32 radio = 1;
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
           this->_internal_radio());
     }
 
-    // int32 frequency = 2;
+    // optional int32 frequency = 2;
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
           this->_internal_frequency());
     }
 
-    // bool transmit_enabled = 3;
+    // optional bool transmit_enabled = 3;
     if (cached_has_bits & 0x00000004u) {
       total_size += 1 + 1;
     }
 
-    // bool receive_enabled = 4;
+    // optional bool receive_enabled = 4;
     if (cached_has_bits & 0x00000008u) {
       total_size += 1 + 1;
     }
@@ -369,7 +367,7 @@ bool SetRadioStack::IsInitialized() const {
 
 void SetRadioStack::InternalSwap(SetRadioStack* other) {
   using std::swap;
-  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(SetRadioStack, receive_enabled_)
@@ -380,9 +378,10 @@ void SetRadioStack::InternalSwap(SetRadioStack* other) {
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata SetRadioStack::GetMetadata() const {
-  return GetMetadataStatic();
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_SetRadioStack_2eproto_getter, &descriptor_table_SetRadioStack_2eproto_once,
+      file_level_metadata_SetRadioStack_2eproto[0]);
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace xpilot

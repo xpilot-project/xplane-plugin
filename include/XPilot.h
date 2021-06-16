@@ -107,6 +107,9 @@ namespace xpilot
 
 		void startZmqServer();
 		void stopZmqServer();
+
+		void startBridgeProcess();
+		void stopBridgeProcess();
 	protected:
 		OwnedDataRef<int> m_pttPressed;
 		OwnedDataRef<int> m_networkLoginStatus;
@@ -168,6 +171,8 @@ namespace xpilot
 		XPLMCommandRef m_cmdTransponderId;
 
 	private:
+		std::unique_ptr<std::thread> svcThread;
+
 		std::string m_pluginHash;
 		static float deferredStartup(float, float, int, void* ref);
 		static float mainFlightLoop(float, float, int, void* ref);

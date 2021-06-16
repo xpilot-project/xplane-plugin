@@ -98,10 +98,8 @@ const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Nearby
   schemas, file_default_instances, TableStruct_NearbyControllers_2eproto::offsets,
   file_level_metadata_NearbyControllers_2eproto, file_level_enum_descriptors_NearbyControllers_2eproto, file_level_service_descriptors_NearbyControllers_2eproto,
 };
-PROTOBUF_ATTRIBUTE_WEAK ::PROTOBUF_NAMESPACE_ID::Metadata
-descriptor_table_NearbyControllers_2eproto_metadata_getter(int index) {
-  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_NearbyControllers_2eproto);
-  return descriptor_table_NearbyControllers_2eproto.file_level_metadata[index];
+PROTOBUF_ATTRIBUTE_WEAK const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable* descriptor_table_NearbyControllers_2eproto_getter() {
+  return &descriptor_table_NearbyControllers_2eproto;
 }
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -140,17 +138,17 @@ NearbyControllers_Controller::NearbyControllers_Controller(const NearbyControlle
   callsign_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (from._internal_has_callsign()) {
     callsign_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_callsign(), 
-      GetArena());
+      GetArenaForAllocation());
   }
   frequency_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (from._internal_has_frequency()) {
     frequency_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_frequency(), 
-      GetArena());
+      GetArenaForAllocation());
   }
   real_name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (from._internal_has_real_name()) {
     real_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_real_name(), 
-      GetArena());
+      GetArenaForAllocation());
   }
   xplane_frequency_ = from.xplane_frequency_;
   // @@protoc_insertion_point(copy_constructor:xpilot.NearbyControllers.Controller)
@@ -170,7 +168,7 @@ NearbyControllers_Controller::~NearbyControllers_Controller() {
 }
 
 void NearbyControllers_Controller::SharedDtor() {
-  GOOGLE_DCHECK(GetArena() == nullptr);
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   callsign_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   frequency_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   real_name_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
@@ -215,9 +213,8 @@ const char* NearbyControllers_Controller::_InternalParse(const char* ptr, ::PROT
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
-    CHK_(ptr);
     switch (tag >> 3) {
-      // string callsign = 1;
+      // optional string callsign = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
           auto str = _internal_mutable_callsign();
@@ -226,7 +223,7 @@ const char* NearbyControllers_Controller::_InternalParse(const char* ptr, ::PROT
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // int32 xplane_frequency = 2;
+      // optional int32 xplane_frequency = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
           _Internal::set_has_xplane_frequency(&has_bits);
@@ -234,7 +231,7 @@ const char* NearbyControllers_Controller::_InternalParse(const char* ptr, ::PROT
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // string frequency = 3;
+      // optional string frequency = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
           auto str = _internal_mutable_frequency();
@@ -243,7 +240,7 @@ const char* NearbyControllers_Controller::_InternalParse(const char* ptr, ::PROT
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // string real_name = 4;
+      // optional string real_name = 4;
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
           auto str = _internal_mutable_real_name();
@@ -254,7 +251,8 @@ const char* NearbyControllers_Controller::_InternalParse(const char* ptr, ::PROT
         continue;
       default: {
       handle_unusual:
-        if ((tag & 7) == 4 || tag == 0) {
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
           ctx->SetLastTag(tag);
           goto success;
         }
@@ -281,7 +279,7 @@ failure:
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string callsign = 1;
+  // optional string callsign = 1;
   if (_internal_has_callsign()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_callsign().data(), static_cast<int>(this->_internal_callsign().length()),
@@ -291,13 +289,13 @@ failure:
         1, this->_internal_callsign(), target);
   }
 
-  // int32 xplane_frequency = 2;
+  // optional int32 xplane_frequency = 2;
   if (_internal_has_xplane_frequency()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_xplane_frequency(), target);
   }
 
-  // string frequency = 3;
+  // optional string frequency = 3;
   if (_internal_has_frequency()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_frequency().data(), static_cast<int>(this->_internal_frequency().length()),
@@ -307,7 +305,7 @@ failure:
         3, this->_internal_frequency(), target);
   }
 
-  // string real_name = 4;
+  // optional string real_name = 4;
   if (_internal_has_real_name()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_real_name().data(), static_cast<int>(this->_internal_real_name().length()),
@@ -335,28 +333,28 @@ size_t NearbyControllers_Controller::ByteSizeLong() const {
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 0x0000000fu) {
-    // string callsign = 1;
+    // optional string callsign = 1;
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
           this->_internal_callsign());
     }
 
-    // string frequency = 3;
+    // optional string frequency = 3;
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
           this->_internal_frequency());
     }
 
-    // string real_name = 4;
+    // optional string real_name = 4;
     if (cached_has_bits & 0x00000004u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
           this->_internal_real_name());
     }
 
-    // int32 xplane_frequency = 2;
+    // optional int32 xplane_frequency = 2;
     if (cached_has_bits & 0x00000008u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
@@ -433,18 +431,31 @@ bool NearbyControllers_Controller::IsInitialized() const {
 
 void NearbyControllers_Controller::InternalSwap(NearbyControllers_Controller* other) {
   using std::swap;
-  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
-  callsign_.Swap(&other->callsign_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
-  frequency_.Swap(&other->frequency_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
-  real_name_.Swap(&other->real_name_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &callsign_, GetArenaForAllocation(),
+      &other->callsign_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &frequency_, GetArenaForAllocation(),
+      &other->frequency_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &real_name_, GetArenaForAllocation(),
+      &other->real_name_, other->GetArenaForAllocation()
+  );
   swap(xplane_frequency_, other->xplane_frequency_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata NearbyControllers_Controller::GetMetadata() const {
-  return GetMetadataStatic();
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_NearbyControllers_2eproto_getter, &descriptor_table_NearbyControllers_2eproto_once,
+      file_level_metadata_NearbyControllers_2eproto[0]);
 }
-
 
 // ===================================================================
 
@@ -476,7 +487,7 @@ NearbyControllers::~NearbyControllers() {
 }
 
 void NearbyControllers::SharedDtor() {
-  GOOGLE_DCHECK(GetArena() == nullptr);
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
 }
 
 void NearbyControllers::ArenaDtor(void* object) {
@@ -504,7 +515,6 @@ const char* NearbyControllers::_InternalParse(const char* ptr, ::PROTOBUF_NAMESP
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
-    CHK_(ptr);
     switch (tag >> 3) {
       // repeated .xpilot.NearbyControllers.Controller list = 1;
       case 1:
@@ -520,7 +530,8 @@ const char* NearbyControllers::_InternalParse(const char* ptr, ::PROTOBUF_NAMESP
         continue;
       default: {
       handle_unusual:
-        if ((tag & 7) == 4 || tag == 0) {
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
           ctx->SetLastTag(tag);
           goto success;
         }
@@ -631,14 +642,15 @@ bool NearbyControllers::IsInitialized() const {
 
 void NearbyControllers::InternalSwap(NearbyControllers* other) {
   using std::swap;
-  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   list_.InternalSwap(&other->list_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata NearbyControllers::GetMetadata() const {
-  return GetMetadataStatic();
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_NearbyControllers_2eproto_getter, &descriptor_table_NearbyControllers_2eproto_once,
+      file_level_metadata_NearbyControllers_2eproto[1]);
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace xpilot

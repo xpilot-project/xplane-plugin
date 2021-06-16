@@ -137,10 +137,8 @@ const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Airpla
   schemas, file_default_instances, TableStruct_AirplaneConfig_2eproto::offsets,
   file_level_metadata_AirplaneConfig_2eproto, file_level_enum_descriptors_AirplaneConfig_2eproto, file_level_service_descriptors_AirplaneConfig_2eproto,
 };
-PROTOBUF_ATTRIBUTE_WEAK ::PROTOBUF_NAMESPACE_ID::Metadata
-descriptor_table_AirplaneConfig_2eproto_metadata_getter(int index) {
-  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_AirplaneConfig_2eproto);
-  return descriptor_table_AirplaneConfig_2eproto.file_level_metadata[index];
+PROTOBUF_ATTRIBUTE_WEAK const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable* descriptor_table_AirplaneConfig_2eproto_getter() {
+  return &descriptor_table_AirplaneConfig_2eproto;
 }
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -199,7 +197,7 @@ AirplaneConfig_AirplaneConfigLights::~AirplaneConfig_AirplaneConfigLights() {
 }
 
 void AirplaneConfig_AirplaneConfigLights::SharedDtor() {
-  GOOGLE_DCHECK(GetArena() == nullptr);
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
 }
 
 void AirplaneConfig_AirplaneConfigLights::ArenaDtor(void* object) {
@@ -234,9 +232,8 @@ const char* AirplaneConfig_AirplaneConfigLights::_InternalParse(const char* ptr,
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
-    CHK_(ptr);
     switch (tag >> 3) {
-      // bool strobe_lights_on = 1;
+      // optional bool strobe_lights_on = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
           _Internal::set_has_strobe_lights_on(&has_bits);
@@ -244,7 +241,7 @@ const char* AirplaneConfig_AirplaneConfigLights::_InternalParse(const char* ptr,
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // bool landing_lights_on = 2;
+      // optional bool landing_lights_on = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
           _Internal::set_has_landing_lights_on(&has_bits);
@@ -252,7 +249,7 @@ const char* AirplaneConfig_AirplaneConfigLights::_InternalParse(const char* ptr,
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // bool taxi_lights_on = 3;
+      // optional bool taxi_lights_on = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
           _Internal::set_has_taxi_lights_on(&has_bits);
@@ -260,7 +257,7 @@ const char* AirplaneConfig_AirplaneConfigLights::_InternalParse(const char* ptr,
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // bool beacon_lights_on = 4;
+      // optional bool beacon_lights_on = 4;
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32)) {
           _Internal::set_has_beacon_lights_on(&has_bits);
@@ -268,7 +265,7 @@ const char* AirplaneConfig_AirplaneConfigLights::_InternalParse(const char* ptr,
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // bool nav_lights_on = 5;
+      // optional bool nav_lights_on = 5;
       case 5:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 40)) {
           _Internal::set_has_nav_lights_on(&has_bits);
@@ -278,7 +275,8 @@ const char* AirplaneConfig_AirplaneConfigLights::_InternalParse(const char* ptr,
         continue;
       default: {
       handle_unusual:
-        if ((tag & 7) == 4 || tag == 0) {
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
           ctx->SetLastTag(tag);
           goto success;
         }
@@ -305,31 +303,31 @@ failure:
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // bool strobe_lights_on = 1;
+  // optional bool strobe_lights_on = 1;
   if (_internal_has_strobe_lights_on()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(1, this->_internal_strobe_lights_on(), target);
   }
 
-  // bool landing_lights_on = 2;
+  // optional bool landing_lights_on = 2;
   if (_internal_has_landing_lights_on()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(2, this->_internal_landing_lights_on(), target);
   }
 
-  // bool taxi_lights_on = 3;
+  // optional bool taxi_lights_on = 3;
   if (_internal_has_taxi_lights_on()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(3, this->_internal_taxi_lights_on(), target);
   }
 
-  // bool beacon_lights_on = 4;
+  // optional bool beacon_lights_on = 4;
   if (_internal_has_beacon_lights_on()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(4, this->_internal_beacon_lights_on(), target);
   }
 
-  // bool nav_lights_on = 5;
+  // optional bool nav_lights_on = 5;
   if (_internal_has_nav_lights_on()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(5, this->_internal_nav_lights_on(), target);
@@ -353,27 +351,27 @@ size_t AirplaneConfig_AirplaneConfigLights::ByteSizeLong() const {
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 0x0000001fu) {
-    // bool strobe_lights_on = 1;
+    // optional bool strobe_lights_on = 1;
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 + 1;
     }
 
-    // bool landing_lights_on = 2;
+    // optional bool landing_lights_on = 2;
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 + 1;
     }
 
-    // bool taxi_lights_on = 3;
+    // optional bool taxi_lights_on = 3;
     if (cached_has_bits & 0x00000004u) {
       total_size += 1 + 1;
     }
 
-    // bool beacon_lights_on = 4;
+    // optional bool beacon_lights_on = 4;
     if (cached_has_bits & 0x00000008u) {
       total_size += 1 + 1;
     }
 
-    // bool nav_lights_on = 5;
+    // optional bool nav_lights_on = 5;
     if (cached_has_bits & 0x00000010u) {
       total_size += 1 + 1;
     }
@@ -451,7 +449,7 @@ bool AirplaneConfig_AirplaneConfigLights::IsInitialized() const {
 
 void AirplaneConfig_AirplaneConfigLights::InternalSwap(AirplaneConfig_AirplaneConfigLights* other) {
   using std::swap;
-  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(AirplaneConfig_AirplaneConfigLights, nav_lights_on_)
@@ -462,9 +460,10 @@ void AirplaneConfig_AirplaneConfigLights::InternalSwap(AirplaneConfig_AirplaneCo
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata AirplaneConfig_AirplaneConfigLights::GetMetadata() const {
-  return GetMetadataStatic();
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_AirplaneConfig_2eproto_getter, &descriptor_table_AirplaneConfig_2eproto_once,
+      file_level_metadata_AirplaneConfig_2eproto[0]);
 }
-
 
 // ===================================================================
 
@@ -518,7 +517,7 @@ AirplaneConfig::AirplaneConfig(const AirplaneConfig& from)
   callsign_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (from._internal_has_callsign()) {
     callsign_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_callsign(), 
-      GetArena());
+      GetArenaForAllocation());
   }
   if (from._internal_has_lights()) {
     lights_ = new ::xpilot::AirplaneConfig_AirplaneConfigLights(*from.lights_);
@@ -546,7 +545,7 @@ AirplaneConfig::~AirplaneConfig() {
 }
 
 void AirplaneConfig::SharedDtor() {
-  GOOGLE_DCHECK(GetArena() == nullptr);
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   callsign_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (this != internal_default_instance()) delete lights_;
 }
@@ -573,10 +572,8 @@ void AirplaneConfig::Clear() {
       callsign_.ClearNonDefaultToEmpty();
     }
     if (cached_has_bits & 0x00000002u) {
-      if (GetArena() == nullptr && lights_ != nullptr) {
-        delete lights_;
-      }
-      lights_ = nullptr;
+      GOOGLE_DCHECK(lights_ != nullptr);
+      lights_->Clear();
     }
   }
   if (cached_has_bits & 0x000000fcu) {
@@ -595,9 +592,8 @@ const char* AirplaneConfig::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
-    CHK_(ptr);
     switch (tag >> 3) {
-      // string callsign = 1;
+      // optional string callsign = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
           auto str = _internal_mutable_callsign();
@@ -606,7 +602,7 @@ const char* AirplaneConfig::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // bool is_full_config = 2;
+      // optional bool is_full_config = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
           _Internal::set_has_is_full_config(&has_bits);
@@ -614,14 +610,14 @@ const char* AirplaneConfig::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // .xpilot.AirplaneConfig.AirplaneConfigLights lights = 3;
+      // optional .xpilot.AirplaneConfig.AirplaneConfigLights lights = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
           ptr = ctx->ParseMessage(_internal_mutable_lights(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // bool gear_down = 4;
+      // optional bool gear_down = 4;
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32)) {
           _Internal::set_has_gear_down(&has_bits);
@@ -629,7 +625,7 @@ const char* AirplaneConfig::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // float flaps = 5;
+      // optional float flaps = 5;
       case 5:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 45)) {
           _Internal::set_has_flaps(&has_bits);
@@ -637,7 +633,7 @@ const char* AirplaneConfig::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
           ptr += sizeof(float);
         } else goto handle_unusual;
         continue;
-      // bool engines_on = 6;
+      // optional bool engines_on = 6;
       case 6:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 48)) {
           _Internal::set_has_engines_on(&has_bits);
@@ -645,7 +641,7 @@ const char* AirplaneConfig::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // bool spoilers_deployed = 7;
+      // optional bool spoilers_deployed = 7;
       case 7:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 56)) {
           _Internal::set_has_spoilers_deployed(&has_bits);
@@ -653,7 +649,7 @@ const char* AirplaneConfig::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // bool reverse_thrust = 8;
+      // optional bool reverse_thrust = 8;
       case 8:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 64)) {
           _Internal::set_has_reverse_thrust(&has_bits);
@@ -661,7 +657,7 @@ const char* AirplaneConfig::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // bool on_ground = 9;
+      // optional bool on_ground = 9;
       case 9:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 72)) {
           _Internal::set_has_on_ground(&has_bits);
@@ -671,7 +667,8 @@ const char* AirplaneConfig::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
         continue;
       default: {
       handle_unusual:
-        if ((tag & 7) == 4 || tag == 0) {
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
           ctx->SetLastTag(tag);
           goto success;
         }
@@ -698,7 +695,7 @@ failure:
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string callsign = 1;
+  // optional string callsign = 1;
   if (_internal_has_callsign()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_callsign().data(), static_cast<int>(this->_internal_callsign().length()),
@@ -708,13 +705,13 @@ failure:
         1, this->_internal_callsign(), target);
   }
 
-  // bool is_full_config = 2;
+  // optional bool is_full_config = 2;
   if (_internal_has_is_full_config()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(2, this->_internal_is_full_config(), target);
   }
 
-  // .xpilot.AirplaneConfig.AirplaneConfigLights lights = 3;
+  // optional .xpilot.AirplaneConfig.AirplaneConfigLights lights = 3;
   if (_internal_has_lights()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
@@ -722,37 +719,37 @@ failure:
         3, _Internal::lights(this), target, stream);
   }
 
-  // bool gear_down = 4;
+  // optional bool gear_down = 4;
   if (_internal_has_gear_down()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(4, this->_internal_gear_down(), target);
   }
 
-  // float flaps = 5;
+  // optional float flaps = 5;
   if (_internal_has_flaps()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(5, this->_internal_flaps(), target);
   }
 
-  // bool engines_on = 6;
+  // optional bool engines_on = 6;
   if (_internal_has_engines_on()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(6, this->_internal_engines_on(), target);
   }
 
-  // bool spoilers_deployed = 7;
+  // optional bool spoilers_deployed = 7;
   if (_internal_has_spoilers_deployed()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(7, this->_internal_spoilers_deployed(), target);
   }
 
-  // bool reverse_thrust = 8;
+  // optional bool reverse_thrust = 8;
   if (_internal_has_reverse_thrust()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(8, this->_internal_reverse_thrust(), target);
   }
 
-  // bool on_ground = 9;
+  // optional bool on_ground = 9;
   if (_internal_has_on_ground()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(9, this->_internal_on_ground(), target);
@@ -776,52 +773,52 @@ size_t AirplaneConfig::ByteSizeLong() const {
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 0x000000ffu) {
-    // string callsign = 1;
+    // optional string callsign = 1;
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
           this->_internal_callsign());
     }
 
-    // .xpilot.AirplaneConfig.AirplaneConfigLights lights = 3;
+    // optional .xpilot.AirplaneConfig.AirplaneConfigLights lights = 3;
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
           *lights_);
     }
 
-    // bool is_full_config = 2;
+    // optional bool is_full_config = 2;
     if (cached_has_bits & 0x00000004u) {
       total_size += 1 + 1;
     }
 
-    // bool gear_down = 4;
+    // optional bool gear_down = 4;
     if (cached_has_bits & 0x00000008u) {
       total_size += 1 + 1;
     }
 
-    // bool engines_on = 6;
+    // optional bool engines_on = 6;
     if (cached_has_bits & 0x00000010u) {
       total_size += 1 + 1;
     }
 
-    // bool spoilers_deployed = 7;
+    // optional bool spoilers_deployed = 7;
     if (cached_has_bits & 0x00000020u) {
       total_size += 1 + 1;
     }
 
-    // float flaps = 5;
+    // optional float flaps = 5;
     if (cached_has_bits & 0x00000040u) {
       total_size += 1 + 4;
     }
 
-    // bool reverse_thrust = 8;
+    // optional bool reverse_thrust = 8;
     if (cached_has_bits & 0x00000080u) {
       total_size += 1 + 1;
     }
 
   }
-  // bool on_ground = 9;
+  // optional bool on_ground = 9;
   if (cached_has_bits & 0x00000100u) {
     total_size += 1 + 1;
   }
@@ -910,9 +907,13 @@ bool AirplaneConfig::IsInitialized() const {
 
 void AirplaneConfig::InternalSwap(AirplaneConfig* other) {
   using std::swap;
-  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
-  callsign_.Swap(&other->callsign_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &callsign_, GetArenaForAllocation(),
+      &other->callsign_, other->GetArenaForAllocation()
+  );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(AirplaneConfig, on_ground_)
       + sizeof(AirplaneConfig::on_ground_)
@@ -922,9 +923,10 @@ void AirplaneConfig::InternalSwap(AirplaneConfig* other) {
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata AirplaneConfig::GetMetadata() const {
-  return GetMetadataStatic();
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_AirplaneConfig_2eproto_getter, &descriptor_table_AirplaneConfig_2eproto_once,
+      file_level_metadata_AirplaneConfig_2eproto[1]);
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace xpilot

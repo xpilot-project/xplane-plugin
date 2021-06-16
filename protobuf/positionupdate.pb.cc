@@ -107,10 +107,8 @@ const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Positi
   schemas, file_default_instances, TableStruct_PositionUpdate_2eproto::offsets,
   file_level_metadata_PositionUpdate_2eproto, file_level_enum_descriptors_PositionUpdate_2eproto, file_level_service_descriptors_PositionUpdate_2eproto,
 };
-PROTOBUF_ATTRIBUTE_WEAK ::PROTOBUF_NAMESPACE_ID::Metadata
-descriptor_table_PositionUpdate_2eproto_metadata_getter(int index) {
-  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_PositionUpdate_2eproto);
-  return descriptor_table_PositionUpdate_2eproto.file_level_metadata[index];
+PROTOBUF_ATTRIBUTE_WEAK const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable* descriptor_table_PositionUpdate_2eproto_getter() {
+  return &descriptor_table_PositionUpdate_2eproto;
 }
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -173,17 +171,17 @@ PositionUpdate::PositionUpdate(const PositionUpdate& from)
   callsign_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (from._internal_has_callsign()) {
     callsign_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_callsign(), 
-      GetArena());
+      GetArenaForAllocation());
   }
   origin_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (from._internal_has_origin()) {
     origin_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_origin(), 
-      GetArena());
+      GetArenaForAllocation());
   }
   destination_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (from._internal_has_destination()) {
     destination_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_destination(), 
-      GetArena());
+      GetArenaForAllocation());
   }
   ::memcpy(&latitude_, &from.latitude_,
     static_cast<size_t>(reinterpret_cast<char*>(&transponder_mode_c_) -
@@ -208,7 +206,7 @@ PositionUpdate::~PositionUpdate() {
 }
 
 void PositionUpdate::SharedDtor() {
-  GOOGLE_DCHECK(GetArena() == nullptr);
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   callsign_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   origin_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   destination_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
@@ -262,9 +260,8 @@ const char* PositionUpdate::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
-    CHK_(ptr);
     switch (tag >> 3) {
-      // string callsign = 1;
+      // optional string callsign = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
           auto str = _internal_mutable_callsign();
@@ -273,7 +270,7 @@ const char* PositionUpdate::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // double latitude = 2;
+      // optional double latitude = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 17)) {
           _Internal::set_has_latitude(&has_bits);
@@ -281,7 +278,7 @@ const char* PositionUpdate::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
           ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
-      // double longitude = 3;
+      // optional double longitude = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 25)) {
           _Internal::set_has_longitude(&has_bits);
@@ -289,7 +286,7 @@ const char* PositionUpdate::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
           ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
-      // double altitude = 4;
+      // optional double altitude = 4;
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 33)) {
           _Internal::set_has_altitude(&has_bits);
@@ -297,7 +294,7 @@ const char* PositionUpdate::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
           ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
-      // double heading = 5;
+      // optional double heading = 5;
       case 5:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 41)) {
           _Internal::set_has_heading(&has_bits);
@@ -305,7 +302,7 @@ const char* PositionUpdate::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
           ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
-      // double pitch = 6;
+      // optional double pitch = 6;
       case 6:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 49)) {
           _Internal::set_has_pitch(&has_bits);
@@ -313,7 +310,7 @@ const char* PositionUpdate::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
           ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
-      // double bank = 7;
+      // optional double bank = 7;
       case 7:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 57)) {
           _Internal::set_has_bank(&has_bits);
@@ -321,7 +318,7 @@ const char* PositionUpdate::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
           ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
-      // double ground_speed = 8;
+      // optional double ground_speed = 8;
       case 8:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 65)) {
           _Internal::set_has_ground_speed(&has_bits);
@@ -329,7 +326,7 @@ const char* PositionUpdate::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
           ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
-      // int32 transponder_code = 9;
+      // optional int32 transponder_code = 9;
       case 9:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 72)) {
           _Internal::set_has_transponder_code(&has_bits);
@@ -337,7 +334,7 @@ const char* PositionUpdate::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // bool transponder_mode_c = 10;
+      // optional bool transponder_mode_c = 10;
       case 10:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 80)) {
           _Internal::set_has_transponder_mode_c(&has_bits);
@@ -345,7 +342,7 @@ const char* PositionUpdate::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // string origin = 11;
+      // optional string origin = 11;
       case 11:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 90)) {
           auto str = _internal_mutable_origin();
@@ -354,7 +351,7 @@ const char* PositionUpdate::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // string destination = 12;
+      // optional string destination = 12;
       case 12:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 98)) {
           auto str = _internal_mutable_destination();
@@ -365,7 +362,8 @@ const char* PositionUpdate::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
         continue;
       default: {
       handle_unusual:
-        if ((tag & 7) == 4 || tag == 0) {
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
           ctx->SetLastTag(tag);
           goto success;
         }
@@ -392,7 +390,7 @@ failure:
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string callsign = 1;
+  // optional string callsign = 1;
   if (_internal_has_callsign()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_callsign().data(), static_cast<int>(this->_internal_callsign().length()),
@@ -402,61 +400,61 @@ failure:
         1, this->_internal_callsign(), target);
   }
 
-  // double latitude = 2;
+  // optional double latitude = 2;
   if (_internal_has_latitude()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(2, this->_internal_latitude(), target);
   }
 
-  // double longitude = 3;
+  // optional double longitude = 3;
   if (_internal_has_longitude()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(3, this->_internal_longitude(), target);
   }
 
-  // double altitude = 4;
+  // optional double altitude = 4;
   if (_internal_has_altitude()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(4, this->_internal_altitude(), target);
   }
 
-  // double heading = 5;
+  // optional double heading = 5;
   if (_internal_has_heading()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(5, this->_internal_heading(), target);
   }
 
-  // double pitch = 6;
+  // optional double pitch = 6;
   if (_internal_has_pitch()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(6, this->_internal_pitch(), target);
   }
 
-  // double bank = 7;
+  // optional double bank = 7;
   if (_internal_has_bank()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(7, this->_internal_bank(), target);
   }
 
-  // double ground_speed = 8;
+  // optional double ground_speed = 8;
   if (_internal_has_ground_speed()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(8, this->_internal_ground_speed(), target);
   }
 
-  // int32 transponder_code = 9;
+  // optional int32 transponder_code = 9;
   if (_internal_has_transponder_code()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(9, this->_internal_transponder_code(), target);
   }
 
-  // bool transponder_mode_c = 10;
+  // optional bool transponder_mode_c = 10;
   if (_internal_has_transponder_mode_c()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(10, this->_internal_transponder_mode_c(), target);
   }
 
-  // string origin = 11;
+  // optional string origin = 11;
   if (_internal_has_origin()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_origin().data(), static_cast<int>(this->_internal_origin().length()),
@@ -466,7 +464,7 @@ failure:
         11, this->_internal_origin(), target);
   }
 
-  // string destination = 12;
+  // optional string destination = 12;
   if (_internal_has_destination()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_destination().data(), static_cast<int>(this->_internal_destination().length()),
@@ -494,72 +492,72 @@ size_t PositionUpdate::ByteSizeLong() const {
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 0x000000ffu) {
-    // string callsign = 1;
+    // optional string callsign = 1;
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
           this->_internal_callsign());
     }
 
-    // string origin = 11;
+    // optional string origin = 11;
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
           this->_internal_origin());
     }
 
-    // string destination = 12;
+    // optional string destination = 12;
     if (cached_has_bits & 0x00000004u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
           this->_internal_destination());
     }
 
-    // double latitude = 2;
+    // optional double latitude = 2;
     if (cached_has_bits & 0x00000008u) {
       total_size += 1 + 8;
     }
 
-    // double longitude = 3;
+    // optional double longitude = 3;
     if (cached_has_bits & 0x00000010u) {
       total_size += 1 + 8;
     }
 
-    // double altitude = 4;
+    // optional double altitude = 4;
     if (cached_has_bits & 0x00000020u) {
       total_size += 1 + 8;
     }
 
-    // double heading = 5;
+    // optional double heading = 5;
     if (cached_has_bits & 0x00000040u) {
       total_size += 1 + 8;
     }
 
-    // double pitch = 6;
+    // optional double pitch = 6;
     if (cached_has_bits & 0x00000080u) {
       total_size += 1 + 8;
     }
 
   }
   if (cached_has_bits & 0x00000f00u) {
-    // double bank = 7;
+    // optional double bank = 7;
     if (cached_has_bits & 0x00000100u) {
       total_size += 1 + 8;
     }
 
-    // double ground_speed = 8;
+    // optional double ground_speed = 8;
     if (cached_has_bits & 0x00000200u) {
       total_size += 1 + 8;
     }
 
-    // int32 transponder_code = 9;
+    // optional int32 transponder_code = 9;
     if (cached_has_bits & 0x00000400u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
           this->_internal_transponder_code());
     }
 
-    // bool transponder_mode_c = 10;
+    // optional bool transponder_mode_c = 10;
     if (cached_has_bits & 0x00000800u) {
       total_size += 1 + 1;
     }
@@ -661,11 +659,23 @@ bool PositionUpdate::IsInitialized() const {
 
 void PositionUpdate::InternalSwap(PositionUpdate* other) {
   using std::swap;
-  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
-  callsign_.Swap(&other->callsign_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
-  origin_.Swap(&other->origin_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
-  destination_.Swap(&other->destination_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &callsign_, GetArenaForAllocation(),
+      &other->callsign_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &origin_, GetArenaForAllocation(),
+      &other->origin_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &destination_, GetArenaForAllocation(),
+      &other->destination_, other->GetArenaForAllocation()
+  );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(PositionUpdate, transponder_mode_c_)
       + sizeof(PositionUpdate::transponder_mode_c_)
@@ -675,9 +685,10 @@ void PositionUpdate::InternalSwap(PositionUpdate* other) {
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata PositionUpdate::GetMetadata() const {
-  return GetMetadataStatic();
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_PositionUpdate_2eproto_getter, &descriptor_table_PositionUpdate_2eproto_once,
+      file_level_metadata_PositionUpdate_2eproto[0]);
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace xpilot
