@@ -62,8 +62,6 @@ set(Header_Files
     ${CMAKE_SOURCE_DIR}/Lib/ImgWindow/ImgWindow.h
     ${CMAKE_SOURCE_DIR}/Lib/ImgWindow/SystemGL.h
     ${CMAKE_SOURCE_DIR}/Lib/ImgWindow/XPImgWindow.h
-	${CMAKE_SOURCE_DIR}/Lib/ZMQ/zmq.h
-	${CMAKE_SOURCE_DIR}/Lib/ZMQ/zmq.hpp
     ${CMAKE_SOURCE_DIR}/Lib/json.hpp
 	${CMAKE_SOURCE_DIR}/Lib/Font/IconsFontAwesome5.h
 	${CMAKE_SOURCE_DIR}/Lib/Font/fa-solid-900.inc
@@ -122,11 +120,9 @@ endif(Protobuf_FOUND)
 
 if (APPLE)
     list(APPEND CMAKE_FRAMEWORK_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Lib/XPMP2")
-	list(APPEND CMAKE_FRAMEWORK_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Lib/ZMQ")
     list(APPEND CMAKE_FRAMEWORK_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Lib/sdk/Libraries/Mac")
 elseif (WIN32)
     list(APPEND CMAKE_LIBRARY_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Lib/XPMP2")
-	list(APPEND CMAKE_LIBRARY_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Lib/ZMQ")
     list(APPEND CMAKE_LIBRARY_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Lib/sdk/Libraries/Win")
 endif()
 
@@ -139,15 +135,8 @@ elseif (WIN32)
 endif()
 
 target_link_libraries(xPilot ${XPMP2_LIBRARY})
-
-if (WIN32)
-	find_library(ZLIB_LIBRARY NAMES zlib.lib)
-	find_library(ZMQ_LIBRARY NAMES libzmq.lib)
-endif()
-
-target_link_libraries(xPilot ${ZLIB_LIBRARY})
-target_link_libraries(xPilot ${ZMQ_LIBRARY})
 target_link_libraries(xPilot CONAN_PKG::zeromq) 
+target_link_libraries(xPilot CONAN_PKG::zmqpp)
 
 if (WIN32 OR APPLE)
     find_library(XPLM_LIBRARY NAMES XPLM XPLM_64.lib)
