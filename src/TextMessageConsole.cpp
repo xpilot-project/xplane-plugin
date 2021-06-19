@@ -73,9 +73,9 @@ namespace xpilot
 	{
 		if (m_env->isNetworkConnected())
 		{
-			xpilot::Wrapper reply;
-			xpilot::RadioMessageSent* msg = new xpilot::RadioMessageSent();
-			reply.set_allocated_radio_message_sent(msg);
+			xpilot::Envelope reply;
+			xpilot::TextMessageSent* msg = new xpilot::TextMessageSent();
+			reply.set_allocated_text_message_sent(msg);
 			msg->set_message(message);
 			m_env->sendPbArray(reply);
 		}
@@ -131,7 +131,7 @@ namespace xpilot
 		{
 			if (m_env->isNetworkConnected())
 			{
-				xpilot::Wrapper reply;
+				xpilot::Envelope reply;
 				xpilot::PrivateMessageSent* msg = new xpilot::PrivateMessageSent();
 				reply.set_allocated_private_message_sent(msg);
 				msg->set_to(str_toupper(tabName));

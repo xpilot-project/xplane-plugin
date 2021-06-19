@@ -41,7 +41,7 @@
 #include "XPLMUtilities.h"
 #include "XPLMProcessing.h"
 
-#include "../protobuf/wrapper.pb.h"
+#include "../protobuf/Envelope.pb.h"
 
 namespace xpilot
 {
@@ -70,7 +70,7 @@ namespace xpilot
 		void AddNotificationPanelMessage(const std::string& msg, double red = 255, double green = 255, double blue = 255);
 		void addNotification(const std::string& msg, double red = 255, double green = 255, double blue = 255);
 
-		void sendPbArray(xpilot::Wrapper& wrapper);
+		void sendPbArray(const xpilot::Envelope& envelope);
 
 		void onNetworkDisconnected();
 		void onNetworkConnected();
@@ -176,7 +176,6 @@ namespace xpilot
 		std::string m_pluginHash;
 		static float deferredStartup(float, float, int, void* ref);
 		static float mainFlightLoop(float, float, int, void* ref);
-		static float drFlightLoop(float, float, int, void* ref);
 		bool initializeXPMP();
 
 		std::thread::id m_xplaneThread;
@@ -196,6 +195,11 @@ namespace xpilot
 		std::unique_ptr<zmq::socket_t> m_zmqSocket;
 
 		void zmqWorker();
+		std::mutex m_zmqMutex;
+		std::deque<std::function<void()>> m_queuedZmqCallbacks;
+		void queueZmqCallback(const std::function<void()>& cb);
+		void invokeQueuedZmqCallbacks();
+
 		bool isSocketConnected()const
 		{
 			return m_zmqSocket && m_zmqSocket->connected();
@@ -209,8 +213,6 @@ namespace xpilot
 		std::deque<std::function<void()>> m_queuedCallbacks;
 		void invokeQueuedCallbacks();
 		void queueCallback(const std::function<void()>& cb);
-
-		void checkDatarefs();
 
 		XPLMDataRef m_bulkDataQuick{}, m_bulkDataExpensive{};
 		static int getBulkData(void* inRefcon, void* outData, int inStartPos, int inNumBytes);

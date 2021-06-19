@@ -99,7 +99,7 @@ namespace xpilot
 		);
 		mapPlanes.emplace(callsign, std::move(plane));
 
-		xpilot::Wrapper reply;
+		xpilot::Envelope reply;
 		xpilot::PlaneAddedToSim* msg = new xpilot::PlaneAddedToSim();
 		reply.set_allocated_plane_added_to_sim(msg);
 		msg->set_callsign(plane->label);
@@ -116,7 +116,7 @@ namespace xpilot
 
 		mapPlanes.erase(callsign);
 
-		xpilot::Wrapper reply;
+		xpilot::Envelope reply;
 		xpilot::PlaneRemovedFromSim* msg = new xpilot::PlaneRemovedFromSim();
 		reply.set_allocated_plane_removed_from_sim(msg);
 		msg->set_callsign(callsign);
@@ -130,7 +130,7 @@ namespace xpilot
 	{
 		for (auto const& plane : mapPlanes)
 		{
-			xpilot::Wrapper reply;
+			xpilot::Envelope reply;
 			xpilot::PlaneRemovedFromSim* msg = new xpilot::PlaneRemovedFromSim();
 			reply.set_allocated_plane_removed_from_sim(msg);
 			msg->set_callsign(plane.first);

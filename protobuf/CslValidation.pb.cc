@@ -19,7 +19,7 @@ PROTOBUF_PRAGMA_INIT_SEG
 namespace xpilot {
 constexpr CslValidation::CslValidation(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : valid_(false){}
+  : is_valid_(false){}
 struct CslValidationDefaultTypeInternal {
   constexpr CslValidationDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -40,7 +40,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_CslValidation_2eproto::offsets
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::xpilot::CslValidation, valid_),
+  PROTOBUF_FIELD_OFFSET(::xpilot::CslValidation, is_valid_),
   0,
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -52,13 +52,13 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 };
 
 const char descriptor_table_protodef_CslValidation_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\023CslValidation.proto\022\006xpilot\"-\n\rCslVali"
-  "dation\022\022\n\005valid\030\001 \001(\010H\000\210\001\001B\010\n\006_validB\031\252\002"
-  "\026Vatsim.Xpilot.Protobufb\006proto3"
+  "\n\023CslValidation.proto\022\006xpilot\"3\n\rCslVali"
+  "dation\022\025\n\010is_valid\030\001 \001(\010H\000\210\001\001B\013\n\t_is_val"
+  "idB\031\252\002\026Vatsim.Xpilot.Protobufb\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_CslValidation_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_CslValidation_2eproto = {
-  false, false, 111, descriptor_table_protodef_CslValidation_2eproto, "CslValidation.proto", 
+  false, false, 117, descriptor_table_protodef_CslValidation_2eproto, "CslValidation.proto", 
   &descriptor_table_CslValidation_2eproto_once, nullptr, 0, 1,
   schemas, file_default_instances, TableStruct_CslValidation_2eproto::offsets,
   file_level_metadata_CslValidation_2eproto, file_level_enum_descriptors_CslValidation_2eproto, file_level_service_descriptors_CslValidation_2eproto,
@@ -76,7 +76,7 @@ namespace xpilot {
 class CslValidation::_Internal {
  public:
   using HasBits = decltype(std::declval<CslValidation>()._has_bits_);
-  static void set_has_valid(HasBits* has_bits) {
+  static void set_has_is_valid(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
   }
 };
@@ -91,12 +91,12 @@ CslValidation::CslValidation(const CslValidation& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
       _has_bits_(from._has_bits_) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  valid_ = from.valid_;
+  is_valid_ = from.is_valid_;
   // @@protoc_insertion_point(copy_constructor:xpilot.CslValidation)
 }
 
 void CslValidation::SharedCtor() {
-valid_ = false;
+is_valid_ = false;
 }
 
 CslValidation::~CslValidation() {
@@ -125,7 +125,7 @@ void CslValidation::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  valid_ = false;
+  is_valid_ = false;
   _has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
@@ -137,11 +137,11 @@ const char* CslValidation::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // optional bool valid = 1;
+      // optional bool is_valid = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
-          _Internal::set_has_valid(&has_bits);
-          valid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          _Internal::set_has_is_valid(&has_bits);
+          is_valid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -175,10 +175,10 @@ failure:
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // optional bool valid = 1;
-  if (_internal_has_valid()) {
+  // optional bool is_valid = 1;
+  if (_internal_has_is_valid()) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(1, this->_internal_valid(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(1, this->_internal_is_valid(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -197,7 +197,7 @@ size_t CslValidation::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // optional bool valid = 1;
+  // optional bool is_valid = 1;
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
     total_size += 1 + 1;
@@ -234,8 +234,8 @@ void CslValidation::MergeFrom(const CslValidation& from) {
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from._internal_has_valid()) {
-    _internal_set_valid(from._internal_valid());
+  if (from._internal_has_is_valid()) {
+    _internal_set_is_valid(from._internal_is_valid());
   }
 }
 
@@ -261,7 +261,7 @@ void CslValidation::InternalSwap(CslValidation* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
-  swap(valid_, other->valid_);
+  swap(is_valid_, other->is_valid_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata CslValidation::GetMetadata() const {
