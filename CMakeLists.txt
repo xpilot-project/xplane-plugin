@@ -15,7 +15,7 @@ include_directories("${CMAKE_SOURCE_DIR}/Lib/XPMP2")
 include_directories("${CMAKE_SOURCE_DIR}/Lib/Font")
 include_directories("${CMAKE_SOURCE_DIR}/Lib/gmath")
 
-add_definitions(-DXPLM200=1 -DXPLM210=1 -DXPLM300=1 -DXPLM301=1 -DXPLM303=1 -DZMQ_STATIC=1)
+add_definitions(-DXPLM200=1 -DXPLM210=1 -DXPLM300=1 -DXPLM301=1 -DXPLM303=1)
 add_definitions(-DAPL=$<BOOL:${APPLE}> -DIBM=$<BOOL:${WIN32}> -DLIN=$<AND:$<BOOL:${UNIX}>,$<NOT:$<BOOL:${APPLE}>>>)
 
 if (UNIX OR APPLE)
@@ -51,6 +51,7 @@ set(Header_Files
     include/XPilot.h
     include/XPilotAPI.h
     include/XplaneCommand.h
+	include/Base64.hpp
     ${CMAKE_SOURCE_DIR}/Lib/imgui/imstb_rectpack.h
     ${CMAKE_SOURCE_DIR}/Lib/imgui/imstb_textedit.h
     ${CMAKE_SOURCE_DIR}/Lib/imgui/imstb_truetype.h
@@ -97,7 +98,10 @@ set(Source_Files
 )
 source_group("Source Files" FILES ${Source_Files})
 
-set(ALL_FILES  ${Header_Files} ${Source_Files})
+set(Protobuf_Files ${PROTOBUF_SRC})
+source_group("Protobuf Files" FILES ${Protobuf_Files})
+
+set(ALL_FILES  ${Header_Files} ${Source_Files} ${Protobuf_Files})
 
 add_library(xPilot MODULE ${ALL_FILES})
 
@@ -135,8 +139,6 @@ elseif (WIN32)
 endif()
 
 target_link_libraries(xPilot ${XPMP2_LIBRARY})
-target_link_libraries(xPilot CONAN_PKG::zeromq) 
-target_link_libraries(xPilot CONAN_PKG::zmqpp)
 
 if (WIN32 OR APPLE)
     find_library(XPLM_LIBRARY NAMES XPLM XPLM_64.lib)

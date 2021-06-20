@@ -70,8 +70,6 @@ namespace xpilot
 		void AddNotificationPanelMessage(const std::string& msg, double red = 255, double green = 255, double blue = 255);
 		void addNotification(const std::string& msg, double red = 255, double green = 255, double blue = 255);
 
-		void sendPbArray(const xpilot::Envelope& envelope);
-
 		void onNetworkDisconnected();
 		void onNetworkConnected();
 		void forceDisconnect(std::string reason = "");
@@ -105,11 +103,11 @@ namespace xpilot
 		void setNotificationPanelAlwaysVisible(bool visible);
 		bool setNotificationPanelAlwaysVisible()const;
 
-		void startZmqServer();
-		void stopZmqServer();
-
 		void startBridgeProcess();
 		void stopBridgeProcess();
+
+		void ProcessClientEvent(const std::string& data);
+		void SendClientEvent(const xpilot::Envelope& envelope);
 	protected:
 		OwnedDataRef<int> m_pttPressed;
 		OwnedDataRef<int> m_networkLoginStatus;
@@ -122,57 +120,8 @@ namespace xpilot
 		OwnedDataRef<int> m_pluginVersion;
 		DataRefAccess<int> m_xplaneAtisEnabled;
 		DataRefAccess<float> m_frameRatePeriod;
-		DataRefAccess<int> m_transponderCode;
-		DataRefAccess<int> m_transponderMode;
-		DataRefAccess<int> m_transponderIdent;
-
-		// radiostack
-		DataRefAccess<int> m_audioComSelection;
-		DataRefAccess<int> m_com1Frequency833;
-		DataRefAccess<int> m_com1AudioSelection;
-		DataRefAccess<float> m_com1AudioVolume;
-		DataRefAccess<int> m_com2Frequency833;
-		DataRefAccess<int> m_com2AudioSelection;
-		DataRefAccess<float> m_com2AudioVolume;
-		DataRefAccess<int> m_avionicsPowerOn;
-
-		// user aircraft
-		DataRefAccess<double> m_positionLatitude;
-		DataRefAccess<double> m_positionLongitude;
-		DataRefAccess<double> m_positionAltitudeMsl;
-		DataRefAccess<double> m_positionAltitudeAgl;
-		DataRefAccess<float> m_positionAltitudePressure;
-		DataRefAccess<float> m_groundSpeed;
-		DataRefAccess<float> m_positionPitch;
-		DataRefAccess<float> m_positionRoll;
-		DataRefAccess<float> m_positionYaw;
-		DataRefAccess<float> m_velocityLatitude;
-		DataRefAccess<float> m_velocityAltitude;
-		DataRefAccess<float> m_velocityLongitude;
-		DataRefAccess<float> m_velocityPitch;
-		DataRefAccess<float> m_velocityHeading;
-		DataRefAccess<float> m_velocityBank;
-
-		// user aircraft config
-		DataRefAccess<int> m_beaconLightsOn;
-		DataRefAccess<int> m_landingLightsOn;
-		DataRefAccess<int> m_navLightsOn;
-		DataRefAccess<int> m_strobeLightsOn;
-		DataRefAccess<int> m_taxiLightsOn;
-		DataRefAccess<float> m_flapRatio;
-		DataRefAccess<int> m_gearDown;
-		DataRefAccess<float> m_speedBrakeRatio;
-		DataRefAccess<int> m_engineCount;
-		DataRefAccess<std::vector<int>> m_enginesRunning;
-		DataRefAccess<int> m_onGround;
-
-		DataRefAccess<int> m_paused;
-		DataRefAccess<int> m_replayMode;
-		XPLMCommandRef m_cmdTransponderId;
 
 	private:
-		std::unique_ptr<std::thread> svcThread;
-
 		std::string m_pluginHash;
 		static float deferredStartup(float, float, int, void* ref);
 		static float mainFlightLoop(float, float, int, void* ref);
@@ -188,26 +137,7 @@ namespace xpilot
 			return std::this_thread::get_id() == m_xplaneThread;
 		}
 
-		bool m_keepAlive;
-		bool m_clientConnected;
-		std::unique_ptr<std::thread> m_zmqThread;
-		std::unique_ptr<zmq::context_t> m_zmqContext;
-		std::unique_ptr<zmq::socket_t> m_zmqSocket;
-
-		void zmqWorker();
-		std::mutex m_zmqMutex;
-		std::deque<std::function<void()>> m_queuedZmqCallbacks;
-		void queueZmqCallback(const std::function<void()>& cb);
-		void invokeQueuedZmqCallbacks();
-
-		bool isSocketConnected()const
-		{
-			return m_zmqSocket && m_zmqSocket->connected();
-		}
-		bool isSocketReady()const
-		{
-			return m_keepAlive && isSocketConnected();
-		}
+		std::unique_ptr<std::thread> svcThread;
 
 		std::mutex m_mutex;
 		std::deque<std::function<void()>> m_queuedCallbacks;

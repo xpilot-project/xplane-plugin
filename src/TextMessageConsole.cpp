@@ -73,11 +73,11 @@ namespace xpilot
 	{
 		if (m_env->isNetworkConnected())
 		{
-			xpilot::Envelope reply;
+			xpilot::Envelope envelope;
 			xpilot::TextMessageSent* msg = new xpilot::TextMessageSent();
-			reply.set_allocated_text_message_sent(msg);
+			envelope.set_allocated_text_message_sent(msg);
 			msg->set_message(message);
-			m_env->sendPbArray(reply);
+			m_env->SendClientEvent(envelope);
 		}
 	}
 
@@ -131,12 +131,12 @@ namespace xpilot
 		{
 			if (m_env->isNetworkConnected())
 			{
-				xpilot::Envelope reply;
+				xpilot::Envelope envelope;
 				xpilot::PrivateMessageSent* msg = new xpilot::PrivateMessageSent();
-				reply.set_allocated_private_message_sent(msg);
+				envelope.set_allocated_private_message_sent(msg);
 				msg->set_to(str_toupper(tabName));
 				msg->set_message(message);
-				m_env->sendPbArray(reply);
+				m_env->SendClientEvent(envelope);
 			}
 		}
 	}

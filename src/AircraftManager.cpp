@@ -99,13 +99,13 @@ namespace xpilot
 		);
 		mapPlanes.emplace(callsign, std::move(plane));
 
-		xpilot::Envelope reply;
+		xpilot::Envelope envelope;
 		xpilot::PlaneAddedToSim* msg = new xpilot::PlaneAddedToSim();
-		reply.set_allocated_plane_added_to_sim(msg);
+		envelope.set_allocated_plane_added_to_sim(msg);
 		msg->set_callsign(plane->label);
 		if (mEnv)
 		{
-			mEnv->sendPbArray(reply);
+			mEnv->SendClientEvent(envelope);
 		}
 	}
 
@@ -116,13 +116,13 @@ namespace xpilot
 
 		mapPlanes.erase(callsign);
 
-		xpilot::Envelope reply;
+		xpilot::Envelope envelope;
 		xpilot::PlaneRemovedFromSim* msg = new xpilot::PlaneRemovedFromSim();
-		reply.set_allocated_plane_removed_from_sim(msg);
+		envelope.set_allocated_plane_removed_from_sim(msg);
 		msg->set_callsign(callsign);
 		if (mEnv)
 		{
-			mEnv->sendPbArray(reply);
+			mEnv->SendClientEvent(envelope);
 		}
 	}
 
@@ -130,13 +130,13 @@ namespace xpilot
 	{
 		for (auto const& plane : mapPlanes)
 		{
-			xpilot::Envelope reply;
+			xpilot::Envelope envelope;
 			xpilot::PlaneRemovedFromSim* msg = new xpilot::PlaneRemovedFromSim();
-			reply.set_allocated_plane_removed_from_sim(msg);
+			envelope.set_allocated_plane_removed_from_sim(msg);
 			msg->set_callsign(plane.first);
 			if (mEnv)
 			{
-				mEnv->sendPbArray(reply);
+				mEnv->SendClientEvent(envelope);
 			}
 		}
 		mapPlanes.clear();
