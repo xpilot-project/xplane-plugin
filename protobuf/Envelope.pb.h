@@ -31,7 +31,6 @@
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 #include <google/protobuf/unknown_field_set.h>
-#include <google/protobuf/timestamp.pb.h>
 #include "AppMetadata.pb.h"
 #include "CslValidation.pb.h"
 #include "AddPlane.pb.h"
@@ -44,7 +43,7 @@
 #include "NearbyControllers.pb.h"
 #include "PrivateMessageReceived.pb.h"
 #include "PrivateMessageSent.pb.h"
-#include "SetTransponder.pb.h"
+#include "TransponderIdent.pb.h"
 #include "FastPositionUpdate.pb.h"
 #include "PlaneAddedToSim.pb.h"
 #include "PlaneRemovedFromSim.pb.h"
@@ -58,11 +57,15 @@
 #include "RequestMetar.pb.h"
 #include "WallopSent.pb.h"
 #include "BroadcastMessageReceived.pb.h"
-#include "InfoMessagePosted.pb.h"
 #include "NotePosted.pb.h"
 #include "SimulatorConnectionState.pb.h"
-#include "AppConfig.pb.h"
+#include "AppConfigDto.pb.h"
 #include "RadioStack.pb.h"
+#include "TransponderModeC.pb.h"
+#include "TransponderCode.pb.h"
+#include "NetworkConnectionRequest.pb.h"
+#include "PostInfoMessage.pb.h"
+#include "PostErrorMessage.pb.h"
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
 #define PROTOBUF_INTERNAL_EXPORT_Envelope_2eproto
@@ -137,37 +140,41 @@ class Envelope final :
     return *internal_default_instance();
   }
   enum EventCase {
-    kPositionUpdate = 2,
-    kFastPositionUpdate = 3,
-    kAirplaneConfig = 4,
-    kAddPlane = 5,
-    kPlaneAddedToSim = 6,
-    kChangePlaneModel = 7,
-    kDeletePlane = 8,
-    kPrivateMessageReceived = 9,
-    kPrivateMessageSent = 10,
-    kTextMessageReceived = 11,
-    kTextMessageSent = 12,
-    kNetworkConnected = 13,
-    kNetworkDisconnected = 14,
-    kNearbyControllers = 15,
-    kSetTransponder = 16,
-    kSetRadiostack = 17,
-    kAppMetdata = 18,
-    kCslValidation = 19,
-    kRequestControllerInfo = 20,
-    kTriggerDisconnect = 21,
-    kPlaneRemovedFromSim = 22,
-    kServerMessageReceived = 23,
-    kRequestMetar = 24,
-    kMetarReceived = 25,
-    kWallopSent = 26,
-    kBroadcastMessageReceived = 27,
-    kInfoMessagePosted = 28,
-    kNotePosted = 29,
-    kSimulatorConnectionState = 30,
-    kAppConfig = 31,
-    kRadioStack = 32,
+    kPositionUpdate = 1,
+    kFastPositionUpdate = 2,
+    kAirplaneConfig = 3,
+    kAddPlane = 4,
+    kPlaneAddedToSim = 5,
+    kChangePlaneModel = 6,
+    kDeletePlane = 7,
+    kPrivateMessageReceived = 8,
+    kPrivateMessageSent = 9,
+    kTextMessageReceived = 10,
+    kTextMessageSent = 11,
+    kNetworkConnected = 12,
+    kNetworkDisconnected = 13,
+    kNearbyControllers = 14,
+    kSetRadiostack = 15,
+    kAppMetdata = 16,
+    kCslValidation = 17,
+    kRequestControllerInfo = 18,
+    kTriggerDisconnect = 19,
+    kPlaneRemovedFromSim = 20,
+    kServerMessageReceived = 21,
+    kRequestMetar = 22,
+    kMetarReceived = 23,
+    kWallopSent = 24,
+    kBroadcastMessageReceived = 25,
+    kPostInfoMessage = 26,
+    kPostErrorMessage = 27,
+    kNotePosted = 28,
+    kSimulatorConnectionState = 29,
+    kAppConfigDto = 30,
+    kRadioStack = 31,
+    kTransponderModeC = 32,
+    kTransponderCode = 33,
+    kTransponderIdent = 34,
+    kNetworkConnectRequested = 35,
     EVENT_NOT_SET = 0,
   };
 
@@ -240,58 +247,43 @@ class Envelope final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kTimestampFieldNumber = 1,
-    kPositionUpdateFieldNumber = 2,
-    kFastPositionUpdateFieldNumber = 3,
-    kAirplaneConfigFieldNumber = 4,
-    kAddPlaneFieldNumber = 5,
-    kPlaneAddedToSimFieldNumber = 6,
-    kChangePlaneModelFieldNumber = 7,
-    kDeletePlaneFieldNumber = 8,
-    kPrivateMessageReceivedFieldNumber = 9,
-    kPrivateMessageSentFieldNumber = 10,
-    kTextMessageReceivedFieldNumber = 11,
-    kTextMessageSentFieldNumber = 12,
-    kNetworkConnectedFieldNumber = 13,
-    kNetworkDisconnectedFieldNumber = 14,
-    kNearbyControllersFieldNumber = 15,
-    kSetTransponderFieldNumber = 16,
-    kSetRadiostackFieldNumber = 17,
-    kAppMetdataFieldNumber = 18,
-    kCslValidationFieldNumber = 19,
-    kRequestControllerInfoFieldNumber = 20,
-    kTriggerDisconnectFieldNumber = 21,
-    kPlaneRemovedFromSimFieldNumber = 22,
-    kServerMessageReceivedFieldNumber = 23,
-    kRequestMetarFieldNumber = 24,
-    kMetarReceivedFieldNumber = 25,
-    kWallopSentFieldNumber = 26,
-    kBroadcastMessageReceivedFieldNumber = 27,
-    kInfoMessagePostedFieldNumber = 28,
-    kNotePostedFieldNumber = 29,
-    kSimulatorConnectionStateFieldNumber = 30,
-    kAppConfigFieldNumber = 31,
-    kRadioStackFieldNumber = 32,
+    kPositionUpdateFieldNumber = 1,
+    kFastPositionUpdateFieldNumber = 2,
+    kAirplaneConfigFieldNumber = 3,
+    kAddPlaneFieldNumber = 4,
+    kPlaneAddedToSimFieldNumber = 5,
+    kChangePlaneModelFieldNumber = 6,
+    kDeletePlaneFieldNumber = 7,
+    kPrivateMessageReceivedFieldNumber = 8,
+    kPrivateMessageSentFieldNumber = 9,
+    kTextMessageReceivedFieldNumber = 10,
+    kTextMessageSentFieldNumber = 11,
+    kNetworkConnectedFieldNumber = 12,
+    kNetworkDisconnectedFieldNumber = 13,
+    kNearbyControllersFieldNumber = 14,
+    kSetRadiostackFieldNumber = 15,
+    kAppMetdataFieldNumber = 16,
+    kCslValidationFieldNumber = 17,
+    kRequestControllerInfoFieldNumber = 18,
+    kTriggerDisconnectFieldNumber = 19,
+    kPlaneRemovedFromSimFieldNumber = 20,
+    kServerMessageReceivedFieldNumber = 21,
+    kRequestMetarFieldNumber = 22,
+    kMetarReceivedFieldNumber = 23,
+    kWallopSentFieldNumber = 24,
+    kBroadcastMessageReceivedFieldNumber = 25,
+    kPostInfoMessageFieldNumber = 26,
+    kPostErrorMessageFieldNumber = 27,
+    kNotePostedFieldNumber = 28,
+    kSimulatorConnectionStateFieldNumber = 29,
+    kAppConfigDtoFieldNumber = 30,
+    kRadioStackFieldNumber = 31,
+    kTransponderModeCFieldNumber = 32,
+    kTransponderCodeFieldNumber = 33,
+    kTransponderIdentFieldNumber = 34,
+    kNetworkConnectRequestedFieldNumber = 35,
   };
-  // .google.protobuf.Timestamp timestamp = 1;
-  bool has_timestamp() const;
-  private:
-  bool _internal_has_timestamp() const;
-  public:
-  void clear_timestamp();
-  const PROTOBUF_NAMESPACE_ID::Timestamp& timestamp() const;
-  PROTOBUF_FUTURE_MUST_USE_RESULT PROTOBUF_NAMESPACE_ID::Timestamp* release_timestamp();
-  PROTOBUF_NAMESPACE_ID::Timestamp* mutable_timestamp();
-  void set_allocated_timestamp(PROTOBUF_NAMESPACE_ID::Timestamp* timestamp);
-  private:
-  const PROTOBUF_NAMESPACE_ID::Timestamp& _internal_timestamp() const;
-  PROTOBUF_NAMESPACE_ID::Timestamp* _internal_mutable_timestamp();
-  public:
-  void unsafe_arena_set_allocated_timestamp(
-      PROTOBUF_NAMESPACE_ID::Timestamp* timestamp);
-  PROTOBUF_NAMESPACE_ID::Timestamp* unsafe_arena_release_timestamp();
-
-  // .xpilot.PositionUpdate position_update = 2;
+  // .xpilot.PositionUpdate position_update = 1;
   bool has_position_update() const;
   private:
   bool _internal_has_position_update() const;
@@ -309,7 +301,7 @@ class Envelope final :
       ::xpilot::PositionUpdate* position_update);
   ::xpilot::PositionUpdate* unsafe_arena_release_position_update();
 
-  // .xpilot.FastPositionUpdate fast_position_update = 3;
+  // .xpilot.FastPositionUpdate fast_position_update = 2;
   bool has_fast_position_update() const;
   private:
   bool _internal_has_fast_position_update() const;
@@ -327,7 +319,7 @@ class Envelope final :
       ::xpilot::FastPositionUpdate* fast_position_update);
   ::xpilot::FastPositionUpdate* unsafe_arena_release_fast_position_update();
 
-  // .xpilot.AirplaneConfig airplane_config = 4;
+  // .xpilot.AirplaneConfig airplane_config = 3;
   bool has_airplane_config() const;
   private:
   bool _internal_has_airplane_config() const;
@@ -345,7 +337,7 @@ class Envelope final :
       ::xpilot::AirplaneConfig* airplane_config);
   ::xpilot::AirplaneConfig* unsafe_arena_release_airplane_config();
 
-  // .xpilot.AddPlane add_plane = 5;
+  // .xpilot.AddPlane add_plane = 4;
   bool has_add_plane() const;
   private:
   bool _internal_has_add_plane() const;
@@ -363,7 +355,7 @@ class Envelope final :
       ::xpilot::AddPlane* add_plane);
   ::xpilot::AddPlane* unsafe_arena_release_add_plane();
 
-  // .xpilot.PlaneAddedToSim plane_added_to_sim = 6;
+  // .xpilot.PlaneAddedToSim plane_added_to_sim = 5;
   bool has_plane_added_to_sim() const;
   private:
   bool _internal_has_plane_added_to_sim() const;
@@ -381,7 +373,7 @@ class Envelope final :
       ::xpilot::PlaneAddedToSim* plane_added_to_sim);
   ::xpilot::PlaneAddedToSim* unsafe_arena_release_plane_added_to_sim();
 
-  // .xpilot.ChangePlaneModel change_plane_model = 7;
+  // .xpilot.ChangePlaneModel change_plane_model = 6;
   bool has_change_plane_model() const;
   private:
   bool _internal_has_change_plane_model() const;
@@ -399,7 +391,7 @@ class Envelope final :
       ::xpilot::ChangePlaneModel* change_plane_model);
   ::xpilot::ChangePlaneModel* unsafe_arena_release_change_plane_model();
 
-  // .xpilot.DeletePlane delete_plane = 8;
+  // .xpilot.DeletePlane delete_plane = 7;
   bool has_delete_plane() const;
   private:
   bool _internal_has_delete_plane() const;
@@ -417,7 +409,7 @@ class Envelope final :
       ::xpilot::DeletePlane* delete_plane);
   ::xpilot::DeletePlane* unsafe_arena_release_delete_plane();
 
-  // .xpilot.PrivateMessageReceived private_message_received = 9;
+  // .xpilot.PrivateMessageReceived private_message_received = 8;
   bool has_private_message_received() const;
   private:
   bool _internal_has_private_message_received() const;
@@ -435,7 +427,7 @@ class Envelope final :
       ::xpilot::PrivateMessageReceived* private_message_received);
   ::xpilot::PrivateMessageReceived* unsafe_arena_release_private_message_received();
 
-  // .xpilot.PrivateMessageSent private_message_sent = 10;
+  // .xpilot.PrivateMessageSent private_message_sent = 9;
   bool has_private_message_sent() const;
   private:
   bool _internal_has_private_message_sent() const;
@@ -453,7 +445,7 @@ class Envelope final :
       ::xpilot::PrivateMessageSent* private_message_sent);
   ::xpilot::PrivateMessageSent* unsafe_arena_release_private_message_sent();
 
-  // .xpilot.TextMessageReceived text_message_received = 11;
+  // .xpilot.TextMessageReceived text_message_received = 10;
   bool has_text_message_received() const;
   private:
   bool _internal_has_text_message_received() const;
@@ -471,7 +463,7 @@ class Envelope final :
       ::xpilot::TextMessageReceived* text_message_received);
   ::xpilot::TextMessageReceived* unsafe_arena_release_text_message_received();
 
-  // .xpilot.TextMessageSent text_message_sent = 12;
+  // .xpilot.TextMessageSent text_message_sent = 11;
   bool has_text_message_sent() const;
   private:
   bool _internal_has_text_message_sent() const;
@@ -489,7 +481,7 @@ class Envelope final :
       ::xpilot::TextMessageSent* text_message_sent);
   ::xpilot::TextMessageSent* unsafe_arena_release_text_message_sent();
 
-  // .xpilot.NetworkConnected network_connected = 13;
+  // .xpilot.NetworkConnected network_connected = 12;
   bool has_network_connected() const;
   private:
   bool _internal_has_network_connected() const;
@@ -507,7 +499,7 @@ class Envelope final :
       ::xpilot::NetworkConnected* network_connected);
   ::xpilot::NetworkConnected* unsafe_arena_release_network_connected();
 
-  // .xpilot.NetworkDisconnected network_disconnected = 14;
+  // .xpilot.NetworkDisconnected network_disconnected = 13;
   bool has_network_disconnected() const;
   private:
   bool _internal_has_network_disconnected() const;
@@ -525,7 +517,7 @@ class Envelope final :
       ::xpilot::NetworkDisconnected* network_disconnected);
   ::xpilot::NetworkDisconnected* unsafe_arena_release_network_disconnected();
 
-  // .xpilot.NearbyControllers nearby_controllers = 15;
+  // .xpilot.NearbyControllers nearby_controllers = 14;
   bool has_nearby_controllers() const;
   private:
   bool _internal_has_nearby_controllers() const;
@@ -543,25 +535,7 @@ class Envelope final :
       ::xpilot::NearbyControllers* nearby_controllers);
   ::xpilot::NearbyControllers* unsafe_arena_release_nearby_controllers();
 
-  // .xpilot.SetTransponder set_transponder = 16;
-  bool has_set_transponder() const;
-  private:
-  bool _internal_has_set_transponder() const;
-  public:
-  void clear_set_transponder();
-  const ::xpilot::SetTransponder& set_transponder() const;
-  PROTOBUF_FUTURE_MUST_USE_RESULT ::xpilot::SetTransponder* release_set_transponder();
-  ::xpilot::SetTransponder* mutable_set_transponder();
-  void set_allocated_set_transponder(::xpilot::SetTransponder* set_transponder);
-  private:
-  const ::xpilot::SetTransponder& _internal_set_transponder() const;
-  ::xpilot::SetTransponder* _internal_mutable_set_transponder();
-  public:
-  void unsafe_arena_set_allocated_set_transponder(
-      ::xpilot::SetTransponder* set_transponder);
-  ::xpilot::SetTransponder* unsafe_arena_release_set_transponder();
-
-  // .xpilot.SetRadioStack set_radiostack = 17;
+  // .xpilot.SetRadioStack set_radiostack = 15;
   bool has_set_radiostack() const;
   private:
   bool _internal_has_set_radiostack() const;
@@ -579,7 +553,7 @@ class Envelope final :
       ::xpilot::SetRadioStack* set_radiostack);
   ::xpilot::SetRadioStack* unsafe_arena_release_set_radiostack();
 
-  // .xpilot.AppMetadata app_metdata = 18;
+  // .xpilot.AppMetadata app_metdata = 16;
   bool has_app_metdata() const;
   private:
   bool _internal_has_app_metdata() const;
@@ -597,7 +571,7 @@ class Envelope final :
       ::xpilot::AppMetadata* app_metdata);
   ::xpilot::AppMetadata* unsafe_arena_release_app_metdata();
 
-  // .xpilot.CslValidation csl_validation = 19;
+  // .xpilot.CslValidation csl_validation = 17;
   bool has_csl_validation() const;
   private:
   bool _internal_has_csl_validation() const;
@@ -615,7 +589,7 @@ class Envelope final :
       ::xpilot::CslValidation* csl_validation);
   ::xpilot::CslValidation* unsafe_arena_release_csl_validation();
 
-  // .xpilot.RequestControllerInfo request_controller_info = 20;
+  // .xpilot.RequestControllerInfo request_controller_info = 18;
   bool has_request_controller_info() const;
   private:
   bool _internal_has_request_controller_info() const;
@@ -633,7 +607,7 @@ class Envelope final :
       ::xpilot::RequestControllerInfo* request_controller_info);
   ::xpilot::RequestControllerInfo* unsafe_arena_release_request_controller_info();
 
-  // .xpilot.TriggerDisconnect trigger_disconnect = 21;
+  // .xpilot.TriggerDisconnect trigger_disconnect = 19;
   bool has_trigger_disconnect() const;
   private:
   bool _internal_has_trigger_disconnect() const;
@@ -651,7 +625,7 @@ class Envelope final :
       ::xpilot::TriggerDisconnect* trigger_disconnect);
   ::xpilot::TriggerDisconnect* unsafe_arena_release_trigger_disconnect();
 
-  // .xpilot.PlaneRemovedFromSim plane_removed_from_sim = 22;
+  // .xpilot.PlaneRemovedFromSim plane_removed_from_sim = 20;
   bool has_plane_removed_from_sim() const;
   private:
   bool _internal_has_plane_removed_from_sim() const;
@@ -669,7 +643,7 @@ class Envelope final :
       ::xpilot::PlaneRemovedFromSim* plane_removed_from_sim);
   ::xpilot::PlaneRemovedFromSim* unsafe_arena_release_plane_removed_from_sim();
 
-  // .xpilot.ServerMessageReceived server_message_received = 23;
+  // .xpilot.ServerMessageReceived server_message_received = 21;
   bool has_server_message_received() const;
   private:
   bool _internal_has_server_message_received() const;
@@ -687,7 +661,7 @@ class Envelope final :
       ::xpilot::ServerMessageReceived* server_message_received);
   ::xpilot::ServerMessageReceived* unsafe_arena_release_server_message_received();
 
-  // .xpilot.RequestMetar request_metar = 24;
+  // .xpilot.RequestMetar request_metar = 22;
   bool has_request_metar() const;
   private:
   bool _internal_has_request_metar() const;
@@ -705,7 +679,7 @@ class Envelope final :
       ::xpilot::RequestMetar* request_metar);
   ::xpilot::RequestMetar* unsafe_arena_release_request_metar();
 
-  // .xpilot.MetarReceived metar_received = 25;
+  // .xpilot.MetarReceived metar_received = 23;
   bool has_metar_received() const;
   private:
   bool _internal_has_metar_received() const;
@@ -723,7 +697,7 @@ class Envelope final :
       ::xpilot::MetarReceived* metar_received);
   ::xpilot::MetarReceived* unsafe_arena_release_metar_received();
 
-  // .xpilot.WallopSent wallop_sent = 26;
+  // .xpilot.WallopSent wallop_sent = 24;
   bool has_wallop_sent() const;
   private:
   bool _internal_has_wallop_sent() const;
@@ -741,7 +715,7 @@ class Envelope final :
       ::xpilot::WallopSent* wallop_sent);
   ::xpilot::WallopSent* unsafe_arena_release_wallop_sent();
 
-  // .xpilot.BroadcastMessageReceived broadcast_message_received = 27;
+  // .xpilot.BroadcastMessageReceived broadcast_message_received = 25;
   bool has_broadcast_message_received() const;
   private:
   bool _internal_has_broadcast_message_received() const;
@@ -759,25 +733,43 @@ class Envelope final :
       ::xpilot::BroadcastMessageReceived* broadcast_message_received);
   ::xpilot::BroadcastMessageReceived* unsafe_arena_release_broadcast_message_received();
 
-  // .xpilot.InfoMessagePosted info_message_posted = 28;
-  bool has_info_message_posted() const;
+  // .xpilot.PostInfoMessage post_info_message = 26;
+  bool has_post_info_message() const;
   private:
-  bool _internal_has_info_message_posted() const;
+  bool _internal_has_post_info_message() const;
   public:
-  void clear_info_message_posted();
-  const ::xpilot::InfoMessagePosted& info_message_posted() const;
-  PROTOBUF_FUTURE_MUST_USE_RESULT ::xpilot::InfoMessagePosted* release_info_message_posted();
-  ::xpilot::InfoMessagePosted* mutable_info_message_posted();
-  void set_allocated_info_message_posted(::xpilot::InfoMessagePosted* info_message_posted);
+  void clear_post_info_message();
+  const ::xpilot::PostInfoMessage& post_info_message() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::xpilot::PostInfoMessage* release_post_info_message();
+  ::xpilot::PostInfoMessage* mutable_post_info_message();
+  void set_allocated_post_info_message(::xpilot::PostInfoMessage* post_info_message);
   private:
-  const ::xpilot::InfoMessagePosted& _internal_info_message_posted() const;
-  ::xpilot::InfoMessagePosted* _internal_mutable_info_message_posted();
+  const ::xpilot::PostInfoMessage& _internal_post_info_message() const;
+  ::xpilot::PostInfoMessage* _internal_mutable_post_info_message();
   public:
-  void unsafe_arena_set_allocated_info_message_posted(
-      ::xpilot::InfoMessagePosted* info_message_posted);
-  ::xpilot::InfoMessagePosted* unsafe_arena_release_info_message_posted();
+  void unsafe_arena_set_allocated_post_info_message(
+      ::xpilot::PostInfoMessage* post_info_message);
+  ::xpilot::PostInfoMessage* unsafe_arena_release_post_info_message();
 
-  // .xpilot.NotePosted note_posted = 29;
+  // .xpilot.PostErrorMessage post_error_message = 27;
+  bool has_post_error_message() const;
+  private:
+  bool _internal_has_post_error_message() const;
+  public:
+  void clear_post_error_message();
+  const ::xpilot::PostErrorMessage& post_error_message() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::xpilot::PostErrorMessage* release_post_error_message();
+  ::xpilot::PostErrorMessage* mutable_post_error_message();
+  void set_allocated_post_error_message(::xpilot::PostErrorMessage* post_error_message);
+  private:
+  const ::xpilot::PostErrorMessage& _internal_post_error_message() const;
+  ::xpilot::PostErrorMessage* _internal_mutable_post_error_message();
+  public:
+  void unsafe_arena_set_allocated_post_error_message(
+      ::xpilot::PostErrorMessage* post_error_message);
+  ::xpilot::PostErrorMessage* unsafe_arena_release_post_error_message();
+
+  // .xpilot.NotePosted note_posted = 28;
   bool has_note_posted() const;
   private:
   bool _internal_has_note_posted() const;
@@ -795,7 +787,7 @@ class Envelope final :
       ::xpilot::NotePosted* note_posted);
   ::xpilot::NotePosted* unsafe_arena_release_note_posted();
 
-  // .xpilot.SimulatorConnectionState simulator_connection_state = 30;
+  // .xpilot.SimulatorConnectionState simulator_connection_state = 29;
   bool has_simulator_connection_state() const;
   private:
   bool _internal_has_simulator_connection_state() const;
@@ -813,25 +805,25 @@ class Envelope final :
       ::xpilot::SimulatorConnectionState* simulator_connection_state);
   ::xpilot::SimulatorConnectionState* unsafe_arena_release_simulator_connection_state();
 
-  // .xpilot.AppConfig app_config = 31;
-  bool has_app_config() const;
+  // .xpilot.AppConfigDto app_config_dto = 30;
+  bool has_app_config_dto() const;
   private:
-  bool _internal_has_app_config() const;
+  bool _internal_has_app_config_dto() const;
   public:
-  void clear_app_config();
-  const ::xpilot::AppConfig& app_config() const;
-  PROTOBUF_FUTURE_MUST_USE_RESULT ::xpilot::AppConfig* release_app_config();
-  ::xpilot::AppConfig* mutable_app_config();
-  void set_allocated_app_config(::xpilot::AppConfig* app_config);
+  void clear_app_config_dto();
+  const ::xpilot::AppConfigDto& app_config_dto() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::xpilot::AppConfigDto* release_app_config_dto();
+  ::xpilot::AppConfigDto* mutable_app_config_dto();
+  void set_allocated_app_config_dto(::xpilot::AppConfigDto* app_config_dto);
   private:
-  const ::xpilot::AppConfig& _internal_app_config() const;
-  ::xpilot::AppConfig* _internal_mutable_app_config();
+  const ::xpilot::AppConfigDto& _internal_app_config_dto() const;
+  ::xpilot::AppConfigDto* _internal_mutable_app_config_dto();
   public:
-  void unsafe_arena_set_allocated_app_config(
-      ::xpilot::AppConfig* app_config);
-  ::xpilot::AppConfig* unsafe_arena_release_app_config();
+  void unsafe_arena_set_allocated_app_config_dto(
+      ::xpilot::AppConfigDto* app_config_dto);
+  ::xpilot::AppConfigDto* unsafe_arena_release_app_config_dto();
 
-  // .xpilot.RadioStack radio_stack = 32;
+  // .xpilot.RadioStack radio_stack = 31;
   bool has_radio_stack() const;
   private:
   bool _internal_has_radio_stack() const;
@@ -848,6 +840,78 @@ class Envelope final :
   void unsafe_arena_set_allocated_radio_stack(
       ::xpilot::RadioStack* radio_stack);
   ::xpilot::RadioStack* unsafe_arena_release_radio_stack();
+
+  // .xpilot.TransponderModeC transponder_mode_c = 32;
+  bool has_transponder_mode_c() const;
+  private:
+  bool _internal_has_transponder_mode_c() const;
+  public:
+  void clear_transponder_mode_c();
+  const ::xpilot::TransponderModeC& transponder_mode_c() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::xpilot::TransponderModeC* release_transponder_mode_c();
+  ::xpilot::TransponderModeC* mutable_transponder_mode_c();
+  void set_allocated_transponder_mode_c(::xpilot::TransponderModeC* transponder_mode_c);
+  private:
+  const ::xpilot::TransponderModeC& _internal_transponder_mode_c() const;
+  ::xpilot::TransponderModeC* _internal_mutable_transponder_mode_c();
+  public:
+  void unsafe_arena_set_allocated_transponder_mode_c(
+      ::xpilot::TransponderModeC* transponder_mode_c);
+  ::xpilot::TransponderModeC* unsafe_arena_release_transponder_mode_c();
+
+  // .xpilot.TransponderCode transponder_code = 33;
+  bool has_transponder_code() const;
+  private:
+  bool _internal_has_transponder_code() const;
+  public:
+  void clear_transponder_code();
+  const ::xpilot::TransponderCode& transponder_code() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::xpilot::TransponderCode* release_transponder_code();
+  ::xpilot::TransponderCode* mutable_transponder_code();
+  void set_allocated_transponder_code(::xpilot::TransponderCode* transponder_code);
+  private:
+  const ::xpilot::TransponderCode& _internal_transponder_code() const;
+  ::xpilot::TransponderCode* _internal_mutable_transponder_code();
+  public:
+  void unsafe_arena_set_allocated_transponder_code(
+      ::xpilot::TransponderCode* transponder_code);
+  ::xpilot::TransponderCode* unsafe_arena_release_transponder_code();
+
+  // .xpilot.TransponderIdent transponder_ident = 34;
+  bool has_transponder_ident() const;
+  private:
+  bool _internal_has_transponder_ident() const;
+  public:
+  void clear_transponder_ident();
+  const ::xpilot::TransponderIdent& transponder_ident() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::xpilot::TransponderIdent* release_transponder_ident();
+  ::xpilot::TransponderIdent* mutable_transponder_ident();
+  void set_allocated_transponder_ident(::xpilot::TransponderIdent* transponder_ident);
+  private:
+  const ::xpilot::TransponderIdent& _internal_transponder_ident() const;
+  ::xpilot::TransponderIdent* _internal_mutable_transponder_ident();
+  public:
+  void unsafe_arena_set_allocated_transponder_ident(
+      ::xpilot::TransponderIdent* transponder_ident);
+  ::xpilot::TransponderIdent* unsafe_arena_release_transponder_ident();
+
+  // .xpilot.NetworkConnectionRequest network_connect_requested = 35;
+  bool has_network_connect_requested() const;
+  private:
+  bool _internal_has_network_connect_requested() const;
+  public:
+  void clear_network_connect_requested();
+  const ::xpilot::NetworkConnectionRequest& network_connect_requested() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::xpilot::NetworkConnectionRequest* release_network_connect_requested();
+  ::xpilot::NetworkConnectionRequest* mutable_network_connect_requested();
+  void set_allocated_network_connect_requested(::xpilot::NetworkConnectionRequest* network_connect_requested);
+  private:
+  const ::xpilot::NetworkConnectionRequest& _internal_network_connect_requested() const;
+  ::xpilot::NetworkConnectionRequest* _internal_mutable_network_connect_requested();
+  public:
+  void unsafe_arena_set_allocated_network_connect_requested(
+      ::xpilot::NetworkConnectionRequest* network_connect_requested);
+  ::xpilot::NetworkConnectionRequest* unsafe_arena_release_network_connect_requested();
 
   void clear_event();
   EventCase event_case() const;
@@ -868,7 +932,6 @@ class Envelope final :
   void set_has_network_connected();
   void set_has_network_disconnected();
   void set_has_nearby_controllers();
-  void set_has_set_transponder();
   void set_has_set_radiostack();
   void set_has_app_metdata();
   void set_has_csl_validation();
@@ -880,11 +943,16 @@ class Envelope final :
   void set_has_metar_received();
   void set_has_wallop_sent();
   void set_has_broadcast_message_received();
-  void set_has_info_message_posted();
+  void set_has_post_info_message();
+  void set_has_post_error_message();
   void set_has_note_posted();
   void set_has_simulator_connection_state();
-  void set_has_app_config();
+  void set_has_app_config_dto();
   void set_has_radio_stack();
+  void set_has_transponder_mode_c();
+  void set_has_transponder_code();
+  void set_has_transponder_ident();
+  void set_has_network_connect_requested();
 
   inline bool has_event() const;
   inline void clear_has_event();
@@ -892,7 +960,6 @@ class Envelope final :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  PROTOBUF_NAMESPACE_ID::Timestamp* timestamp_;
   union EventUnion {
     constexpr EventUnion() : _constinit_{} {}
       ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized _constinit_;
@@ -910,7 +977,6 @@ class Envelope final :
     ::xpilot::NetworkConnected* network_connected_;
     ::xpilot::NetworkDisconnected* network_disconnected_;
     ::xpilot::NearbyControllers* nearby_controllers_;
-    ::xpilot::SetTransponder* set_transponder_;
     ::xpilot::SetRadioStack* set_radiostack_;
     ::xpilot::AppMetadata* app_metdata_;
     ::xpilot::CslValidation* csl_validation_;
@@ -922,11 +988,16 @@ class Envelope final :
     ::xpilot::MetarReceived* metar_received_;
     ::xpilot::WallopSent* wallop_sent_;
     ::xpilot::BroadcastMessageReceived* broadcast_message_received_;
-    ::xpilot::InfoMessagePosted* info_message_posted_;
+    ::xpilot::PostInfoMessage* post_info_message_;
+    ::xpilot::PostErrorMessage* post_error_message_;
     ::xpilot::NotePosted* note_posted_;
     ::xpilot::SimulatorConnectionState* simulator_connection_state_;
-    ::xpilot::AppConfig* app_config_;
+    ::xpilot::AppConfigDto* app_config_dto_;
     ::xpilot::RadioStack* radio_stack_;
+    ::xpilot::TransponderModeC* transponder_mode_c_;
+    ::xpilot::TransponderCode* transponder_code_;
+    ::xpilot::TransponderIdent* transponder_ident_;
+    ::xpilot::NetworkConnectionRequest* network_connect_requested_;
   } event_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::uint32 _oneof_case_[1];
@@ -944,86 +1015,7 @@ class Envelope final :
 #endif  // __GNUC__
 // Envelope
 
-// .google.protobuf.Timestamp timestamp = 1;
-inline bool Envelope::_internal_has_timestamp() const {
-  return this != internal_default_instance() && timestamp_ != nullptr;
-}
-inline bool Envelope::has_timestamp() const {
-  return _internal_has_timestamp();
-}
-inline const PROTOBUF_NAMESPACE_ID::Timestamp& Envelope::_internal_timestamp() const {
-  const PROTOBUF_NAMESPACE_ID::Timestamp* p = timestamp_;
-  return p != nullptr ? *p : reinterpret_cast<const PROTOBUF_NAMESPACE_ID::Timestamp&>(
-      PROTOBUF_NAMESPACE_ID::_Timestamp_default_instance_);
-}
-inline const PROTOBUF_NAMESPACE_ID::Timestamp& Envelope::timestamp() const {
-  // @@protoc_insertion_point(field_get:xpilot.Envelope.timestamp)
-  return _internal_timestamp();
-}
-inline void Envelope::unsafe_arena_set_allocated_timestamp(
-    PROTOBUF_NAMESPACE_ID::Timestamp* timestamp) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(timestamp_);
-  }
-  timestamp_ = timestamp;
-  if (timestamp) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Envelope.timestamp)
-}
-inline PROTOBUF_NAMESPACE_ID::Timestamp* Envelope::release_timestamp() {
-  
-  PROTOBUF_NAMESPACE_ID::Timestamp* temp = timestamp_;
-  timestamp_ = nullptr;
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-  return temp;
-}
-inline PROTOBUF_NAMESPACE_ID::Timestamp* Envelope::unsafe_arena_release_timestamp() {
-  // @@protoc_insertion_point(field_release:xpilot.Envelope.timestamp)
-  
-  PROTOBUF_NAMESPACE_ID::Timestamp* temp = timestamp_;
-  timestamp_ = nullptr;
-  return temp;
-}
-inline PROTOBUF_NAMESPACE_ID::Timestamp* Envelope::_internal_mutable_timestamp() {
-  
-  if (timestamp_ == nullptr) {
-    auto* p = CreateMaybeMessage<PROTOBUF_NAMESPACE_ID::Timestamp>(GetArenaForAllocation());
-    timestamp_ = p;
-  }
-  return timestamp_;
-}
-inline PROTOBUF_NAMESPACE_ID::Timestamp* Envelope::mutable_timestamp() {
-  // @@protoc_insertion_point(field_mutable:xpilot.Envelope.timestamp)
-  return _internal_mutable_timestamp();
-}
-inline void Envelope::set_allocated_timestamp(PROTOBUF_NAMESPACE_ID::Timestamp* timestamp) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(timestamp_);
-  }
-  if (timestamp) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
-            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(timestamp));
-    if (message_arena != submessage_arena) {
-      timestamp = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, timestamp, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  timestamp_ = timestamp;
-  // @@protoc_insertion_point(field_set_allocated:xpilot.Envelope.timestamp)
-}
-
-// .xpilot.PositionUpdate position_update = 2;
+// .xpilot.PositionUpdate position_update = 1;
 inline bool Envelope::_internal_has_position_update() const {
   return event_case() == kPositionUpdate;
 }
@@ -1088,7 +1080,7 @@ inline ::xpilot::PositionUpdate* Envelope::mutable_position_update() {
   return _internal_mutable_position_update();
 }
 
-// .xpilot.FastPositionUpdate fast_position_update = 3;
+// .xpilot.FastPositionUpdate fast_position_update = 2;
 inline bool Envelope::_internal_has_fast_position_update() const {
   return event_case() == kFastPositionUpdate;
 }
@@ -1153,7 +1145,7 @@ inline ::xpilot::FastPositionUpdate* Envelope::mutable_fast_position_update() {
   return _internal_mutable_fast_position_update();
 }
 
-// .xpilot.AirplaneConfig airplane_config = 4;
+// .xpilot.AirplaneConfig airplane_config = 3;
 inline bool Envelope::_internal_has_airplane_config() const {
   return event_case() == kAirplaneConfig;
 }
@@ -1218,7 +1210,7 @@ inline ::xpilot::AirplaneConfig* Envelope::mutable_airplane_config() {
   return _internal_mutable_airplane_config();
 }
 
-// .xpilot.AddPlane add_plane = 5;
+// .xpilot.AddPlane add_plane = 4;
 inline bool Envelope::_internal_has_add_plane() const {
   return event_case() == kAddPlane;
 }
@@ -1283,7 +1275,7 @@ inline ::xpilot::AddPlane* Envelope::mutable_add_plane() {
   return _internal_mutable_add_plane();
 }
 
-// .xpilot.PlaneAddedToSim plane_added_to_sim = 6;
+// .xpilot.PlaneAddedToSim plane_added_to_sim = 5;
 inline bool Envelope::_internal_has_plane_added_to_sim() const {
   return event_case() == kPlaneAddedToSim;
 }
@@ -1348,7 +1340,7 @@ inline ::xpilot::PlaneAddedToSim* Envelope::mutable_plane_added_to_sim() {
   return _internal_mutable_plane_added_to_sim();
 }
 
-// .xpilot.ChangePlaneModel change_plane_model = 7;
+// .xpilot.ChangePlaneModel change_plane_model = 6;
 inline bool Envelope::_internal_has_change_plane_model() const {
   return event_case() == kChangePlaneModel;
 }
@@ -1413,7 +1405,7 @@ inline ::xpilot::ChangePlaneModel* Envelope::mutable_change_plane_model() {
   return _internal_mutable_change_plane_model();
 }
 
-// .xpilot.DeletePlane delete_plane = 8;
+// .xpilot.DeletePlane delete_plane = 7;
 inline bool Envelope::_internal_has_delete_plane() const {
   return event_case() == kDeletePlane;
 }
@@ -1478,7 +1470,7 @@ inline ::xpilot::DeletePlane* Envelope::mutable_delete_plane() {
   return _internal_mutable_delete_plane();
 }
 
-// .xpilot.PrivateMessageReceived private_message_received = 9;
+// .xpilot.PrivateMessageReceived private_message_received = 8;
 inline bool Envelope::_internal_has_private_message_received() const {
   return event_case() == kPrivateMessageReceived;
 }
@@ -1543,7 +1535,7 @@ inline ::xpilot::PrivateMessageReceived* Envelope::mutable_private_message_recei
   return _internal_mutable_private_message_received();
 }
 
-// .xpilot.PrivateMessageSent private_message_sent = 10;
+// .xpilot.PrivateMessageSent private_message_sent = 9;
 inline bool Envelope::_internal_has_private_message_sent() const {
   return event_case() == kPrivateMessageSent;
 }
@@ -1608,7 +1600,7 @@ inline ::xpilot::PrivateMessageSent* Envelope::mutable_private_message_sent() {
   return _internal_mutable_private_message_sent();
 }
 
-// .xpilot.TextMessageReceived text_message_received = 11;
+// .xpilot.TextMessageReceived text_message_received = 10;
 inline bool Envelope::_internal_has_text_message_received() const {
   return event_case() == kTextMessageReceived;
 }
@@ -1673,7 +1665,7 @@ inline ::xpilot::TextMessageReceived* Envelope::mutable_text_message_received() 
   return _internal_mutable_text_message_received();
 }
 
-// .xpilot.TextMessageSent text_message_sent = 12;
+// .xpilot.TextMessageSent text_message_sent = 11;
 inline bool Envelope::_internal_has_text_message_sent() const {
   return event_case() == kTextMessageSent;
 }
@@ -1738,7 +1730,7 @@ inline ::xpilot::TextMessageSent* Envelope::mutable_text_message_sent() {
   return _internal_mutable_text_message_sent();
 }
 
-// .xpilot.NetworkConnected network_connected = 13;
+// .xpilot.NetworkConnected network_connected = 12;
 inline bool Envelope::_internal_has_network_connected() const {
   return event_case() == kNetworkConnected;
 }
@@ -1803,7 +1795,7 @@ inline ::xpilot::NetworkConnected* Envelope::mutable_network_connected() {
   return _internal_mutable_network_connected();
 }
 
-// .xpilot.NetworkDisconnected network_disconnected = 14;
+// .xpilot.NetworkDisconnected network_disconnected = 13;
 inline bool Envelope::_internal_has_network_disconnected() const {
   return event_case() == kNetworkDisconnected;
 }
@@ -1868,7 +1860,7 @@ inline ::xpilot::NetworkDisconnected* Envelope::mutable_network_disconnected() {
   return _internal_mutable_network_disconnected();
 }
 
-// .xpilot.NearbyControllers nearby_controllers = 15;
+// .xpilot.NearbyControllers nearby_controllers = 14;
 inline bool Envelope::_internal_has_nearby_controllers() const {
   return event_case() == kNearbyControllers;
 }
@@ -1933,72 +1925,7 @@ inline ::xpilot::NearbyControllers* Envelope::mutable_nearby_controllers() {
   return _internal_mutable_nearby_controllers();
 }
 
-// .xpilot.SetTransponder set_transponder = 16;
-inline bool Envelope::_internal_has_set_transponder() const {
-  return event_case() == kSetTransponder;
-}
-inline bool Envelope::has_set_transponder() const {
-  return _internal_has_set_transponder();
-}
-inline void Envelope::set_has_set_transponder() {
-  _oneof_case_[0] = kSetTransponder;
-}
-inline ::xpilot::SetTransponder* Envelope::release_set_transponder() {
-  // @@protoc_insertion_point(field_release:xpilot.Envelope.set_transponder)
-  if (_internal_has_set_transponder()) {
-    clear_has_event();
-      ::xpilot::SetTransponder* temp = event_.set_transponder_;
-    if (GetArenaForAllocation() != nullptr) {
-      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-    }
-    event_.set_transponder_ = nullptr;
-    return temp;
-  } else {
-    return nullptr;
-  }
-}
-inline const ::xpilot::SetTransponder& Envelope::_internal_set_transponder() const {
-  return _internal_has_set_transponder()
-      ? *event_.set_transponder_
-      : reinterpret_cast< ::xpilot::SetTransponder&>(::xpilot::_SetTransponder_default_instance_);
-}
-inline const ::xpilot::SetTransponder& Envelope::set_transponder() const {
-  // @@protoc_insertion_point(field_get:xpilot.Envelope.set_transponder)
-  return _internal_set_transponder();
-}
-inline ::xpilot::SetTransponder* Envelope::unsafe_arena_release_set_transponder() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Envelope.set_transponder)
-  if (_internal_has_set_transponder()) {
-    clear_has_event();
-    ::xpilot::SetTransponder* temp = event_.set_transponder_;
-    event_.set_transponder_ = nullptr;
-    return temp;
-  } else {
-    return nullptr;
-  }
-}
-inline void Envelope::unsafe_arena_set_allocated_set_transponder(::xpilot::SetTransponder* set_transponder) {
-  clear_event();
-  if (set_transponder) {
-    set_has_set_transponder();
-    event_.set_transponder_ = set_transponder;
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Envelope.set_transponder)
-}
-inline ::xpilot::SetTransponder* Envelope::_internal_mutable_set_transponder() {
-  if (!_internal_has_set_transponder()) {
-    clear_event();
-    set_has_set_transponder();
-    event_.set_transponder_ = CreateMaybeMessage< ::xpilot::SetTransponder >(GetArenaForAllocation());
-  }
-  return event_.set_transponder_;
-}
-inline ::xpilot::SetTransponder* Envelope::mutable_set_transponder() {
-  // @@protoc_insertion_point(field_mutable:xpilot.Envelope.set_transponder)
-  return _internal_mutable_set_transponder();
-}
-
-// .xpilot.SetRadioStack set_radiostack = 17;
+// .xpilot.SetRadioStack set_radiostack = 15;
 inline bool Envelope::_internal_has_set_radiostack() const {
   return event_case() == kSetRadiostack;
 }
@@ -2063,7 +1990,7 @@ inline ::xpilot::SetRadioStack* Envelope::mutable_set_radiostack() {
   return _internal_mutable_set_radiostack();
 }
 
-// .xpilot.AppMetadata app_metdata = 18;
+// .xpilot.AppMetadata app_metdata = 16;
 inline bool Envelope::_internal_has_app_metdata() const {
   return event_case() == kAppMetdata;
 }
@@ -2128,7 +2055,7 @@ inline ::xpilot::AppMetadata* Envelope::mutable_app_metdata() {
   return _internal_mutable_app_metdata();
 }
 
-// .xpilot.CslValidation csl_validation = 19;
+// .xpilot.CslValidation csl_validation = 17;
 inline bool Envelope::_internal_has_csl_validation() const {
   return event_case() == kCslValidation;
 }
@@ -2193,7 +2120,7 @@ inline ::xpilot::CslValidation* Envelope::mutable_csl_validation() {
   return _internal_mutable_csl_validation();
 }
 
-// .xpilot.RequestControllerInfo request_controller_info = 20;
+// .xpilot.RequestControllerInfo request_controller_info = 18;
 inline bool Envelope::_internal_has_request_controller_info() const {
   return event_case() == kRequestControllerInfo;
 }
@@ -2258,7 +2185,7 @@ inline ::xpilot::RequestControllerInfo* Envelope::mutable_request_controller_inf
   return _internal_mutable_request_controller_info();
 }
 
-// .xpilot.TriggerDisconnect trigger_disconnect = 21;
+// .xpilot.TriggerDisconnect trigger_disconnect = 19;
 inline bool Envelope::_internal_has_trigger_disconnect() const {
   return event_case() == kTriggerDisconnect;
 }
@@ -2323,7 +2250,7 @@ inline ::xpilot::TriggerDisconnect* Envelope::mutable_trigger_disconnect() {
   return _internal_mutable_trigger_disconnect();
 }
 
-// .xpilot.PlaneRemovedFromSim plane_removed_from_sim = 22;
+// .xpilot.PlaneRemovedFromSim plane_removed_from_sim = 20;
 inline bool Envelope::_internal_has_plane_removed_from_sim() const {
   return event_case() == kPlaneRemovedFromSim;
 }
@@ -2388,7 +2315,7 @@ inline ::xpilot::PlaneRemovedFromSim* Envelope::mutable_plane_removed_from_sim()
   return _internal_mutable_plane_removed_from_sim();
 }
 
-// .xpilot.ServerMessageReceived server_message_received = 23;
+// .xpilot.ServerMessageReceived server_message_received = 21;
 inline bool Envelope::_internal_has_server_message_received() const {
   return event_case() == kServerMessageReceived;
 }
@@ -2453,7 +2380,7 @@ inline ::xpilot::ServerMessageReceived* Envelope::mutable_server_message_receive
   return _internal_mutable_server_message_received();
 }
 
-// .xpilot.RequestMetar request_metar = 24;
+// .xpilot.RequestMetar request_metar = 22;
 inline bool Envelope::_internal_has_request_metar() const {
   return event_case() == kRequestMetar;
 }
@@ -2518,7 +2445,7 @@ inline ::xpilot::RequestMetar* Envelope::mutable_request_metar() {
   return _internal_mutable_request_metar();
 }
 
-// .xpilot.MetarReceived metar_received = 25;
+// .xpilot.MetarReceived metar_received = 23;
 inline bool Envelope::_internal_has_metar_received() const {
   return event_case() == kMetarReceived;
 }
@@ -2583,7 +2510,7 @@ inline ::xpilot::MetarReceived* Envelope::mutable_metar_received() {
   return _internal_mutable_metar_received();
 }
 
-// .xpilot.WallopSent wallop_sent = 26;
+// .xpilot.WallopSent wallop_sent = 24;
 inline bool Envelope::_internal_has_wallop_sent() const {
   return event_case() == kWallopSent;
 }
@@ -2648,7 +2575,7 @@ inline ::xpilot::WallopSent* Envelope::mutable_wallop_sent() {
   return _internal_mutable_wallop_sent();
 }
 
-// .xpilot.BroadcastMessageReceived broadcast_message_received = 27;
+// .xpilot.BroadcastMessageReceived broadcast_message_received = 25;
 inline bool Envelope::_internal_has_broadcast_message_received() const {
   return event_case() == kBroadcastMessageReceived;
 }
@@ -2713,72 +2640,137 @@ inline ::xpilot::BroadcastMessageReceived* Envelope::mutable_broadcast_message_r
   return _internal_mutable_broadcast_message_received();
 }
 
-// .xpilot.InfoMessagePosted info_message_posted = 28;
-inline bool Envelope::_internal_has_info_message_posted() const {
-  return event_case() == kInfoMessagePosted;
+// .xpilot.PostInfoMessage post_info_message = 26;
+inline bool Envelope::_internal_has_post_info_message() const {
+  return event_case() == kPostInfoMessage;
 }
-inline bool Envelope::has_info_message_posted() const {
-  return _internal_has_info_message_posted();
+inline bool Envelope::has_post_info_message() const {
+  return _internal_has_post_info_message();
 }
-inline void Envelope::set_has_info_message_posted() {
-  _oneof_case_[0] = kInfoMessagePosted;
+inline void Envelope::set_has_post_info_message() {
+  _oneof_case_[0] = kPostInfoMessage;
 }
-inline ::xpilot::InfoMessagePosted* Envelope::release_info_message_posted() {
-  // @@protoc_insertion_point(field_release:xpilot.Envelope.info_message_posted)
-  if (_internal_has_info_message_posted()) {
+inline ::xpilot::PostInfoMessage* Envelope::release_post_info_message() {
+  // @@protoc_insertion_point(field_release:xpilot.Envelope.post_info_message)
+  if (_internal_has_post_info_message()) {
     clear_has_event();
-      ::xpilot::InfoMessagePosted* temp = event_.info_message_posted_;
+      ::xpilot::PostInfoMessage* temp = event_.post_info_message_;
     if (GetArenaForAllocation() != nullptr) {
       temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
     }
-    event_.info_message_posted_ = nullptr;
+    event_.post_info_message_ = nullptr;
     return temp;
   } else {
     return nullptr;
   }
 }
-inline const ::xpilot::InfoMessagePosted& Envelope::_internal_info_message_posted() const {
-  return _internal_has_info_message_posted()
-      ? *event_.info_message_posted_
-      : reinterpret_cast< ::xpilot::InfoMessagePosted&>(::xpilot::_InfoMessagePosted_default_instance_);
+inline const ::xpilot::PostInfoMessage& Envelope::_internal_post_info_message() const {
+  return _internal_has_post_info_message()
+      ? *event_.post_info_message_
+      : reinterpret_cast< ::xpilot::PostInfoMessage&>(::xpilot::_PostInfoMessage_default_instance_);
 }
-inline const ::xpilot::InfoMessagePosted& Envelope::info_message_posted() const {
-  // @@protoc_insertion_point(field_get:xpilot.Envelope.info_message_posted)
-  return _internal_info_message_posted();
+inline const ::xpilot::PostInfoMessage& Envelope::post_info_message() const {
+  // @@protoc_insertion_point(field_get:xpilot.Envelope.post_info_message)
+  return _internal_post_info_message();
 }
-inline ::xpilot::InfoMessagePosted* Envelope::unsafe_arena_release_info_message_posted() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Envelope.info_message_posted)
-  if (_internal_has_info_message_posted()) {
+inline ::xpilot::PostInfoMessage* Envelope::unsafe_arena_release_post_info_message() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Envelope.post_info_message)
+  if (_internal_has_post_info_message()) {
     clear_has_event();
-    ::xpilot::InfoMessagePosted* temp = event_.info_message_posted_;
-    event_.info_message_posted_ = nullptr;
+    ::xpilot::PostInfoMessage* temp = event_.post_info_message_;
+    event_.post_info_message_ = nullptr;
     return temp;
   } else {
     return nullptr;
   }
 }
-inline void Envelope::unsafe_arena_set_allocated_info_message_posted(::xpilot::InfoMessagePosted* info_message_posted) {
+inline void Envelope::unsafe_arena_set_allocated_post_info_message(::xpilot::PostInfoMessage* post_info_message) {
   clear_event();
-  if (info_message_posted) {
-    set_has_info_message_posted();
-    event_.info_message_posted_ = info_message_posted;
+  if (post_info_message) {
+    set_has_post_info_message();
+    event_.post_info_message_ = post_info_message;
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Envelope.info_message_posted)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Envelope.post_info_message)
 }
-inline ::xpilot::InfoMessagePosted* Envelope::_internal_mutable_info_message_posted() {
-  if (!_internal_has_info_message_posted()) {
+inline ::xpilot::PostInfoMessage* Envelope::_internal_mutable_post_info_message() {
+  if (!_internal_has_post_info_message()) {
     clear_event();
-    set_has_info_message_posted();
-    event_.info_message_posted_ = CreateMaybeMessage< ::xpilot::InfoMessagePosted >(GetArenaForAllocation());
+    set_has_post_info_message();
+    event_.post_info_message_ = CreateMaybeMessage< ::xpilot::PostInfoMessage >(GetArenaForAllocation());
   }
-  return event_.info_message_posted_;
+  return event_.post_info_message_;
 }
-inline ::xpilot::InfoMessagePosted* Envelope::mutable_info_message_posted() {
-  // @@protoc_insertion_point(field_mutable:xpilot.Envelope.info_message_posted)
-  return _internal_mutable_info_message_posted();
+inline ::xpilot::PostInfoMessage* Envelope::mutable_post_info_message() {
+  // @@protoc_insertion_point(field_mutable:xpilot.Envelope.post_info_message)
+  return _internal_mutable_post_info_message();
 }
 
-// .xpilot.NotePosted note_posted = 29;
+// .xpilot.PostErrorMessage post_error_message = 27;
+inline bool Envelope::_internal_has_post_error_message() const {
+  return event_case() == kPostErrorMessage;
+}
+inline bool Envelope::has_post_error_message() const {
+  return _internal_has_post_error_message();
+}
+inline void Envelope::set_has_post_error_message() {
+  _oneof_case_[0] = kPostErrorMessage;
+}
+inline ::xpilot::PostErrorMessage* Envelope::release_post_error_message() {
+  // @@protoc_insertion_point(field_release:xpilot.Envelope.post_error_message)
+  if (_internal_has_post_error_message()) {
+    clear_has_event();
+      ::xpilot::PostErrorMessage* temp = event_.post_error_message_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    event_.post_error_message_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::xpilot::PostErrorMessage& Envelope::_internal_post_error_message() const {
+  return _internal_has_post_error_message()
+      ? *event_.post_error_message_
+      : reinterpret_cast< ::xpilot::PostErrorMessage&>(::xpilot::_PostErrorMessage_default_instance_);
+}
+inline const ::xpilot::PostErrorMessage& Envelope::post_error_message() const {
+  // @@protoc_insertion_point(field_get:xpilot.Envelope.post_error_message)
+  return _internal_post_error_message();
+}
+inline ::xpilot::PostErrorMessage* Envelope::unsafe_arena_release_post_error_message() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Envelope.post_error_message)
+  if (_internal_has_post_error_message()) {
+    clear_has_event();
+    ::xpilot::PostErrorMessage* temp = event_.post_error_message_;
+    event_.post_error_message_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_post_error_message(::xpilot::PostErrorMessage* post_error_message) {
+  clear_event();
+  if (post_error_message) {
+    set_has_post_error_message();
+    event_.post_error_message_ = post_error_message;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Envelope.post_error_message)
+}
+inline ::xpilot::PostErrorMessage* Envelope::_internal_mutable_post_error_message() {
+  if (!_internal_has_post_error_message()) {
+    clear_event();
+    set_has_post_error_message();
+    event_.post_error_message_ = CreateMaybeMessage< ::xpilot::PostErrorMessage >(GetArenaForAllocation());
+  }
+  return event_.post_error_message_;
+}
+inline ::xpilot::PostErrorMessage* Envelope::mutable_post_error_message() {
+  // @@protoc_insertion_point(field_mutable:xpilot.Envelope.post_error_message)
+  return _internal_mutable_post_error_message();
+}
+
+// .xpilot.NotePosted note_posted = 28;
 inline bool Envelope::_internal_has_note_posted() const {
   return event_case() == kNotePosted;
 }
@@ -2843,7 +2835,7 @@ inline ::xpilot::NotePosted* Envelope::mutable_note_posted() {
   return _internal_mutable_note_posted();
 }
 
-// .xpilot.SimulatorConnectionState simulator_connection_state = 30;
+// .xpilot.SimulatorConnectionState simulator_connection_state = 29;
 inline bool Envelope::_internal_has_simulator_connection_state() const {
   return event_case() == kSimulatorConnectionState;
 }
@@ -2908,72 +2900,72 @@ inline ::xpilot::SimulatorConnectionState* Envelope::mutable_simulator_connectio
   return _internal_mutable_simulator_connection_state();
 }
 
-// .xpilot.AppConfig app_config = 31;
-inline bool Envelope::_internal_has_app_config() const {
-  return event_case() == kAppConfig;
+// .xpilot.AppConfigDto app_config_dto = 30;
+inline bool Envelope::_internal_has_app_config_dto() const {
+  return event_case() == kAppConfigDto;
 }
-inline bool Envelope::has_app_config() const {
-  return _internal_has_app_config();
+inline bool Envelope::has_app_config_dto() const {
+  return _internal_has_app_config_dto();
 }
-inline void Envelope::set_has_app_config() {
-  _oneof_case_[0] = kAppConfig;
+inline void Envelope::set_has_app_config_dto() {
+  _oneof_case_[0] = kAppConfigDto;
 }
-inline ::xpilot::AppConfig* Envelope::release_app_config() {
-  // @@protoc_insertion_point(field_release:xpilot.Envelope.app_config)
-  if (_internal_has_app_config()) {
+inline ::xpilot::AppConfigDto* Envelope::release_app_config_dto() {
+  // @@protoc_insertion_point(field_release:xpilot.Envelope.app_config_dto)
+  if (_internal_has_app_config_dto()) {
     clear_has_event();
-      ::xpilot::AppConfig* temp = event_.app_config_;
+      ::xpilot::AppConfigDto* temp = event_.app_config_dto_;
     if (GetArenaForAllocation() != nullptr) {
       temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
     }
-    event_.app_config_ = nullptr;
+    event_.app_config_dto_ = nullptr;
     return temp;
   } else {
     return nullptr;
   }
 }
-inline const ::xpilot::AppConfig& Envelope::_internal_app_config() const {
-  return _internal_has_app_config()
-      ? *event_.app_config_
-      : reinterpret_cast< ::xpilot::AppConfig&>(::xpilot::_AppConfig_default_instance_);
+inline const ::xpilot::AppConfigDto& Envelope::_internal_app_config_dto() const {
+  return _internal_has_app_config_dto()
+      ? *event_.app_config_dto_
+      : reinterpret_cast< ::xpilot::AppConfigDto&>(::xpilot::_AppConfigDto_default_instance_);
 }
-inline const ::xpilot::AppConfig& Envelope::app_config() const {
-  // @@protoc_insertion_point(field_get:xpilot.Envelope.app_config)
-  return _internal_app_config();
+inline const ::xpilot::AppConfigDto& Envelope::app_config_dto() const {
+  // @@protoc_insertion_point(field_get:xpilot.Envelope.app_config_dto)
+  return _internal_app_config_dto();
 }
-inline ::xpilot::AppConfig* Envelope::unsafe_arena_release_app_config() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Envelope.app_config)
-  if (_internal_has_app_config()) {
+inline ::xpilot::AppConfigDto* Envelope::unsafe_arena_release_app_config_dto() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Envelope.app_config_dto)
+  if (_internal_has_app_config_dto()) {
     clear_has_event();
-    ::xpilot::AppConfig* temp = event_.app_config_;
-    event_.app_config_ = nullptr;
+    ::xpilot::AppConfigDto* temp = event_.app_config_dto_;
+    event_.app_config_dto_ = nullptr;
     return temp;
   } else {
     return nullptr;
   }
 }
-inline void Envelope::unsafe_arena_set_allocated_app_config(::xpilot::AppConfig* app_config) {
+inline void Envelope::unsafe_arena_set_allocated_app_config_dto(::xpilot::AppConfigDto* app_config_dto) {
   clear_event();
-  if (app_config) {
-    set_has_app_config();
-    event_.app_config_ = app_config;
+  if (app_config_dto) {
+    set_has_app_config_dto();
+    event_.app_config_dto_ = app_config_dto;
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Envelope.app_config)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Envelope.app_config_dto)
 }
-inline ::xpilot::AppConfig* Envelope::_internal_mutable_app_config() {
-  if (!_internal_has_app_config()) {
+inline ::xpilot::AppConfigDto* Envelope::_internal_mutable_app_config_dto() {
+  if (!_internal_has_app_config_dto()) {
     clear_event();
-    set_has_app_config();
-    event_.app_config_ = CreateMaybeMessage< ::xpilot::AppConfig >(GetArenaForAllocation());
+    set_has_app_config_dto();
+    event_.app_config_dto_ = CreateMaybeMessage< ::xpilot::AppConfigDto >(GetArenaForAllocation());
   }
-  return event_.app_config_;
+  return event_.app_config_dto_;
 }
-inline ::xpilot::AppConfig* Envelope::mutable_app_config() {
-  // @@protoc_insertion_point(field_mutable:xpilot.Envelope.app_config)
-  return _internal_mutable_app_config();
+inline ::xpilot::AppConfigDto* Envelope::mutable_app_config_dto() {
+  // @@protoc_insertion_point(field_mutable:xpilot.Envelope.app_config_dto)
+  return _internal_mutable_app_config_dto();
 }
 
-// .xpilot.RadioStack radio_stack = 32;
+// .xpilot.RadioStack radio_stack = 31;
 inline bool Envelope::_internal_has_radio_stack() const {
   return event_case() == kRadioStack;
 }
@@ -3036,6 +3028,266 @@ inline ::xpilot::RadioStack* Envelope::_internal_mutable_radio_stack() {
 inline ::xpilot::RadioStack* Envelope::mutable_radio_stack() {
   // @@protoc_insertion_point(field_mutable:xpilot.Envelope.radio_stack)
   return _internal_mutable_radio_stack();
+}
+
+// .xpilot.TransponderModeC transponder_mode_c = 32;
+inline bool Envelope::_internal_has_transponder_mode_c() const {
+  return event_case() == kTransponderModeC;
+}
+inline bool Envelope::has_transponder_mode_c() const {
+  return _internal_has_transponder_mode_c();
+}
+inline void Envelope::set_has_transponder_mode_c() {
+  _oneof_case_[0] = kTransponderModeC;
+}
+inline ::xpilot::TransponderModeC* Envelope::release_transponder_mode_c() {
+  // @@protoc_insertion_point(field_release:xpilot.Envelope.transponder_mode_c)
+  if (_internal_has_transponder_mode_c()) {
+    clear_has_event();
+      ::xpilot::TransponderModeC* temp = event_.transponder_mode_c_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    event_.transponder_mode_c_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::xpilot::TransponderModeC& Envelope::_internal_transponder_mode_c() const {
+  return _internal_has_transponder_mode_c()
+      ? *event_.transponder_mode_c_
+      : reinterpret_cast< ::xpilot::TransponderModeC&>(::xpilot::_TransponderModeC_default_instance_);
+}
+inline const ::xpilot::TransponderModeC& Envelope::transponder_mode_c() const {
+  // @@protoc_insertion_point(field_get:xpilot.Envelope.transponder_mode_c)
+  return _internal_transponder_mode_c();
+}
+inline ::xpilot::TransponderModeC* Envelope::unsafe_arena_release_transponder_mode_c() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Envelope.transponder_mode_c)
+  if (_internal_has_transponder_mode_c()) {
+    clear_has_event();
+    ::xpilot::TransponderModeC* temp = event_.transponder_mode_c_;
+    event_.transponder_mode_c_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_transponder_mode_c(::xpilot::TransponderModeC* transponder_mode_c) {
+  clear_event();
+  if (transponder_mode_c) {
+    set_has_transponder_mode_c();
+    event_.transponder_mode_c_ = transponder_mode_c;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Envelope.transponder_mode_c)
+}
+inline ::xpilot::TransponderModeC* Envelope::_internal_mutable_transponder_mode_c() {
+  if (!_internal_has_transponder_mode_c()) {
+    clear_event();
+    set_has_transponder_mode_c();
+    event_.transponder_mode_c_ = CreateMaybeMessage< ::xpilot::TransponderModeC >(GetArenaForAllocation());
+  }
+  return event_.transponder_mode_c_;
+}
+inline ::xpilot::TransponderModeC* Envelope::mutable_transponder_mode_c() {
+  // @@protoc_insertion_point(field_mutable:xpilot.Envelope.transponder_mode_c)
+  return _internal_mutable_transponder_mode_c();
+}
+
+// .xpilot.TransponderCode transponder_code = 33;
+inline bool Envelope::_internal_has_transponder_code() const {
+  return event_case() == kTransponderCode;
+}
+inline bool Envelope::has_transponder_code() const {
+  return _internal_has_transponder_code();
+}
+inline void Envelope::set_has_transponder_code() {
+  _oneof_case_[0] = kTransponderCode;
+}
+inline ::xpilot::TransponderCode* Envelope::release_transponder_code() {
+  // @@protoc_insertion_point(field_release:xpilot.Envelope.transponder_code)
+  if (_internal_has_transponder_code()) {
+    clear_has_event();
+      ::xpilot::TransponderCode* temp = event_.transponder_code_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    event_.transponder_code_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::xpilot::TransponderCode& Envelope::_internal_transponder_code() const {
+  return _internal_has_transponder_code()
+      ? *event_.transponder_code_
+      : reinterpret_cast< ::xpilot::TransponderCode&>(::xpilot::_TransponderCode_default_instance_);
+}
+inline const ::xpilot::TransponderCode& Envelope::transponder_code() const {
+  // @@protoc_insertion_point(field_get:xpilot.Envelope.transponder_code)
+  return _internal_transponder_code();
+}
+inline ::xpilot::TransponderCode* Envelope::unsafe_arena_release_transponder_code() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Envelope.transponder_code)
+  if (_internal_has_transponder_code()) {
+    clear_has_event();
+    ::xpilot::TransponderCode* temp = event_.transponder_code_;
+    event_.transponder_code_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_transponder_code(::xpilot::TransponderCode* transponder_code) {
+  clear_event();
+  if (transponder_code) {
+    set_has_transponder_code();
+    event_.transponder_code_ = transponder_code;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Envelope.transponder_code)
+}
+inline ::xpilot::TransponderCode* Envelope::_internal_mutable_transponder_code() {
+  if (!_internal_has_transponder_code()) {
+    clear_event();
+    set_has_transponder_code();
+    event_.transponder_code_ = CreateMaybeMessage< ::xpilot::TransponderCode >(GetArenaForAllocation());
+  }
+  return event_.transponder_code_;
+}
+inline ::xpilot::TransponderCode* Envelope::mutable_transponder_code() {
+  // @@protoc_insertion_point(field_mutable:xpilot.Envelope.transponder_code)
+  return _internal_mutable_transponder_code();
+}
+
+// .xpilot.TransponderIdent transponder_ident = 34;
+inline bool Envelope::_internal_has_transponder_ident() const {
+  return event_case() == kTransponderIdent;
+}
+inline bool Envelope::has_transponder_ident() const {
+  return _internal_has_transponder_ident();
+}
+inline void Envelope::set_has_transponder_ident() {
+  _oneof_case_[0] = kTransponderIdent;
+}
+inline ::xpilot::TransponderIdent* Envelope::release_transponder_ident() {
+  // @@protoc_insertion_point(field_release:xpilot.Envelope.transponder_ident)
+  if (_internal_has_transponder_ident()) {
+    clear_has_event();
+      ::xpilot::TransponderIdent* temp = event_.transponder_ident_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    event_.transponder_ident_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::xpilot::TransponderIdent& Envelope::_internal_transponder_ident() const {
+  return _internal_has_transponder_ident()
+      ? *event_.transponder_ident_
+      : reinterpret_cast< ::xpilot::TransponderIdent&>(::xpilot::_TransponderIdent_default_instance_);
+}
+inline const ::xpilot::TransponderIdent& Envelope::transponder_ident() const {
+  // @@protoc_insertion_point(field_get:xpilot.Envelope.transponder_ident)
+  return _internal_transponder_ident();
+}
+inline ::xpilot::TransponderIdent* Envelope::unsafe_arena_release_transponder_ident() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Envelope.transponder_ident)
+  if (_internal_has_transponder_ident()) {
+    clear_has_event();
+    ::xpilot::TransponderIdent* temp = event_.transponder_ident_;
+    event_.transponder_ident_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_transponder_ident(::xpilot::TransponderIdent* transponder_ident) {
+  clear_event();
+  if (transponder_ident) {
+    set_has_transponder_ident();
+    event_.transponder_ident_ = transponder_ident;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Envelope.transponder_ident)
+}
+inline ::xpilot::TransponderIdent* Envelope::_internal_mutable_transponder_ident() {
+  if (!_internal_has_transponder_ident()) {
+    clear_event();
+    set_has_transponder_ident();
+    event_.transponder_ident_ = CreateMaybeMessage< ::xpilot::TransponderIdent >(GetArenaForAllocation());
+  }
+  return event_.transponder_ident_;
+}
+inline ::xpilot::TransponderIdent* Envelope::mutable_transponder_ident() {
+  // @@protoc_insertion_point(field_mutable:xpilot.Envelope.transponder_ident)
+  return _internal_mutable_transponder_ident();
+}
+
+// .xpilot.NetworkConnectionRequest network_connect_requested = 35;
+inline bool Envelope::_internal_has_network_connect_requested() const {
+  return event_case() == kNetworkConnectRequested;
+}
+inline bool Envelope::has_network_connect_requested() const {
+  return _internal_has_network_connect_requested();
+}
+inline void Envelope::set_has_network_connect_requested() {
+  _oneof_case_[0] = kNetworkConnectRequested;
+}
+inline ::xpilot::NetworkConnectionRequest* Envelope::release_network_connect_requested() {
+  // @@protoc_insertion_point(field_release:xpilot.Envelope.network_connect_requested)
+  if (_internal_has_network_connect_requested()) {
+    clear_has_event();
+      ::xpilot::NetworkConnectionRequest* temp = event_.network_connect_requested_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    event_.network_connect_requested_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::xpilot::NetworkConnectionRequest& Envelope::_internal_network_connect_requested() const {
+  return _internal_has_network_connect_requested()
+      ? *event_.network_connect_requested_
+      : reinterpret_cast< ::xpilot::NetworkConnectionRequest&>(::xpilot::_NetworkConnectionRequest_default_instance_);
+}
+inline const ::xpilot::NetworkConnectionRequest& Envelope::network_connect_requested() const {
+  // @@protoc_insertion_point(field_get:xpilot.Envelope.network_connect_requested)
+  return _internal_network_connect_requested();
+}
+inline ::xpilot::NetworkConnectionRequest* Envelope::unsafe_arena_release_network_connect_requested() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Envelope.network_connect_requested)
+  if (_internal_has_network_connect_requested()) {
+    clear_has_event();
+    ::xpilot::NetworkConnectionRequest* temp = event_.network_connect_requested_;
+    event_.network_connect_requested_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_network_connect_requested(::xpilot::NetworkConnectionRequest* network_connect_requested) {
+  clear_event();
+  if (network_connect_requested) {
+    set_has_network_connect_requested();
+    event_.network_connect_requested_ = network_connect_requested;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Envelope.network_connect_requested)
+}
+inline ::xpilot::NetworkConnectionRequest* Envelope::_internal_mutable_network_connect_requested() {
+  if (!_internal_has_network_connect_requested()) {
+    clear_event();
+    set_has_network_connect_requested();
+    event_.network_connect_requested_ = CreateMaybeMessage< ::xpilot::NetworkConnectionRequest >(GetArenaForAllocation());
+  }
+  return event_.network_connect_requested_;
+}
+inline ::xpilot::NetworkConnectionRequest* Envelope::mutable_network_connect_requested() {
+  // @@protoc_insertion_point(field_mutable:xpilot.Envelope.network_connect_requested)
+  return _internal_mutable_network_connect_requested();
 }
 
 inline bool Envelope::has_event() const {

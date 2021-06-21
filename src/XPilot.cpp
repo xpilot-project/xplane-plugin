@@ -183,13 +183,7 @@ namespace xpilot
 
 		if (envelope.has_app_metdata())
 		{
-			auto ts = new google::protobuf::Timestamp{};
-			ts->set_seconds(time(NULL));
-			ts->set_nanos(0);
-
 			xpilot::Envelope reply{};
-			reply.set_allocated_timestamp(ts);
-
 			xpilot::AppMetadata* msg = new xpilot::AppMetadata();
 			reply.set_allocated_app_metdata(msg);
 			msg->set_version(PLUGIN_VERSION);
@@ -200,18 +194,181 @@ namespace xpilot
 
 		if (envelope.has_csl_validation())
 		{
-			auto ts = new google::protobuf::Timestamp{};
-			ts->set_seconds(time(NULL));
-			ts->set_nanos(0);
-
 			xpilot::Envelope reply{};
-			reply.set_allocated_timestamp(ts);
-
 			xpilot::CslValidation* msg = new xpilot::CslValidation();
 			reply.set_allocated_csl_validation(msg);
 			msg->set_is_valid(Config::Instance().hasValidPaths() && XPMPGetNumberOfInstalledModels() > 0);
 
 			SendClientEvent(reply);
+		}
+
+		if (envelope.has_add_plane())
+		{
+			xpilot::AddPlane msg = envelope.add_plane();
+			if (msg.has_callsign() && msg.has_visual_state() && msg.has_equipment())
+			{
+				AircraftVisualState visualState{};
+				visualState.Lat = msg.visual_state().latitude();
+				visualState.Lon = msg.visual_state().longitude();
+				visualState.Altitude = msg.visual_state().altitude();
+				visualState.Heading = msg.visual_state().heading();
+				visualState.Pitch = msg.visual_state().pitch();
+				visualState.Bank = msg.visual_state().bank();
+
+				queueCallback([=]()
+				{
+					m_aircraftManager->SetUpNewPlane(msg.callsign(), visualState, msg.equipment(), msg.airline());
+				});
+			}
+		}
+
+		if (envelope.has_change_plane_model())
+		{
+			xpilot::ChangePlaneModel msg = envelope.change_plane_model();
+			if (msg.has_callsign() && msg.has_equipment())
+			{
+				queueCallback([=]()
+				{
+					m_aircraftManager->ChangeAircraftModel(msg.callsign(), msg.equipment(), msg.airline());
+				});
+			}
+		}
+
+		if (envelope.has_position_update())
+		{
+			xpilot::PositionUpdate msg = envelope.position_update();
+
+			AircraftVisualState visualState{};
+			visualState.Lat = msg.latitude();
+			visualState.Lon = msg.longitude();
+			visualState.Altitude = msg.altitude();
+			visualState.Pitch = msg.pitch();
+			visualState.Bank = msg.bank();
+			visualState.Heading = msg.heading();
+
+			if (msg.has_callsign())
+			{
+				queueCallback([=]()
+				{
+					m_aircraftManager->HandleSlowPositionUpdate(msg.callsign(), visualState, msg.ground_speed());
+				});
+			}
+		}
+
+		if (envelope.has_fast_position_update())
+		{
+			xpilot::FastPositionUpdate msg = envelope.fast_position_update();
+
+			AircraftVisualState visualState{};
+			visualState.Lat = msg.latitude();
+			visualState.Lon = msg.longitude();
+			visualState.Altitude = msg.altitude();
+			visualState.Pitch = msg.pitch();
+			visualState.Bank = msg.bank();
+			visualState.Heading = msg.heading();
+
+			Vector3 positionalVector{};
+			positionalVector.X = msg.velocity_longitude();
+			positionalVector.Y = msg.velocity_altitude();
+			positionalVector.Z = msg.velocity_latitude();
+
+			Vector3 rotationalVector{};
+			rotationalVector.X = msg.velocity_pitch() * -1;
+			rotationalVector.Y = msg.velocity_heading();
+			rotationalVector.Z = msg.velocity_bank() * -1;
+
+			if (msg.has_callsign())
+			{
+				queueCallback([=]()
+				{
+					m_aircraftManager->HandleFastPositionUpdate(
+						msg.callsign(),
+						visualState,
+						positionalVector,
+						rotationalVector
+					);
+				});
+			}
+		}
+
+		if (envelope.has_airplane_config())
+		{
+			xpilot::AirplaneConfig msg = envelope.airplane_config();
+			if (msg.has_callsign())
+			{
+				queueCallback([=]()
+				{
+					m_aircraftManager->UpdateAircraftConfiguration(msg);
+				});
+			}
+		}
+
+		if (envelope.has_delete_plane())
+		{
+			xpilot::DeletePlane msg = envelope.delete_plane();
+			if (msg.has_callsign())
+			{
+				queueCallback([=]()
+				{
+					m_aircraftManager->DeleteAircraft(msg.callsign());
+				});
+			}
+		}
+
+		if (envelope.has_network_connected())
+		{
+			if (envelope.network_connected().has_callsign())
+			{
+				m_networkCallsign = envelope.network_connected().callsign();
+			}
+			queueCallback([=]()
+			{
+				onNetworkConnected();
+			});
+		}
+
+		if (envelope.has_network_disconnected())
+		{
+			queueCallback([=]()
+			{
+				onNetworkDisconnected();
+			});
+		}
+
+		if (envelope.has_nearby_controllers())
+		{
+			queueCallback([=]()
+			{
+				if (envelope.nearby_controllers().list_size() > 0)
+				{
+					m_nearbyAtcWindow->UpdateList(envelope.nearby_controllers());
+				}
+				else
+				{
+					m_nearbyAtcWindow->ClearList();
+				}
+			});
+		}
+
+		if (envelope.has_text_message_received())
+		{
+			xpilot::TextMessageReceived msg = envelope.text_message_received();
+			RadioMessageReceived(msg.message(), 255, 255, 255);
+			AddNotificationPanelMessage(msg.message(), 255, 255, 255);
+		}
+
+		if (envelope.has_private_message_received())
+		{
+			xpilot::PrivateMessageReceived msg = envelope.private_message_received();
+			AddPrivateMessage(msg.from(), msg.message(), ConsoleTabType::Received);
+			AddNotificationPanelMessage(string_format("%s [pvt]:  %s", msg.from(), msg.message().c_str()), 255, 255, 255);
+		}
+
+		if (envelope.has_private_message_sent())
+		{
+			xpilot::PrivateMessageSent msg = envelope.private_message_sent();
+			AddPrivateMessage(msg.to(), msg.message(), ConsoleTabType::Sent);
+			AddNotificationPanelMessage(string_format("%s [pvt: %s]:  %s", m_networkCallsign.value().c_str(), msg.to(), msg.message().c_str()), 0, 255, 255);
 		}
 	}
 
@@ -223,7 +380,7 @@ namespace xpilot
 		in << base64::base64_encode(data).c_str() << std::endl;
 	}
 
-	void XPilot::stopBridgeProcess()
+	void XPilot::StopXplaneBridgeProcess()
 	{
 		try
 		{

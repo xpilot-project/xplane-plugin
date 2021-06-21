@@ -85,7 +85,7 @@ PLUGIN_API void XPluginDisable(void)
 {
     try
     {
-        environment->stopBridgeProcess();
+        environment->StopXplaneBridgeProcess();
         XPMPMultiplayerDisable();
         XPMPMultiplayerCleanup();
         LOG_MSG(logMSG, "xPilot Plugin Disabled");
