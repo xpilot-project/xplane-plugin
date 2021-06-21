@@ -20,7 +20,8 @@ namespace xpilot {
 constexpr MetarReceived::MetarReceived(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : station_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
-  , metar_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
+  , metar_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , timestamp_(nullptr){}
 struct MetarReceivedDefaultTypeInternal {
   constexpr MetarReceivedDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -41,13 +42,15 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_MetarReceived_2eproto::offsets
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::xpilot::MetarReceived, timestamp_),
   PROTOBUF_FIELD_OFFSET(::xpilot::MetarReceived, station_),
   PROTOBUF_FIELD_OFFSET(::xpilot::MetarReceived, metar_),
+  ~0u,
   0,
   1,
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, 7, sizeof(::xpilot::MetarReceived)},
+  { 0, 8, sizeof(::xpilot::MetarReceived)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -55,15 +58,20 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 };
 
 const char descriptor_table_protodef_MetarReceived_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\023MetarReceived.proto\022\006xpilot\"O\n\rMetarRe"
-  "ceived\022\024\n\007station\030\001 \001(\tH\000\210\001\001\022\022\n\005metar\030\002 "
+  "\n\023MetarReceived.proto\022\006xpilot\032\037google/pr"
+  "otobuf/timestamp.proto\"~\n\rMetarReceived\022"
+  "-\n\ttimestamp\030\001 \001(\0132\032.google.protobuf.Tim"
+  "estamp\022\024\n\007station\030\002 \001(\tH\000\210\001\001\022\022\n\005metar\030\003 "
   "\001(\tH\001\210\001\001B\n\n\010_stationB\010\n\006_metarB\031\252\002\026Vatsi"
   "m.Xpilot.Protobufb\006proto3"
   ;
+static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_MetarReceived_2eproto_deps[1] = {
+  &::descriptor_table_google_2fprotobuf_2ftimestamp_2eproto,
+};
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_MetarReceived_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_MetarReceived_2eproto = {
-  false, false, 145, descriptor_table_protodef_MetarReceived_2eproto, "MetarReceived.proto", 
-  &descriptor_table_MetarReceived_2eproto_once, nullptr, 0, 1,
+  false, false, 225, descriptor_table_protodef_MetarReceived_2eproto, "MetarReceived.proto", 
+  &descriptor_table_MetarReceived_2eproto_once, descriptor_table_MetarReceived_2eproto_deps, 1, 1,
   schemas, file_default_instances, TableStruct_MetarReceived_2eproto::offsets,
   file_level_metadata_MetarReceived_2eproto, file_level_enum_descriptors_MetarReceived_2eproto, file_level_service_descriptors_MetarReceived_2eproto,
 };
@@ -80,6 +88,7 @@ namespace xpilot {
 class MetarReceived::_Internal {
  public:
   using HasBits = decltype(std::declval<MetarReceived>()._has_bits_);
+  static const PROTOBUF_NAMESPACE_ID::Timestamp& timestamp(const MetarReceived* msg);
   static void set_has_station(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
   }
@@ -88,6 +97,16 @@ class MetarReceived::_Internal {
   }
 };
 
+const PROTOBUF_NAMESPACE_ID::Timestamp&
+MetarReceived::_Internal::timestamp(const MetarReceived* msg) {
+  return *msg->timestamp_;
+}
+void MetarReceived::clear_timestamp() {
+  if (GetArenaForAllocation() == nullptr && timestamp_ != nullptr) {
+    delete timestamp_;
+  }
+  timestamp_ = nullptr;
+}
 MetarReceived::MetarReceived(::PROTOBUF_NAMESPACE_ID::Arena* arena)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
   SharedCtor();
@@ -108,12 +127,18 @@ MetarReceived::MetarReceived(const MetarReceived& from)
     metar_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_metar(), 
       GetArenaForAllocation());
   }
+  if (from._internal_has_timestamp()) {
+    timestamp_ = new PROTOBUF_NAMESPACE_ID::Timestamp(*from.timestamp_);
+  } else {
+    timestamp_ = nullptr;
+  }
   // @@protoc_insertion_point(copy_constructor:xpilot.MetarReceived)
 }
 
 void MetarReceived::SharedCtor() {
 station_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 metar_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+timestamp_ = nullptr;
 }
 
 MetarReceived::~MetarReceived() {
@@ -126,6 +151,7 @@ void MetarReceived::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   station_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   metar_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (this != internal_default_instance()) delete timestamp_;
 }
 
 void MetarReceived::ArenaDtor(void* object) {
@@ -153,6 +179,10 @@ void MetarReceived::Clear() {
       metar_.ClearNonDefaultToEmpty();
     }
   }
+  if (GetArenaForAllocation() == nullptr && timestamp_ != nullptr) {
+    delete timestamp_;
+  }
+  timestamp_ = nullptr;
   _has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
@@ -164,18 +194,25 @@ const char* MetarReceived::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // optional string station = 1;
+      // .google.protobuf.Timestamp timestamp = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_timestamp(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // optional string station = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
           auto str = _internal_mutable_station();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "xpilot.MetarReceived.station"));
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // optional string metar = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+      // optional string metar = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
           auto str = _internal_mutable_metar();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "xpilot.MetarReceived.metar"));
@@ -212,24 +249,32 @@ failure:
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // optional string station = 1;
+  // .google.protobuf.Timestamp timestamp = 1;
+  if (this->has_timestamp()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        1, _Internal::timestamp(this), target, stream);
+  }
+
+  // optional string station = 2;
   if (_internal_has_station()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_station().data(), static_cast<int>(this->_internal_station().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "xpilot.MetarReceived.station");
     target = stream->WriteStringMaybeAliased(
-        1, this->_internal_station(), target);
+        2, this->_internal_station(), target);
   }
 
-  // optional string metar = 2;
+  // optional string metar = 3;
   if (_internal_has_metar()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_metar().data(), static_cast<int>(this->_internal_metar().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "xpilot.MetarReceived.metar");
     target = stream->WriteStringMaybeAliased(
-        2, this->_internal_metar(), target);
+        3, this->_internal_metar(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -250,14 +295,14 @@ size_t MetarReceived::ByteSizeLong() const {
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 0x00000003u) {
-    // optional string station = 1;
+    // optional string station = 2;
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
           this->_internal_station());
     }
 
-    // optional string metar = 2;
+    // optional string metar = 3;
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
@@ -265,6 +310,13 @@ size_t MetarReceived::ByteSizeLong() const {
     }
 
   }
+  // .google.protobuf.Timestamp timestamp = 1;
+  if (this->has_timestamp()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *timestamp_);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
         _internal_metadata_, total_size, &_cached_size_);
@@ -305,6 +357,9 @@ void MetarReceived::MergeFrom(const MetarReceived& from) {
       _internal_set_metar(from._internal_metar());
     }
   }
+  if (from.has_timestamp()) {
+    _internal_mutable_timestamp()->PROTOBUF_NAMESPACE_ID::Timestamp::MergeFrom(from._internal_timestamp());
+  }
 }
 
 void MetarReceived::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
@@ -339,6 +394,7 @@ void MetarReceived::InternalSwap(MetarReceived* other) {
       &metar_, GetArenaForAllocation(),
       &other->metar_, other->GetArenaForAllocation()
   );
+  swap(timestamp_, other->timestamp_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata MetarReceived::GetMetadata() const {

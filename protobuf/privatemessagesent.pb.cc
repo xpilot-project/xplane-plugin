@@ -20,7 +20,8 @@ namespace xpilot {
 constexpr PrivateMessageSent::PrivateMessageSent(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : to_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
-  , message_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
+  , message_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , timestamp_(nullptr){}
 struct PrivateMessageSentDefaultTypeInternal {
   constexpr PrivateMessageSentDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -41,13 +42,15 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_PrivateMessageSent_2eproto::of
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::xpilot::PrivateMessageSent, timestamp_),
   PROTOBUF_FIELD_OFFSET(::xpilot::PrivateMessageSent, to_),
   PROTOBUF_FIELD_OFFSET(::xpilot::PrivateMessageSent, message_),
+  ~0u,
   0,
   1,
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, 7, sizeof(::xpilot::PrivateMessageSent)},
+  { 0, 8, sizeof(::xpilot::PrivateMessageSent)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -55,15 +58,20 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 };
 
 const char descriptor_table_protodef_PrivateMessageSent_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\030PrivateMessageSent.proto\022\006xpilot\"N\n\022Pr"
-  "ivateMessageSent\022\017\n\002to\030\001 \001(\tH\000\210\001\001\022\024\n\007mes"
-  "sage\030\002 \001(\tH\001\210\001\001B\005\n\003_toB\n\n\010_messageB\031\252\002\026V"
+  "\n\030PrivateMessageSent.proto\022\006xpilot\032\037goog"
+  "le/protobuf/timestamp.proto\"}\n\022PrivateMe"
+  "ssageSent\022-\n\ttimestamp\030\001 \001(\0132\032.google.pr"
+  "otobuf.Timestamp\022\017\n\002to\030\002 \001(\tH\000\210\001\001\022\024\n\007mes"
+  "sage\030\003 \001(\tH\001\210\001\001B\005\n\003_toB\n\n\010_messageB\031\252\002\026V"
   "atsim.Xpilot.Protobufb\006proto3"
   ;
+static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_PrivateMessageSent_2eproto_deps[1] = {
+  &::descriptor_table_google_2fprotobuf_2ftimestamp_2eproto,
+};
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_PrivateMessageSent_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_PrivateMessageSent_2eproto = {
-  false, false, 149, descriptor_table_protodef_PrivateMessageSent_2eproto, "PrivateMessageSent.proto", 
-  &descriptor_table_PrivateMessageSent_2eproto_once, nullptr, 0, 1,
+  false, false, 229, descriptor_table_protodef_PrivateMessageSent_2eproto, "PrivateMessageSent.proto", 
+  &descriptor_table_PrivateMessageSent_2eproto_once, descriptor_table_PrivateMessageSent_2eproto_deps, 1, 1,
   schemas, file_default_instances, TableStruct_PrivateMessageSent_2eproto::offsets,
   file_level_metadata_PrivateMessageSent_2eproto, file_level_enum_descriptors_PrivateMessageSent_2eproto, file_level_service_descriptors_PrivateMessageSent_2eproto,
 };
@@ -80,6 +88,7 @@ namespace xpilot {
 class PrivateMessageSent::_Internal {
  public:
   using HasBits = decltype(std::declval<PrivateMessageSent>()._has_bits_);
+  static const PROTOBUF_NAMESPACE_ID::Timestamp& timestamp(const PrivateMessageSent* msg);
   static void set_has_to(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
   }
@@ -88,6 +97,16 @@ class PrivateMessageSent::_Internal {
   }
 };
 
+const PROTOBUF_NAMESPACE_ID::Timestamp&
+PrivateMessageSent::_Internal::timestamp(const PrivateMessageSent* msg) {
+  return *msg->timestamp_;
+}
+void PrivateMessageSent::clear_timestamp() {
+  if (GetArenaForAllocation() == nullptr && timestamp_ != nullptr) {
+    delete timestamp_;
+  }
+  timestamp_ = nullptr;
+}
 PrivateMessageSent::PrivateMessageSent(::PROTOBUF_NAMESPACE_ID::Arena* arena)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
   SharedCtor();
@@ -108,12 +127,18 @@ PrivateMessageSent::PrivateMessageSent(const PrivateMessageSent& from)
     message_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_message(), 
       GetArenaForAllocation());
   }
+  if (from._internal_has_timestamp()) {
+    timestamp_ = new PROTOBUF_NAMESPACE_ID::Timestamp(*from.timestamp_);
+  } else {
+    timestamp_ = nullptr;
+  }
   // @@protoc_insertion_point(copy_constructor:xpilot.PrivateMessageSent)
 }
 
 void PrivateMessageSent::SharedCtor() {
 to_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 message_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+timestamp_ = nullptr;
 }
 
 PrivateMessageSent::~PrivateMessageSent() {
@@ -126,6 +151,7 @@ void PrivateMessageSent::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   to_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   message_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (this != internal_default_instance()) delete timestamp_;
 }
 
 void PrivateMessageSent::ArenaDtor(void* object) {
@@ -153,6 +179,10 @@ void PrivateMessageSent::Clear() {
       message_.ClearNonDefaultToEmpty();
     }
   }
+  if (GetArenaForAllocation() == nullptr && timestamp_ != nullptr) {
+    delete timestamp_;
+  }
+  timestamp_ = nullptr;
   _has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
@@ -164,18 +194,25 @@ const char* PrivateMessageSent::_InternalParse(const char* ptr, ::PROTOBUF_NAMES
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // optional string to = 1;
+      // .google.protobuf.Timestamp timestamp = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_timestamp(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // optional string to = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
           auto str = _internal_mutable_to();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "xpilot.PrivateMessageSent.to"));
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // optional string message = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+      // optional string message = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
           auto str = _internal_mutable_message();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "xpilot.PrivateMessageSent.message"));
@@ -212,24 +249,32 @@ failure:
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // optional string to = 1;
+  // .google.protobuf.Timestamp timestamp = 1;
+  if (this->has_timestamp()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        1, _Internal::timestamp(this), target, stream);
+  }
+
+  // optional string to = 2;
   if (_internal_has_to()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_to().data(), static_cast<int>(this->_internal_to().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "xpilot.PrivateMessageSent.to");
     target = stream->WriteStringMaybeAliased(
-        1, this->_internal_to(), target);
+        2, this->_internal_to(), target);
   }
 
-  // optional string message = 2;
+  // optional string message = 3;
   if (_internal_has_message()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_message().data(), static_cast<int>(this->_internal_message().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "xpilot.PrivateMessageSent.message");
     target = stream->WriteStringMaybeAliased(
-        2, this->_internal_message(), target);
+        3, this->_internal_message(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -250,14 +295,14 @@ size_t PrivateMessageSent::ByteSizeLong() const {
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 0x00000003u) {
-    // optional string to = 1;
+    // optional string to = 2;
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
           this->_internal_to());
     }
 
-    // optional string message = 2;
+    // optional string message = 3;
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
@@ -265,6 +310,13 @@ size_t PrivateMessageSent::ByteSizeLong() const {
     }
 
   }
+  // .google.protobuf.Timestamp timestamp = 1;
+  if (this->has_timestamp()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *timestamp_);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
         _internal_metadata_, total_size, &_cached_size_);
@@ -305,6 +357,9 @@ void PrivateMessageSent::MergeFrom(const PrivateMessageSent& from) {
       _internal_set_message(from._internal_message());
     }
   }
+  if (from.has_timestamp()) {
+    _internal_mutable_timestamp()->PROTOBUF_NAMESPACE_ID::Timestamp::MergeFrom(from._internal_timestamp());
+  }
 }
 
 void PrivateMessageSent::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
@@ -339,6 +394,7 @@ void PrivateMessageSent::InternalSwap(PrivateMessageSent* other) {
       &message_, GetArenaForAllocation(),
       &other->message_, other->GetArenaForAllocation()
   );
+  swap(timestamp_, other->timestamp_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata PrivateMessageSent::GetMetadata() const {

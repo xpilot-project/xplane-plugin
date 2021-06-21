@@ -187,7 +187,7 @@ namespace xpilot
 			xpilot::AppMetadata* msg = new xpilot::AppMetadata();
 			reply.set_allocated_app_metdata(msg);
 			msg->set_version(PLUGIN_VERSION);
-			msg->set_hash(m_pluginHash.c_str());
+			msg->set_plugin_hash(m_pluginHash.c_str());
 
 			SendClientEvent(reply);
 		}
@@ -461,12 +461,12 @@ namespace xpilot
 		SendClientEvent(envelope);
 	}
 
-	void XPilot::requestControllerAtis(std::string callsign)
+	void XPilot::requestStationInfo(std::string callsign)
 	{
 		xpilot::Envelope envelope;
-		xpilot::RequestControllerInfo* data = new xpilot::RequestControllerInfo();
-		envelope.set_allocated_request_controller_info(data);
-		data->set_callsign(callsign);
+		xpilot::RequestStationInfo* data = new xpilot::RequestStationInfo();
+		envelope.set_allocated_request_station_info(data);
+		data->set_station(callsign);
 		SendClientEvent(envelope);
 	}
 

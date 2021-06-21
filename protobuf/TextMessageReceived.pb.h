@@ -31,6 +31,7 @@
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 #include <google/protobuf/unknown_field_set.h>
+#include <google/protobuf/timestamp.pb.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
 #define PROTOBUF_INTERNAL_EXPORT_TextMessageReceived_2eproto
@@ -173,11 +174,12 @@ class TextMessageReceived final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kFromFieldNumber = 1,
-    kMessageFieldNumber = 2,
-    kIsDirectFieldNumber = 3,
+    kFromFieldNumber = 2,
+    kMessageFieldNumber = 3,
+    kTimestampFieldNumber = 1,
+    kIsDirectFieldNumber = 4,
   };
-  // optional string from = 1;
+  // optional string from = 2;
   bool has_from() const;
   private:
   bool _internal_has_from() const;
@@ -195,7 +197,7 @@ class TextMessageReceived final :
   std::string* _internal_mutable_from();
   public:
 
-  // optional string message = 2;
+  // optional string message = 3;
   bool has_message() const;
   private:
   bool _internal_has_message() const;
@@ -213,7 +215,25 @@ class TextMessageReceived final :
   std::string* _internal_mutable_message();
   public:
 
-  // optional bool is_direct = 3;
+  // .google.protobuf.Timestamp timestamp = 1;
+  bool has_timestamp() const;
+  private:
+  bool _internal_has_timestamp() const;
+  public:
+  void clear_timestamp();
+  const PROTOBUF_NAMESPACE_ID::Timestamp& timestamp() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT PROTOBUF_NAMESPACE_ID::Timestamp* release_timestamp();
+  PROTOBUF_NAMESPACE_ID::Timestamp* mutable_timestamp();
+  void set_allocated_timestamp(PROTOBUF_NAMESPACE_ID::Timestamp* timestamp);
+  private:
+  const PROTOBUF_NAMESPACE_ID::Timestamp& _internal_timestamp() const;
+  PROTOBUF_NAMESPACE_ID::Timestamp* _internal_mutable_timestamp();
+  public:
+  void unsafe_arena_set_allocated_timestamp(
+      PROTOBUF_NAMESPACE_ID::Timestamp* timestamp);
+  PROTOBUF_NAMESPACE_ID::Timestamp* unsafe_arena_release_timestamp();
+
+  // optional bool is_direct = 4;
   bool has_is_direct() const;
   private:
   bool _internal_has_is_direct() const;
@@ -237,6 +257,7 @@ class TextMessageReceived final :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr from_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
+  PROTOBUF_NAMESPACE_ID::Timestamp* timestamp_;
   bool is_direct_;
   friend struct ::TableStruct_TextMessageReceived_2eproto;
 };
@@ -251,7 +272,86 @@ class TextMessageReceived final :
 #endif  // __GNUC__
 // TextMessageReceived
 
-// optional string from = 1;
+// .google.protobuf.Timestamp timestamp = 1;
+inline bool TextMessageReceived::_internal_has_timestamp() const {
+  return this != internal_default_instance() && timestamp_ != nullptr;
+}
+inline bool TextMessageReceived::has_timestamp() const {
+  return _internal_has_timestamp();
+}
+inline const PROTOBUF_NAMESPACE_ID::Timestamp& TextMessageReceived::_internal_timestamp() const {
+  const PROTOBUF_NAMESPACE_ID::Timestamp* p = timestamp_;
+  return p != nullptr ? *p : reinterpret_cast<const PROTOBUF_NAMESPACE_ID::Timestamp&>(
+      PROTOBUF_NAMESPACE_ID::_Timestamp_default_instance_);
+}
+inline const PROTOBUF_NAMESPACE_ID::Timestamp& TextMessageReceived::timestamp() const {
+  // @@protoc_insertion_point(field_get:xpilot.TextMessageReceived.timestamp)
+  return _internal_timestamp();
+}
+inline void TextMessageReceived::unsafe_arena_set_allocated_timestamp(
+    PROTOBUF_NAMESPACE_ID::Timestamp* timestamp) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(timestamp_);
+  }
+  timestamp_ = timestamp;
+  if (timestamp) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.TextMessageReceived.timestamp)
+}
+inline PROTOBUF_NAMESPACE_ID::Timestamp* TextMessageReceived::release_timestamp() {
+  
+  PROTOBUF_NAMESPACE_ID::Timestamp* temp = timestamp_;
+  timestamp_ = nullptr;
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+  return temp;
+}
+inline PROTOBUF_NAMESPACE_ID::Timestamp* TextMessageReceived::unsafe_arena_release_timestamp() {
+  // @@protoc_insertion_point(field_release:xpilot.TextMessageReceived.timestamp)
+  
+  PROTOBUF_NAMESPACE_ID::Timestamp* temp = timestamp_;
+  timestamp_ = nullptr;
+  return temp;
+}
+inline PROTOBUF_NAMESPACE_ID::Timestamp* TextMessageReceived::_internal_mutable_timestamp() {
+  
+  if (timestamp_ == nullptr) {
+    auto* p = CreateMaybeMessage<PROTOBUF_NAMESPACE_ID::Timestamp>(GetArenaForAllocation());
+    timestamp_ = p;
+  }
+  return timestamp_;
+}
+inline PROTOBUF_NAMESPACE_ID::Timestamp* TextMessageReceived::mutable_timestamp() {
+  // @@protoc_insertion_point(field_mutable:xpilot.TextMessageReceived.timestamp)
+  return _internal_mutable_timestamp();
+}
+inline void TextMessageReceived::set_allocated_timestamp(PROTOBUF_NAMESPACE_ID::Timestamp* timestamp) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(timestamp_);
+  }
+  if (timestamp) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
+            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(timestamp));
+    if (message_arena != submessage_arena) {
+      timestamp = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, timestamp, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  timestamp_ = timestamp;
+  // @@protoc_insertion_point(field_set_allocated:xpilot.TextMessageReceived.timestamp)
+}
+
+// optional string from = 2;
 inline bool TextMessageReceived::_internal_has_from() const {
   bool value = (_has_bits_[0] & 0x00000001u) != 0;
   return value;
@@ -308,7 +408,7 @@ inline void TextMessageReceived::set_allocated_from(std::string* from) {
   // @@protoc_insertion_point(field_set_allocated:xpilot.TextMessageReceived.from)
 }
 
-// optional string message = 2;
+// optional string message = 3;
 inline bool TextMessageReceived::_internal_has_message() const {
   bool value = (_has_bits_[0] & 0x00000002u) != 0;
   return value;
@@ -365,7 +465,7 @@ inline void TextMessageReceived::set_allocated_message(std::string* message) {
   // @@protoc_insertion_point(field_set_allocated:xpilot.TextMessageReceived.message)
 }
 
-// optional bool is_direct = 3;
+// optional bool is_direct = 4;
 inline bool TextMessageReceived::_internal_has_is_direct() const {
   bool value = (_has_bits_[0] & 0x00000004u) != 0;
   return value;

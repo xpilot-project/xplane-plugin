@@ -73,7 +73,7 @@ namespace xpilot
 		void onNetworkDisconnected();
 		void onNetworkConnected();
 		void forceDisconnect(std::string reason = "");
-		void requestControllerAtis(std::string callsign);
+		void requestStationInfo(std::string callsign);
 
 		std::string ourCallsign()const
 		{

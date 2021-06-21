@@ -301,7 +301,7 @@ namespace xpilot
 								{
 									if (args.size() == 2)
 									{
-										m_env->requestControllerAtis(args.at(1));
+										m_env->requestStationInfo(args.at(1));
 									}
 									else
 									{

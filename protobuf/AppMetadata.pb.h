@@ -174,7 +174,7 @@ class AppMetadata final :
 
   enum : int {
     kPackageVersionFieldNumber = 2,
-    kHashFieldNumber = 3,
+    kPluginHashFieldNumber = 3,
     kVersionFieldNumber = 1,
   };
   // optional string package_version = 2;
@@ -195,22 +195,22 @@ class AppMetadata final :
   std::string* _internal_mutable_package_version();
   public:
 
-  // optional string hash = 3;
-  bool has_hash() const;
+  // optional string plugin_hash = 3;
+  bool has_plugin_hash() const;
   private:
-  bool _internal_has_hash() const;
+  bool _internal_has_plugin_hash() const;
   public:
-  void clear_hash();
-  const std::string& hash() const;
+  void clear_plugin_hash();
+  const std::string& plugin_hash() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_hash(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_hash();
-  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_hash();
-  void set_allocated_hash(std::string* hash);
+  void set_plugin_hash(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_plugin_hash();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_plugin_hash();
+  void set_allocated_plugin_hash(std::string* plugin_hash);
   private:
-  const std::string& _internal_hash() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_hash(const std::string& value);
-  std::string* _internal_mutable_hash();
+  const std::string& _internal_plugin_hash() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_plugin_hash(const std::string& value);
+  std::string* _internal_mutable_plugin_hash();
   public:
 
   // optional int32 version = 1;
@@ -236,7 +236,7 @@ class AppMetadata final :
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr package_version_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr hash_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr plugin_hash_;
   ::PROTOBUF_NAMESPACE_ID::int32 version_;
   friend struct ::TableStruct_AppMetadata_2eproto;
 };
@@ -336,61 +336,61 @@ inline void AppMetadata::set_allocated_package_version(std::string* package_vers
   // @@protoc_insertion_point(field_set_allocated:xpilot.AppMetadata.package_version)
 }
 
-// optional string hash = 3;
-inline bool AppMetadata::_internal_has_hash() const {
+// optional string plugin_hash = 3;
+inline bool AppMetadata::_internal_has_plugin_hash() const {
   bool value = (_has_bits_[0] & 0x00000002u) != 0;
   return value;
 }
-inline bool AppMetadata::has_hash() const {
-  return _internal_has_hash();
+inline bool AppMetadata::has_plugin_hash() const {
+  return _internal_has_plugin_hash();
 }
-inline void AppMetadata::clear_hash() {
-  hash_.ClearToEmpty();
+inline void AppMetadata::clear_plugin_hash() {
+  plugin_hash_.ClearToEmpty();
   _has_bits_[0] &= ~0x00000002u;
 }
-inline const std::string& AppMetadata::hash() const {
-  // @@protoc_insertion_point(field_get:xpilot.AppMetadata.hash)
-  return _internal_hash();
+inline const std::string& AppMetadata::plugin_hash() const {
+  // @@protoc_insertion_point(field_get:xpilot.AppMetadata.plugin_hash)
+  return _internal_plugin_hash();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void AppMetadata::set_hash(ArgT0&& arg0, ArgT... args) {
+void AppMetadata::set_plugin_hash(ArgT0&& arg0, ArgT... args) {
  _has_bits_[0] |= 0x00000002u;
- hash_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:xpilot.AppMetadata.hash)
+ plugin_hash_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:xpilot.AppMetadata.plugin_hash)
 }
-inline std::string* AppMetadata::mutable_hash() {
-  // @@protoc_insertion_point(field_mutable:xpilot.AppMetadata.hash)
-  return _internal_mutable_hash();
+inline std::string* AppMetadata::mutable_plugin_hash() {
+  // @@protoc_insertion_point(field_mutable:xpilot.AppMetadata.plugin_hash)
+  return _internal_mutable_plugin_hash();
 }
-inline const std::string& AppMetadata::_internal_hash() const {
-  return hash_.Get();
+inline const std::string& AppMetadata::_internal_plugin_hash() const {
+  return plugin_hash_.Get();
 }
-inline void AppMetadata::_internal_set_hash(const std::string& value) {
+inline void AppMetadata::_internal_set_plugin_hash(const std::string& value) {
   _has_bits_[0] |= 0x00000002u;
-  hash_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+  plugin_hash_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
 }
-inline std::string* AppMetadata::_internal_mutable_hash() {
+inline std::string* AppMetadata::_internal_mutable_plugin_hash() {
   _has_bits_[0] |= 0x00000002u;
-  return hash_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+  return plugin_hash_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
 }
-inline std::string* AppMetadata::release_hash() {
-  // @@protoc_insertion_point(field_release:xpilot.AppMetadata.hash)
-  if (!_internal_has_hash()) {
+inline std::string* AppMetadata::release_plugin_hash() {
+  // @@protoc_insertion_point(field_release:xpilot.AppMetadata.plugin_hash)
+  if (!_internal_has_plugin_hash()) {
     return nullptr;
   }
   _has_bits_[0] &= ~0x00000002u;
-  return hash_.ReleaseNonDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+  return plugin_hash_.ReleaseNonDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
 }
-inline void AppMetadata::set_allocated_hash(std::string* hash) {
-  if (hash != nullptr) {
+inline void AppMetadata::set_allocated_plugin_hash(std::string* plugin_hash) {
+  if (plugin_hash != nullptr) {
     _has_bits_[0] |= 0x00000002u;
   } else {
     _has_bits_[0] &= ~0x00000002u;
   }
-  hash_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), hash,
+  plugin_hash_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), plugin_hash,
       GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set_allocated:xpilot.AppMetadata.hash)
+  // @@protoc_insertion_point(field_set_allocated:xpilot.AppMetadata.plugin_hash)
 }
 
 #ifdef __GNUC__

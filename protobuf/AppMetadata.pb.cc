@@ -20,7 +20,7 @@ namespace xpilot {
 constexpr AppMetadata::AppMetadata(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : package_version_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
-  , hash_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , plugin_hash_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
   , version_(0){}
 struct AppMetadataDefaultTypeInternal {
   constexpr AppMetadataDefaultTypeInternal()
@@ -44,7 +44,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_AppMetadata_2eproto::offsets[]
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::xpilot::AppMetadata, version_),
   PROTOBUF_FIELD_OFFSET(::xpilot::AppMetadata, package_version_),
-  PROTOBUF_FIELD_OFFSET(::xpilot::AppMetadata, hash_),
+  PROTOBUF_FIELD_OFFSET(::xpilot::AppMetadata, plugin_hash_),
   2,
   0,
   1,
@@ -58,15 +58,16 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 };
 
 const char descriptor_table_protodef_AppMetadata_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\021AppMetadata.proto\022\006xpilot\"}\n\013AppMetada"
-  "ta\022\024\n\007version\030\001 \001(\005H\000\210\001\001\022\034\n\017package_vers"
-  "ion\030\002 \001(\tH\001\210\001\001\022\021\n\004hash\030\003 \001(\tH\002\210\001\001B\n\n\010_ve"
-  "rsionB\022\n\020_package_versionB\007\n\005_hashB\031\252\002\026V"
-  "atsim.Xpilot.Protobufb\006proto3"
+  "\n\021AppMetadata.proto\022\006xpilot\"\213\001\n\013AppMetad"
+  "ata\022\024\n\007version\030\001 \001(\005H\000\210\001\001\022\034\n\017package_ver"
+  "sion\030\002 \001(\tH\001\210\001\001\022\030\n\013plugin_hash\030\003 \001(\tH\002\210\001"
+  "\001B\n\n\010_versionB\022\n\020_package_versionB\016\n\014_pl"
+  "ugin_hashB\031\252\002\026Vatsim.Xpilot.Protobufb\006pr"
+  "oto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_AppMetadata_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_AppMetadata_2eproto = {
-  false, false, 189, descriptor_table_protodef_AppMetadata_2eproto, "AppMetadata.proto", 
+  false, false, 204, descriptor_table_protodef_AppMetadata_2eproto, "AppMetadata.proto", 
   &descriptor_table_AppMetadata_2eproto_once, nullptr, 0, 1,
   schemas, file_default_instances, TableStruct_AppMetadata_2eproto::offsets,
   file_level_metadata_AppMetadata_2eproto, file_level_enum_descriptors_AppMetadata_2eproto, file_level_service_descriptors_AppMetadata_2eproto,
@@ -90,7 +91,7 @@ class AppMetadata::_Internal {
   static void set_has_package_version(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
   }
-  static void set_has_hash(HasBits* has_bits) {
+  static void set_has_plugin_hash(HasBits* has_bits) {
     (*has_bits)[0] |= 2u;
   }
 };
@@ -110,9 +111,9 @@ AppMetadata::AppMetadata(const AppMetadata& from)
     package_version_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_package_version(), 
       GetArenaForAllocation());
   }
-  hash_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  if (from._internal_has_hash()) {
-    hash_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_hash(), 
+  plugin_hash_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from._internal_has_plugin_hash()) {
+    plugin_hash_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_plugin_hash(), 
       GetArenaForAllocation());
   }
   version_ = from.version_;
@@ -121,7 +122,7 @@ AppMetadata::AppMetadata(const AppMetadata& from)
 
 void AppMetadata::SharedCtor() {
 package_version_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-hash_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+plugin_hash_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 version_ = 0;
 }
 
@@ -134,7 +135,7 @@ AppMetadata::~AppMetadata() {
 void AppMetadata::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   package_version_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  hash_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  plugin_hash_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
 void AppMetadata::ArenaDtor(void* object) {
@@ -159,7 +160,7 @@ void AppMetadata::Clear() {
       package_version_.ClearNonDefaultToEmpty();
     }
     if (cached_has_bits & 0x00000002u) {
-      hash_.ClearNonDefaultToEmpty();
+      plugin_hash_.ClearNonDefaultToEmpty();
     }
   }
   version_ = 0;
@@ -191,12 +192,12 @@ const char* AppMetadata::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // optional string hash = 3;
+      // optional string plugin_hash = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
-          auto str = _internal_mutable_hash();
+          auto str = _internal_mutable_plugin_hash();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "xpilot.AppMetadata.hash"));
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "xpilot.AppMetadata.plugin_hash"));
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -246,14 +247,14 @@ failure:
         2, this->_internal_package_version(), target);
   }
 
-  // optional string hash = 3;
-  if (_internal_has_hash()) {
+  // optional string plugin_hash = 3;
+  if (_internal_has_plugin_hash()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_hash().data(), static_cast<int>(this->_internal_hash().length()),
+      this->_internal_plugin_hash().data(), static_cast<int>(this->_internal_plugin_hash().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "xpilot.AppMetadata.hash");
+      "xpilot.AppMetadata.plugin_hash");
     target = stream->WriteStringMaybeAliased(
-        3, this->_internal_hash(), target);
+        3, this->_internal_plugin_hash(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -281,11 +282,11 @@ size_t AppMetadata::ByteSizeLong() const {
           this->_internal_package_version());
     }
 
-    // optional string hash = 3;
+    // optional string plugin_hash = 3;
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-          this->_internal_hash());
+          this->_internal_plugin_hash());
     }
 
     // optional int32 version = 1;
@@ -333,7 +334,7 @@ void AppMetadata::MergeFrom(const AppMetadata& from) {
       _internal_set_package_version(from._internal_package_version());
     }
     if (cached_has_bits & 0x00000002u) {
-      _internal_set_hash(from._internal_hash());
+      _internal_set_plugin_hash(from._internal_plugin_hash());
     }
     if (cached_has_bits & 0x00000004u) {
       version_ = from.version_;
@@ -371,8 +372,8 @@ void AppMetadata::InternalSwap(AppMetadata* other) {
   );
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-      &hash_, GetArenaForAllocation(),
-      &other->hash_, other->GetArenaForAllocation()
+      &plugin_hash_, GetArenaForAllocation(),
+      &other->plugin_hash_, other->GetArenaForAllocation()
   );
   swap(version_, other->version_);
 }

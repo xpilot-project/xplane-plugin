@@ -96,7 +96,7 @@ namespace xpilot {
 				ImGui::NextColumn();
 				if (ImGui::ButtonIcon(ICON_FA_INFO, "Request Station Information"))
 				{
-					m_env->requestControllerAtis(e.getCallsign());
+					m_env->requestStationInfo(e.getCallsign());
 				}
 				ImGui::SameLine();
 				if (ImGui::ButtonIcon(ICON_FA_HEADSET, "Tune COM1 Frequency"))

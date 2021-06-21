@@ -21,6 +21,7 @@ constexpr TextMessageReceived::TextMessageReceived(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : from_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
   , message_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , timestamp_(nullptr)
   , is_direct_(false){}
 struct TextMessageReceivedDefaultTypeInternal {
   constexpr TextMessageReceivedDefaultTypeInternal()
@@ -42,15 +43,17 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_TextMessageReceived_2eproto::o
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::xpilot::TextMessageReceived, timestamp_),
   PROTOBUF_FIELD_OFFSET(::xpilot::TextMessageReceived, from_),
   PROTOBUF_FIELD_OFFSET(::xpilot::TextMessageReceived, message_),
   PROTOBUF_FIELD_OFFSET(::xpilot::TextMessageReceived, is_direct_),
+  ~0u,
   0,
   1,
   2,
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, 8, sizeof(::xpilot::TextMessageReceived)},
+  { 0, 9, sizeof(::xpilot::TextMessageReceived)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -58,16 +61,21 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 };
 
 const char descriptor_table_protodef_TextMessageReceived_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\031TextMessageReceived.proto\022\006xpilot\"y\n\023T"
-  "extMessageReceived\022\021\n\004from\030\001 \001(\tH\000\210\001\001\022\024\n"
-  "\007message\030\002 \001(\tH\001\210\001\001\022\026\n\tis_direct\030\003 \001(\010H\002"
-  "\210\001\001B\007\n\005_fromB\n\n\010_messageB\014\n\n_is_directB\031"
-  "\252\002\026Vatsim.Xpilot.Protobufb\006proto3"
+  "\n\031TextMessageReceived.proto\022\006xpilot\032\037goo"
+  "gle/protobuf/timestamp.proto\"\250\001\n\023TextMes"
+  "sageReceived\022-\n\ttimestamp\030\001 \001(\0132\032.google"
+  ".protobuf.Timestamp\022\021\n\004from\030\002 \001(\tH\000\210\001\001\022\024"
+  "\n\007message\030\003 \001(\tH\001\210\001\001\022\026\n\tis_direct\030\004 \001(\010H"
+  "\002\210\001\001B\007\n\005_fromB\n\n\010_messageB\014\n\n_is_directB"
+  "\031\252\002\026Vatsim.Xpilot.Protobufb\006proto3"
   ;
+static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_TextMessageReceived_2eproto_deps[1] = {
+  &::descriptor_table_google_2fprotobuf_2ftimestamp_2eproto,
+};
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_TextMessageReceived_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_TextMessageReceived_2eproto = {
-  false, false, 193, descriptor_table_protodef_TextMessageReceived_2eproto, "TextMessageReceived.proto", 
-  &descriptor_table_TextMessageReceived_2eproto_once, nullptr, 0, 1,
+  false, false, 274, descriptor_table_protodef_TextMessageReceived_2eproto, "TextMessageReceived.proto", 
+  &descriptor_table_TextMessageReceived_2eproto_once, descriptor_table_TextMessageReceived_2eproto_deps, 1, 1,
   schemas, file_default_instances, TableStruct_TextMessageReceived_2eproto::offsets,
   file_level_metadata_TextMessageReceived_2eproto, file_level_enum_descriptors_TextMessageReceived_2eproto, file_level_service_descriptors_TextMessageReceived_2eproto,
 };
@@ -84,6 +92,7 @@ namespace xpilot {
 class TextMessageReceived::_Internal {
  public:
   using HasBits = decltype(std::declval<TextMessageReceived>()._has_bits_);
+  static const PROTOBUF_NAMESPACE_ID::Timestamp& timestamp(const TextMessageReceived* msg);
   static void set_has_from(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
   }
@@ -95,6 +104,16 @@ class TextMessageReceived::_Internal {
   }
 };
 
+const PROTOBUF_NAMESPACE_ID::Timestamp&
+TextMessageReceived::_Internal::timestamp(const TextMessageReceived* msg) {
+  return *msg->timestamp_;
+}
+void TextMessageReceived::clear_timestamp() {
+  if (GetArenaForAllocation() == nullptr && timestamp_ != nullptr) {
+    delete timestamp_;
+  }
+  timestamp_ = nullptr;
+}
 TextMessageReceived::TextMessageReceived(::PROTOBUF_NAMESPACE_ID::Arena* arena)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
   SharedCtor();
@@ -115,6 +134,11 @@ TextMessageReceived::TextMessageReceived(const TextMessageReceived& from)
     message_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_message(), 
       GetArenaForAllocation());
   }
+  if (from._internal_has_timestamp()) {
+    timestamp_ = new PROTOBUF_NAMESPACE_ID::Timestamp(*from.timestamp_);
+  } else {
+    timestamp_ = nullptr;
+  }
   is_direct_ = from.is_direct_;
   // @@protoc_insertion_point(copy_constructor:xpilot.TextMessageReceived)
 }
@@ -122,7 +146,10 @@ TextMessageReceived::TextMessageReceived(const TextMessageReceived& from)
 void TextMessageReceived::SharedCtor() {
 from_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 message_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-is_direct_ = false;
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&timestamp_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&is_direct_) -
+    reinterpret_cast<char*>(&timestamp_)) + sizeof(is_direct_));
 }
 
 TextMessageReceived::~TextMessageReceived() {
@@ -135,6 +162,7 @@ void TextMessageReceived::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   from_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   message_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (this != internal_default_instance()) delete timestamp_;
 }
 
 void TextMessageReceived::ArenaDtor(void* object) {
@@ -162,6 +190,10 @@ void TextMessageReceived::Clear() {
       message_.ClearNonDefaultToEmpty();
     }
   }
+  if (GetArenaForAllocation() == nullptr && timestamp_ != nullptr) {
+    delete timestamp_;
+  }
+  timestamp_ = nullptr;
   is_direct_ = false;
   _has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
@@ -174,27 +206,34 @@ const char* TextMessageReceived::_InternalParse(const char* ptr, ::PROTOBUF_NAME
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // optional string from = 1;
+      // .google.protobuf.Timestamp timestamp = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_timestamp(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // optional string from = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
           auto str = _internal_mutable_from();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "xpilot.TextMessageReceived.from"));
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // optional string message = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+      // optional string message = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
           auto str = _internal_mutable_message();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "xpilot.TextMessageReceived.message"));
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // optional bool is_direct = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
+      // optional bool is_direct = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32)) {
           _Internal::set_has_is_direct(&has_bits);
           is_direct_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
@@ -230,30 +269,38 @@ failure:
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // optional string from = 1;
+  // .google.protobuf.Timestamp timestamp = 1;
+  if (this->has_timestamp()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        1, _Internal::timestamp(this), target, stream);
+  }
+
+  // optional string from = 2;
   if (_internal_has_from()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_from().data(), static_cast<int>(this->_internal_from().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "xpilot.TextMessageReceived.from");
     target = stream->WriteStringMaybeAliased(
-        1, this->_internal_from(), target);
+        2, this->_internal_from(), target);
   }
 
-  // optional string message = 2;
+  // optional string message = 3;
   if (_internal_has_message()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_message().data(), static_cast<int>(this->_internal_message().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "xpilot.TextMessageReceived.message");
     target = stream->WriteStringMaybeAliased(
-        2, this->_internal_message(), target);
+        3, this->_internal_message(), target);
   }
 
-  // optional bool is_direct = 3;
+  // optional bool is_direct = 4;
   if (_internal_has_is_direct()) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(3, this->_internal_is_direct(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(4, this->_internal_is_direct(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -273,27 +320,34 @@ size_t TextMessageReceived::ByteSizeLong() const {
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x00000007u) {
-    // optional string from = 1;
+  if (cached_has_bits & 0x00000003u) {
+    // optional string from = 2;
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
           this->_internal_from());
     }
 
-    // optional string message = 2;
+    // optional string message = 3;
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
           this->_internal_message());
     }
 
-    // optional bool is_direct = 3;
-    if (cached_has_bits & 0x00000004u) {
-      total_size += 1 + 1;
-    }
-
   }
+  // .google.protobuf.Timestamp timestamp = 1;
+  if (this->has_timestamp()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *timestamp_);
+  }
+
+  // optional bool is_direct = 4;
+  if (cached_has_bits & 0x00000004u) {
+    total_size += 1 + 1;
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
         _internal_metadata_, total_size, &_cached_size_);
@@ -326,17 +380,19 @@ void TextMessageReceived::MergeFrom(const TextMessageReceived& from) {
   (void) cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 0x00000007u) {
+  if (cached_has_bits & 0x00000003u) {
     if (cached_has_bits & 0x00000001u) {
       _internal_set_from(from._internal_from());
     }
     if (cached_has_bits & 0x00000002u) {
       _internal_set_message(from._internal_message());
     }
-    if (cached_has_bits & 0x00000004u) {
-      is_direct_ = from.is_direct_;
-    }
-    _has_bits_[0] |= cached_has_bits;
+  }
+  if (from.has_timestamp()) {
+    _internal_mutable_timestamp()->PROTOBUF_NAMESPACE_ID::Timestamp::MergeFrom(from._internal_timestamp());
+  }
+  if (cached_has_bits & 0x00000004u) {
+    _internal_set_is_direct(from._internal_is_direct());
   }
 }
 
@@ -372,7 +428,12 @@ void TextMessageReceived::InternalSwap(TextMessageReceived* other) {
       &message_, GetArenaForAllocation(),
       &other->message_, other->GetArenaForAllocation()
   );
-  swap(is_direct_, other->is_direct_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(TextMessageReceived, is_direct_)
+      + sizeof(TextMessageReceived::is_direct_)
+      - PROTOBUF_FIELD_OFFSET(TextMessageReceived, timestamp_)>(
+          reinterpret_cast<char*>(&timestamp_),
+          reinterpret_cast<char*>(&other->timestamp_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata TextMessageReceived::GetMetadata() const {
