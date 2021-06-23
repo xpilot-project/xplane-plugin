@@ -50,8 +50,8 @@
 #include "SetRadioStack.pb.h"
 #include "RequestStationInfo.pb.h"
 #include "TriggerDisconnect.pb.h"
-#include "TextMessageReceived.pb.h"
-#include "TextMessageSent.pb.h"
+#include "RadioMessageReceived.pb.h"
+#include "RadioMessageSent.pb.h"
 #include "ServerMessageReceived.pb.h"
 #include "MetarReceived.pb.h"
 #include "RequestMetar.pb.h"
@@ -66,6 +66,12 @@
 #include "NetworkConnectionRequest.pb.h"
 #include "ClearMessageHistory.pb.h"
 #include "PostConsoleMessage.pb.h"
+#include "SendFlightPlan.pb.h"
+#include "FetchFlightPlan.pb.h"
+#include "FlightPlanReceived.pb.h"
+#include "NoteReceived.pb.h"
+#include "ClearNoteHistory.pb.h"
+#include "StationInfoReceived.pb.h"
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
 #define PROTOBUF_INTERNAL_EXPORT_Envelope_2eproto
@@ -149,8 +155,8 @@ class Envelope final :
     kDeletePlane = 7,
     kPrivateMessageReceived = 8,
     kPrivateMessageSent = 9,
-    kTextMessageReceived = 10,
-    kTextMessageSent = 11,
+    kRadioMessageReceived = 10,
+    kRadioMessageSent = 11,
     kNetworkConnected = 12,
     kNetworkDisconnected = 13,
     kNearbyControllers = 14,
@@ -175,6 +181,12 @@ class Envelope final :
     kNetworkConnectRequested = 35,
     kClearMessageHistory = 36,
     kPostConsoleMessage = 37,
+    kSendFlightPlan = 38,
+    kFetchFlightPlan = 39,
+    kFlightPlanReceived = 40,
+    kNoteReceived = 41,
+    kClearNoteHistory = 42,
+    kStationInfoReceived = 43,
     EVENT_NOT_SET = 0,
   };
 
@@ -256,8 +268,8 @@ class Envelope final :
     kDeletePlaneFieldNumber = 7,
     kPrivateMessageReceivedFieldNumber = 8,
     kPrivateMessageSentFieldNumber = 9,
-    kTextMessageReceivedFieldNumber = 10,
-    kTextMessageSentFieldNumber = 11,
+    kRadioMessageReceivedFieldNumber = 10,
+    kRadioMessageSentFieldNumber = 11,
     kNetworkConnectedFieldNumber = 12,
     kNetworkDisconnectedFieldNumber = 13,
     kNearbyControllersFieldNumber = 14,
@@ -282,6 +294,12 @@ class Envelope final :
     kNetworkConnectRequestedFieldNumber = 35,
     kClearMessageHistoryFieldNumber = 36,
     kPostConsoleMessageFieldNumber = 37,
+    kSendFlightPlanFieldNumber = 38,
+    kFetchFlightPlanFieldNumber = 39,
+    kFlightPlanReceivedFieldNumber = 40,
+    kNoteReceivedFieldNumber = 41,
+    kClearNoteHistoryFieldNumber = 42,
+    kStationInfoReceivedFieldNumber = 43,
   };
   // .xpilot.PositionUpdate position_update = 1;
   bool has_position_update() const;
@@ -445,41 +463,41 @@ class Envelope final :
       ::xpilot::PrivateMessageSent* private_message_sent);
   ::xpilot::PrivateMessageSent* unsafe_arena_release_private_message_sent();
 
-  // .xpilot.TextMessageReceived text_message_received = 10;
-  bool has_text_message_received() const;
+  // .xpilot.RadioMessageReceived radio_message_received = 10;
+  bool has_radio_message_received() const;
   private:
-  bool _internal_has_text_message_received() const;
+  bool _internal_has_radio_message_received() const;
   public:
-  void clear_text_message_received();
-  const ::xpilot::TextMessageReceived& text_message_received() const;
-  PROTOBUF_FUTURE_MUST_USE_RESULT ::xpilot::TextMessageReceived* release_text_message_received();
-  ::xpilot::TextMessageReceived* mutable_text_message_received();
-  void set_allocated_text_message_received(::xpilot::TextMessageReceived* text_message_received);
+  void clear_radio_message_received();
+  const ::xpilot::RadioMessageReceived& radio_message_received() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::xpilot::RadioMessageReceived* release_radio_message_received();
+  ::xpilot::RadioMessageReceived* mutable_radio_message_received();
+  void set_allocated_radio_message_received(::xpilot::RadioMessageReceived* radio_message_received);
   private:
-  const ::xpilot::TextMessageReceived& _internal_text_message_received() const;
-  ::xpilot::TextMessageReceived* _internal_mutable_text_message_received();
+  const ::xpilot::RadioMessageReceived& _internal_radio_message_received() const;
+  ::xpilot::RadioMessageReceived* _internal_mutable_radio_message_received();
   public:
-  void unsafe_arena_set_allocated_text_message_received(
-      ::xpilot::TextMessageReceived* text_message_received);
-  ::xpilot::TextMessageReceived* unsafe_arena_release_text_message_received();
+  void unsafe_arena_set_allocated_radio_message_received(
+      ::xpilot::RadioMessageReceived* radio_message_received);
+  ::xpilot::RadioMessageReceived* unsafe_arena_release_radio_message_received();
 
-  // .xpilot.TextMessageSent text_message_sent = 11;
-  bool has_text_message_sent() const;
+  // .xpilot.RadioMessageSent radio_message_sent = 11;
+  bool has_radio_message_sent() const;
   private:
-  bool _internal_has_text_message_sent() const;
+  bool _internal_has_radio_message_sent() const;
   public:
-  void clear_text_message_sent();
-  const ::xpilot::TextMessageSent& text_message_sent() const;
-  PROTOBUF_FUTURE_MUST_USE_RESULT ::xpilot::TextMessageSent* release_text_message_sent();
-  ::xpilot::TextMessageSent* mutable_text_message_sent();
-  void set_allocated_text_message_sent(::xpilot::TextMessageSent* text_message_sent);
+  void clear_radio_message_sent();
+  const ::xpilot::RadioMessageSent& radio_message_sent() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::xpilot::RadioMessageSent* release_radio_message_sent();
+  ::xpilot::RadioMessageSent* mutable_radio_message_sent();
+  void set_allocated_radio_message_sent(::xpilot::RadioMessageSent* radio_message_sent);
   private:
-  const ::xpilot::TextMessageSent& _internal_text_message_sent() const;
-  ::xpilot::TextMessageSent* _internal_mutable_text_message_sent();
+  const ::xpilot::RadioMessageSent& _internal_radio_message_sent() const;
+  ::xpilot::RadioMessageSent* _internal_mutable_radio_message_sent();
   public:
-  void unsafe_arena_set_allocated_text_message_sent(
-      ::xpilot::TextMessageSent* text_message_sent);
-  ::xpilot::TextMessageSent* unsafe_arena_release_text_message_sent();
+  void unsafe_arena_set_allocated_radio_message_sent(
+      ::xpilot::RadioMessageSent* radio_message_sent);
+  ::xpilot::RadioMessageSent* unsafe_arena_release_radio_message_sent();
 
   // .xpilot.NetworkConnected network_connected = 12;
   bool has_network_connected() const;
@@ -913,6 +931,114 @@ class Envelope final :
       ::xpilot::PostConsoleMessage* post_console_message);
   ::xpilot::PostConsoleMessage* unsafe_arena_release_post_console_message();
 
+  // .xpilot.SendFlightPlan send_flight_plan = 38;
+  bool has_send_flight_plan() const;
+  private:
+  bool _internal_has_send_flight_plan() const;
+  public:
+  void clear_send_flight_plan();
+  const ::xpilot::SendFlightPlan& send_flight_plan() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::xpilot::SendFlightPlan* release_send_flight_plan();
+  ::xpilot::SendFlightPlan* mutable_send_flight_plan();
+  void set_allocated_send_flight_plan(::xpilot::SendFlightPlan* send_flight_plan);
+  private:
+  const ::xpilot::SendFlightPlan& _internal_send_flight_plan() const;
+  ::xpilot::SendFlightPlan* _internal_mutable_send_flight_plan();
+  public:
+  void unsafe_arena_set_allocated_send_flight_plan(
+      ::xpilot::SendFlightPlan* send_flight_plan);
+  ::xpilot::SendFlightPlan* unsafe_arena_release_send_flight_plan();
+
+  // .xpilot.FetchFlightPlan fetch_flight_plan = 39;
+  bool has_fetch_flight_plan() const;
+  private:
+  bool _internal_has_fetch_flight_plan() const;
+  public:
+  void clear_fetch_flight_plan();
+  const ::xpilot::FetchFlightPlan& fetch_flight_plan() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::xpilot::FetchFlightPlan* release_fetch_flight_plan();
+  ::xpilot::FetchFlightPlan* mutable_fetch_flight_plan();
+  void set_allocated_fetch_flight_plan(::xpilot::FetchFlightPlan* fetch_flight_plan);
+  private:
+  const ::xpilot::FetchFlightPlan& _internal_fetch_flight_plan() const;
+  ::xpilot::FetchFlightPlan* _internal_mutable_fetch_flight_plan();
+  public:
+  void unsafe_arena_set_allocated_fetch_flight_plan(
+      ::xpilot::FetchFlightPlan* fetch_flight_plan);
+  ::xpilot::FetchFlightPlan* unsafe_arena_release_fetch_flight_plan();
+
+  // .xpilot.FlightPlanReceived flight_plan_received = 40;
+  bool has_flight_plan_received() const;
+  private:
+  bool _internal_has_flight_plan_received() const;
+  public:
+  void clear_flight_plan_received();
+  const ::xpilot::FlightPlanReceived& flight_plan_received() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::xpilot::FlightPlanReceived* release_flight_plan_received();
+  ::xpilot::FlightPlanReceived* mutable_flight_plan_received();
+  void set_allocated_flight_plan_received(::xpilot::FlightPlanReceived* flight_plan_received);
+  private:
+  const ::xpilot::FlightPlanReceived& _internal_flight_plan_received() const;
+  ::xpilot::FlightPlanReceived* _internal_mutable_flight_plan_received();
+  public:
+  void unsafe_arena_set_allocated_flight_plan_received(
+      ::xpilot::FlightPlanReceived* flight_plan_received);
+  ::xpilot::FlightPlanReceived* unsafe_arena_release_flight_plan_received();
+
+  // .xpilot.NoteReceived note_received = 41;
+  bool has_note_received() const;
+  private:
+  bool _internal_has_note_received() const;
+  public:
+  void clear_note_received();
+  const ::xpilot::NoteReceived& note_received() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::xpilot::NoteReceived* release_note_received();
+  ::xpilot::NoteReceived* mutable_note_received();
+  void set_allocated_note_received(::xpilot::NoteReceived* note_received);
+  private:
+  const ::xpilot::NoteReceived& _internal_note_received() const;
+  ::xpilot::NoteReceived* _internal_mutable_note_received();
+  public:
+  void unsafe_arena_set_allocated_note_received(
+      ::xpilot::NoteReceived* note_received);
+  ::xpilot::NoteReceived* unsafe_arena_release_note_received();
+
+  // .xpilot.ClearNoteHistory clear_note_history = 42;
+  bool has_clear_note_history() const;
+  private:
+  bool _internal_has_clear_note_history() const;
+  public:
+  void clear_clear_note_history();
+  const ::xpilot::ClearNoteHistory& clear_note_history() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::xpilot::ClearNoteHistory* release_clear_note_history();
+  ::xpilot::ClearNoteHistory* mutable_clear_note_history();
+  void set_allocated_clear_note_history(::xpilot::ClearNoteHistory* clear_note_history);
+  private:
+  const ::xpilot::ClearNoteHistory& _internal_clear_note_history() const;
+  ::xpilot::ClearNoteHistory* _internal_mutable_clear_note_history();
+  public:
+  void unsafe_arena_set_allocated_clear_note_history(
+      ::xpilot::ClearNoteHistory* clear_note_history);
+  ::xpilot::ClearNoteHistory* unsafe_arena_release_clear_note_history();
+
+  // .xpilot.StationInfoReceived station_info_received = 43;
+  bool has_station_info_received() const;
+  private:
+  bool _internal_has_station_info_received() const;
+  public:
+  void clear_station_info_received();
+  const ::xpilot::StationInfoReceived& station_info_received() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::xpilot::StationInfoReceived* release_station_info_received();
+  ::xpilot::StationInfoReceived* mutable_station_info_received();
+  void set_allocated_station_info_received(::xpilot::StationInfoReceived* station_info_received);
+  private:
+  const ::xpilot::StationInfoReceived& _internal_station_info_received() const;
+  ::xpilot::StationInfoReceived* _internal_mutable_station_info_received();
+  public:
+  void unsafe_arena_set_allocated_station_info_received(
+      ::xpilot::StationInfoReceived* station_info_received);
+  ::xpilot::StationInfoReceived* unsafe_arena_release_station_info_received();
+
   void clear_event();
   EventCase event_case() const;
   // @@protoc_insertion_point(class_scope:xpilot.Envelope)
@@ -927,8 +1053,8 @@ class Envelope final :
   void set_has_delete_plane();
   void set_has_private_message_received();
   void set_has_private_message_sent();
-  void set_has_text_message_received();
-  void set_has_text_message_sent();
+  void set_has_radio_message_received();
+  void set_has_radio_message_sent();
   void set_has_network_connected();
   void set_has_network_disconnected();
   void set_has_nearby_controllers();
@@ -953,6 +1079,12 @@ class Envelope final :
   void set_has_network_connect_requested();
   void set_has_clear_message_history();
   void set_has_post_console_message();
+  void set_has_send_flight_plan();
+  void set_has_fetch_flight_plan();
+  void set_has_flight_plan_received();
+  void set_has_note_received();
+  void set_has_clear_note_history();
+  void set_has_station_info_received();
 
   inline bool has_event() const;
   inline void clear_has_event();
@@ -972,8 +1104,8 @@ class Envelope final :
     ::xpilot::DeletePlane* delete_plane_;
     ::xpilot::PrivateMessageReceived* private_message_received_;
     ::xpilot::PrivateMessageSent* private_message_sent_;
-    ::xpilot::TextMessageReceived* text_message_received_;
-    ::xpilot::TextMessageSent* text_message_sent_;
+    ::xpilot::RadioMessageReceived* radio_message_received_;
+    ::xpilot::RadioMessageSent* radio_message_sent_;
     ::xpilot::NetworkConnected* network_connected_;
     ::xpilot::NetworkDisconnected* network_disconnected_;
     ::xpilot::NearbyControllers* nearby_controllers_;
@@ -998,6 +1130,12 @@ class Envelope final :
     ::xpilot::NetworkConnectionRequest* network_connect_requested_;
     ::xpilot::ClearMessageHistory* clear_message_history_;
     ::xpilot::PostConsoleMessage* post_console_message_;
+    ::xpilot::SendFlightPlan* send_flight_plan_;
+    ::xpilot::FetchFlightPlan* fetch_flight_plan_;
+    ::xpilot::FlightPlanReceived* flight_plan_received_;
+    ::xpilot::NoteReceived* note_received_;
+    ::xpilot::ClearNoteHistory* clear_note_history_;
+    ::xpilot::StationInfoReceived* station_info_received_;
   } event_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::uint32 _oneof_case_[1];
@@ -1600,134 +1738,134 @@ inline ::xpilot::PrivateMessageSent* Envelope::mutable_private_message_sent() {
   return _internal_mutable_private_message_sent();
 }
 
-// .xpilot.TextMessageReceived text_message_received = 10;
-inline bool Envelope::_internal_has_text_message_received() const {
-  return event_case() == kTextMessageReceived;
+// .xpilot.RadioMessageReceived radio_message_received = 10;
+inline bool Envelope::_internal_has_radio_message_received() const {
+  return event_case() == kRadioMessageReceived;
 }
-inline bool Envelope::has_text_message_received() const {
-  return _internal_has_text_message_received();
+inline bool Envelope::has_radio_message_received() const {
+  return _internal_has_radio_message_received();
 }
-inline void Envelope::set_has_text_message_received() {
-  _oneof_case_[0] = kTextMessageReceived;
+inline void Envelope::set_has_radio_message_received() {
+  _oneof_case_[0] = kRadioMessageReceived;
 }
-inline ::xpilot::TextMessageReceived* Envelope::release_text_message_received() {
-  // @@protoc_insertion_point(field_release:xpilot.Envelope.text_message_received)
-  if (_internal_has_text_message_received()) {
+inline ::xpilot::RadioMessageReceived* Envelope::release_radio_message_received() {
+  // @@protoc_insertion_point(field_release:xpilot.Envelope.radio_message_received)
+  if (_internal_has_radio_message_received()) {
     clear_has_event();
-      ::xpilot::TextMessageReceived* temp = event_.text_message_received_;
+      ::xpilot::RadioMessageReceived* temp = event_.radio_message_received_;
     if (GetArenaForAllocation() != nullptr) {
       temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
     }
-    event_.text_message_received_ = nullptr;
+    event_.radio_message_received_ = nullptr;
     return temp;
   } else {
     return nullptr;
   }
 }
-inline const ::xpilot::TextMessageReceived& Envelope::_internal_text_message_received() const {
-  return _internal_has_text_message_received()
-      ? *event_.text_message_received_
-      : reinterpret_cast< ::xpilot::TextMessageReceived&>(::xpilot::_TextMessageReceived_default_instance_);
+inline const ::xpilot::RadioMessageReceived& Envelope::_internal_radio_message_received() const {
+  return _internal_has_radio_message_received()
+      ? *event_.radio_message_received_
+      : reinterpret_cast< ::xpilot::RadioMessageReceived&>(::xpilot::_RadioMessageReceived_default_instance_);
 }
-inline const ::xpilot::TextMessageReceived& Envelope::text_message_received() const {
-  // @@protoc_insertion_point(field_get:xpilot.Envelope.text_message_received)
-  return _internal_text_message_received();
+inline const ::xpilot::RadioMessageReceived& Envelope::radio_message_received() const {
+  // @@protoc_insertion_point(field_get:xpilot.Envelope.radio_message_received)
+  return _internal_radio_message_received();
 }
-inline ::xpilot::TextMessageReceived* Envelope::unsafe_arena_release_text_message_received() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Envelope.text_message_received)
-  if (_internal_has_text_message_received()) {
+inline ::xpilot::RadioMessageReceived* Envelope::unsafe_arena_release_radio_message_received() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Envelope.radio_message_received)
+  if (_internal_has_radio_message_received()) {
     clear_has_event();
-    ::xpilot::TextMessageReceived* temp = event_.text_message_received_;
-    event_.text_message_received_ = nullptr;
+    ::xpilot::RadioMessageReceived* temp = event_.radio_message_received_;
+    event_.radio_message_received_ = nullptr;
     return temp;
   } else {
     return nullptr;
   }
 }
-inline void Envelope::unsafe_arena_set_allocated_text_message_received(::xpilot::TextMessageReceived* text_message_received) {
+inline void Envelope::unsafe_arena_set_allocated_radio_message_received(::xpilot::RadioMessageReceived* radio_message_received) {
   clear_event();
-  if (text_message_received) {
-    set_has_text_message_received();
-    event_.text_message_received_ = text_message_received;
+  if (radio_message_received) {
+    set_has_radio_message_received();
+    event_.radio_message_received_ = radio_message_received;
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Envelope.text_message_received)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Envelope.radio_message_received)
 }
-inline ::xpilot::TextMessageReceived* Envelope::_internal_mutable_text_message_received() {
-  if (!_internal_has_text_message_received()) {
+inline ::xpilot::RadioMessageReceived* Envelope::_internal_mutable_radio_message_received() {
+  if (!_internal_has_radio_message_received()) {
     clear_event();
-    set_has_text_message_received();
-    event_.text_message_received_ = CreateMaybeMessage< ::xpilot::TextMessageReceived >(GetArenaForAllocation());
+    set_has_radio_message_received();
+    event_.radio_message_received_ = CreateMaybeMessage< ::xpilot::RadioMessageReceived >(GetArenaForAllocation());
   }
-  return event_.text_message_received_;
+  return event_.radio_message_received_;
 }
-inline ::xpilot::TextMessageReceived* Envelope::mutable_text_message_received() {
-  // @@protoc_insertion_point(field_mutable:xpilot.Envelope.text_message_received)
-  return _internal_mutable_text_message_received();
+inline ::xpilot::RadioMessageReceived* Envelope::mutable_radio_message_received() {
+  // @@protoc_insertion_point(field_mutable:xpilot.Envelope.radio_message_received)
+  return _internal_mutable_radio_message_received();
 }
 
-// .xpilot.TextMessageSent text_message_sent = 11;
-inline bool Envelope::_internal_has_text_message_sent() const {
-  return event_case() == kTextMessageSent;
+// .xpilot.RadioMessageSent radio_message_sent = 11;
+inline bool Envelope::_internal_has_radio_message_sent() const {
+  return event_case() == kRadioMessageSent;
 }
-inline bool Envelope::has_text_message_sent() const {
-  return _internal_has_text_message_sent();
+inline bool Envelope::has_radio_message_sent() const {
+  return _internal_has_radio_message_sent();
 }
-inline void Envelope::set_has_text_message_sent() {
-  _oneof_case_[0] = kTextMessageSent;
+inline void Envelope::set_has_radio_message_sent() {
+  _oneof_case_[0] = kRadioMessageSent;
 }
-inline ::xpilot::TextMessageSent* Envelope::release_text_message_sent() {
-  // @@protoc_insertion_point(field_release:xpilot.Envelope.text_message_sent)
-  if (_internal_has_text_message_sent()) {
+inline ::xpilot::RadioMessageSent* Envelope::release_radio_message_sent() {
+  // @@protoc_insertion_point(field_release:xpilot.Envelope.radio_message_sent)
+  if (_internal_has_radio_message_sent()) {
     clear_has_event();
-      ::xpilot::TextMessageSent* temp = event_.text_message_sent_;
+      ::xpilot::RadioMessageSent* temp = event_.radio_message_sent_;
     if (GetArenaForAllocation() != nullptr) {
       temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
     }
-    event_.text_message_sent_ = nullptr;
+    event_.radio_message_sent_ = nullptr;
     return temp;
   } else {
     return nullptr;
   }
 }
-inline const ::xpilot::TextMessageSent& Envelope::_internal_text_message_sent() const {
-  return _internal_has_text_message_sent()
-      ? *event_.text_message_sent_
-      : reinterpret_cast< ::xpilot::TextMessageSent&>(::xpilot::_TextMessageSent_default_instance_);
+inline const ::xpilot::RadioMessageSent& Envelope::_internal_radio_message_sent() const {
+  return _internal_has_radio_message_sent()
+      ? *event_.radio_message_sent_
+      : reinterpret_cast< ::xpilot::RadioMessageSent&>(::xpilot::_RadioMessageSent_default_instance_);
 }
-inline const ::xpilot::TextMessageSent& Envelope::text_message_sent() const {
-  // @@protoc_insertion_point(field_get:xpilot.Envelope.text_message_sent)
-  return _internal_text_message_sent();
+inline const ::xpilot::RadioMessageSent& Envelope::radio_message_sent() const {
+  // @@protoc_insertion_point(field_get:xpilot.Envelope.radio_message_sent)
+  return _internal_radio_message_sent();
 }
-inline ::xpilot::TextMessageSent* Envelope::unsafe_arena_release_text_message_sent() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Envelope.text_message_sent)
-  if (_internal_has_text_message_sent()) {
+inline ::xpilot::RadioMessageSent* Envelope::unsafe_arena_release_radio_message_sent() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Envelope.radio_message_sent)
+  if (_internal_has_radio_message_sent()) {
     clear_has_event();
-    ::xpilot::TextMessageSent* temp = event_.text_message_sent_;
-    event_.text_message_sent_ = nullptr;
+    ::xpilot::RadioMessageSent* temp = event_.radio_message_sent_;
+    event_.radio_message_sent_ = nullptr;
     return temp;
   } else {
     return nullptr;
   }
 }
-inline void Envelope::unsafe_arena_set_allocated_text_message_sent(::xpilot::TextMessageSent* text_message_sent) {
+inline void Envelope::unsafe_arena_set_allocated_radio_message_sent(::xpilot::RadioMessageSent* radio_message_sent) {
   clear_event();
-  if (text_message_sent) {
-    set_has_text_message_sent();
-    event_.text_message_sent_ = text_message_sent;
+  if (radio_message_sent) {
+    set_has_radio_message_sent();
+    event_.radio_message_sent_ = radio_message_sent;
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Envelope.text_message_sent)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Envelope.radio_message_sent)
 }
-inline ::xpilot::TextMessageSent* Envelope::_internal_mutable_text_message_sent() {
-  if (!_internal_has_text_message_sent()) {
+inline ::xpilot::RadioMessageSent* Envelope::_internal_mutable_radio_message_sent() {
+  if (!_internal_has_radio_message_sent()) {
     clear_event();
-    set_has_text_message_sent();
-    event_.text_message_sent_ = CreateMaybeMessage< ::xpilot::TextMessageSent >(GetArenaForAllocation());
+    set_has_radio_message_sent();
+    event_.radio_message_sent_ = CreateMaybeMessage< ::xpilot::RadioMessageSent >(GetArenaForAllocation());
   }
-  return event_.text_message_sent_;
+  return event_.radio_message_sent_;
 }
-inline ::xpilot::TextMessageSent* Envelope::mutable_text_message_sent() {
-  // @@protoc_insertion_point(field_mutable:xpilot.Envelope.text_message_sent)
-  return _internal_mutable_text_message_sent();
+inline ::xpilot::RadioMessageSent* Envelope::mutable_radio_message_sent() {
+  // @@protoc_insertion_point(field_mutable:xpilot.Envelope.radio_message_sent)
+  return _internal_mutable_radio_message_sent();
 }
 
 // .xpilot.NetworkConnected network_connected = 12;
@@ -3288,6 +3426,396 @@ inline ::xpilot::PostConsoleMessage* Envelope::_internal_mutable_post_console_me
 inline ::xpilot::PostConsoleMessage* Envelope::mutable_post_console_message() {
   // @@protoc_insertion_point(field_mutable:xpilot.Envelope.post_console_message)
   return _internal_mutable_post_console_message();
+}
+
+// .xpilot.SendFlightPlan send_flight_plan = 38;
+inline bool Envelope::_internal_has_send_flight_plan() const {
+  return event_case() == kSendFlightPlan;
+}
+inline bool Envelope::has_send_flight_plan() const {
+  return _internal_has_send_flight_plan();
+}
+inline void Envelope::set_has_send_flight_plan() {
+  _oneof_case_[0] = kSendFlightPlan;
+}
+inline ::xpilot::SendFlightPlan* Envelope::release_send_flight_plan() {
+  // @@protoc_insertion_point(field_release:xpilot.Envelope.send_flight_plan)
+  if (_internal_has_send_flight_plan()) {
+    clear_has_event();
+      ::xpilot::SendFlightPlan* temp = event_.send_flight_plan_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    event_.send_flight_plan_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::xpilot::SendFlightPlan& Envelope::_internal_send_flight_plan() const {
+  return _internal_has_send_flight_plan()
+      ? *event_.send_flight_plan_
+      : reinterpret_cast< ::xpilot::SendFlightPlan&>(::xpilot::_SendFlightPlan_default_instance_);
+}
+inline const ::xpilot::SendFlightPlan& Envelope::send_flight_plan() const {
+  // @@protoc_insertion_point(field_get:xpilot.Envelope.send_flight_plan)
+  return _internal_send_flight_plan();
+}
+inline ::xpilot::SendFlightPlan* Envelope::unsafe_arena_release_send_flight_plan() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Envelope.send_flight_plan)
+  if (_internal_has_send_flight_plan()) {
+    clear_has_event();
+    ::xpilot::SendFlightPlan* temp = event_.send_flight_plan_;
+    event_.send_flight_plan_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_send_flight_plan(::xpilot::SendFlightPlan* send_flight_plan) {
+  clear_event();
+  if (send_flight_plan) {
+    set_has_send_flight_plan();
+    event_.send_flight_plan_ = send_flight_plan;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Envelope.send_flight_plan)
+}
+inline ::xpilot::SendFlightPlan* Envelope::_internal_mutable_send_flight_plan() {
+  if (!_internal_has_send_flight_plan()) {
+    clear_event();
+    set_has_send_flight_plan();
+    event_.send_flight_plan_ = CreateMaybeMessage< ::xpilot::SendFlightPlan >(GetArenaForAllocation());
+  }
+  return event_.send_flight_plan_;
+}
+inline ::xpilot::SendFlightPlan* Envelope::mutable_send_flight_plan() {
+  // @@protoc_insertion_point(field_mutable:xpilot.Envelope.send_flight_plan)
+  return _internal_mutable_send_flight_plan();
+}
+
+// .xpilot.FetchFlightPlan fetch_flight_plan = 39;
+inline bool Envelope::_internal_has_fetch_flight_plan() const {
+  return event_case() == kFetchFlightPlan;
+}
+inline bool Envelope::has_fetch_flight_plan() const {
+  return _internal_has_fetch_flight_plan();
+}
+inline void Envelope::set_has_fetch_flight_plan() {
+  _oneof_case_[0] = kFetchFlightPlan;
+}
+inline ::xpilot::FetchFlightPlan* Envelope::release_fetch_flight_plan() {
+  // @@protoc_insertion_point(field_release:xpilot.Envelope.fetch_flight_plan)
+  if (_internal_has_fetch_flight_plan()) {
+    clear_has_event();
+      ::xpilot::FetchFlightPlan* temp = event_.fetch_flight_plan_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    event_.fetch_flight_plan_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::xpilot::FetchFlightPlan& Envelope::_internal_fetch_flight_plan() const {
+  return _internal_has_fetch_flight_plan()
+      ? *event_.fetch_flight_plan_
+      : reinterpret_cast< ::xpilot::FetchFlightPlan&>(::xpilot::_FetchFlightPlan_default_instance_);
+}
+inline const ::xpilot::FetchFlightPlan& Envelope::fetch_flight_plan() const {
+  // @@protoc_insertion_point(field_get:xpilot.Envelope.fetch_flight_plan)
+  return _internal_fetch_flight_plan();
+}
+inline ::xpilot::FetchFlightPlan* Envelope::unsafe_arena_release_fetch_flight_plan() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Envelope.fetch_flight_plan)
+  if (_internal_has_fetch_flight_plan()) {
+    clear_has_event();
+    ::xpilot::FetchFlightPlan* temp = event_.fetch_flight_plan_;
+    event_.fetch_flight_plan_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_fetch_flight_plan(::xpilot::FetchFlightPlan* fetch_flight_plan) {
+  clear_event();
+  if (fetch_flight_plan) {
+    set_has_fetch_flight_plan();
+    event_.fetch_flight_plan_ = fetch_flight_plan;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Envelope.fetch_flight_plan)
+}
+inline ::xpilot::FetchFlightPlan* Envelope::_internal_mutable_fetch_flight_plan() {
+  if (!_internal_has_fetch_flight_plan()) {
+    clear_event();
+    set_has_fetch_flight_plan();
+    event_.fetch_flight_plan_ = CreateMaybeMessage< ::xpilot::FetchFlightPlan >(GetArenaForAllocation());
+  }
+  return event_.fetch_flight_plan_;
+}
+inline ::xpilot::FetchFlightPlan* Envelope::mutable_fetch_flight_plan() {
+  // @@protoc_insertion_point(field_mutable:xpilot.Envelope.fetch_flight_plan)
+  return _internal_mutable_fetch_flight_plan();
+}
+
+// .xpilot.FlightPlanReceived flight_plan_received = 40;
+inline bool Envelope::_internal_has_flight_plan_received() const {
+  return event_case() == kFlightPlanReceived;
+}
+inline bool Envelope::has_flight_plan_received() const {
+  return _internal_has_flight_plan_received();
+}
+inline void Envelope::set_has_flight_plan_received() {
+  _oneof_case_[0] = kFlightPlanReceived;
+}
+inline ::xpilot::FlightPlanReceived* Envelope::release_flight_plan_received() {
+  // @@protoc_insertion_point(field_release:xpilot.Envelope.flight_plan_received)
+  if (_internal_has_flight_plan_received()) {
+    clear_has_event();
+      ::xpilot::FlightPlanReceived* temp = event_.flight_plan_received_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    event_.flight_plan_received_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::xpilot::FlightPlanReceived& Envelope::_internal_flight_plan_received() const {
+  return _internal_has_flight_plan_received()
+      ? *event_.flight_plan_received_
+      : reinterpret_cast< ::xpilot::FlightPlanReceived&>(::xpilot::_FlightPlanReceived_default_instance_);
+}
+inline const ::xpilot::FlightPlanReceived& Envelope::flight_plan_received() const {
+  // @@protoc_insertion_point(field_get:xpilot.Envelope.flight_plan_received)
+  return _internal_flight_plan_received();
+}
+inline ::xpilot::FlightPlanReceived* Envelope::unsafe_arena_release_flight_plan_received() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Envelope.flight_plan_received)
+  if (_internal_has_flight_plan_received()) {
+    clear_has_event();
+    ::xpilot::FlightPlanReceived* temp = event_.flight_plan_received_;
+    event_.flight_plan_received_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_flight_plan_received(::xpilot::FlightPlanReceived* flight_plan_received) {
+  clear_event();
+  if (flight_plan_received) {
+    set_has_flight_plan_received();
+    event_.flight_plan_received_ = flight_plan_received;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Envelope.flight_plan_received)
+}
+inline ::xpilot::FlightPlanReceived* Envelope::_internal_mutable_flight_plan_received() {
+  if (!_internal_has_flight_plan_received()) {
+    clear_event();
+    set_has_flight_plan_received();
+    event_.flight_plan_received_ = CreateMaybeMessage< ::xpilot::FlightPlanReceived >(GetArenaForAllocation());
+  }
+  return event_.flight_plan_received_;
+}
+inline ::xpilot::FlightPlanReceived* Envelope::mutable_flight_plan_received() {
+  // @@protoc_insertion_point(field_mutable:xpilot.Envelope.flight_plan_received)
+  return _internal_mutable_flight_plan_received();
+}
+
+// .xpilot.NoteReceived note_received = 41;
+inline bool Envelope::_internal_has_note_received() const {
+  return event_case() == kNoteReceived;
+}
+inline bool Envelope::has_note_received() const {
+  return _internal_has_note_received();
+}
+inline void Envelope::set_has_note_received() {
+  _oneof_case_[0] = kNoteReceived;
+}
+inline ::xpilot::NoteReceived* Envelope::release_note_received() {
+  // @@protoc_insertion_point(field_release:xpilot.Envelope.note_received)
+  if (_internal_has_note_received()) {
+    clear_has_event();
+      ::xpilot::NoteReceived* temp = event_.note_received_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    event_.note_received_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::xpilot::NoteReceived& Envelope::_internal_note_received() const {
+  return _internal_has_note_received()
+      ? *event_.note_received_
+      : reinterpret_cast< ::xpilot::NoteReceived&>(::xpilot::_NoteReceived_default_instance_);
+}
+inline const ::xpilot::NoteReceived& Envelope::note_received() const {
+  // @@protoc_insertion_point(field_get:xpilot.Envelope.note_received)
+  return _internal_note_received();
+}
+inline ::xpilot::NoteReceived* Envelope::unsafe_arena_release_note_received() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Envelope.note_received)
+  if (_internal_has_note_received()) {
+    clear_has_event();
+    ::xpilot::NoteReceived* temp = event_.note_received_;
+    event_.note_received_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_note_received(::xpilot::NoteReceived* note_received) {
+  clear_event();
+  if (note_received) {
+    set_has_note_received();
+    event_.note_received_ = note_received;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Envelope.note_received)
+}
+inline ::xpilot::NoteReceived* Envelope::_internal_mutable_note_received() {
+  if (!_internal_has_note_received()) {
+    clear_event();
+    set_has_note_received();
+    event_.note_received_ = CreateMaybeMessage< ::xpilot::NoteReceived >(GetArenaForAllocation());
+  }
+  return event_.note_received_;
+}
+inline ::xpilot::NoteReceived* Envelope::mutable_note_received() {
+  // @@protoc_insertion_point(field_mutable:xpilot.Envelope.note_received)
+  return _internal_mutable_note_received();
+}
+
+// .xpilot.ClearNoteHistory clear_note_history = 42;
+inline bool Envelope::_internal_has_clear_note_history() const {
+  return event_case() == kClearNoteHistory;
+}
+inline bool Envelope::has_clear_note_history() const {
+  return _internal_has_clear_note_history();
+}
+inline void Envelope::set_has_clear_note_history() {
+  _oneof_case_[0] = kClearNoteHistory;
+}
+inline ::xpilot::ClearNoteHistory* Envelope::release_clear_note_history() {
+  // @@protoc_insertion_point(field_release:xpilot.Envelope.clear_note_history)
+  if (_internal_has_clear_note_history()) {
+    clear_has_event();
+      ::xpilot::ClearNoteHistory* temp = event_.clear_note_history_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    event_.clear_note_history_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::xpilot::ClearNoteHistory& Envelope::_internal_clear_note_history() const {
+  return _internal_has_clear_note_history()
+      ? *event_.clear_note_history_
+      : reinterpret_cast< ::xpilot::ClearNoteHistory&>(::xpilot::_ClearNoteHistory_default_instance_);
+}
+inline const ::xpilot::ClearNoteHistory& Envelope::clear_note_history() const {
+  // @@protoc_insertion_point(field_get:xpilot.Envelope.clear_note_history)
+  return _internal_clear_note_history();
+}
+inline ::xpilot::ClearNoteHistory* Envelope::unsafe_arena_release_clear_note_history() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Envelope.clear_note_history)
+  if (_internal_has_clear_note_history()) {
+    clear_has_event();
+    ::xpilot::ClearNoteHistory* temp = event_.clear_note_history_;
+    event_.clear_note_history_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_clear_note_history(::xpilot::ClearNoteHistory* clear_note_history) {
+  clear_event();
+  if (clear_note_history) {
+    set_has_clear_note_history();
+    event_.clear_note_history_ = clear_note_history;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Envelope.clear_note_history)
+}
+inline ::xpilot::ClearNoteHistory* Envelope::_internal_mutable_clear_note_history() {
+  if (!_internal_has_clear_note_history()) {
+    clear_event();
+    set_has_clear_note_history();
+    event_.clear_note_history_ = CreateMaybeMessage< ::xpilot::ClearNoteHistory >(GetArenaForAllocation());
+  }
+  return event_.clear_note_history_;
+}
+inline ::xpilot::ClearNoteHistory* Envelope::mutable_clear_note_history() {
+  // @@protoc_insertion_point(field_mutable:xpilot.Envelope.clear_note_history)
+  return _internal_mutable_clear_note_history();
+}
+
+// .xpilot.StationInfoReceived station_info_received = 43;
+inline bool Envelope::_internal_has_station_info_received() const {
+  return event_case() == kStationInfoReceived;
+}
+inline bool Envelope::has_station_info_received() const {
+  return _internal_has_station_info_received();
+}
+inline void Envelope::set_has_station_info_received() {
+  _oneof_case_[0] = kStationInfoReceived;
+}
+inline ::xpilot::StationInfoReceived* Envelope::release_station_info_received() {
+  // @@protoc_insertion_point(field_release:xpilot.Envelope.station_info_received)
+  if (_internal_has_station_info_received()) {
+    clear_has_event();
+      ::xpilot::StationInfoReceived* temp = event_.station_info_received_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    event_.station_info_received_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::xpilot::StationInfoReceived& Envelope::_internal_station_info_received() const {
+  return _internal_has_station_info_received()
+      ? *event_.station_info_received_
+      : reinterpret_cast< ::xpilot::StationInfoReceived&>(::xpilot::_StationInfoReceived_default_instance_);
+}
+inline const ::xpilot::StationInfoReceived& Envelope::station_info_received() const {
+  // @@protoc_insertion_point(field_get:xpilot.Envelope.station_info_received)
+  return _internal_station_info_received();
+}
+inline ::xpilot::StationInfoReceived* Envelope::unsafe_arena_release_station_info_received() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xpilot.Envelope.station_info_received)
+  if (_internal_has_station_info_received()) {
+    clear_has_event();
+    ::xpilot::StationInfoReceived* temp = event_.station_info_received_;
+    event_.station_info_received_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_station_info_received(::xpilot::StationInfoReceived* station_info_received) {
+  clear_event();
+  if (station_info_received) {
+    set_has_station_info_received();
+    event_.station_info_received_ = station_info_received;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xpilot.Envelope.station_info_received)
+}
+inline ::xpilot::StationInfoReceived* Envelope::_internal_mutable_station_info_received() {
+  if (!_internal_has_station_info_received()) {
+    clear_event();
+    set_has_station_info_received();
+    event_.station_info_received_ = CreateMaybeMessage< ::xpilot::StationInfoReceived >(GetArenaForAllocation());
+  }
+  return event_.station_info_received_;
+}
+inline ::xpilot::StationInfoReceived* Envelope::mutable_station_info_received() {
+  // @@protoc_insertion_point(field_mutable:xpilot.Envelope.station_info_received)
+  return _internal_mutable_station_info_received();
 }
 
 inline bool Envelope::has_event() const {

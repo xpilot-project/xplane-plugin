@@ -75,6 +75,12 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Envelope_2eproto::offsets[] PR
   ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
   ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
   ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
+  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
+  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
+  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
+  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
+  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
+  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
   PROTOBUF_FIELD_OFFSET(::xpilot::Envelope, event_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -97,69 +103,81 @@ const char descriptor_table_protodef_Envelope_2eproto[] PROTOBUF_SECTION_VARIABL
   "oto\032\030FastPositionUpdate.proto\032\025PlaneAdde"
   "dToSim.proto\032\031PlaneRemovedFromSim.proto\032"
   "\023SetRadioStack.proto\032\030RequestStationInfo"
-  ".proto\032\027TriggerDisconnect.proto\032\031TextMes"
-  "sageReceived.proto\032\025TextMessageSent.prot"
-  "o\032\033ServerMessageReceived.proto\032\023MetarRec"
-  "eived.proto\032\022RequestMetar.proto\032\020WallopS"
-  "ent.proto\032\036BroadcastMessageReceived.prot"
-  "o\032\016PostNote.proto\032\036SimulatorConnectionSt"
-  "ate.proto\032\022AppConfigDto.proto\032\020RadioStac"
-  "k.proto\032\025TransponderMode.proto\032\025Transpon"
-  "derCode.proto\032\036NetworkConnectionRequest."
-  "proto\032\031ClearMessageHistory.proto\032\030PostCo"
-  "nsoleMessage.proto\"\234\017\n\010Envelope\0221\n\017posit"
-  "ion_update\030\001 \001(\0132\026.xpilot.PositionUpdate"
-  "H\000\022:\n\024fast_position_update\030\002 \001(\0132\032.xpilo"
-  "t.FastPositionUpdateH\000\0221\n\017airplane_confi"
-  "g\030\003 \001(\0132\026.xpilot.AirplaneConfigH\000\022%\n\tadd"
-  "_plane\030\004 \001(\0132\020.xpilot.AddPlaneH\000\0225\n\022plan"
-  "e_added_to_sim\030\005 \001(\0132\027.xpilot.PlaneAdded"
-  "ToSimH\000\0226\n\022change_plane_model\030\006 \001(\0132\030.xp"
-  "ilot.ChangePlaneModelH\000\022+\n\014delete_plane\030"
-  "\007 \001(\0132\023.xpilot.DeletePlaneH\000\022B\n\030private_"
-  "message_received\030\010 \001(\0132\036.xpilot.PrivateM"
-  "essageReceivedH\000\022:\n\024private_message_sent"
-  "\030\t \001(\0132\032.xpilot.PrivateMessageSentH\000\022<\n\025"
-  "text_message_received\030\n \001(\0132\033.xpilot.Tex"
-  "tMessageReceivedH\000\0224\n\021text_message_sent\030"
-  "\013 \001(\0132\027.xpilot.TextMessageSentH\000\0225\n\021netw"
-  "ork_connected\030\014 \001(\0132\030.xpilot.NetworkConn"
-  "ectedH\000\022;\n\024network_disconnected\030\r \001(\0132\033."
-  "xpilot.NetworkDisconnectedH\000\0227\n\022nearby_c"
-  "ontrollers\030\016 \001(\0132\031.xpilot.NearbyControll"
-  "ersH\000\022/\n\016set_radiostack\030\017 \001(\0132\025.xpilot.S"
-  "etRadioStackH\000\022*\n\013app_metdata\030\020 \001(\0132\023.xp"
-  "ilot.AppMetadataH\000\022/\n\016csl_validation\030\021 \001"
-  "(\0132\025.xpilot.CslValidationH\000\022:\n\024request_s"
-  "tation_info\030\022 \001(\0132\032.xpilot.RequestStatio"
-  "nInfoH\000\0227\n\022trigger_disconnect\030\023 \001(\0132\031.xp"
-  "ilot.TriggerDisconnectH\000\022=\n\026plane_remove"
-  "d_from_sim\030\024 \001(\0132\033.xpilot.PlaneRemovedFr"
-  "omSimH\000\022@\n\027server_message_received\030\025 \001(\013"
-  "2\035.xpilot.ServerMessageReceivedH\000\022-\n\rreq"
-  "uest_metar\030\026 \001(\0132\024.xpilot.RequestMetarH\000"
-  "\022/\n\016metar_received\030\027 \001(\0132\025.xpilot.MetarR"
-  "eceivedH\000\022)\n\013wallop_sent\030\030 \001(\0132\022.xpilot."
-  "WallopSentH\000\022F\n\032broadcast_message_receiv"
-  "ed\030\031 \001(\0132 .xpilot.BroadcastMessageReceiv"
-  "edH\000\022%\n\tpost_note\030\034 \001(\0132\020.xpilot.PostNot"
-  "eH\000\022F\n\032simulator_connection_state\030\035 \001(\0132"
-  " .xpilot.SimulatorConnectionStateH\000\022.\n\016a"
-  "pp_config_dto\030\036 \001(\0132\024.xpilot.AppConfigDt"
-  "oH\000\022)\n\013radio_stack\030\037 \001(\0132\022.xpilot.RadioS"
-  "tackH\000\0223\n\020transponder_mode\030  \001(\0132\027.xpilo"
-  "t.TransponderModeH\000\0223\n\020transponder_code\030"
-  "! \001(\0132\027.xpilot.TransponderCodeH\000\0225\n\021tran"
-  "sponder_ident\030\" \001(\0132\030.xpilot.Transponder"
-  "IdentH\000\022E\n\031network_connect_requested\030# \001"
-  "(\0132 .xpilot.NetworkConnectionRequestH\000\022<"
-  "\n\025clear_message_history\030$ \001(\0132\033.xpilot.C"
-  "learMessageHistoryH\000\022:\n\024post_console_mes"
-  "sage\030% \001(\0132\032.xpilot.PostConsoleMessageH\000"
-  "B\007\n\005eventB\031\252\002\026Vatsim.Xpilot.Protobufb\006pr"
-  "oto3"
+  ".proto\032\027TriggerDisconnect.proto\032\032RadioMe"
+  "ssageReceived.proto\032\026RadioMessageSent.pr"
+  "oto\032\033ServerMessageReceived.proto\032\023MetarR"
+  "eceived.proto\032\022RequestMetar.proto\032\020Wallo"
+  "pSent.proto\032\036BroadcastMessageReceived.pr"
+  "oto\032\016PostNote.proto\032\036SimulatorConnection"
+  "State.proto\032\022AppConfigDto.proto\032\020RadioSt"
+  "ack.proto\032\025TransponderMode.proto\032\025Transp"
+  "onderCode.proto\032\036NetworkConnectionReques"
+  "t.proto\032\031ClearMessageHistory.proto\032\030Post"
+  "ConsoleMessage.proto\032\024SendFlightPlan.pro"
+  "to\032\025FetchFlightPlan.proto\032\030FlightPlanRec"
+  "eived.proto\032\022NoteReceived.proto\032\026ClearNo"
+  "teHistory.proto\032\031StationInfoReceived.pro"
+  "to\"\353\021\n\010Envelope\0221\n\017position_update\030\001 \001(\013"
+  "2\026.xpilot.PositionUpdateH\000\022:\n\024fast_posit"
+  "ion_update\030\002 \001(\0132\032.xpilot.FastPositionUp"
+  "dateH\000\0221\n\017airplane_config\030\003 \001(\0132\026.xpilot"
+  ".AirplaneConfigH\000\022%\n\tadd_plane\030\004 \001(\0132\020.x"
+  "pilot.AddPlaneH\000\0225\n\022plane_added_to_sim\030\005"
+  " \001(\0132\027.xpilot.PlaneAddedToSimH\000\0226\n\022chang"
+  "e_plane_model\030\006 \001(\0132\030.xpilot.ChangePlane"
+  "ModelH\000\022+\n\014delete_plane\030\007 \001(\0132\023.xpilot.D"
+  "eletePlaneH\000\022B\n\030private_message_received"
+  "\030\010 \001(\0132\036.xpilot.PrivateMessageReceivedH\000"
+  "\022:\n\024private_message_sent\030\t \001(\0132\032.xpilot."
+  "PrivateMessageSentH\000\022>\n\026radio_message_re"
+  "ceived\030\n \001(\0132\034.xpilot.RadioMessageReceiv"
+  "edH\000\0226\n\022radio_message_sent\030\013 \001(\0132\030.xpilo"
+  "t.RadioMessageSentH\000\0225\n\021network_connecte"
+  "d\030\014 \001(\0132\030.xpilot.NetworkConnectedH\000\022;\n\024n"
+  "etwork_disconnected\030\r \001(\0132\033.xpilot.Netwo"
+  "rkDisconnectedH\000\0227\n\022nearby_controllers\030\016"
+  " \001(\0132\031.xpilot.NearbyControllersH\000\022/\n\016set"
+  "_radiostack\030\017 \001(\0132\025.xpilot.SetRadioStack"
+  "H\000\022*\n\013app_metdata\030\020 \001(\0132\023.xpilot.AppMeta"
+  "dataH\000\022/\n\016csl_validation\030\021 \001(\0132\025.xpilot."
+  "CslValidationH\000\022:\n\024request_station_info\030"
+  "\022 \001(\0132\032.xpilot.RequestStationInfoH\000\0227\n\022t"
+  "rigger_disconnect\030\023 \001(\0132\031.xpilot.Trigger"
+  "DisconnectH\000\022=\n\026plane_removed_from_sim\030\024"
+  " \001(\0132\033.xpilot.PlaneRemovedFromSimH\000\022@\n\027s"
+  "erver_message_received\030\025 \001(\0132\035.xpilot.Se"
+  "rverMessageReceivedH\000\022-\n\rrequest_metar\030\026"
+  " \001(\0132\024.xpilot.RequestMetarH\000\022/\n\016metar_re"
+  "ceived\030\027 \001(\0132\025.xpilot.MetarReceivedH\000\022)\n"
+  "\013wallop_sent\030\030 \001(\0132\022.xpilot.WallopSentH\000"
+  "\022F\n\032broadcast_message_received\030\031 \001(\0132 .x"
+  "pilot.BroadcastMessageReceivedH\000\022%\n\tpost"
+  "_note\030\034 \001(\0132\020.xpilot.PostNoteH\000\022F\n\032simul"
+  "ator_connection_state\030\035 \001(\0132 .xpilot.Sim"
+  "ulatorConnectionStateH\000\022.\n\016app_config_dt"
+  "o\030\036 \001(\0132\024.xpilot.AppConfigDtoH\000\022)\n\013radio"
+  "_stack\030\037 \001(\0132\022.xpilot.RadioStackH\000\0223\n\020tr"
+  "ansponder_mode\030  \001(\0132\027.xpilot.Transponde"
+  "rModeH\000\0223\n\020transponder_code\030! \001(\0132\027.xpil"
+  "ot.TransponderCodeH\000\0225\n\021transponder_iden"
+  "t\030\" \001(\0132\030.xpilot.TransponderIdentH\000\022E\n\031n"
+  "etwork_connect_requested\030# \001(\0132 .xpilot."
+  "NetworkConnectionRequestH\000\022<\n\025clear_mess"
+  "age_history\030$ \001(\0132\033.xpilot.ClearMessageH"
+  "istoryH\000\022:\n\024post_console_message\030% \001(\0132\032"
+  ".xpilot.PostConsoleMessageH\000\0222\n\020send_fli"
+  "ght_plan\030& \001(\0132\026.xpilot.SendFlightPlanH\000"
+  "\0224\n\021fetch_flight_plan\030\' \001(\0132\027.xpilot.Fet"
+  "chFlightPlanH\000\022:\n\024flight_plan_received\030("
+  " \001(\0132\032.xpilot.FlightPlanReceivedH\000\022-\n\rno"
+  "te_received\030) \001(\0132\024.xpilot.NoteReceivedH"
+  "\000\0226\n\022clear_note_history\030* \001(\0132\030.xpilot.C"
+  "learNoteHistoryH\000\022<\n\025station_info_receiv"
+  "ed\030+ \001(\0132\033.xpilot.StationInfoReceivedH\000B"
+  "\007\n\005eventB\031\252\002\026Vatsim.Xpilot.Protobufb\006pro"
+  "to3"
   ;
-static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Envelope_2eproto_deps[35] = {
+static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Envelope_2eproto_deps[41] = {
   &::descriptor_table_AddPlane_2eproto,
   &::descriptor_table_AirplaneConfig_2eproto,
   &::descriptor_table_AppConfigDto_2eproto,
@@ -167,14 +185,18 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor
   &::descriptor_table_BroadcastMessageReceived_2eproto,
   &::descriptor_table_ChangePlaneModel_2eproto,
   &::descriptor_table_ClearMessageHistory_2eproto,
+  &::descriptor_table_ClearNoteHistory_2eproto,
   &::descriptor_table_CslValidation_2eproto,
   &::descriptor_table_DeletePlane_2eproto,
   &::descriptor_table_FastPositionUpdate_2eproto,
+  &::descriptor_table_FetchFlightPlan_2eproto,
+  &::descriptor_table_FlightPlanReceived_2eproto,
   &::descriptor_table_MetarReceived_2eproto,
   &::descriptor_table_NearbyControllers_2eproto,
   &::descriptor_table_NetworkConnected_2eproto,
   &::descriptor_table_NetworkConnectionRequest_2eproto,
   &::descriptor_table_NetworkDisconnected_2eproto,
+  &::descriptor_table_NoteReceived_2eproto,
   &::descriptor_table_PlaneAddedToSim_2eproto,
   &::descriptor_table_PlaneRemovedFromSim_2eproto,
   &::descriptor_table_PositionUpdate_2eproto,
@@ -182,14 +204,16 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor
   &::descriptor_table_PostNote_2eproto,
   &::descriptor_table_PrivateMessageReceived_2eproto,
   &::descriptor_table_PrivateMessageSent_2eproto,
+  &::descriptor_table_RadioMessageReceived_2eproto,
+  &::descriptor_table_RadioMessageSent_2eproto,
   &::descriptor_table_RadioStack_2eproto,
   &::descriptor_table_RequestMetar_2eproto,
   &::descriptor_table_RequestStationInfo_2eproto,
+  &::descriptor_table_SendFlightPlan_2eproto,
   &::descriptor_table_ServerMessageReceived_2eproto,
   &::descriptor_table_SetRadioStack_2eproto,
   &::descriptor_table_SimulatorConnectionState_2eproto,
-  &::descriptor_table_TextMessageReceived_2eproto,
-  &::descriptor_table_TextMessageSent_2eproto,
+  &::descriptor_table_StationInfoReceived_2eproto,
   &::descriptor_table_TransponderCode_2eproto,
   &::descriptor_table_TransponderIdent_2eproto,
   &::descriptor_table_TransponderMode_2eproto,
@@ -198,8 +222,8 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Envelope_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Envelope_2eproto = {
-  false, false, 2844, descriptor_table_protodef_Envelope_2eproto, "Envelope.proto", 
-  &descriptor_table_Envelope_2eproto_once, descriptor_table_Envelope_2eproto_deps, 35, 1,
+  false, false, 3323, descriptor_table_protodef_Envelope_2eproto, "Envelope.proto", 
+  &descriptor_table_Envelope_2eproto_once, descriptor_table_Envelope_2eproto_deps, 41, 1,
   schemas, file_default_instances, TableStruct_Envelope_2eproto::offsets,
   file_level_metadata_Envelope_2eproto, file_level_enum_descriptors_Envelope_2eproto, file_level_service_descriptors_Envelope_2eproto,
 };
@@ -224,8 +248,8 @@ class Envelope::_Internal {
   static const ::xpilot::DeletePlane& delete_plane(const Envelope* msg);
   static const ::xpilot::PrivateMessageReceived& private_message_received(const Envelope* msg);
   static const ::xpilot::PrivateMessageSent& private_message_sent(const Envelope* msg);
-  static const ::xpilot::TextMessageReceived& text_message_received(const Envelope* msg);
-  static const ::xpilot::TextMessageSent& text_message_sent(const Envelope* msg);
+  static const ::xpilot::RadioMessageReceived& radio_message_received(const Envelope* msg);
+  static const ::xpilot::RadioMessageSent& radio_message_sent(const Envelope* msg);
   static const ::xpilot::NetworkConnected& network_connected(const Envelope* msg);
   static const ::xpilot::NetworkDisconnected& network_disconnected(const Envelope* msg);
   static const ::xpilot::NearbyControllers& nearby_controllers(const Envelope* msg);
@@ -250,6 +274,12 @@ class Envelope::_Internal {
   static const ::xpilot::NetworkConnectionRequest& network_connect_requested(const Envelope* msg);
   static const ::xpilot::ClearMessageHistory& clear_message_history(const Envelope* msg);
   static const ::xpilot::PostConsoleMessage& post_console_message(const Envelope* msg);
+  static const ::xpilot::SendFlightPlan& send_flight_plan(const Envelope* msg);
+  static const ::xpilot::FetchFlightPlan& fetch_flight_plan(const Envelope* msg);
+  static const ::xpilot::FlightPlanReceived& flight_plan_received(const Envelope* msg);
+  static const ::xpilot::NoteReceived& note_received(const Envelope* msg);
+  static const ::xpilot::ClearNoteHistory& clear_note_history(const Envelope* msg);
+  static const ::xpilot::StationInfoReceived& station_info_received(const Envelope* msg);
 };
 
 const ::xpilot::PositionUpdate&
@@ -288,13 +318,13 @@ const ::xpilot::PrivateMessageSent&
 Envelope::_Internal::private_message_sent(const Envelope* msg) {
   return *msg->event_.private_message_sent_;
 }
-const ::xpilot::TextMessageReceived&
-Envelope::_Internal::text_message_received(const Envelope* msg) {
-  return *msg->event_.text_message_received_;
+const ::xpilot::RadioMessageReceived&
+Envelope::_Internal::radio_message_received(const Envelope* msg) {
+  return *msg->event_.radio_message_received_;
 }
-const ::xpilot::TextMessageSent&
-Envelope::_Internal::text_message_sent(const Envelope* msg) {
-  return *msg->event_.text_message_sent_;
+const ::xpilot::RadioMessageSent&
+Envelope::_Internal::radio_message_sent(const Envelope* msg) {
+  return *msg->event_.radio_message_sent_;
 }
 const ::xpilot::NetworkConnected&
 Envelope::_Internal::network_connected(const Envelope* msg) {
@@ -391,6 +421,30 @@ Envelope::_Internal::clear_message_history(const Envelope* msg) {
 const ::xpilot::PostConsoleMessage&
 Envelope::_Internal::post_console_message(const Envelope* msg) {
   return *msg->event_.post_console_message_;
+}
+const ::xpilot::SendFlightPlan&
+Envelope::_Internal::send_flight_plan(const Envelope* msg) {
+  return *msg->event_.send_flight_plan_;
+}
+const ::xpilot::FetchFlightPlan&
+Envelope::_Internal::fetch_flight_plan(const Envelope* msg) {
+  return *msg->event_.fetch_flight_plan_;
+}
+const ::xpilot::FlightPlanReceived&
+Envelope::_Internal::flight_plan_received(const Envelope* msg) {
+  return *msg->event_.flight_plan_received_;
+}
+const ::xpilot::NoteReceived&
+Envelope::_Internal::note_received(const Envelope* msg) {
+  return *msg->event_.note_received_;
+}
+const ::xpilot::ClearNoteHistory&
+Envelope::_Internal::clear_note_history(const Envelope* msg) {
+  return *msg->event_.clear_note_history_;
+}
+const ::xpilot::StationInfoReceived&
+Envelope::_Internal::station_info_received(const Envelope* msg) {
+  return *msg->event_.station_info_received_;
 }
 void Envelope::set_allocated_position_update(::xpilot::PositionUpdate* position_update) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
@@ -617,52 +671,52 @@ void Envelope::clear_private_message_sent() {
     clear_has_event();
   }
 }
-void Envelope::set_allocated_text_message_received(::xpilot::TextMessageReceived* text_message_received) {
+void Envelope::set_allocated_radio_message_received(::xpilot::RadioMessageReceived* radio_message_received) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   clear_event();
-  if (text_message_received) {
+  if (radio_message_received) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
         ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
             ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(text_message_received));
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(radio_message_received));
     if (message_arena != submessage_arena) {
-      text_message_received = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, text_message_received, submessage_arena);
+      radio_message_received = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, radio_message_received, submessage_arena);
     }
-    set_has_text_message_received();
-    event_.text_message_received_ = text_message_received;
+    set_has_radio_message_received();
+    event_.radio_message_received_ = radio_message_received;
   }
-  // @@protoc_insertion_point(field_set_allocated:xpilot.Envelope.text_message_received)
+  // @@protoc_insertion_point(field_set_allocated:xpilot.Envelope.radio_message_received)
 }
-void Envelope::clear_text_message_received() {
-  if (_internal_has_text_message_received()) {
+void Envelope::clear_radio_message_received() {
+  if (_internal_has_radio_message_received()) {
     if (GetArenaForAllocation() == nullptr) {
-      delete event_.text_message_received_;
+      delete event_.radio_message_received_;
     }
     clear_has_event();
   }
 }
-void Envelope::set_allocated_text_message_sent(::xpilot::TextMessageSent* text_message_sent) {
+void Envelope::set_allocated_radio_message_sent(::xpilot::RadioMessageSent* radio_message_sent) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   clear_event();
-  if (text_message_sent) {
+  if (radio_message_sent) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
         ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
             ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(text_message_sent));
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(radio_message_sent));
     if (message_arena != submessage_arena) {
-      text_message_sent = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, text_message_sent, submessage_arena);
+      radio_message_sent = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, radio_message_sent, submessage_arena);
     }
-    set_has_text_message_sent();
-    event_.text_message_sent_ = text_message_sent;
+    set_has_radio_message_sent();
+    event_.radio_message_sent_ = radio_message_sent;
   }
-  // @@protoc_insertion_point(field_set_allocated:xpilot.Envelope.text_message_sent)
+  // @@protoc_insertion_point(field_set_allocated:xpilot.Envelope.radio_message_sent)
 }
-void Envelope::clear_text_message_sent() {
-  if (_internal_has_text_message_sent()) {
+void Envelope::clear_radio_message_sent() {
+  if (_internal_has_radio_message_sent()) {
     if (GetArenaForAllocation() == nullptr) {
-      delete event_.text_message_sent_;
+      delete event_.radio_message_sent_;
     }
     clear_has_event();
   }
@@ -1267,6 +1321,156 @@ void Envelope::clear_post_console_message() {
     clear_has_event();
   }
 }
+void Envelope::set_allocated_send_flight_plan(::xpilot::SendFlightPlan* send_flight_plan) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_event();
+  if (send_flight_plan) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
+            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(send_flight_plan));
+    if (message_arena != submessage_arena) {
+      send_flight_plan = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, send_flight_plan, submessage_arena);
+    }
+    set_has_send_flight_plan();
+    event_.send_flight_plan_ = send_flight_plan;
+  }
+  // @@protoc_insertion_point(field_set_allocated:xpilot.Envelope.send_flight_plan)
+}
+void Envelope::clear_send_flight_plan() {
+  if (_internal_has_send_flight_plan()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete event_.send_flight_plan_;
+    }
+    clear_has_event();
+  }
+}
+void Envelope::set_allocated_fetch_flight_plan(::xpilot::FetchFlightPlan* fetch_flight_plan) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_event();
+  if (fetch_flight_plan) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
+            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(fetch_flight_plan));
+    if (message_arena != submessage_arena) {
+      fetch_flight_plan = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, fetch_flight_plan, submessage_arena);
+    }
+    set_has_fetch_flight_plan();
+    event_.fetch_flight_plan_ = fetch_flight_plan;
+  }
+  // @@protoc_insertion_point(field_set_allocated:xpilot.Envelope.fetch_flight_plan)
+}
+void Envelope::clear_fetch_flight_plan() {
+  if (_internal_has_fetch_flight_plan()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete event_.fetch_flight_plan_;
+    }
+    clear_has_event();
+  }
+}
+void Envelope::set_allocated_flight_plan_received(::xpilot::FlightPlanReceived* flight_plan_received) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_event();
+  if (flight_plan_received) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
+            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(flight_plan_received));
+    if (message_arena != submessage_arena) {
+      flight_plan_received = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, flight_plan_received, submessage_arena);
+    }
+    set_has_flight_plan_received();
+    event_.flight_plan_received_ = flight_plan_received;
+  }
+  // @@protoc_insertion_point(field_set_allocated:xpilot.Envelope.flight_plan_received)
+}
+void Envelope::clear_flight_plan_received() {
+  if (_internal_has_flight_plan_received()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete event_.flight_plan_received_;
+    }
+    clear_has_event();
+  }
+}
+void Envelope::set_allocated_note_received(::xpilot::NoteReceived* note_received) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_event();
+  if (note_received) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
+            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(note_received));
+    if (message_arena != submessage_arena) {
+      note_received = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, note_received, submessage_arena);
+    }
+    set_has_note_received();
+    event_.note_received_ = note_received;
+  }
+  // @@protoc_insertion_point(field_set_allocated:xpilot.Envelope.note_received)
+}
+void Envelope::clear_note_received() {
+  if (_internal_has_note_received()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete event_.note_received_;
+    }
+    clear_has_event();
+  }
+}
+void Envelope::set_allocated_clear_note_history(::xpilot::ClearNoteHistory* clear_note_history) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_event();
+  if (clear_note_history) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
+            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(clear_note_history));
+    if (message_arena != submessage_arena) {
+      clear_note_history = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, clear_note_history, submessage_arena);
+    }
+    set_has_clear_note_history();
+    event_.clear_note_history_ = clear_note_history;
+  }
+  // @@protoc_insertion_point(field_set_allocated:xpilot.Envelope.clear_note_history)
+}
+void Envelope::clear_clear_note_history() {
+  if (_internal_has_clear_note_history()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete event_.clear_note_history_;
+    }
+    clear_has_event();
+  }
+}
+void Envelope::set_allocated_station_info_received(::xpilot::StationInfoReceived* station_info_received) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_event();
+  if (station_info_received) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
+            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(station_info_received));
+    if (message_arena != submessage_arena) {
+      station_info_received = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, station_info_received, submessage_arena);
+    }
+    set_has_station_info_received();
+    event_.station_info_received_ = station_info_received;
+  }
+  // @@protoc_insertion_point(field_set_allocated:xpilot.Envelope.station_info_received)
+}
+void Envelope::clear_station_info_received() {
+  if (_internal_has_station_info_received()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete event_.station_info_received_;
+    }
+    clear_has_event();
+  }
+}
 Envelope::Envelope(::PROTOBUF_NAMESPACE_ID::Arena* arena)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
   SharedCtor();
@@ -1314,12 +1518,12 @@ Envelope::Envelope(const Envelope& from)
       _internal_mutable_private_message_sent()->::xpilot::PrivateMessageSent::MergeFrom(from._internal_private_message_sent());
       break;
     }
-    case kTextMessageReceived: {
-      _internal_mutable_text_message_received()->::xpilot::TextMessageReceived::MergeFrom(from._internal_text_message_received());
+    case kRadioMessageReceived: {
+      _internal_mutable_radio_message_received()->::xpilot::RadioMessageReceived::MergeFrom(from._internal_radio_message_received());
       break;
     }
-    case kTextMessageSent: {
-      _internal_mutable_text_message_sent()->::xpilot::TextMessageSent::MergeFrom(from._internal_text_message_sent());
+    case kRadioMessageSent: {
+      _internal_mutable_radio_message_sent()->::xpilot::RadioMessageSent::MergeFrom(from._internal_radio_message_sent());
       break;
     }
     case kNetworkConnected: {
@@ -1418,6 +1622,30 @@ Envelope::Envelope(const Envelope& from)
       _internal_mutable_post_console_message()->::xpilot::PostConsoleMessage::MergeFrom(from._internal_post_console_message());
       break;
     }
+    case kSendFlightPlan: {
+      _internal_mutable_send_flight_plan()->::xpilot::SendFlightPlan::MergeFrom(from._internal_send_flight_plan());
+      break;
+    }
+    case kFetchFlightPlan: {
+      _internal_mutable_fetch_flight_plan()->::xpilot::FetchFlightPlan::MergeFrom(from._internal_fetch_flight_plan());
+      break;
+    }
+    case kFlightPlanReceived: {
+      _internal_mutable_flight_plan_received()->::xpilot::FlightPlanReceived::MergeFrom(from._internal_flight_plan_received());
+      break;
+    }
+    case kNoteReceived: {
+      _internal_mutable_note_received()->::xpilot::NoteReceived::MergeFrom(from._internal_note_received());
+      break;
+    }
+    case kClearNoteHistory: {
+      _internal_mutable_clear_note_history()->::xpilot::ClearNoteHistory::MergeFrom(from._internal_clear_note_history());
+      break;
+    }
+    case kStationInfoReceived: {
+      _internal_mutable_station_info_received()->::xpilot::StationInfoReceived::MergeFrom(from._internal_station_info_received());
+      break;
+    }
     case EVENT_NOT_SET: {
       break;
     }
@@ -1509,15 +1737,15 @@ void Envelope::clear_event() {
       }
       break;
     }
-    case kTextMessageReceived: {
+    case kRadioMessageReceived: {
       if (GetArenaForAllocation() == nullptr) {
-        delete event_.text_message_received_;
+        delete event_.radio_message_received_;
       }
       break;
     }
-    case kTextMessageSent: {
+    case kRadioMessageSent: {
       if (GetArenaForAllocation() == nullptr) {
-        delete event_.text_message_sent_;
+        delete event_.radio_message_sent_;
       }
       break;
     }
@@ -1665,6 +1893,42 @@ void Envelope::clear_event() {
       }
       break;
     }
+    case kSendFlightPlan: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete event_.send_flight_plan_;
+      }
+      break;
+    }
+    case kFetchFlightPlan: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete event_.fetch_flight_plan_;
+      }
+      break;
+    }
+    case kFlightPlanReceived: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete event_.flight_plan_received_;
+      }
+      break;
+    }
+    case kNoteReceived: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete event_.note_received_;
+      }
+      break;
+    }
+    case kClearNoteHistory: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete event_.clear_note_history_;
+      }
+      break;
+    }
+    case kStationInfoReceived: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete event_.station_info_received_;
+      }
+      break;
+    }
     case EVENT_NOT_SET: {
       break;
     }
@@ -1752,17 +2016,17 @@ const char* Envelope::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // .xpilot.TextMessageReceived text_message_received = 10;
+      // .xpilot.RadioMessageReceived radio_message_received = 10;
       case 10:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 82)) {
-          ptr = ctx->ParseMessage(_internal_mutable_text_message_received(), ptr);
+          ptr = ctx->ParseMessage(_internal_mutable_radio_message_received(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // .xpilot.TextMessageSent text_message_sent = 11;
+      // .xpilot.RadioMessageSent radio_message_sent = 11;
       case 11:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 90)) {
-          ptr = ctx->ParseMessage(_internal_mutable_text_message_sent(), ptr);
+          ptr = ctx->ParseMessage(_internal_mutable_radio_message_sent(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -1934,6 +2198,48 @@ const char* Envelope::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
+      // .xpilot.SendFlightPlan send_flight_plan = 38;
+      case 38:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 50)) {
+          ptr = ctx->ParseMessage(_internal_mutable_send_flight_plan(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .xpilot.FetchFlightPlan fetch_flight_plan = 39;
+      case 39:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 58)) {
+          ptr = ctx->ParseMessage(_internal_mutable_fetch_flight_plan(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .xpilot.FlightPlanReceived flight_plan_received = 40;
+      case 40:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 66)) {
+          ptr = ctx->ParseMessage(_internal_mutable_flight_plan_received(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .xpilot.NoteReceived note_received = 41;
+      case 41:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 74)) {
+          ptr = ctx->ParseMessage(_internal_mutable_note_received(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .xpilot.ClearNoteHistory clear_note_history = 42;
+      case 42:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 82)) {
+          ptr = ctx->ParseMessage(_internal_mutable_clear_note_history(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .xpilot.StationInfoReceived station_info_received = 43;
+      case 43:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 90)) {
+          ptr = ctx->ParseMessage(_internal_mutable_station_info_received(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
       default: {
       handle_unusual:
         if ((tag == 0) || ((tag & 7) == 4)) {
@@ -2035,20 +2341,20 @@ failure:
         9, _Internal::private_message_sent(this), target, stream);
   }
 
-  // .xpilot.TextMessageReceived text_message_received = 10;
-  if (_internal_has_text_message_received()) {
+  // .xpilot.RadioMessageReceived radio_message_received = 10;
+  if (_internal_has_radio_message_received()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        10, _Internal::text_message_received(this), target, stream);
+        10, _Internal::radio_message_received(this), target, stream);
   }
 
-  // .xpilot.TextMessageSent text_message_sent = 11;
-  if (_internal_has_text_message_sent()) {
+  // .xpilot.RadioMessageSent radio_message_sent = 11;
+  if (_internal_has_radio_message_sent()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        11, _Internal::text_message_sent(this), target, stream);
+        11, _Internal::radio_message_sent(this), target, stream);
   }
 
   // .xpilot.NetworkConnected network_connected = 12;
@@ -2243,6 +2549,54 @@ failure:
         37, _Internal::post_console_message(this), target, stream);
   }
 
+  // .xpilot.SendFlightPlan send_flight_plan = 38;
+  if (_internal_has_send_flight_plan()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        38, _Internal::send_flight_plan(this), target, stream);
+  }
+
+  // .xpilot.FetchFlightPlan fetch_flight_plan = 39;
+  if (_internal_has_fetch_flight_plan()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        39, _Internal::fetch_flight_plan(this), target, stream);
+  }
+
+  // .xpilot.FlightPlanReceived flight_plan_received = 40;
+  if (_internal_has_flight_plan_received()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        40, _Internal::flight_plan_received(this), target, stream);
+  }
+
+  // .xpilot.NoteReceived note_received = 41;
+  if (_internal_has_note_received()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        41, _Internal::note_received(this), target, stream);
+  }
+
+  // .xpilot.ClearNoteHistory clear_note_history = 42;
+  if (_internal_has_clear_note_history()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        42, _Internal::clear_note_history(this), target, stream);
+  }
+
+  // .xpilot.StationInfoReceived station_info_received = 43;
+  if (_internal_has_station_info_received()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        43, _Internal::station_info_received(this), target, stream);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -2323,18 +2677,18 @@ size_t Envelope::ByteSizeLong() const {
           *event_.private_message_sent_);
       break;
     }
-    // .xpilot.TextMessageReceived text_message_received = 10;
-    case kTextMessageReceived: {
+    // .xpilot.RadioMessageReceived radio_message_received = 10;
+    case kRadioMessageReceived: {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *event_.text_message_received_);
+          *event_.radio_message_received_);
       break;
     }
-    // .xpilot.TextMessageSent text_message_sent = 11;
-    case kTextMessageSent: {
+    // .xpilot.RadioMessageSent radio_message_sent = 11;
+    case kRadioMessageSent: {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *event_.text_message_sent_);
+          *event_.radio_message_sent_);
       break;
     }
     // .xpilot.NetworkConnected network_connected = 12;
@@ -2505,6 +2859,48 @@ size_t Envelope::ByteSizeLong() const {
           *event_.post_console_message_);
       break;
     }
+    // .xpilot.SendFlightPlan send_flight_plan = 38;
+    case kSendFlightPlan: {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *event_.send_flight_plan_);
+      break;
+    }
+    // .xpilot.FetchFlightPlan fetch_flight_plan = 39;
+    case kFetchFlightPlan: {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *event_.fetch_flight_plan_);
+      break;
+    }
+    // .xpilot.FlightPlanReceived flight_plan_received = 40;
+    case kFlightPlanReceived: {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *event_.flight_plan_received_);
+      break;
+    }
+    // .xpilot.NoteReceived note_received = 41;
+    case kNoteReceived: {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *event_.note_received_);
+      break;
+    }
+    // .xpilot.ClearNoteHistory clear_note_history = 42;
+    case kClearNoteHistory: {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *event_.clear_note_history_);
+      break;
+    }
+    // .xpilot.StationInfoReceived station_info_received = 43;
+    case kStationInfoReceived: {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *event_.station_info_received_);
+      break;
+    }
     case EVENT_NOT_SET: {
       break;
     }
@@ -2577,12 +2973,12 @@ void Envelope::MergeFrom(const Envelope& from) {
       _internal_mutable_private_message_sent()->::xpilot::PrivateMessageSent::MergeFrom(from._internal_private_message_sent());
       break;
     }
-    case kTextMessageReceived: {
-      _internal_mutable_text_message_received()->::xpilot::TextMessageReceived::MergeFrom(from._internal_text_message_received());
+    case kRadioMessageReceived: {
+      _internal_mutable_radio_message_received()->::xpilot::RadioMessageReceived::MergeFrom(from._internal_radio_message_received());
       break;
     }
-    case kTextMessageSent: {
-      _internal_mutable_text_message_sent()->::xpilot::TextMessageSent::MergeFrom(from._internal_text_message_sent());
+    case kRadioMessageSent: {
+      _internal_mutable_radio_message_sent()->::xpilot::RadioMessageSent::MergeFrom(from._internal_radio_message_sent());
       break;
     }
     case kNetworkConnected: {
@@ -2679,6 +3075,30 @@ void Envelope::MergeFrom(const Envelope& from) {
     }
     case kPostConsoleMessage: {
       _internal_mutable_post_console_message()->::xpilot::PostConsoleMessage::MergeFrom(from._internal_post_console_message());
+      break;
+    }
+    case kSendFlightPlan: {
+      _internal_mutable_send_flight_plan()->::xpilot::SendFlightPlan::MergeFrom(from._internal_send_flight_plan());
+      break;
+    }
+    case kFetchFlightPlan: {
+      _internal_mutable_fetch_flight_plan()->::xpilot::FetchFlightPlan::MergeFrom(from._internal_fetch_flight_plan());
+      break;
+    }
+    case kFlightPlanReceived: {
+      _internal_mutable_flight_plan_received()->::xpilot::FlightPlanReceived::MergeFrom(from._internal_flight_plan_received());
+      break;
+    }
+    case kNoteReceived: {
+      _internal_mutable_note_received()->::xpilot::NoteReceived::MergeFrom(from._internal_note_received());
+      break;
+    }
+    case kClearNoteHistory: {
+      _internal_mutable_clear_note_history()->::xpilot::ClearNoteHistory::MergeFrom(from._internal_clear_note_history());
+      break;
+    }
+    case kStationInfoReceived: {
+      _internal_mutable_station_info_received()->::xpilot::StationInfoReceived::MergeFrom(from._internal_station_info_received());
       break;
     }
     case EVENT_NOT_SET: {

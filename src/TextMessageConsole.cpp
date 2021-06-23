@@ -74,8 +74,8 @@ namespace xpilot
 		if (m_env->isNetworkConnected())
 		{
 			xpilot::Envelope envelope;
-			xpilot::TextMessageSent* msg = new xpilot::TextMessageSent();
-			envelope.set_allocated_text_message_sent(msg);
+			xpilot::RadioMessageSent* msg = new xpilot::RadioMessageSent();
+			envelope.set_allocated_radio_message_sent(msg);
 			msg->set_message(message);
 			m_env->SendClientEvent(envelope);
 		}

@@ -350,9 +350,9 @@ namespace xpilot
 			});
 		}
 
-		if (envelope.has_text_message_received())
+		if (envelope.has_radio_message_received())
 		{
-			xpilot::TextMessageReceived msg = envelope.text_message_received();
+			xpilot::RadioMessageReceived msg = envelope.radio_message_received();
 			RadioMessageReceived(msg.message(), 255, 255, 255);
 			AddNotificationPanelMessage(msg.message(), 255, 255, 255);
 		}
