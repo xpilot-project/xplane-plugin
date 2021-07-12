@@ -13,6 +13,7 @@ These instructions will get you a copy of the project up and running on your loc
 ```
 $ git clone https://github.com/xpilot-project/Plugin.git
 $ mkdir build && cd build
+$ conan install .. -s build_type=Release --build missing -s compiler.runtime=MT
 $ cmake ..
 ```
 
