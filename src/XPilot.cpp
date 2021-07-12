@@ -125,19 +125,40 @@ namespace xpilot
 		auto* instance = static_cast<XPilot*>(ref);
 		if (instance)
 		{
-			instance->startBridgeProcess();
+			instance->initializeXPMP();
+			instance->tryGetTcasControl();
+			instance->StartBridgeProcess();
+			XPLMRegisterFlightLoopCallback(mainFlightLoop, -1.0f, ref);
 		}
 		return 0;
 	}
 
-	void XPilot::startBridgeProcess()
+	void XPilot::StopXplaneBridgeProcess()
 	{
 		try
 		{
-			initializeXPMP();
-			tryGetTcasControl();
-			XPLMRegisterFlightLoopCallback(mainFlightLoop, -1.0f, this);
+			if (bridgeProcess.running())
+			{
+				bridgeProcess.terminate();
+				LOG_MSG(logMSG, "XplaneBridge service stopped.");
+			}
 
+			if (svcThread)
+			{
+				svcThread->join();
+				svcThread.reset();
+			}
+		}
+		catch (std::exception const& ex)
+		{
+			LOG_MSG(logERROR, "Error stopping XplaneBridge service: %s", ex.what());
+		}
+	}
+
+	void XPilot::StartBridgeProcess()
+	{
+		try
+		{
 			if (svcThread)
 			{
 				svcThread->join();
@@ -378,28 +399,6 @@ namespace xpilot
 		envelope.SerializeToString(&data);
 
 		in << base64::base64_encode(data).c_str() << std::endl;
-	}
-
-	void XPilot::StopXplaneBridgeProcess()
-	{
-		try
-		{
-			if (bridgeProcess.running())
-			{
-				bridgeProcess.terminate();
-				LOG_MSG(logMSG, "XplaneBridge service stopped.");
-			}
-
-			if (svcThread)
-			{
-				svcThread->join();
-				svcThread.reset();
-			}
-		}
-		catch (std::exception const& ex)
-		{
-			LOG_MSG(logERROR, "Error stopping XplaneBridge service: %s", ex.what());
-		}
 	}
 
 	float XPilot::mainFlightLoop(float inElapsedSinceLastCall, float, int, void* ref)

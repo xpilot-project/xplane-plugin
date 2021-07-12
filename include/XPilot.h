@@ -103,7 +103,7 @@ namespace xpilot
 		void setNotificationPanelAlwaysVisible(bool visible);
 		bool setNotificationPanelAlwaysVisible()const;
 
-		void startBridgeProcess();
+		void StartBridgeProcess();
 		void StopXplaneBridgeProcess();
 
 		void ProcessClientEvent(const std::string& data);

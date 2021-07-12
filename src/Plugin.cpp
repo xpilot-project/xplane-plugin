@@ -31,6 +31,8 @@
 #error xPilot requires XPLM301 SDK or newer
 #endif
 
+#define RESTART_CLIENT (void*)1
+
 std::unique_ptr<XPilot> environment;
 
 PLUGIN_API int XPluginStart(char* outName, char* outSignature, char* outDescription)
@@ -223,6 +225,15 @@ int ToggleAircraftLabelsCommandHandler(XPLMCommandRef inCommand, XPLMCommandPhas
     return 0;
 }
 
+void MenuCallback(void* menuRef, void* param)
+{
+    if (RESTART_CLIENT == param)
+    {
+        environment->StopXplaneBridgeProcess();
+        environment->StartBridgeProcess();
+    }
+}
+
 void RegisterMenuItems()
 {
     PttCommand = XPLMCreateCommand("xpilot/ptt", "xPilot: Radio Push-To-Talk (PTT)");
@@ -252,9 +263,10 @@ void RegisterMenuItems()
     XPLMRegisterCommandHandler(ContactAtcCommand, ContactAtcCommandHandler, 1, (void*)0);
 
     PluginMenuIdx = XPLMAppendMenuItem(XPLMFindPluginsMenu(), "xPilot", nullptr, 0);
-    PluginMenu = XPLMCreateMenu("xPilot", XPLMFindPluginsMenu(), PluginMenuIdx, nullptr, nullptr);
+    PluginMenu = XPLMCreateMenu("xPilot", XPLMFindPluginsMenu(), PluginMenuIdx, MenuCallback, nullptr);
 
     MenuPreferences = XPLMAppendMenuItemWithCommand(PluginMenu, "Settings", ToggleSettingsCommand);
+    MenuRestart = XPLMAppendMenuItem(PluginMenu, "Restart Client", RESTART_CLIENT, 1);
     MenuNearbyAtc = XPLMAppendMenuItemWithCommand(PluginMenu, "Nearby ATC", ToggleNearbyATCWindowCommand);
     MenuTextMessageConsole = XPLMAppendMenuItemWithCommand(PluginMenu, "Toggle Message Console", ToggleMessageConsoleCommand);
     MenuNotificationPanel = XPLMAppendMenuItemWithCommand(PluginMenu, "Toggle Message Preview Panel", ToggleMessgePreviewPanelCommnd);
