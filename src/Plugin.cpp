@@ -87,6 +87,7 @@ PLUGIN_API void XPluginDisable(void)
 {
     try
     {
+        environment->DeleteAllAircraft();
         environment->StopXplaneBridgeProcess();
         XPMPMultiplayerDisable();
         XPMPMultiplayerCleanup();
@@ -194,11 +195,11 @@ int ToggleTcasCommandHandler(XPLMCommandRef inCommand, XPLMCommandPhase inPhase,
     {
         if (XPMPHasControlOfAIAircraft())
         {
-            environment->releaseTcasControl();
+            environment->ReleaseTcasControl();
         }
         else
         {
-            environment->tryGetTcasControl();
+            environment->TryGetTcasControl();
         }
     }
     return 0;

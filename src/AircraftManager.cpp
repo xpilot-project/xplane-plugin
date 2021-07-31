@@ -142,7 +142,7 @@ namespace xpilot
 		mapPlanes.clear();
 	}
 
-	void AircraftManager::HandleSlowPositionUpdate(const std::string& callsign, AircraftVisualState visualState, double speed)
+	void AircraftManager::ProcessSlowPositionUpdate(const std::string& callsign, AircraftVisualState visualState, double speed)
 	{
 		auto aircraft = GetAircraft(callsign);
 		if (!aircraft)
@@ -158,7 +158,7 @@ namespace xpilot
 		// newly-reported rotation rather than trying to derive rotational velocities.
 		if (!ReceivingFastPositionUpdates(aircraft))
 		{
-			auto lastUpdateTimeStamp = (aircraft->last_slow_position_timestamp > aircraft->last_fast_position_timestamp) ? aircraft->last_slow_position_timestamp : aircraft->last_fast_position_timestamp;
+			auto lastUpdateTimeStamp = (aircraft->last_slow_position_timestamp < aircraft->last_fast_position_timestamp) ? aircraft->last_slow_position_timestamp : aircraft->last_fast_position_timestamp;
 
 			auto intervalMs = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastUpdateTimeStamp).count();
 
@@ -170,19 +170,20 @@ namespace xpilot
 			aircraft->rotational_velocity_vector = Vector3::Zero();
 
 			AircraftVisualState newVisualState{};
-			newVisualState.Lat = aircraft->current_visual_state.Lat;
-			newVisualState.Lon = aircraft->current_visual_state.Lon;
-			newVisualState.Altitude = aircraft->current_visual_state.Altitude;
+			newVisualState.Lat = aircraft->predicted_visual_state.Lat;
+			newVisualState.Lon = aircraft->predicted_visual_state.Lon;
+			newVisualState.Altitude = aircraft->predicted_visual_state.Altitude;
 			newVisualState.Pitch = visualState.Pitch;
 			newVisualState.Heading = visualState.Heading;
 			newVisualState.Bank = visualState.Bank;
 
-			aircraft->current_visual_state = newVisualState;
+			aircraft->predicted_visual_state = newVisualState;
 			aircraft->remote_visual_state = visualState;
 			aircraft->UpdateErrorVectors(ERROR_CORRECTION_INTERVAL_SLOW);
 		}
 
 		aircraft->last_slow_position_timestamp = now;
+		aircraft->ground_speed = speed;
 	}
 
 	void AircraftManager::HandleFastPositionUpdate(const std::string& callsign, const AircraftVisualState& visualState, Vector3 positionalVector, Vector3 rotationalVector)
@@ -218,10 +219,14 @@ namespace xpilot
 
 	Vector3 AircraftManager::DerivePositionalVelocityVector(AircraftVisualState previousVisualState, AircraftVisualState newVisualState, long intervalMs)
 	{
+		// We're rounding the lat/lon/alt to the lowest common precision among slow and
+		// fast position updates, because sometimes the previous visual state is from a
+		// fast position. (The new visual state is always from a slow position.)
+
 		double latDelta = DegreesToMeters(CalculateNormalizedDelta(
 			Round(previousVisualState.Lat, 5),
 			Round(newVisualState.Lat, 5),
-			- 90.0,
+			-90.0,
 			90.0
 		));
 

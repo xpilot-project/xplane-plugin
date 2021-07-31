@@ -68,18 +68,20 @@ namespace xpilot
         std::string destination;
         std::chrono::system_clock::time_point prev_surface_update_time;
         int fast_positions_received_count;
+        bool first_render_pending;
 
         XPMPPlanePosition_t position;
         XPMPPlaneRadar_t radar;
 
         double terrain_offset;
         double previous_terrain_offset;
-        std::optional<double> terrain_altitude = {};
+        std::optional<double> ground_altitude = {};
         std::optional<double> target_terrain_offset = {};
+        std::optional<double> adjusted_altitude = {};
         TerrainProbe terrain_probe;
 
         AircraftVisualState remote_visual_state;
-        AircraftVisualState current_visual_state;
+        AircraftVisualState predicted_visual_state;
 
         Vector3 positional_velocity_vector;
         Vector3 positional_velocity_vector_error;
@@ -92,7 +94,7 @@ namespace xpilot
     protected:
         virtual void UpdatePosition(float, int);
         void Extrapolate(Vector3 velocityVector, Vector3 rotationVector, double interval);
-        double AutoLevel(double alt, double interval);
+        void AutoLevel(float frameRate);
         static double NormalizeDegrees(double value, double lowerBound, double upperBound);
     };
 }

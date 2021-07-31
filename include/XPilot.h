@@ -94,14 +94,16 @@ namespace xpilot
 			return !m_xplaneAtisEnabled;
 		}
 
-		void tryGetTcasControl();
-		void releaseTcasControl();
+		void TryGetTcasControl();
+		void ReleaseTcasControl();
 
 		void togglePreferencesWindow();
 		void toggleNearbyAtcWindow();
 		void toggleTextMessageConsole();
 		void setNotificationPanelAlwaysVisible(bool visible);
 		bool setNotificationPanelAlwaysVisible()const;
+
+		void DeleteAllAircraft();
 
 		void StartBridgeProcess();
 		void StopXplaneBridgeProcess();

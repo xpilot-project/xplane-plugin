@@ -126,7 +126,7 @@ namespace xpilot
 		if (instance)
 		{
 			instance->initializeXPMP();
-			instance->tryGetTcasControl();
+			instance->TryGetTcasControl();
 			instance->StartBridgeProcess();
 			XPLMRegisterFlightLoopCallback(mainFlightLoop, -1.0f, ref);
 		}
@@ -159,16 +159,16 @@ namespace xpilot
 	{
 		try
 		{
-			if (svcThread)
-			{
-				svcThread->join();
-				svcThread.reset();
-			}
-
 			if (bridgeProcess.running())
 			{
 				// this should never happen... but just in case
 				bridgeProcess.terminate();
+			}
+
+			if (svcThread)
+			{
+				svcThread->join();
+				svcThread.reset();
 			}
 
 			#ifdef WIN32
@@ -271,7 +271,7 @@ namespace xpilot
 			{
 				queueCallback([=]()
 				{
-					m_aircraftManager->HandleSlowPositionUpdate(msg.callsign(), visualState, msg.ground_speed());
+					m_aircraftManager->ProcessSlowPositionUpdate(msg.callsign(), visualState, msg.ground_speed());
 				});
 			}
 		}
@@ -438,7 +438,7 @@ namespace xpilot
 		m_frameRateMonitor->startMonitoring();
 		m_xplaneAtisEnabled = 0;
 		m_networkLoginStatus = 1;
-		tryGetTcasControl();
+		TryGetTcasControl();
 	}
 
 	void XPilot::onNetworkDisconnected()
@@ -448,7 +448,7 @@ namespace xpilot
 		m_xplaneAtisEnabled = 1;
 		m_networkLoginStatus = 0;
 		m_networkCallsign = "";
-		releaseTcasControl();
+		ReleaseTcasControl();
 	}
 
 	void XPilot::forceDisconnect(std::string reason)
@@ -605,7 +605,7 @@ namespace xpilot
 		XPMPMultiplayerEnable(callbackRequestTcasAgain);
 	}
 
-	void XPilot::tryGetTcasControl()
+	void XPilot::TryGetTcasControl()
 	{
 		if (!XPMPHasControlOfAIAircraft())
 		{
@@ -618,13 +618,18 @@ namespace xpilot
 		}
 	}
 
-	void XPilot::releaseTcasControl()
+	void XPilot::ReleaseTcasControl()
 	{
 		if (XPMPHasControlOfAIAircraft())
 		{
 			XPMPMultiplayerDisable();
 			LOG_MSG(logDEBUG, "xPilot has released TCAS control");
 		}
+	}
+
+	void XPilot::DeleteAllAircraft()
+	{
+		m_aircraftManager->DeleteAllAircraft();
 	}
 
 	int XPilot::getBulkData(void* inRefcon, void* outData, int inStartPos, int inNumBytes)

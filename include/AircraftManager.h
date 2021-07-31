@@ -60,7 +60,7 @@ namespace xpilot
 		void SetUpNewPlane(const std::string& callsign, const AircraftVisualState& visualState, const std::string& typeIcao, const std::string& airlineIcao, const std::string& livery = "", const std::string& modelName = "");
 		void UpdateAircraftConfiguration(const xpilot::AirplaneConfig& config);
 		void ChangeAircraftModel(const std::string& callsign, const std::string& typeIcao, const std::string& airlineIcao);
-		void HandleSlowPositionUpdate(const std::string& callsign, AircraftVisualState visualState, double speed);
+		void ProcessSlowPositionUpdate(const std::string& callsign, AircraftVisualState visualState, double speed);
 		void HandleFastPositionUpdate(const std::string& callsign, const AircraftVisualState& visualState, Vector3 positionalVector, Vector3 rotationalVector);
 		void DeleteAircraft(const std::string& callsign);
 		void DeleteAllAircraft();
