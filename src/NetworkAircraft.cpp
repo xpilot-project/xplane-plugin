@@ -24,7 +24,6 @@
 namespace xpilot
 {
     const double TERRAIN_HEIGHT_TOLERANCE = 200.0;
-    const double ERROR_CORRECTION_INTERVAL = 2.0;
 
     double CalculateNormalizedDelta(double start, double end, double lowerBound, double upperBound)
     {
@@ -168,6 +167,15 @@ namespace xpilot
 
     void NetworkAircraft::AutoLevel(float frameRate)
     {
+        ground_altitude = {};
+        if (predicted_visual_state.Altitude < 18000.0)
+        {
+            ground_altitude = terrain_probe.getTerrainElevation(
+                predicted_visual_state.Lat,
+                predicted_visual_state.Lon
+            );
+        }
+
         if (!ground_altitude.has_value())
         {
             return;
@@ -323,15 +331,6 @@ namespace xpilot
 
     void NetworkAircraft::UpdatePosition(float _elapsedSinceLastCall, int)
     {
-        ground_altitude = {};
-        if (predicted_visual_state.Altitude < 18000.0)
-        {
-            ground_altitude = terrain_probe.getTerrainElevation(
-                predicted_visual_state.Lat,
-                predicted_visual_state.Lon
-            );
-        }
-
         Extrapolate(
             positional_velocity_vector + positional_velocity_vector_error,
             rotational_velocity_vector + rotational_velocity_vector_error,

@@ -242,7 +242,7 @@ namespace xpilot
 		double intervalSec = intervalMs / 1000.0;
 
 		return Vector3(
-			(lonDelta / intervalSec) * -1,
+			lonDelta / intervalSec,
 			altDelta / intervalSec,
 			latDelta / intervalSec
 		);
