@@ -105,8 +105,8 @@ namespace xpilot
 
 		void DeleteAllAircraft();
 
-		void StartBridgeProcess();
-		void StopXplaneBridgeProcess();
+		void Initialize();
+		void Shutdown();
 
 		void ProcessClientEvent(const std::string& data);
 		void SendClientEvent(const xpilot::Envelope& envelope);
@@ -127,7 +127,7 @@ namespace xpilot
 		std::string m_pluginHash;
 		static float deferredStartup(float, float, int, void* ref);
 		static float mainFlightLoop(float, float, int, void* ref);
-		bool initializeXPMP();
+		bool InitializeXPMP();
 
 		std::thread::id m_xplaneThread;
 		void thisThreadIsXP()
@@ -137,6 +137,21 @@ namespace xpilot
 		bool isXPThread()const
 		{
 			return std::this_thread::get_id() == m_xplaneThread;
+		}
+
+		bool m_keepAlive;
+		std::unique_ptr<std::thread> m_zmqThread;
+		std::unique_ptr<zmq::context_t> m_zmqContext;
+		std::unique_ptr<zmq::socket_t> m_zmqSocket;
+
+		void zmqWorker();
+		bool isSocketConnected()const
+		{
+			return m_zmqSocket && m_zmqSocket->connected();
+		}
+		bool isSocketReady()const
+		{
+			return m_keepAlive && isSocketConnected();
 		}
 
 		std::unique_ptr<std::thread> svcThread;

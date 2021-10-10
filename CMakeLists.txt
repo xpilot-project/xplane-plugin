@@ -105,15 +105,15 @@ set(ALL_FILES  ${Header_Files} ${Source_Files} ${Protobuf_Files})
 
 add_library(xPilot MODULE ${ALL_FILES})
 
-set( Boost_USE_STATIC_LIBS ON )
-set( Boost_USE_MULTITHREADED ON )
-add_definitions(-DBOOST_ALL_NO_LIB)
-find_package(Boost REQUIRED COMPONENTS filesystem system)
-if(Boost_FOUND)
-	message("Found Boost libraries")
-    include_directories(${Boost_INCLUDE_DIRS})  
-    target_link_libraries(xPilot ${Boost_LIBRARIES})
-endif()
+#set( Boost_USE_STATIC_LIBS ON )
+#set( Boost_USE_MULTITHREADED ON )
+#add_definitions(-DBOOST_ALL_NO_LIB)
+#find_package(Boost REQUIRED COMPONENTS filesystem system)
+#if(Boost_FOUND)
+#	message("Found Boost libraries")
+#    include_directories(${Boost_INCLUDE_DIRS})  
+#    target_link_libraries(xPilot ${Boost_LIBRARIES})
+#endif()
 
 find_package(Protobuf REQUIRED)
 if(Protobuf_FOUND)
@@ -121,6 +121,8 @@ if(Protobuf_FOUND)
 	include_directories(${Protobuf_INCLUDE_DIRS})
 	target_link_libraries(xPilot ${Protobuf_LIBRARIES})
 endif(Protobuf_FOUND)
+
+set(ZMQ_LIBRARY CONAN_PKG::cppzmq)
 
 if (APPLE)
     list(APPEND CMAKE_FRAMEWORK_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Lib/XPMP2")
@@ -162,11 +164,12 @@ if (APPLE)
         ${Kerberos5_LIBRARY}
         ${OpenGL_LIBRARY}
         ${Cocoa_LIBRARY}
+		${ZMQ_LIBRARY}
     )
 endif()
 
 if (WIN32)
-    target_link_libraries(xPilot ws2_32.lib wldap32.lib advapi32.lib crypt32.lib wsock32.lib opengl32.lib iphlpapi.lib)
+    target_link_libraries(xPilot ws2_32.lib wldap32.lib advapi32.lib crypt32.lib wsock32.lib opengl32.lib iphlpapi.lib ${ZMQ_LIBRARY})
 elseif (APPLE)
     target_compile_options(xPilot PUBLIC -mmacosx-version-min=10.11)
     target_link_libraries(xPilot -mmacosx-version-min=10.11)

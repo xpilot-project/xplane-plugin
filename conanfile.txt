@@ -1,6 +1,6 @@
 [requires]
-boost/1.76.0
 protobuf/3.17.1
+cppzmq/4.7.1
 
 [generators]
 cmake

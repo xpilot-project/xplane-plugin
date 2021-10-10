@@ -32,18 +32,8 @@
 #include "json.hpp"
 #include "Base64.hpp"
 #include "../protobuf/Envelope.pb.h"
-#include <boost/process.hpp>
-#include <boost/asio.hpp>
-#ifdef WIN32
-#include <boost/process/windows.hpp>
-#endif
 
 using json = nlohmann::json;
-namespace bp = boost::process;
-
-bp::child bridgeProcess;
-bp::opstream in;
-bp::ipstream out;
 
 namespace xpilot
 {
@@ -125,271 +115,301 @@ namespace xpilot
 		auto* instance = static_cast<XPilot*>(ref);
 		if (instance)
 		{
-			instance->initializeXPMP();
-			instance->TryGetTcasControl();
-			instance->StartBridgeProcess();
-			XPLMRegisterFlightLoopCallback(mainFlightLoop, -1.0f, ref);
+			instance->Initialize();
+
 		}
 		return 0;
 	}
 
-	void XPilot::StopXplaneBridgeProcess()
+	void XPilot::Initialize()
+	{
+		InitializeXPMP();
+		TryGetTcasControl();
+
+		if (m_zmqThread)
+		{
+			m_keepAlive = false;
+			m_zmqThread->join();
+			m_zmqThread.reset();
+		}
+
+		try
+		{
+			m_zmqContext = std::make_unique<zmq::context_t>(1);
+			m_zmqSocket = std::make_unique<zmq::socket_t>(*m_zmqContext.get(), ZMQ_ROUTER);
+			m_zmqSocket->setsockopt(ZMQ_IDENTITY, "PLUGIN", 6);
+			m_zmqSocket->setsockopt(ZMQ_LINGER, 0);
+			m_zmqSocket->bind("tcp://*:53100");
+			//m_zmqSocket->bind("tcp://*:" + Config::Instance().getTcpPort());
+		}
+		catch (zmq::error_t& e)
+		{
+
+		}
+		catch (const std::exception& e)
+		{
+
+		}
+		catch (...)
+		{
+
+		}
+
+		XPLMRegisterFlightLoopCallback(mainFlightLoop, -1.0f, this);
+
+		m_keepAlive = true;
+		m_zmqThread = std::make_unique<std::thread>(&XPilot::zmqWorker, this);
+	}
+
+	void XPilot::Shutdown()
 	{
 		try
 		{
-			if (bridgeProcess.running())
+			if (m_zmqSocket)
 			{
-				bridgeProcess.terminate();
-				LOG_MSG(logMSG, "XplaneBridge service stopped.");
-			}
-
-			if (svcThread)
-			{
-				svcThread->join();
-				svcThread.reset();
+				m_zmqSocket->close();
+				m_zmqContext->close();
 			}
 		}
-		catch (std::exception const& ex)
+		catch (zmq::error_t& e)
 		{
-			LOG_MSG(logERROR, "Error stopping XplaneBridge service: %s", ex.what());
+
+		}
+		catch (std::exception& e)
+		{
+
+		}
+		catch (...)
+		{
+
+		}
+
+		m_keepAlive = false;
+
+		if (m_zmqThread)
+		{
+			m_zmqThread->join();
+			m_zmqThread.reset();
 		}
 	}
 
-	void XPilot::StartBridgeProcess()
+	void XPilot::zmqWorker()
 	{
-		try
+		while (isSocketReady())
 		{
-			if (bridgeProcess.running())
+			try
 			{
-				// this should never happen... but just in case
-				bridgeProcess.terminate();
-			}
+				zmq::message_t msg;
+				m_zmqSocket->recv(msg, zmq::recv_flags::none);
+				std::string data(static_cast<char*>(msg.data()), msg.size());
 
-			if (svcThread)
-			{
-				svcThread->join();
-				svcThread.reset();
-			}
+				xpilot::Envelope envelope;
+				envelope.ParseFromString(base64::base64_decode(data));
 
-			#ifdef WIN32
-			bridgeProcess = bp::child(GetPluginPath() + "\\Resources\\XplaneBridge\\XplaneBridge.exe", bp::std_out > out, bp::std_in < in, bp::windows::hide);
-			#else
-			bridgeProcess = bp::child(GetPluginPath() + "/Resources/XplaneBridge/XplaneBridge", bp::std_out > out, bp::std_in < in);
-			#endif
-
-			if (bridgeProcess.running())
-			{
-				LOG_MSG(logMSG, "XplaneBridge process started");
-			}
-
-			svcThread = std::make_unique<std::thread>([&]
-			{
-				std::string line;
-				while (bridgeProcess.running() && std::getline(out, line) && !line.empty())
+				if (envelope.has_app_metdata())
 				{
-					ProcessClientEvent(line);
+					xpilot::Envelope reply{};
+					xpilot::AppMetadata* msg = new xpilot::AppMetadata();
+					reply.set_allocated_app_metdata(msg);
+					msg->set_version(PLUGIN_VERSION);
+					msg->set_plugin_hash(m_pluginHash.c_str());
+
+					SendClientEvent(reply);
 				}
-			});
-		}
-		catch (std::exception const& ex)
-		{
-			LOG_MSG(logERROR, "Error starting XplaneBridge: %s", ex.what());
-		}
-	}
 
-	void XPilot::ProcessClientEvent(const std::string& data)
-	{
-		xpilot::Envelope envelope;
-		envelope.ParseFromString(base64::base64_decode(data));
-
-		if (envelope.has_app_metdata())
-		{
-			xpilot::Envelope reply{};
-			xpilot::AppMetadata* msg = new xpilot::AppMetadata();
-			reply.set_allocated_app_metdata(msg);
-			msg->set_version(PLUGIN_VERSION);
-			msg->set_plugin_hash(m_pluginHash.c_str());
-
-			SendClientEvent(reply);
-		}
-
-		if (envelope.has_csl_validation())
-		{
-			xpilot::Envelope reply{};
-			xpilot::CslValidation* msg = new xpilot::CslValidation();
-			reply.set_allocated_csl_validation(msg);
-			msg->set_is_valid(Config::Instance().hasValidPaths() && XPMPGetNumberOfInstalledModels() > 0);
-
-			SendClientEvent(reply);
-		}
-
-		if (envelope.has_add_plane())
-		{
-			xpilot::AddPlane msg = envelope.add_plane();
-			if (msg.has_callsign() && msg.has_visual_state() && msg.has_equipment())
-			{
-				AircraftVisualState visualState{};
-				visualState.Lat = msg.visual_state().latitude();
-				visualState.Lon = msg.visual_state().longitude();
-				visualState.Altitude = msg.visual_state().altitude();
-				visualState.Heading = msg.visual_state().heading();
-				visualState.Pitch = msg.visual_state().pitch();
-				visualState.Bank = msg.visual_state().bank();
-
-				queueCallback([=]()
+				if (envelope.has_csl_validation())
 				{
-					m_aircraftManager->SetUpNewPlane(msg.callsign(), visualState, msg.equipment(), msg.airline());
-				});
-			}
-		}
+					xpilot::Envelope reply{};
+					xpilot::CslValidation* msg = new xpilot::CslValidation();
+					reply.set_allocated_csl_validation(msg);
+					msg->set_is_valid(Config::Instance().hasValidPaths() && XPMPGetNumberOfInstalledModels() > 0);
 
-		if (envelope.has_change_plane_model())
-		{
-			xpilot::ChangePlaneModel msg = envelope.change_plane_model();
-			if (msg.has_callsign() && msg.has_equipment())
-			{
-				queueCallback([=]()
-				{
-					m_aircraftManager->ChangeAircraftModel(msg.callsign(), msg.equipment(), msg.airline());
-				});
-			}
-		}
-
-		if (envelope.has_position_update())
-		{
-			xpilot::PositionUpdate msg = envelope.position_update();
-
-			AircraftVisualState visualState{};
-			visualState.Lat = msg.latitude();
-			visualState.Lon = msg.longitude();
-			visualState.Altitude = msg.altitude();
-			visualState.Pitch = msg.pitch();
-			visualState.Bank = msg.bank();
-			visualState.Heading = msg.heading();
-
-			if (msg.has_callsign())
-			{
-				queueCallback([=]()
-				{
-					m_aircraftManager->ProcessSlowPositionUpdate(msg.callsign(), visualState, msg.ground_speed());
-				});
-			}
-		}
-
-		if (envelope.has_fast_position_update())
-		{
-			xpilot::FastPositionUpdate msg = envelope.fast_position_update();
-
-			AircraftVisualState visualState{};
-			visualState.Lat = msg.latitude();
-			visualState.Lon = msg.longitude();
-			visualState.Altitude = msg.altitude();
-			visualState.Pitch = msg.pitch();
-			visualState.Bank = msg.bank();
-			visualState.Heading = msg.heading();
-
-			Vector3 positionalVector{};
-			positionalVector.X = msg.velocity_longitude();
-			positionalVector.Y = msg.velocity_altitude();
-			positionalVector.Z = msg.velocity_latitude();
-
-			Vector3 rotationalVector{};
-			rotationalVector.X = msg.velocity_pitch() * -1;
-			rotationalVector.Y = msg.velocity_heading();
-			rotationalVector.Z = msg.velocity_bank() * -1;
-
-			if (msg.has_callsign())
-			{
-				queueCallback([=]()
-				{
-					m_aircraftManager->HandleFastPositionUpdate(
-						msg.callsign(),
-						visualState,
-						positionalVector,
-						rotationalVector
-					);
-				});
-			}
-		}
-
-		if (envelope.has_airplane_config())
-		{
-			xpilot::AirplaneConfig msg = envelope.airplane_config();
-			if (msg.has_callsign())
-			{
-				queueCallback([=]()
-				{
-					m_aircraftManager->UpdateAircraftConfiguration(msg);
-				});
-			}
-		}
-
-		if (envelope.has_delete_plane())
-		{
-			xpilot::DeletePlane msg = envelope.delete_plane();
-			if (msg.has_callsign())
-			{
-				queueCallback([=]()
-				{
-					m_aircraftManager->DeleteAircraft(msg.callsign());
-				});
-			}
-		}
-
-		if (envelope.has_network_connected())
-		{
-			if (envelope.network_connected().has_callsign())
-			{
-				m_networkCallsign = envelope.network_connected().callsign();
-			}
-			queueCallback([=]()
-			{
-				onNetworkConnected();
-			});
-		}
-
-		if (envelope.has_network_disconnected())
-		{
-			queueCallback([=]()
-			{
-				onNetworkDisconnected();
-			});
-		}
-
-		if (envelope.has_nearby_controllers())
-		{
-			queueCallback([=]()
-			{
-				if (envelope.nearby_controllers().list_size() > 0)
-				{
-					m_nearbyAtcWindow->UpdateList(envelope.nearby_controllers());
+					SendClientEvent(reply);
 				}
-				else
+
+				if (envelope.has_add_plane())
 				{
-					m_nearbyAtcWindow->ClearList();
+					xpilot::AddPlane msg = envelope.add_plane();
+					if (msg.has_callsign() && msg.has_visual_state() && msg.has_equipment())
+					{
+						AircraftVisualState visualState{};
+						visualState.Lat = msg.visual_state().latitude();
+						visualState.Lon = msg.visual_state().longitude();
+						visualState.Altitude = msg.visual_state().altitude();
+						visualState.Heading = msg.visual_state().heading();
+						visualState.Pitch = msg.visual_state().pitch();
+						visualState.Bank = msg.visual_state().bank();
+
+						queueCallback([=]()
+						{
+							m_aircraftManager->SetUpNewPlane(msg.callsign(), visualState, msg.equipment(), msg.airline());
+						});
+					}
 				}
-			});
-		}
 
-		if (envelope.has_radio_message_received())
-		{
-			xpilot::RadioMessageReceived msg = envelope.radio_message_received();
-			RadioMessageReceived(msg.message(), 255, 255, 255);
-			AddNotificationPanelMessage(msg.message(), 255, 255, 255);
-		}
+				if (envelope.has_change_plane_model())
+				{
+					xpilot::ChangePlaneModel msg = envelope.change_plane_model();
+					if (msg.has_callsign() && msg.has_equipment())
+					{
+						queueCallback([=]()
+						{
+							m_aircraftManager->ChangeAircraftModel(msg.callsign(), msg.equipment(), msg.airline());
+						});
+					}
+				}
 
-		if (envelope.has_private_message_received())
-		{
-			xpilot::PrivateMessageReceived msg = envelope.private_message_received();
-			AddPrivateMessage(msg.from(), msg.message(), ConsoleTabType::Received);
-			AddNotificationPanelMessage(string_format("%s [pvt]:  %s", msg.from(), msg.message().c_str()), 255, 255, 255);
-		}
+				if (envelope.has_position_update())
+				{
+					xpilot::PositionUpdate msg = envelope.position_update();
 
-		if (envelope.has_private_message_sent())
-		{
-			xpilot::PrivateMessageSent msg = envelope.private_message_sent();
-			AddPrivateMessage(msg.to(), msg.message(), ConsoleTabType::Sent);
-			AddNotificationPanelMessage(string_format("%s [pvt: %s]:  %s", m_networkCallsign.value().c_str(), msg.to(), msg.message().c_str()), 0, 255, 255);
+					AircraftVisualState visualState{};
+					visualState.Lat = msg.latitude();
+					visualState.Lon = msg.longitude();
+					visualState.Altitude = msg.altitude();
+					visualState.Pitch = msg.pitch();
+					visualState.Bank = msg.bank();
+					visualState.Heading = msg.heading();
+
+					if (msg.has_callsign())
+					{
+						queueCallback([=]()
+						{
+							m_aircraftManager->ProcessSlowPositionUpdate(msg.callsign(), visualState, msg.ground_speed());
+						});
+					}
+				}
+
+				if (envelope.has_fast_position_update())
+				{
+					xpilot::FastPositionUpdate msg = envelope.fast_position_update();
+
+					AircraftVisualState visualState{};
+					visualState.Lat = msg.latitude();
+					visualState.Lon = msg.longitude();
+					visualState.Altitude = msg.altitude();
+					visualState.Pitch = msg.pitch();
+					visualState.Bank = msg.bank();
+					visualState.Heading = msg.heading();
+
+					Vector3 positionalVector{};
+					positionalVector.X = msg.velocity_longitude();
+					positionalVector.Y = msg.velocity_altitude();
+					positionalVector.Z = msg.velocity_latitude();
+
+					Vector3 rotationalVector{};
+					rotationalVector.X = msg.velocity_pitch() * -1;
+					rotationalVector.Y = msg.velocity_heading();
+					rotationalVector.Z = msg.velocity_bank() * -1;
+
+					if (msg.has_callsign())
+					{
+						queueCallback([=]()
+						{
+							m_aircraftManager->HandleFastPositionUpdate(
+								msg.callsign(),
+								visualState,
+								positionalVector,
+								rotationalVector
+							);
+						});
+					}
+				}
+
+				if (envelope.has_airplane_config())
+				{
+					xpilot::AirplaneConfig msg = envelope.airplane_config();
+					if (msg.has_callsign())
+					{
+						queueCallback([=]()
+						{
+							m_aircraftManager->UpdateAircraftConfiguration(msg);
+						});
+					}
+				}
+
+				if (envelope.has_delete_plane())
+				{
+					xpilot::DeletePlane msg = envelope.delete_plane();
+					if (msg.has_callsign())
+					{
+						queueCallback([=]()
+						{
+							m_aircraftManager->DeleteAircraft(msg.callsign());
+						});
+					}
+				}
+
+				if (envelope.has_network_connected())
+				{
+					if (envelope.network_connected().has_callsign())
+					{
+						m_networkCallsign = envelope.network_connected().callsign();
+					}
+					queueCallback([=]()
+					{
+						onNetworkConnected();
+					});
+				}
+
+				if (envelope.has_network_disconnected())
+				{
+					queueCallback([=]()
+					{
+						onNetworkDisconnected();
+					});
+				}
+
+				if (envelope.has_nearby_controllers())
+				{
+					queueCallback([=]()
+					{
+						if (envelope.nearby_controllers().list_size() > 0)
+						{
+							m_nearbyAtcWindow->UpdateList(envelope.nearby_controllers());
+						}
+						else
+						{
+							m_nearbyAtcWindow->ClearList();
+						}
+					});
+				}
+
+				if (envelope.has_radio_message_received())
+				{
+					xpilot::RadioMessageReceived msg = envelope.radio_message_received();
+					RadioMessageReceived(msg.message(), 255, 255, 255);
+					AddNotificationPanelMessage(msg.message(), 255, 255, 255);
+				}
+
+				if (envelope.has_private_message_received())
+				{
+					xpilot::PrivateMessageReceived msg = envelope.private_message_received();
+					AddPrivateMessage(msg.from(), msg.message(), ConsoleTabType::Received);
+					AddNotificationPanelMessage(string_format("%s [pvt]:  %s", msg.from(), msg.message().c_str()), 255, 255, 255);
+				}
+
+				if (envelope.has_private_message_sent())
+				{
+					xpilot::PrivateMessageSent msg = envelope.private_message_sent();
+					AddPrivateMessage(msg.to(), msg.message(), ConsoleTabType::Sent);
+					AddNotificationPanelMessage(string_format("%s [pvt: %s]:  %s", m_networkCallsign.value().c_str(), msg.to(), msg.message().c_str()), 0, 255, 255);
+				}
+			}
+			catch (zmq::error_t& e)
+			{
+				if (e.num() != ETERM)
+				{
+					LOG_MSG(logERROR, "Socket recv exception: %s", e.what());
+				}
+			}
+			catch (std::exception& e)
+			{
+				LOG_MSG(logERROR, "Socket recv exception: %s", e.what());
+			}
+			catch (...)
+			{
+			}
 		}
 	}
 
@@ -398,7 +418,30 @@ namespace xpilot
 		std::string data;
 		envelope.SerializeToString(&data);
 
-		in << base64::base64_encode(data).c_str() << std::endl;
+		std::string encodedData = base64::base64_encode(data).c_str();
+
+		if (isSocketConnected() && !data.empty())
+		{
+			try
+			{
+				std::string identity = "CLIENT";
+				zmq::message_t msg1(identity.size());
+				std::memcpy(msg1.data(), identity.data(), identity.size());
+				m_zmqSocket->send(msg1, zmq::send_flags::sndmore);
+
+				zmq::message_t message(encodedData.size());
+				std::memcpy(message.data(), encodedData.data(), encodedData.size());
+				m_zmqSocket->send(message, ZMQ_NOBLOCK);
+			}
+			catch (zmq::error_t& e)
+			{
+
+			}
+			catch (...)
+			{
+
+			}
+		}
 	}
 
 	float XPilot::mainFlightLoop(float inElapsedSinceLastCall, float, int, void* ref)
@@ -469,7 +512,7 @@ namespace xpilot
 		SendClientEvent(envelope);
 	}
 
-	bool XPilot::initializeXPMP()
+	bool XPilot::InitializeXPMP()
 	{
 		const std::string pathResources(GetPluginPath() + "Resources");
 

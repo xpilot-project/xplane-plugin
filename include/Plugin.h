@@ -55,7 +55,6 @@ inline int ContactAtcCommandHandler(XPLMCommandRef inCommand, XPLMCommandPhase i
 inline int PluginMenuIdx;
 inline XPLMMenuID PluginMenu;
 static int MenuPreferences = 0;
-static int MenuRestart = 0;
 static int MenuNearbyAtc = 0;
 static int MenuDefaultAtis = 0;
 static int MenuTextMessageConsole = 0;
