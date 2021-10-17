@@ -1,6 +1,6 @@
 /*
  * xPilot: X-Plane pilot client for VATSIM
- * Copyright (C) 2019-2020 Justin Shannon
+ * Copyright (C) 2019-2021 Justin Shannon
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,22 +35,22 @@ namespace xpilot {
 		SetWindowResizingLimits(535, 300, 535, 300);
 	}
 
-	void NearbyATCWindow::UpdateList(xpilot::NearbyControllers data)
-	{
-		std::lock_guard<std::mutex> lock(m_mutex);
-		{
-			NearbyList.clear();
-			for (auto& el : data.list())
-			{
-				NearbyATCList l;
-				l.setCallsign(el.callsign());
-				l.setFrequency(el.frequency());
-				l.setXplaneFrequency(el.xplane_frequency());
-				l.setRealName(el.real_name());
-				NearbyList.push_back(l);
-			}
-		}
-	}
+	//void NearbyATCWindow::UpdateList(xpilot::NearbyControllers data)
+	//{
+	//	std::lock_guard<std::mutex> lock(m_mutex);
+	//	{
+	//		NearbyList.clear();
+	//		for (auto& el : data.list())
+	//		{
+	//			NearbyATCList l;
+	//			l.setCallsign(el.callsign());
+	//			l.setFrequency(el.frequency());
+	//			l.setXplaneFrequency(el.xplane_frequency());
+	//			l.setRealName(el.real_name());
+	//			NearbyList.push_back(l);
+	//		}
+	//	}
+	//}
 
 	void NearbyATCWindow::ClearList()
 	{

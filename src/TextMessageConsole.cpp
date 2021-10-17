@@ -1,6 +1,6 @@
 /*
  * xPilot: X-Plane pilot client for VATSIM
- * Copyright (C) 2019-2020 Justin Shannon
+ * Copyright (C) 2019-2021 Justin Shannon
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -71,14 +71,14 @@ namespace xpilot
 
 	void TextMessageConsole::SendRadioMessage(const std::string& message)
 	{
-		if (m_env->isNetworkConnected())
-		{
-			xpilot::Envelope envelope;
-			xpilot::RadioMessageSent* msg = new xpilot::RadioMessageSent();
-			envelope.set_allocated_radio_message_sent(msg);
-			msg->set_message(message);
-			m_env->SendClientEvent(envelope);
-		}
+		//if (m_env->isNetworkConnected())
+		//{
+		//	xpilot::Envelope envelope;
+		//	xpilot::RadioMessageSent* msg = new xpilot::RadioMessageSent();
+		//	envelope.set_allocated_radio_message_sent(msg);
+		//	msg->set_message(message);
+		//	m_env->SendClientEvent(envelope);
+		//}
 	}
 
 	void TextMessageConsole::RadioMessageReceived(std::string msg, double red, double green, double blue)
@@ -127,18 +127,18 @@ namespace xpilot
 
 	void TextMessageConsole::SendPrivateMessage(const std::string& tabName, const std::string& message)
 	{
-		if (!tabName.empty() && !message.empty())
-		{
-			if (m_env->isNetworkConnected())
-			{
-				xpilot::Envelope envelope;
-				xpilot::PrivateMessageSent* msg = new xpilot::PrivateMessageSent();
-				envelope.set_allocated_private_message_sent(msg);
-				msg->set_to(str_toupper(tabName));
-				msg->set_message(message);
-				m_env->SendClientEvent(envelope);
-			}
-		}
+		//if (!tabName.empty() && !message.empty())
+		//{
+		//	if (m_env->isNetworkConnected())
+		//	{
+		//		xpilot::Envelope envelope;
+		//		xpilot::PrivateMessageSent* msg = new xpilot::PrivateMessageSent();
+		//		envelope.set_allocated_private_message_sent(msg);
+		//		msg->set_to(str_toupper(tabName));
+		//		msg->set_message(message);
+		//		m_env->SendClientEvent(envelope);
+		//	}
+		//}
 	}
 
 	void TextMessageConsole::CreateNonExistingTab(const std::string& tabName)
@@ -246,7 +246,7 @@ namespace xpilot
 					}
 					if (m_scrollToBottom)
 					{
-						ImGui::SetScrollHere(1.0f);
+						ImGui::SetScrollHereY(1.0f);
 						m_scrollToBottom = false;
 					}
 				}
@@ -366,7 +366,7 @@ namespace xpilot
 						}
 						if (it->scrollToBottom)
 						{
-							ImGui::SetScrollHere(1.0f);
+							ImGui::SetScrollHereY(1.0f);
 							it->scrollToBottom = false;
 						}
 					}

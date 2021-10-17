@@ -1,6 +1,6 @@
 /*
  * xPilot: X-Plane pilot client for VATSIM
- * Copyright (C) 2019-2020 Justin Shannon
+ * Copyright (C) 2019-2021 Justin Shannon
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
 #ifndef NearbyATCWindow_h
 #define NearbyATCWindow_h
 
-#include "../protobuf/nearbycontrollers.pb.h"
 #include "json.hpp"
 using json = nlohmann::json;
 
@@ -49,7 +48,7 @@ namespace xpilot
 	public:
 		NearbyATCWindow(XPilot* instance);
 		~NearbyATCWindow() final = default;
-		void UpdateList(xpilot::NearbyControllers data);
+		//void UpdateList(xpilot::NearbyControllers data);
 		void ClearList();
 	protected:
 		void buildInterface() override;

@@ -1,6 +1,6 @@
 /*
  * xPilot: X-Plane pilot client for VATSIM
- * Copyright (C) 2019-2020 Justin Shannon
+ * Copyright (C) 2019-2021 Justin Shannon
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,22 +26,20 @@
 #include <map>
 #include <atomic>
 #include <algorithm>
+#include <iostream>
 
 #include "imgui.h"
 #include "imgui_stdlib.h"
 #include "imfilebrowser.h"
 #include "XPImgWindow.h"
-
 #include "DataRefAccess.h"
 #include "OwnedDataRef.h"
 #include "TextMessageConsole.h"
-#include "ZMQ/zmq.hpp"
-
 #include "XPLMMenus.h"
 #include "XPLMUtilities.h"
 #include "XPLMProcessing.h"
 
-#include "../protobuf/Envelope.pb.h"
+#include "zmq.hpp"
 
 namespace xpilot
 {
@@ -107,9 +105,6 @@ namespace xpilot
 
 		void Initialize();
 		void Shutdown();
-
-		void ProcessClientEvent(const std::string& data);
-		void SendClientEvent(const xpilot::Envelope& envelope);
 	protected:
 		OwnedDataRef<int> m_pttPressed;
 		OwnedDataRef<int> m_networkLoginStatus;
@@ -124,7 +119,6 @@ namespace xpilot
 		DataRefAccess<float> m_frameRatePeriod;
 
 	private:
-		std::string m_pluginHash;
 		static float deferredStartup(float, float, int, void* ref);
 		static float mainFlightLoop(float, float, int, void* ref);
 		bool InitializeXPMP();
@@ -153,8 +147,6 @@ namespace xpilot
 		{
 			return m_keepAlive && isSocketConnected();
 		}
-
-		std::unique_ptr<std::thread> svcThread;
 
 		std::mutex m_mutex;
 		std::deque<std::function<void()>> m_queuedCallbacks;

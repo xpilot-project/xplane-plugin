@@ -1,6 +1,6 @@
 /*
  * xPilot: X-Plane pilot client for VATSIM
- * Copyright (C) 2019-2020 Justin Shannon
+ * Copyright (C) 2019-2021 Justin Shannon
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,6 @@ constexpr int COLOR_BLUE = 0x00F0F0;
 
 #define PLUGIN_NAME "xPilot"
 #define PLUGIN_VERSION 2001
-#define PLUGIN_VERSION_STRING "2.0.0-velocity.alpha.1"
+#define PLUGIN_VERSION_STRING "2.0.0.alpha.1"
 
 #endif // !Constants_h

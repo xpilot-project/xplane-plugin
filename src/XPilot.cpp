@@ -1,6 +1,6 @@
 /*
  * xPilot: X-Plane pilot client for VATSIM
- * Copyright (C) 2019-2020 Justin Shannon
+ * Copyright (C) 2019-2021 Justin Shannon
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
 
 #include "Plugin.h"
 #include "XPilot.h"
-#include "XPMPMultiplayer.h"
 #include "Config.h"
 #include "Utilities.h"
 #include "AircraftManager.h"
@@ -28,10 +27,8 @@
 #include "SettingsWindow.h"
 #include "NotificationPanel.h"
 #include "TextMessageConsole.h"
-#include "sha512.hh"
-#include "json.hpp"
-#include "Base64.hpp"
-#include "../protobuf/Envelope.pb.h"
+#include "XPMP2/XPMPMultiplayer.h"
+#include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
 
@@ -96,7 +93,6 @@ namespace xpilot
 		m_settingsWindow = std::make_unique<SettingsWindow>();
 		m_frameRateMonitor = std::make_unique<FrameRateMonitor>(this);
 		m_aircraftManager = std::make_unique<AircraftManager>(this);
-		m_pluginHash = sw::sha512::file(GetTruePluginPath().c_str());
 		m_pluginVersion = PLUGIN_VERSION;
 
 		XPLMRegisterFlightLoopCallback(deferredStartup, -1.0f, this);
@@ -137,22 +133,18 @@ namespace xpilot
 		{
 			m_zmqContext = std::make_unique<zmq::context_t>(1);
 			m_zmqSocket = std::make_unique<zmq::socket_t>(*m_zmqContext.get(), ZMQ_ROUTER);
-			m_zmqSocket->setsockopt(ZMQ_IDENTITY, "PLUGIN", 6);
+			m_zmqSocket->setsockopt(ZMQ_IDENTITY, "xpilot", 5);
 			m_zmqSocket->setsockopt(ZMQ_LINGER, 0);
 			m_zmqSocket->bind("tcp://*:53100");
-			//m_zmqSocket->bind("tcp://*:" + Config::Instance().getTcpPort());
 		}
 		catch (zmq::error_t& e)
 		{
-
 		}
 		catch (const std::exception& e)
 		{
-
 		}
 		catch (...)
 		{
-
 		}
 
 		XPLMRegisterFlightLoopCallback(mainFlightLoop, -1.0f, this);
@@ -173,15 +165,12 @@ namespace xpilot
 		}
 		catch (zmq::error_t& e)
 		{
-
 		}
 		catch (std::exception& e)
 		{
-
 		}
 		catch (...)
 		{
-
 		}
 
 		m_keepAlive = false;
@@ -195,7 +184,7 @@ namespace xpilot
 
 	void XPilot::zmqWorker()
 	{
-		while (isSocketReady())
+		/*while (isSocketReady())
 		{
 			try
 			{
@@ -410,10 +399,10 @@ namespace xpilot
 			catch (...)
 			{
 			}
-		}
+		}*/
 	}
 
-	void XPilot::SendClientEvent(const xpilot::Envelope& envelope)
+	/*void XPilot::SendClientEvent(const xpilot::Envelope& envelope)
 	{
 		std::string data;
 		envelope.SerializeToString(&data);
@@ -442,7 +431,7 @@ namespace xpilot
 
 			}
 		}
-	}
+	}*/
 
 	float XPilot::mainFlightLoop(float inElapsedSinceLastCall, float, int, void* ref)
 	{
@@ -496,20 +485,20 @@ namespace xpilot
 
 	void XPilot::forceDisconnect(std::string reason)
 	{
-		xpilot::Envelope envelope;
-		xpilot::TriggerDisconnect* data = new xpilot::TriggerDisconnect();
-		envelope.set_allocated_trigger_disconnect(data);
-		data->set_reason(reason);
-		SendClientEvent(envelope);
+		//xpilot::Envelope envelope;
+		//xpilot::TriggerDisconnect* data = new xpilot::TriggerDisconnect();
+		//envelope.set_allocated_trigger_disconnect(data);
+		//data->set_reason(reason);
+		//SendClientEvent(envelope);
 	}
 
 	void XPilot::requestStationInfo(std::string callsign)
 	{
-		xpilot::Envelope envelope;
-		xpilot::RequestStationInfo* data = new xpilot::RequestStationInfo();
-		envelope.set_allocated_request_station_info(data);
-		data->set_station(callsign);
-		SendClientEvent(envelope);
+		//xpilot::Envelope envelope;
+		//xpilot::RequestStationInfo* data = new xpilot::RequestStationInfo();
+		//envelope.set_allocated_request_station_info(data);
+		//data->set_station(callsign);
+		//SendClientEvent(envelope);
 	}
 
 	bool XPilot::InitializeXPMP()

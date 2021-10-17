@@ -1,6 +1,6 @@
 /*
  * xPilot: X-Plane pilot client for VATSIM
- * Copyright (C) 2019-2020 Justin Shannon
+ * Copyright (C) 2019-2021 Justin Shannon
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,9 +16,6 @@
  * along with this program. If not, see http://www.gnu.org/licenses/.
 */
 
-#include <memory>
-#include <thread>
-
 #include "Plugin.h"
 #include "XPilot.h"
 #include "Config.h"
@@ -26,6 +23,9 @@
 #include "Constants.h"
 #include "XPMPMultiplayer.h"
 #include "XPLMPlugin.h"
+
+#include <memory>
+#include <thread>
 
 #if !defined(XPLM200) || !defined(XPLM210) || !defined(XPLM300) || !defined(XPLM301)
 #error xPilot requires XPLM301 SDK or newer
@@ -44,7 +44,7 @@ PLUGIN_API int XPluginStart(char* outName, char* outSignature, char* outDescript
         XPLMEnableFeature("XPLM_USE_NATIVE_PATHS", 1);
         XPMPSetPluginName(PLUGIN_NAME);
         RegisterMenuItems();
-        LOG_MSG(logMSG, "xPilot Version %s Initialized", PLUGIN_VERSION_STRING);
+        LOG_MSG(logMSG, "xPilot version %s initialized", PLUGIN_VERSION_STRING);
     }
     catch (const std::exception& e)
     {
@@ -66,7 +66,7 @@ PLUGIN_API int XPluginEnable(void)
         XPImgWindowInit();
         Config::Instance().loadConfig();
         environment = std::make_unique<xpilot::XPilot>();
-        LOG_MSG(logMSG, "xPilot Plugin Enabled");
+        LOG_MSG(logMSG, "xPilot plugin enabled");
     }
     catch (std::exception& e)
     {
@@ -89,7 +89,7 @@ PLUGIN_API void XPluginDisable(void)
         environment->Shutdown();
         XPMPMultiplayerDisable();
         XPMPMultiplayerCleanup();
-        LOG_MSG(logMSG, "xPilot Plugin Disabled");
+        LOG_MSG(logMSG, "xPilot plugin disabled");
     }
     catch (std::exception& e)
     {

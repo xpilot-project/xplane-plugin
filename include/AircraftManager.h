@@ -1,6 +1,6 @@
 /*
  * xPilot: X-Plane pilot client for VATSIM
- * Copyright (C) 2019-2020 Justin Shannon
+ * Copyright (C) 2019-2021 Justin Shannon
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,6 @@
 #include <mutex>
 
 #include "XPilot.h"
-#include "../protobuf/AirplaneConfig.pb.h"
 #include "NetworkAircraft.h"
 
 namespace xpilot
@@ -58,7 +57,7 @@ namespace xpilot
 		~AircraftManager() {};
 
 		void SetUpNewPlane(const std::string& callsign, const AircraftVisualState& visualState, const std::string& typeIcao, const std::string& airlineIcao, const std::string& livery = "", const std::string& modelName = "");
-		void UpdateAircraftConfiguration(const xpilot::AirplaneConfig& config);
+		//void UpdateAircraftConfiguration(const xpilot::AirplaneConfig& config);
 		void ChangeAircraftModel(const std::string& callsign, const std::string& typeIcao, const std::string& airlineIcao);
 		void ProcessSlowPositionUpdate(const std::string& callsign, AircraftVisualState visualState, double speed);
 		void HandleFastPositionUpdate(const std::string& callsign, const AircraftVisualState& visualState, Vector3 positionalVector, Vector3 rotationalVector);

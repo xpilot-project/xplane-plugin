@@ -1,6 +1,6 @@
 /*
  * xPilot: X-Plane pilot client for VATSIM
- * Copyright (C) 2019-2020 Justin Shannon
+ * Copyright (C) 2019-2021 Justin Shannon
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,9 @@ namespace xpilot
 	void FrameRateMonitor::startMonitoring()
 	{
 		resetFrameRateDetection();
-		XPLMRegisterFlightLoopCallback(flightLoopCallback, 30.0f, this); // give 30 second "warm-up" period after connecting
+
+		// give 30 second "warm-up" period after connecting
+		XPLMRegisterFlightLoopCallback(flightLoopCallback, 30.0f, this);
 	}
 
 	void FrameRateMonitor::stopMonitoring()

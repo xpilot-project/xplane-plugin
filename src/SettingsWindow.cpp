@@ -1,6 +1,6 @@
 /*
  * xPilot: X-Plane pilot client for VATSIM
- * Copyright (C) 2019-2020 Justin Shannon
+ * Copyright (C) 2019-2021 Justin Shannon
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -282,7 +282,7 @@ namespace xpilot
 					ImGui::AlignTextToFramePadding();
 					ImGui::Text("Override \"Contact ATC\" Command");
 					ImGui::SameLine();
-					ImGui::ButtonIcon(ICON_FA_QUESTION_CIRCLE, "If this option is enabled, xPilot will ignore the \"Contact ATC\" X-Plane Command. This is only useful for users who also use PilotEdge.");
+					ImGui::ButtonIcon(ICON_FA_QUESTION_CIRCLE, "If this option is enabled, xPilot will ignore the \"Contact ATC\" X-Plane Command. This is generally only useful for those who also use PilotEdge.");
 					ImGui::TableSetColumnIndex(1);
 					if (ImGui::Checkbox("##OverrideContactATC", &overrideContactAtcCommand))
 					{

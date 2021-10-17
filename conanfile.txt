@@ -1,6 +1,8 @@
 [requires]
-protobuf/3.17.1
-cppzmq/4.7.1
+zeromq/4.3.4
+cppzmq/4.8.1
+imgui/1.85
+nlohmann_json/3.10.3
 
 [generators]
 cmake
