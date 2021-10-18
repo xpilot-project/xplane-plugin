@@ -84,65 +84,124 @@ namespace xpilot
 
 	}
 
-	void AircraftManager::SetUpNewPlane(const std::string& callsign, const AircraftVisualState& visualState, const std::string& typeIcao, const std::string& airlineIcao, const std::string& livery, const std::string& model)
+	void AircraftManager::HandleAddPlane(const std::string& callsign, const AircraftVisualState& visualState, const std::string& airline, const std::string& typeCode)
 	{
-		//auto planeIt = mapPlanes.find(callsign);
-		//if (planeIt != mapPlanes.end()) return;
+		auto planeIt = mapPlanes.find(callsign);
+		if (planeIt != mapPlanes.end()) return;
 
-		//NetworkAircraft* plane = new NetworkAircraft(
-		//	callsign.c_str(),
-		//	visualState,
-		//	typeIcao.c_str(),
-		//	airlineIcao.c_str(),
-		//	livery.c_str(), 0,
-		//	model.c_str()
-		//);
-		//mapPlanes.emplace(callsign, std::move(plane));
-
-		//xpilot::Envelope envelope;
-		//xpilot::PlaneAddedToSim* msg = new xpilot::PlaneAddedToSim();
-		//envelope.set_allocated_plane_added_to_sim(msg);
-		//msg->set_callsign(plane->label);
-		//if (mEnv)
-		//{
-		//	mEnv->SendClientEvent(envelope);
-		//}
+		NetworkAircraft* plane = new NetworkAircraft(callsign.c_str(), visualState, typeCode.c_str(), airline.c_str(), "", 0, "");
+		mapPlanes.emplace(callsign, std::move(plane));
 	}
 
-	void AircraftManager::DeleteAircraft(const std::string& callsign)
+	void AircraftManager::HandleAircraftConfig(const std::string& callsign, const NetworkAircraftConfig& config)
 	{
-		//auto aircraft = GetAircraft(callsign);
-		//if (!aircraft) return;
+		auto planeIt = mapPlanes.find(callsign);
+		if (planeIt == mapPlanes.end()) return;
 
-		//mapPlanes.erase(callsign);
+		NetworkAircraft* plane = planeIt->second.get();
+		if (!plane) return;
 
-		//xpilot::Envelope envelope;
-		//xpilot::PlaneRemovedFromSim* msg = new xpilot::PlaneRemovedFromSim();
-		//envelope.set_allocated_plane_removed_from_sim(msg);
-		//msg->set_callsign(callsign);
-		//if (mEnv)
-		//{
-		//	mEnv->SendClientEvent(envelope);
-		//}
+		if (config.data.fullConfig.has_value() && config.data.fullConfig.value())
+		{
+			plane->SetVisible(true);
+		}
+
+		if (config.data.flapsPct.has_value())
+		{
+			if (config.data.flapsPct.value() != plane->target_flaps_position)
+			{
+				plane->target_flaps_position = config.data.flapsPct.value();
+			}
+		}
+		if (config.data.gearDown.has_value())
+		{
+			if (config.data.gearDown.value() != plane->gear_down)
+			{
+				plane->gear_down = config.data.gearDown.value();
+			}
+		}
+		if (config.data.spoilersDeployed.has_value())
+		{
+			if (config.data.spoilersDeployed.value() != plane->spoilers_deployed)
+			{
+				plane->spoilers_deployed = config.data.spoilersDeployed.value();
+			}
+		}
+		if (config.data.lights.has_value())
+		{
+			if (config.data.lights.value().strobesOn.has_value())
+			{
+				if (config.data.lights.value().strobesOn.value() != plane->surfaces.lights.strbLights)
+				{
+					plane->surfaces.lights.strbLights = config.data.lights.value().strobesOn.value();
+				}
+			}
+			if (config.data.lights.value().taxiOn.has_value())
+			{
+				if (config.data.lights.value().taxiOn.value() != plane->surfaces.lights.taxiLights)
+				{
+					plane->surfaces.lights.taxiLights = config.data.lights.value().taxiOn.value();
+				}
+			}
+			if (config.data.lights.value().navOn.has_value())
+			{
+				if (config.data.lights.value().navOn.value() != plane->surfaces.lights.navLights)
+				{
+					plane->surfaces.lights.navLights = config.data.lights.value().navOn.value();
+				}
+			}
+			if (config.data.lights.value().landingOn.has_value())
+			{
+				if (config.data.lights.value().landingOn.value() != plane->surfaces.lights.landLights)
+				{
+					plane->surfaces.lights.landLights = config.data.lights.value().landingOn.value();
+				}
+			}
+			if (config.data.lights.value().beaconOn.has_value())
+			{
+				if (config.data.lights.value().beaconOn.value() != plane->surfaces.lights.bcnLights)
+				{
+					plane->surfaces.lights.bcnLights = config.data.lights.value().beaconOn.value();
+				}
+			}
+		}
+		if (config.data.enginesRunning.has_value())
+		{
+			if (config.data.enginesRunning.value() != plane->engines_running)
+			{
+				plane->engines_running = config.data.enginesRunning.value();
+			}
+		}
+		if (config.data.reverseThrust.has_value())
+		{
+			if (config.data.reverseThrust.value() != plane->reverse_thrust)
+			{
+				plane->reverse_thrust = config.data.reverseThrust.value();
+			}
+		}
+		if (config.data.onGround.has_value())
+		{
+			if (config.data.onGround.value() != plane->on_ground)
+			{
+				plane->on_ground = config.data.onGround.value();
+			}
+		}
 	}
 
-	void AircraftManager::DeleteAllAircraft()
+	void AircraftManager::HandleRemovePlane(const std::string& callsign)
 	{
-		//for (auto const& plane : mapPlanes)
-		//{
-		//	xpilot::Envelope envelope;
-		//	xpilot::PlaneRemovedFromSim* msg = new xpilot::PlaneRemovedFromSim();
-		//	envelope.set_allocated_plane_removed_from_sim(msg);
-		//	msg->set_callsign(plane.first);
-		//	if (mEnv)
-		//	{
-		//		mEnv->SendClientEvent(envelope);
-		//	}
-		//}
-		//mapPlanes.clear();
+		auto aircraft = GetAircraft(callsign);
+		if (!aircraft) return;
+
+		mapPlanes.erase(callsign);
 	}
 
-	void AircraftManager::ProcessSlowPositionUpdate(const std::string& callsign, AircraftVisualState visualState, double speed)
+	void AircraftManager::HandleRemoveAllPlanes()
+	{
+		mapPlanes.clear();
+	}
+
+	void AircraftManager::HandleSlowPositionUpdate(const std::string& callsign, AircraftVisualState visualState, double speed)
 	{
 		auto aircraft = GetAircraft(callsign);
 		if (!aircraft)
@@ -248,7 +307,7 @@ namespace xpilot
 		);
 	}
 
-	void AircraftManager::ChangeAircraftModel(const std::string& callsign, const std::string& typeIcao, const std::string& airlineIcao)
+	void AircraftManager::HandleChangePlaneModel(const std::string& callsign, const std::string& typeIcao, const std::string& airlineIcao)
 	{
 		auto aircraft = GetAircraft(callsign);
 		if (!aircraft) return;

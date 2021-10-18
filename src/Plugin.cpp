@@ -182,7 +182,7 @@ int ToggleDefaultAtisCommandHandler(XPLMCommandRef inCommand, XPLMCommandPhase i
 {
     if (inPhase == xplm_CommandEnd)
     {
-        environment->disableDefaultAtis(environment->isDefaultAtisDisabled());
+        environment->DisableXplaneAtis(environment->IsXplaneAtisDisabled());
     }
     return 0;
 }
@@ -266,7 +266,7 @@ void RegisterMenuItems()
 
 void UpdateMenuItems()
 {
-    XPLMSetMenuItemName(PluginMenu, MenuDefaultAtis, environment->isDefaultAtisDisabled() ? "Default ATIS: Disabled" : "Default ATIS: Enabled", 0);
+    XPLMSetMenuItemName(PluginMenu, MenuDefaultAtis, environment->IsXplaneAtisDisabled() ? "Default ATIS: Disabled" : "Default ATIS: Enabled", 0);
     XPLMSetMenuItemName(PluginMenu, MenuToggleTcas, XPMPHasControlOfAIAircraft() ? "Release TCAS Control" : "Request TCAS Control", 0);
 }
 

@@ -25,6 +25,7 @@
 
 #include "XPilot.h"
 #include "NetworkAircraft.h"
+#include "NetworkAircraftConfig.h"
 
 namespace xpilot
 {
@@ -56,13 +57,13 @@ namespace xpilot
 		AircraftManager(XPilot* instance);
 		~AircraftManager() {};
 
-		void SetUpNewPlane(const std::string& callsign, const AircraftVisualState& visualState, const std::string& typeIcao, const std::string& airlineIcao, const std::string& livery = "", const std::string& modelName = "");
-		//void UpdateAircraftConfiguration(const xpilot::AirplaneConfig& config);
-		void ChangeAircraftModel(const std::string& callsign, const std::string& typeIcao, const std::string& airlineIcao);
-		void ProcessSlowPositionUpdate(const std::string& callsign, AircraftVisualState visualState, double speed);
+		void HandleAddPlane(const std::string& callsign, const AircraftVisualState& visualState, const std::string& airline, const std::string& typeCode);
+		void HandleAircraftConfig(const std::string& callsign, const NetworkAircraftConfig& config);
+		void HandleChangePlaneModel(const std::string& callsign, const std::string& typeIcao, const std::string& airlineIcao);
+		void HandleSlowPositionUpdate(const std::string& callsign, AircraftVisualState visualState, double speed);
 		void HandleFastPositionUpdate(const std::string& callsign, const AircraftVisualState& visualState, Vector3 positionalVector, Vector3 rotationalVector);
-		void DeleteAircraft(const std::string& callsign);
-		void DeleteAllAircraft();
+		void HandleRemovePlane(const std::string& callsign);
+		void HandleRemoveAllPlanes();
 
 	private:
 		XPilot* mEnv;

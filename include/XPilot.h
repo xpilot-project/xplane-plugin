@@ -73,24 +73,14 @@ namespace xpilot
 		void forceDisconnect(std::string reason = "");
 		void requestStationInfo(std::string callsign);
 
-		std::string ourCallsign()const
-		{
-			return m_networkCallsign;
-		}
-		bool isNetworkConnected()const
-		{
-			return m_networkLoginStatus;
-		}
-		void setPttActive(bool active)
-		{
-			m_pttPressed = active;
-		}
+		void SendReply(const std::string& message);
 
-		void disableDefaultAtis(bool disabled);
-		bool isDefaultAtisDisabled()const
-		{
-			return !m_xplaneAtisEnabled;
-		}
+		std::string ourCallsign() const { return m_networkCallsign;  }
+		bool isNetworkConnected() const { return m_networkLoginStatus; }
+		void setPttActive(bool active) { m_pttPressed = active;  }
+
+		void DisableXplaneAtis(bool disabled);
+		bool IsXplaneAtisDisabled() const { return !m_xplaneAtisEnabled; }
 
 		void TryGetTcasControl();
 		void ReleaseTcasControl();
@@ -99,12 +89,13 @@ namespace xpilot
 		void toggleNearbyAtcWindow();
 		void toggleTextMessageConsole();
 		void setNotificationPanelAlwaysVisible(bool visible);
-		bool setNotificationPanelAlwaysVisible()const;
+		bool setNotificationPanelAlwaysVisible() const;
 
 		void DeleteAllAircraft();
 
 		void Initialize();
 		void Shutdown();
+
 	protected:
 		OwnedDataRef<int> m_pttPressed;
 		OwnedDataRef<int> m_networkLoginStatus;
@@ -119,16 +110,16 @@ namespace xpilot
 		DataRefAccess<float> m_frameRatePeriod;
 
 	private:
-		static float deferredStartup(float, float, int, void* ref);
-		static float mainFlightLoop(float, float, int, void* ref);
+		static float DeferredStartup(float, float, int, void* ref);
+		static float MainFlightLoop(float, float, int, void* ref);
 		bool InitializeXPMP();
 
 		std::thread::id m_xplaneThread;
-		void thisThreadIsXP()
+		void ThisThreadIsXplane()
 		{
 			m_xplaneThread = std::this_thread::get_id();
 		}
-		bool isXPThread()const
+		bool IsXplaneThread()const
 		{
 			return std::this_thread::get_id() == m_xplaneThread;
 		}
@@ -138,23 +129,24 @@ namespace xpilot
 		std::unique_ptr<zmq::context_t> m_zmqContext;
 		std::unique_ptr<zmq::socket_t> m_zmqSocket;
 
-		void zmqWorker();
-		bool isSocketConnected()const
+		void ZmqWorker();
+		
+		bool IsSocketConnected()const
 		{
 			return m_zmqSocket && m_zmqSocket->connected();
 		}
-		bool isSocketReady()const
+		bool IsSocketReady()const
 		{
-			return m_keepAlive && isSocketConnected();
+			return m_keepAlive && IsSocketConnected();
 		}
 
 		std::mutex m_mutex;
 		std::deque<std::function<void()>> m_queuedCallbacks;
-		void invokeQueuedCallbacks();
-		void queueCallback(const std::function<void()>& cb);
+		void InvokeQueuedCallbacks();
+		void QueueCallback(const std::function<void()>& cb);
 
 		XPLMDataRef m_bulkDataQuick{}, m_bulkDataExpensive{};
-		static int getBulkData(void* inRefcon, void* outData, int inStartPos, int inNumBytes);
+		static int GetBulkData(void* inRefcon, void* outData, int inStartPos, int inNumBytes);
 		int m_currentAircraftCount = 1;
 
 		std::unique_ptr<FrameRateMonitor> m_frameRateMonitor;

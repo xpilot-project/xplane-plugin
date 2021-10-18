@@ -22,7 +22,8 @@
 #include "Config.h"
 #include "Utilities.h"
 #include "XPMPMultiplayer.h"
-#include "json.hpp"
+#include <nlohmann/json.hpp>
+
 using json = nlohmann::json;
 
 namespace xpilot

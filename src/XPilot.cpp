@@ -22,6 +22,7 @@
 #include "Utilities.h"
 #include "AircraftManager.h"
 #include "NetworkAircraft.h"
+#include "NetworkAircraftConfig.h"
 #include "FrameRateMonitor.h"
 #include "NearbyATCWindow.h"
 #include "SettingsWindow.h"
@@ -47,7 +48,7 @@ namespace xpilot
 		m_pluginVersion("xpilot/version", ReadOnly),
 		m_frameRatePeriod("sim/operation/misc/frame_rate_period", ReadOnly)
 	{
-		thisThreadIsXP();
+		ThisThreadIsXplane();
 
 		m_bulkDataQuick = XPLMRegisterDataAccessor("xpilot/bulk/quick",
 			xplmType_Data,
@@ -59,7 +60,7 @@ namespace xpilot
 			NULL, NULL,
 			NULL, NULL,
 			NULL, NULL,
-			getBulkData,
+			GetBulkData,
 			NULL,
 			(void*)DR_BULK_QUICK,
 			(void*)DR_BULK_QUICK
@@ -75,7 +76,7 @@ namespace xpilot
 			NULL, NULL,
 			NULL, NULL,
 			NULL, NULL,
-			getBulkData,
+			GetBulkData,
 			NULL,
 			(void*)DR_BULK_EXPENSIVE,
 			(void*)DR_BULK_EXPENSIVE
@@ -95,18 +96,18 @@ namespace xpilot
 		m_aircraftManager = std::make_unique<AircraftManager>(this);
 		m_pluginVersion = PLUGIN_VERSION;
 
-		XPLMRegisterFlightLoopCallback(deferredStartup, -1.0f, this);
+		XPLMRegisterFlightLoopCallback(DeferredStartup, -1.0f, this);
 	}
 
 	XPilot::~XPilot()
 	{
 		XPLMUnregisterDataAccessor(m_bulkDataQuick);
 		XPLMUnregisterDataAccessor(m_bulkDataExpensive);
-		XPLMUnregisterFlightLoopCallback(deferredStartup, this);
-		XPLMUnregisterFlightLoopCallback(mainFlightLoop, this);
+		XPLMUnregisterFlightLoopCallback(DeferredStartup, this);
+		XPLMUnregisterFlightLoopCallback(MainFlightLoop, this);
 	}
 
-	float XPilot::deferredStartup(float, float, int, void* ref)
+	float XPilot::DeferredStartup(float, float, int, void* ref)
 	{
 		auto* instance = static_cast<XPilot*>(ref);
 		if (instance)
@@ -133,7 +134,7 @@ namespace xpilot
 		{
 			m_zmqContext = std::make_unique<zmq::context_t>(1);
 			m_zmqSocket = std::make_unique<zmq::socket_t>(*m_zmqContext.get(), ZMQ_ROUTER);
-			m_zmqSocket->setsockopt(ZMQ_IDENTITY, "xpilot", 5);
+			m_zmqSocket->setsockopt(ZMQ_IDENTITY, "xplane", 5);
 			m_zmqSocket->setsockopt(ZMQ_LINGER, 0);
 			m_zmqSocket->bind("tcp://*:53100");
 		}
@@ -147,10 +148,11 @@ namespace xpilot
 		{
 		}
 
-		XPLMRegisterFlightLoopCallback(mainFlightLoop, -1.0f, this);
+		XPLMRegisterFlightLoopCallback(MainFlightLoop, -1.0f, this);
 
 		m_keepAlive = true;
-		m_zmqThread = std::make_unique<std::thread>(&XPilot::zmqWorker, this);
+		m_zmqThread = std::make_unique<std::thread>(&XPilot::ZmqWorker, this);
+		LOG_MSG(logMSG, "xPilot is now listening on port 53100");
 	}
 
 	void XPilot::Shutdown()
@@ -182,263 +184,253 @@ namespace xpilot
 		}
 	}
 
-	void XPilot::zmqWorker()
+	void XPilot::ZmqWorker()
 	{
-		/*while (isSocketReady())
+		while (IsSocketReady())
 		{
 			try
 			{
+				zmq::message_t routing_id;
+				m_zmqSocket->recv(routing_id, zmq::recv_flags::none); // we ultimately ignore this
+
 				zmq::message_t msg;
 				m_zmqSocket->recv(msg, zmq::recv_flags::none);
-				std::string data(static_cast<char*>(msg.data()), msg.size());
+				std::string data(static_cast<char*>(msg.data()), msg.size()); // the actual data we care about
 
-				xpilot::Envelope envelope;
-				envelope.ParseFromString(base64::base64_decode(data));
-
-				if (envelope.has_app_metdata())
+				if (!data.empty() && json::accept(data.c_str()))
 				{
-					xpilot::Envelope reply{};
-					xpilot::AppMetadata* msg = new xpilot::AppMetadata();
-					reply.set_allocated_app_metdata(msg);
-					msg->set_version(PLUGIN_VERSION);
-					msg->set_plugin_hash(m_pluginHash.c_str());
+					json j = json::parse(data.c_str());
 
-					SendClientEvent(reply);
-				}
-
-				if (envelope.has_csl_validation())
-				{
-					xpilot::Envelope reply{};
-					xpilot::CslValidation* msg = new xpilot::CslValidation();
-					reply.set_allocated_csl_validation(msg);
-					msg->set_is_valid(Config::Instance().hasValidPaths() && XPMPGetNumberOfInstalledModels() > 0);
-
-					SendClientEvent(reply);
-				}
-
-				if (envelope.has_add_plane())
-				{
-					xpilot::AddPlane msg = envelope.add_plane();
-					if (msg.has_callsign() && msg.has_visual_state() && msg.has_equipment())
+					if (j.find("type") != j.end())
 					{
-						AircraftVisualState visualState{};
-						visualState.Lat = msg.visual_state().latitude();
-						visualState.Lon = msg.visual_state().longitude();
-						visualState.Altitude = msg.visual_state().altitude();
-						visualState.Heading = msg.visual_state().heading();
-						visualState.Pitch = msg.visual_state().pitch();
-						visualState.Bank = msg.visual_state().bank();
+						std::string MessageType(j["type"]);
 
-						queueCallback([=]()
+						if (!MessageType.empty())
 						{
-							m_aircraftManager->SetUpNewPlane(msg.callsign(), visualState, msg.equipment(), msg.airline());
-						});
-					}
-				}
+							if (MessageType == "AddPlane")
+							{
+								LOG_MSG(logDEBUG, data.c_str());
 
-				if (envelope.has_change_plane_model())
-				{
-					xpilot::ChangePlaneModel msg = envelope.change_plane_model();
-					if (msg.has_callsign() && msg.has_equipment())
-					{
-						queueCallback([=]()
-						{
-							m_aircraftManager->ChangeAircraftModel(msg.callsign(), msg.equipment(), msg.airline());
-						});
-					}
-				}
+								std::string callsign(j["data"]["callsign"]);
+								std::string airline(j["data"]["airline"]);
+								std::string typeCode(j["data"]["type_code"]);
+								double latitude = static_cast<double>(j["data"]["latitude"]);
+								double longitude = static_cast<double>(j["data"]["longitude"]);
+								double altitude = static_cast<double>(j["data"]["altitude"]);
+								double heading = static_cast<double>(j["data"]["heading"]);
+								double bank = static_cast<double>(j["data"]["bank"]);
+								double pitch = static_cast<double>(j["data"]["pitch"]);
 
-				if (envelope.has_position_update())
-				{
-					xpilot::PositionUpdate msg = envelope.position_update();
+								AircraftVisualState visualState{};
+								visualState.Lat = latitude;
+								visualState.Lon = longitude;
+								visualState.Heading = heading;
+								visualState.Altitude = altitude;
+								visualState.Pitch = pitch;
+								visualState.Bank = bank;
 
-					AircraftVisualState visualState{};
-					visualState.Lat = msg.latitude();
-					visualState.Lon = msg.longitude();
-					visualState.Altitude = msg.altitude();
-					visualState.Pitch = msg.pitch();
-					visualState.Bank = msg.bank();
-					visualState.Heading = msg.heading();
+								if (!callsign.empty() && !typeCode.empty())
+								{
+									QueueCallback([=]
+										{
+											m_aircraftManager->HandleAddPlane(callsign, visualState, airline, typeCode);
+										});
+								}
+							}
 
-					if (msg.has_callsign())
-					{
-						queueCallback([=]()
-						{
-							m_aircraftManager->ProcessSlowPositionUpdate(msg.callsign(), visualState, msg.ground_speed());
-						});
-					}
-				}
+							else if (MessageType == "ChangeModel")
+							{
 
-				if (envelope.has_fast_position_update())
-				{
-					xpilot::FastPositionUpdate msg = envelope.fast_position_update();
+							}
 
-					AircraftVisualState visualState{};
-					visualState.Lat = msg.latitude();
-					visualState.Lon = msg.longitude();
-					visualState.Altitude = msg.altitude();
-					visualState.Pitch = msg.pitch();
-					visualState.Bank = msg.bank();
-					visualState.Heading = msg.heading();
+							else if (MessageType == "SlowPositionUpdate")
+							{
+								std::string callsign(j["data"]["callsign"]);
+								double latitude = static_cast<double>(j["data"]["latitude"]);
+								double longitude = static_cast<double>(j["data"]["longitude"]);
+								double altitude = static_cast<double>(j["data"]["altitude"]);
+								double heading = static_cast<double>(j["data"]["heading"]);
+								double bank = static_cast<double>(j["data"]["bank"]);
+								double pitch = static_cast<double>(j["data"]["pitch"]);
+								double groundSpeed = static_cast<double>(j["data"]["ground_speed"]);
 
-					Vector3 positionalVector{};
-					positionalVector.X = msg.velocity_longitude();
-					positionalVector.Y = msg.velocity_altitude();
-					positionalVector.Z = msg.velocity_latitude();
+								AircraftVisualState visualState{};
+								visualState.Lat = latitude;
+								visualState.Lon = longitude;
+								visualState.Heading = heading;
+								visualState.Altitude = altitude;
+								visualState.Pitch = pitch;
+								visualState.Bank = bank;
 
-					Vector3 rotationalVector{};
-					rotationalVector.X = msg.velocity_pitch() * -1;
-					rotationalVector.Y = msg.velocity_heading();
-					rotationalVector.Z = msg.velocity_bank() * -1;
+								if (!callsign.empty())
+								{
+									QueueCallback([=]
+										{
+											m_aircraftManager->HandleSlowPositionUpdate(callsign, visualState, groundSpeed);
+										});
+								}
+							}
 
-					if (msg.has_callsign())
-					{
-						queueCallback([=]()
-						{
-							m_aircraftManager->HandleFastPositionUpdate(
-								msg.callsign(),
-								visualState,
-								positionalVector,
-								rotationalVector
-							);
-						});
-					}
-				}
+							else if (MessageType == "FastPositionUpdate")
+							{
+								std::string callsign(j["data"]["callsign"]);
+								double latitude = static_cast<double>(j["data"]["latitude"]);
+								double longitude = static_cast<double>(j["data"]["longitude"]);
+								double altitude = static_cast<double>(j["data"]["altitude"]);
+								double heading = static_cast<double>(j["data"]["heading"]);
+								double bank = static_cast<double>(j["data"]["bank"]);
+								double pitch = static_cast<double>(j["data"]["pitch"]);
+								double velocityLongitude = static_cast<double>(j["data"]["vx"]);
+								double velocityAltitude = static_cast<double>(j["data"]["vy"]);
+								double velocityLatitude = static_cast<double>(j["data"]["vz"]);
+								double velocityPitch = static_cast<double>(j["data"]["vp"]);
+								double velocityHeading = static_cast<double>(j["data"]["vh"]);
+								double velocityBank = static_cast<double>(j["data"]["vb"]);
 
-				if (envelope.has_airplane_config())
-				{
-					xpilot::AirplaneConfig msg = envelope.airplane_config();
-					if (msg.has_callsign())
-					{
-						queueCallback([=]()
-						{
-							m_aircraftManager->UpdateAircraftConfiguration(msg);
-						});
-					}
-				}
+								AircraftVisualState visualState{};
+								visualState.Lat = latitude;
+								visualState.Lon = longitude;
+								visualState.Altitude = altitude;
+								visualState.Pitch = pitch;
+								visualState.Bank = bank;
+								visualState.Heading = heading;
 
-				if (envelope.has_delete_plane())
-				{
-					xpilot::DeletePlane msg = envelope.delete_plane();
-					if (msg.has_callsign())
-					{
-						queueCallback([=]()
-						{
-							m_aircraftManager->DeleteAircraft(msg.callsign());
-						});
-					}
-				}
+								Vector3 positionalVector{};
+								positionalVector.X = velocityLongitude;
+								positionalVector.Y = velocityAltitude;
+								positionalVector.Z = velocityLatitude;
 
-				if (envelope.has_network_connected())
-				{
-					if (envelope.network_connected().has_callsign())
-					{
-						m_networkCallsign = envelope.network_connected().callsign();
-					}
-					queueCallback([=]()
-					{
-						onNetworkConnected();
-					});
-				}
+								Vector3 rotationalVelocity{};
+								rotationalVelocity.X = velocityPitch * -1;
+								rotationalVelocity.Y = velocityHeading;
+								rotationalVelocity.Z = velocityBank * -1;
 
-				if (envelope.has_network_disconnected())
-				{
-					queueCallback([=]()
-					{
-						onNetworkDisconnected();
-					});
-				}
+								if (!callsign.empty())
+								{
+									QueueCallback([=]
+										{
+											m_aircraftManager->HandleFastPositionUpdate(callsign,
+												visualState, positionalVector, rotationalVelocity);
+										});
+								}
+							}
 
-				if (envelope.has_nearby_controllers())
-				{
-					queueCallback([=]()
-					{
-						if (envelope.nearby_controllers().list_size() > 0)
-						{
-							m_nearbyAtcWindow->UpdateList(envelope.nearby_controllers());
+							else if (MessageType == "AirplaneConfig")
+							{
+								auto acconfig = j.get<NetworkAircraftConfig>();
+								QueueCallback([=]
+									{
+										m_aircraftManager->HandleAircraftConfig(acconfig.data.callsign, acconfig);
+									});
+							}
+
+							else if (MessageType == "RemovePlane")
+							{
+								std::string callsign(j["data"]["callsign"]);
+
+								if (!callsign.empty())
+								{
+									QueueCallback([=]
+										{
+											m_aircraftManager->HandleRemovePlane(callsign);
+										});
+								}
+							}
+
+							else if (MessageType == "RemoveAllPlanes")
+							{
+								QueueCallback([=]
+									{
+										m_aircraftManager->HandleRemoveAllPlanes();
+									});
+							}
+
+							else if (MessageType == "NetworkConnected")
+							{
+								std::string callsign(j["data"]["callsign"]);
+								m_networkCallsign.setValue(callsign);
+								m_networkLoginStatus.setValue(true);
+							}
+
+							else if (MessageType == "NetworkDisconnected")
+							{
+								m_networkCallsign.setValue("");
+								m_networkLoginStatus.setValue(false);
+							}
+
+							else if (MessageType == "NearbyAtc")
+							{
+
+							}
+
+							else if (MessageType == "RadioMessage")
+							{
+
+							}
+
+							else if (MessageType == "PrivateMessageReceived")
+							{
+
+							}
+
+							else if (MessageType == "PrivateMessageSent")
+							{
+
+							}
+
+							else if (MessageType == "ValidateCsl")
+							{
+
+							}
 						}
-						else
-						{
-							m_nearbyAtcWindow->ClearList();
-						}
-					});
-				}
-
-				if (envelope.has_radio_message_received())
-				{
-					xpilot::RadioMessageReceived msg = envelope.radio_message_received();
-					RadioMessageReceived(msg.message(), 255, 255, 255);
-					AddNotificationPanelMessage(msg.message(), 255, 255, 255);
-				}
-
-				if (envelope.has_private_message_received())
-				{
-					xpilot::PrivateMessageReceived msg = envelope.private_message_received();
-					AddPrivateMessage(msg.from(), msg.message(), ConsoleTabType::Received);
-					AddNotificationPanelMessage(string_format("%s [pvt]:  %s", msg.from(), msg.message().c_str()), 255, 255, 255);
-				}
-
-				if (envelope.has_private_message_sent())
-				{
-					xpilot::PrivateMessageSent msg = envelope.private_message_sent();
-					AddPrivateMessage(msg.to(), msg.message(), ConsoleTabType::Sent);
-					AddNotificationPanelMessage(string_format("%s [pvt: %s]:  %s", m_networkCallsign.value().c_str(), msg.to(), msg.message().c_str()), 0, 255, 255);
+					}
 				}
 			}
 			catch (zmq::error_t& e)
 			{
 				if (e.num() != ETERM)
 				{
-					LOG_MSG(logERROR, "Socket recv exception: %s", e.what());
+					LOG_MSG(logERROR, "Socket receive exception: %s", e.what());
 				}
 			}
 			catch (std::exception& e)
 			{
-				LOG_MSG(logERROR, "Socket recv exception: %s", e.what());
+				LOG_MSG(logERROR, "Socket receive exception: %s", e.what());
 			}
 			catch (...)
 			{
-			}
-		}*/
-	}
-
-	/*void XPilot::SendClientEvent(const xpilot::Envelope& envelope)
-	{
-		std::string data;
-		envelope.SerializeToString(&data);
-
-		std::string encodedData = base64::base64_encode(data).c_str();
-
-		if (isSocketConnected() && !data.empty())
-		{
-			try
-			{
-				std::string identity = "CLIENT";
-				zmq::message_t msg1(identity.size());
-				std::memcpy(msg1.data(), identity.data(), identity.size());
-				m_zmqSocket->send(msg1, zmq::send_flags::sndmore);
-
-				zmq::message_t message(encodedData.size());
-				std::memcpy(message.data(), encodedData.data(), encodedData.size());
-				m_zmqSocket->send(message, ZMQ_NOBLOCK);
-			}
-			catch (zmq::error_t& e)
-			{
-
-			}
-			catch (...)
-			{
-
 			}
 		}
-	}*/
+	}
 
-	float XPilot::mainFlightLoop(float inElapsedSinceLastCall, float, int, void* ref)
+	void XPilot::SendReply(const std::string& message)
+	{
+		try
+		{
+			if (IsSocketConnected() && !message.empty())
+			{
+				std::string identity = "xpilot";
+				zmq::message_t part1(identity.size());
+				std::memcpy(part1.data(), identity.data(), identity.size());
+				m_zmqSocket->send(part1, zmq::send_flags::sndmore);
+
+				zmq::message_t part2(message.size());
+				std::memcpy(part2.data(), message.data(), message.size());
+				m_zmqSocket->send(part2, ZMQ_NOBLOCK);
+			}
+		}
+		catch (zmq::error_t& e)
+		{
+			LOG_MSG(logERROR, "Error sending socket message: %s", e.what());
+		}
+	}
+
+	float XPilot::MainFlightLoop(float inElapsedSinceLastCall, float, int, void* ref)
 	{
 		auto* instance = static_cast<XPilot*>(ref);
 		if (instance)
 		{
-			instance->invokeQueuedCallbacks();
+			instance->InvokeQueuedCallbacks();
 			instance->m_aiControlled = XPMPHasControlOfAIAircraft();
 			instance->m_aircraftCount = XPMPCountPlanes();
 			UpdateMenuItems();
@@ -446,7 +438,7 @@ namespace xpilot
 		return -1.0;
 	}
 
-	void XPilot::disableDefaultAtis(bool disabled)
+	void XPilot::DisableXplaneAtis(bool disabled)
 	{
 		m_xplaneAtisEnabled = (int)disabled;
 	}
@@ -466,7 +458,7 @@ namespace xpilot
 
 	void XPilot::onNetworkConnected()
 	{
-		m_aircraftManager->DeleteAllAircraft();
+		m_aircraftManager->HandleRemoveAllPlanes();
 		m_frameRateMonitor->startMonitoring();
 		m_xplaneAtisEnabled = 0;
 		m_networkLoginStatus = 1;
@@ -475,7 +467,7 @@ namespace xpilot
 
 	void XPilot::onNetworkDisconnected()
 	{
-		m_aircraftManager->DeleteAllAircraft();
+		m_aircraftManager->HandleRemoveAllPlanes();
 		m_frameRateMonitor->stopMonitoring();
 		m_xplaneAtisEnabled = 1;
 		m_networkLoginStatus = 0;
@@ -551,7 +543,7 @@ namespace xpilot
 	{
 		if (!recipient.empty() && !msg.empty())
 		{
-			queueCallback([=]()
+			QueueCallback([=]()
 			{
 				m_textMessageConsole->PrivateMessageReceived(recipient, msg, tabType);
 			});
@@ -562,7 +554,7 @@ namespace xpilot
 	{
 		if (!msg.empty())
 		{
-			queueCallback([=]()
+			QueueCallback([=]()
 			{
 				m_textMessageConsole->RadioMessageReceived(msg.c_str(), red, green, blue);
 			});
@@ -573,7 +565,7 @@ namespace xpilot
 	{
 		if (!msg.empty())
 		{
-			queueCallback([=]()
+			QueueCallback([=]()
 			{
 				m_notificationPanel->AddNotificationPanelMessage(msg, red, green, blue);
 			});
@@ -586,13 +578,13 @@ namespace xpilot
 		AddNotificationPanelMessage(msg, red, green, blue);
 	}
 
-	void XPilot::queueCallback(const std::function<void()> &cb)
+	void XPilot::QueueCallback(const std::function<void()> &cb)
 	{
 		std::lock_guard<std::mutex> lck(m_mutex);
 		m_queuedCallbacks.push_back(cb);
 	}
 
-	void XPilot::invokeQueuedCallbacks()
+	void XPilot::InvokeQueuedCallbacks()
 	{
 		std::deque<std::function<void()>> temp;
 		{
@@ -661,10 +653,10 @@ namespace xpilot
 
 	void XPilot::DeleteAllAircraft()
 	{
-		m_aircraftManager->DeleteAllAircraft();
+		m_aircraftManager->HandleRemoveAllPlanes();
 	}
 
-	int XPilot::getBulkData(void* inRefcon, void* outData, int inStartPos, int inNumBytes)
+	int XPilot::GetBulkData(void* inRefcon, void* outData, int inStartPos, int inNumBytes)
 	{
 		dataRefs dr = (dataRefs)reinterpret_cast<long long>(inRefcon);
 		assert(dr == DR_BULK_QUICK || dr == DR_BULK_EXPENSIVE);
