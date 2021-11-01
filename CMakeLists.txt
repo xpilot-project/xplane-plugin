@@ -17,16 +17,6 @@ endif(MSVC)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
 
-#include_directories("${CMAKE_SOURCE_DIR}/include")
-#include_directories("${CMAKE_SOURCE_DIR}/Lib")
-#include_directories("${CMAKE_SOURCE_DIR}/extern/ImGui")
-#include_directories("${CMAKE_SOURCE_DIR}/extern/ImGui/misc/cpp")
-#include_directories("${CMAKE_SOURCE_DIR}/extern/ImgWindow")
-#include_directories("${CMAKE_SOURCE_DIR}/extern/SDK/CHeaders/XPLM")
-#include_directories("${CMAKE_SOURCE_DIR}/extern/XPMP2")
-#include_directories("${CMAKE_SOURCE_DIR}/extern/Font")
-#include_directories("${CMAKE_SOURCE_DIR}/extern/gmath")
-
 set(Header_Files
     include/AircraftManager.h
     include/Config.h
@@ -86,9 +76,6 @@ set(ALL_FILES  ${Header_Files} ${Source_Files})
 add_library(xpilot MODULE ${ALL_FILES})
 
 target_include_directories(xpilot
-		#PRIVATE
-		#${CMAKE_SOURCE_DIR}/extern/cpp-jwt/include
-		#${CMAKE_SOURCE_DIR}/extern/simpleSource
 		PUBLIC
 		${CMAKE_SOURCE_DIR}/include
 		${CMAKE_SOURCE_DIR}/extern
@@ -163,9 +150,9 @@ if (OpenGL_FOUND)
     target_link_libraries(xpilot ${OpenGL_LIBRARIES})
 endif(OpenGL_FOUND)
 
-#if(MSVC)
-#	set_property(TARGET xPilot PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-#endif()
+if(MSVC)
+	set_property(TARGET xpilot PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+endif()
 
 add_definitions(-DXPLM200=1 -DXPLM210=1 -DXPLM300=1 -DXPLM301=1 -DXPLM303=1)
 add_definitions(-DAPL=$<BOOL:${APPLE}> -DIBM=$<BOOL:${WIN32}> -DLIN=$<AND:$<BOOL:${UNIX}>,$<NOT:$<BOOL:${APPLE}>>>)

@@ -169,7 +169,7 @@ namespace xpilot
         bool m_showHideLabels = true;
         bool m_debugModelMatching = false;
         bool m_defaultAtis = false;
-        std::string m_tcpPort = "52300";
+        std::string m_tcpPort = "53100";
         bool m_overrideContactAtcCommand = false;
         int m_labelColor = COLOR_YELLOW;
         bool m_disableTcas = false;

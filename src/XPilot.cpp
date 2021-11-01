@@ -136,7 +136,7 @@ namespace xpilot
 			m_zmqSocket = std::make_unique<zmq::socket_t>(*m_zmqContext.get(), ZMQ_ROUTER);
 			m_zmqSocket->setsockopt(ZMQ_IDENTITY, "xplane", 5);
 			m_zmqSocket->setsockopt(ZMQ_LINGER, 0);
-			m_zmqSocket->bind("tcp://*:53100");
+			m_zmqSocket->bind("tcp://*:" + Config::Instance().getTcpPort());
 		}
 		catch (zmq::error_t& e)
 		{
@@ -152,7 +152,7 @@ namespace xpilot
 
 		m_keepAlive = true;
 		m_zmqThread = std::make_unique<std::thread>(&XPilot::ZmqWorker, this);
-		LOG_MSG(logMSG, "xPilot is now listening on port 53100");
+		LOG_MSG(logMSG, "Now listening on port %s", Config::Instance().getTcpPort().c_str());
 	}
 
 	void XPilot::Shutdown()
@@ -209,8 +209,6 @@ namespace xpilot
 						{
 							if (MessageType == "AddPlane")
 							{
-								LOG_MSG(logDEBUG, data.c_str());
-
 								std::string callsign(j["data"]["callsign"]);
 								std::string airline(j["data"]["airline"]);
 								std::string typeCode(j["data"]["type_code"]);
@@ -240,7 +238,17 @@ namespace xpilot
 
 							else if (MessageType == "ChangeModel")
 							{
+								std::string callsign(j["data"]["callsign"]);
+								std::string airline(j["data"]["airline"]);
+								std::string typeCode(j["data"]["type_code"]);
 
+								if (!callsign.empty() && !typeCode.empty())
+								{
+									QueueCallback([=]
+										{
+											m_aircraftManager->HandleChangePlaneModel(callsign, typeCode, airline);
+										});
+								}
 							}
 
 							else if (MessageType == "SlowPositionUpdate")
@@ -341,21 +349,36 @@ namespace xpilot
 							{
 								QueueCallback([=]
 									{
-										m_aircraftManager->HandleRemoveAllPlanes();
+										m_aircraftManager->RemoveAllPlanes();
 									});
 							}
 
 							else if (MessageType == "NetworkConnected")
 							{
 								std::string callsign(j["data"]["callsign"]);
-								m_networkCallsign.setValue(callsign);
-								m_networkLoginStatus.setValue(true);
+
+								QueueCallback([=]
+									{
+										m_aircraftManager->RemoveAllPlanes();
+										m_frameRateMonitor->startMonitoring();
+										TryGetTcasControl();
+										m_xplaneAtisEnabled = 0;
+										m_networkCallsign.setValue(callsign);
+										m_networkLoginStatus.setValue(true);
+									});
 							}
 
 							else if (MessageType == "NetworkDisconnected")
 							{
-								m_networkCallsign.setValue("");
-								m_networkLoginStatus.setValue(false);
+								QueueCallback([=]
+									{
+										m_aircraftManager->RemoveAllPlanes();
+										m_frameRateMonitor->stopMonitoring();
+										ReleaseTcasControl();
+										m_xplaneAtisEnabled = 1;
+										m_networkCallsign.setValue("");
+										m_networkLoginStatus.setValue(false);
+									});
 							}
 
 							else if (MessageType == "NearbyAtc")
@@ -380,7 +403,18 @@ namespace xpilot
 
 							else if (MessageType == "ValidateCsl")
 							{
+								json reply;
+								reply["type"] = "ValidateCsl";
+								reply["data"]["is_valid"] = Config::Instance().hasValidPaths() && XPMPGetNumberOfInstalledModels() > 0;
+								SendReply(reply.dump());
+							}
 
+							else if (MessageType == "PluginVersion")
+							{
+								json reply;
+								reply["type"] = "PluginVersion";
+								reply["data"]["version"] = PLUGIN_VERSION;
+								SendReply(reply.dump());
 							}
 						}
 					}
@@ -458,7 +492,7 @@ namespace xpilot
 
 	void XPilot::onNetworkConnected()
 	{
-		m_aircraftManager->HandleRemoveAllPlanes();
+		m_aircraftManager->RemoveAllPlanes();
 		m_frameRateMonitor->startMonitoring();
 		m_xplaneAtisEnabled = 0;
 		m_networkLoginStatus = 1;
@@ -467,7 +501,7 @@ namespace xpilot
 
 	void XPilot::onNetworkDisconnected()
 	{
-		m_aircraftManager->HandleRemoveAllPlanes();
+		m_aircraftManager->RemoveAllPlanes();
 		m_frameRateMonitor->stopMonitoring();
 		m_xplaneAtisEnabled = 1;
 		m_networkLoginStatus = 0;
@@ -653,7 +687,7 @@ namespace xpilot
 
 	void XPilot::DeleteAllAircraft()
 	{
-		m_aircraftManager->HandleRemoveAllPlanes();
+		m_aircraftManager->RemoveAllPlanes();
 	}
 
 	int XPilot::GetBulkData(void* inRefcon, void* outData, int inStartPos, int inNumBytes)

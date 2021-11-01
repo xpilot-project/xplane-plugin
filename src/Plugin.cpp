@@ -266,8 +266,9 @@ void RegisterMenuItems()
 
 void UpdateMenuItems()
 {
-    XPLMSetMenuItemName(PluginMenu, MenuDefaultAtis, environment->IsXplaneAtisDisabled() ? "Default ATIS: Disabled" : "Default ATIS: Enabled", 0);
+    XPLMSetMenuItemName(PluginMenu, MenuDefaultAtis, environment->IsXplaneAtisDisabled() ? "X-Plane ATIS: Disabled" : "X-Plane ATIS: Enabled", 0);
     XPLMSetMenuItemName(PluginMenu, MenuToggleTcas, XPMPHasControlOfAIAircraft() ? "Release TCAS Control" : "Request TCAS Control", 0);
+    XPLMSetMenuItemName(PluginMenu, MenuToggleAircraftLabels, xpilot::Config::Instance().getShowHideLabels() ? "Aircraft Labels: On" : "Aircraft Labels: Off", 0);
 }
 
 #ifdef _WIN32

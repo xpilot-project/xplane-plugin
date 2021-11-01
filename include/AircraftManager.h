@@ -63,7 +63,7 @@ namespace xpilot
 		void HandleSlowPositionUpdate(const std::string& callsign, AircraftVisualState visualState, double speed);
 		void HandleFastPositionUpdate(const std::string& callsign, const AircraftVisualState& visualState, Vector3 positionalVector, Vector3 rotationalVector);
 		void HandleRemovePlane(const std::string& callsign);
-		void HandleRemoveAllPlanes();
+		void RemoveAllPlanes();
 
 	private:
 		XPilot* mEnv;
