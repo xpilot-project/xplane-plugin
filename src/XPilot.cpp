@@ -386,19 +386,48 @@ namespace xpilot
 									});
 							}
 
-							else if (MessageType == "RadioMessage")
+							else if (MessageType == "NotificationPosted")
 							{
+								std::string msg(j["data"]["message"]);
+								long color = static_cast<long>(j["data"]["color"]);
+								int red = ((color >> 16) & 0xff);
+								int green = ((color >> 8) & 0xff);
+								int blue = ((color) & 0xff);
+								addNotification(msg, red, green, blue);
+							}
 
+							else if (MessageType == "RadioMessageSent")
+							{
+								std::string msg(j["data"]["message"]);
+								RadioMessageReceived(msg, 0, 255, 255);
+								AddNotificationPanelMessage(msg, 0, 255, 255);
+							}
+
+							else if (MessageType == "RadioMessageReceived")
+							{
+								std::string msg(j["data"]["message"]);
+								bool isDirect = static_cast<bool>(j["data"]["direct"]);
+								double r = isDirect ? 255 : 192;
+								double g = isDirect ? 255 : 192;
+								double b = isDirect ? 255 : 192;
+								RadioMessageReceived(msg, r, g, b);
+								AddNotificationPanelMessage(msg, r, g, b);
 							}
 
 							else if (MessageType == "PrivateMessageReceived")
 							{
-
+								std::string msg(j["data"]["message"]);
+								std::string from(j["data"]["from"]);
+								AddPrivateMessage(from, msg, ConsoleTabType::Received);
+								AddNotificationPanelMessage(string_format("%s [pvt]: %s", from.c_str(), msg.c_str()), 255, 255, 255);
 							}
 
 							else if (MessageType == "PrivateMessageSent")
 							{
-
+								std::string msg(j["data"]["message"]);
+								std::string to(j["data"]["to"]);
+								AddPrivateMessage(to, msg, ConsoleTabType::Sent);
+								AddNotificationPanelMessage(string_format("%s [pvt]: %s", m_networkCallsign.value().c_str(), msg.c_str()), 255, 255, 255);
 							}
 
 							else if (MessageType == "ValidateCsl")
@@ -511,11 +540,10 @@ namespace xpilot
 
 	void XPilot::forceDisconnect(std::string reason)
 	{
-		//xpilot::Envelope envelope;
-		//xpilot::TriggerDisconnect* data = new xpilot::TriggerDisconnect();
-		//envelope.set_allocated_trigger_disconnect(data);
-		//data->set_reason(reason);
-		//SendClientEvent(envelope);
+		json msg;
+		msg["type"] = "ForceDisconnect";
+		msg["data"]["reason"] = reason;
+		SendReply(msg.dump());
 	}
 
 	void XPilot::requestStationInfo(std::string callsign)
