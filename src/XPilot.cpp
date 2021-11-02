@@ -606,7 +606,7 @@ namespace xpilot
 		{
 			QueueCallback([=]()
 			{
-				m_textMessageConsole->PrivateMessageReceived(recipient, msg, tabType);
+				m_textMessageConsole->HandlePrivateMessage(recipient, msg, tabType);
 			});
 		}
 	}

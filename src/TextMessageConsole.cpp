@@ -156,7 +156,7 @@ namespace xpilot
 		}
 	}
 
-	void TextMessageConsole::PrivateMessageReceived(const std::string& recipient, const std::string& msg, ConsoleTabType tabType)
+	void TextMessageConsole::HandlePrivateMessage(const std::string& recipient, const std::string& msg, ConsoleTabType tabType)
 	{
 		switch (tabType)
 		{
@@ -169,9 +169,9 @@ namespace xpilot
 			m.setBlue(255);
 
 			auto it = std::find_if(m_tabs.begin(), m_tabs.end(), [&recipient](const Tab& t)
-			{
-				return t.tabName == recipient;
-			});
+				{
+					return t.tabName == recipient;
+				});
 
 			if (it != m_tabs.end())
 			{
@@ -181,7 +181,7 @@ namespace xpilot
 			else
 			{
 				CreateNonExistingTab(recipient);
-				PrivateMessageReceived(recipient, msg, ConsoleTabType::Sent);
+				HandlePrivateMessage(recipient, msg, ConsoleTabType::Sent);
 			}
 		}
 		break;
@@ -194,9 +194,9 @@ namespace xpilot
 			m.setBlue(255);
 
 			auto it = std::find_if(m_tabs.begin(), m_tabs.end(), [&recipient](const Tab& t)
-			{
-				return t.tabName == recipient;
-			});
+				{
+					return t.tabName == recipient;
+				});
 
 			if (it != m_tabs.end())
 			{
@@ -206,7 +206,7 @@ namespace xpilot
 			else
 			{
 				CreateNonExistingTab(recipient);
-				PrivateMessageReceived(recipient, msg, ConsoleTabType::Received);
+				HandlePrivateMessage(recipient, msg, ConsoleTabType::Received);
 			}
 		}
 		break;
@@ -250,7 +250,6 @@ namespace xpilot
 				}
 				ImGui::EndChild();
 				ImGui::PushItemWidth(-1.0f);
-				ImGui::SetKeyboardFocusHere();
 				if (ImGui::InputTextStd("##MessagesInput", &m_inputValue, ImGuiInputTextFlags_EnterReturnsTrue))
 				{
 					if (!m_inputValue.empty())
