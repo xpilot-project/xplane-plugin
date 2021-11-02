@@ -62,8 +62,8 @@ namespace xpilot
 			NULL, NULL,
 			GetBulkData,
 			NULL,
-			(void*)DR_BULK_QUICK,
-			(void*)DR_BULK_QUICK
+			(void*)xpilot::dataRefs::DR_BULK_QUICK,
+			(void*)xpilot::dataRefs::DR_BULK_QUICK
 		);
 
 		m_bulkDataExpensive = XPLMRegisterDataAccessor("xpilot/bulk/expensive",
@@ -78,8 +78,8 @@ namespace xpilot
 			NULL, NULL,
 			GetBulkData,
 			NULL,
-			(void*)DR_BULK_EXPENSIVE,
-			(void*)DR_BULK_EXPENSIVE
+			(void*)xpilot::dataRefs::DR_BULK_EXPENSIVE,
+			(void*)xpilot::dataRefs::DR_BULK_EXPENSIVE
 		);
 
 		int left, top, right, bottom, screenTop, screenRight;
@@ -190,12 +190,9 @@ namespace xpilot
 		{
 			try
 			{
-				zmq::message_t routing_id;
-				m_zmqSocket->recv(routing_id, zmq::recv_flags::none); // we ultimately ignore this
-
 				zmq::message_t msg;
 				m_zmqSocket->recv(msg, zmq::recv_flags::none);
-				std::string data(static_cast<char*>(msg.data()), msg.size()); // the actual data we care about
+				std::string data(static_cast<char*>(msg.data()), msg.size());
 
 				if (!data.empty() && json::accept(data.c_str()))
 				{
@@ -383,7 +380,10 @@ namespace xpilot
 
 							else if (MessageType == "NearbyAtc")
 							{
-
+								QueueCallback([=]
+									{
+										m_nearbyAtcWindow->UpdateList(j);
+									});
 							}
 
 							else if (MessageType == "RadioMessage")
@@ -450,7 +450,7 @@ namespace xpilot
 
 				zmq::message_t part2(message.size());
 				std::memcpy(part2.data(), message.data(), message.size());
-				m_zmqSocket->send(part2, ZMQ_NOBLOCK);
+				zmq::send_result_t rc = m_zmqSocket->send(part2, zmq::send_flags::none);
 			}
 		}
 		catch (zmq::error_t& e)
@@ -520,11 +520,10 @@ namespace xpilot
 
 	void XPilot::requestStationInfo(std::string callsign)
 	{
-		//xpilot::Envelope envelope;
-		//xpilot::RequestStationInfo* data = new xpilot::RequestStationInfo();
-		//envelope.set_allocated_request_station_info(data);
-		//data->set_station(callsign);
-		//SendClientEvent(envelope);
+		json msg;
+		msg["type"] = "RequestStationInfo";
+		msg["data"]["callsign"] = callsign;
+		SendReply(msg.dump());
 	}
 
 	bool XPilot::InitializeXPMP()
@@ -542,7 +541,7 @@ namespace xpilot
 
 		if (!Config::Instance().hasValidPaths())
 		{
-			std::string err = "No valid CSL paths are configured or the paths are disabled. Verify the CSL configuration in X-Plane (Plugins > xPilot > Settings > CSL Packages).";
+			std::string err = "No valid CSL paths are configured (or enabled). Verify the CSL configuration in X-Plane (via the top menu: Plugins > xPilot > Settings > CSL Configuration).";
 			addNotification(err.c_str(), 192, 57, 43);
 			LOG_MSG(logERROR, err.c_str());
 		}
@@ -698,7 +697,7 @@ namespace xpilot
 		static int size_quick = 0, size_expensive = 0;
 		if (!outData)
 		{
-			if (dr == DR_BULK_QUICK)
+			if (dr == xpilot::dataRefs::DR_BULK_QUICK)
 			{
 				size_quick = inNumBytes;
 				return (int)sizeof(XPilotAPIAircraft::XPilotAPIBulkData);
@@ -710,7 +709,7 @@ namespace xpilot
 			}
 		}
 
-		int size = dr == DR_BULK_QUICK ? size_quick : size_expensive;
+		int size = dr == xpilot::dataRefs::DR_BULK_QUICK ? size_quick : size_expensive;
 		if (!size) return 0;
 
 		if ((inStartPos % size != 0) ||
@@ -726,7 +725,7 @@ namespace xpilot
 			pIter = mapGetNextAircraft(pIter), iAc++, pOut += size)
 		{
 			const NetworkAircraft& ac = *pIter->second;
-			if (dr == DR_BULK_QUICK)
+			if (dr == xpilot::dataRefs::DR_BULK_QUICK)
 				ac.copyBulkData((XPilotAPIAircraft::XPilotAPIBulkData*)pOut, size);
 			else
 				ac.copyBulkData((XPilotAPIAircraft::XPilotAPIBulkInfoTexts*)pOut, size);

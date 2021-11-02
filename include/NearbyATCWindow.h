@@ -49,7 +49,7 @@ namespace xpilot
 	public:
 		NearbyATCWindow(XPilot* instance);
 		~NearbyATCWindow() final = default;
-		//void UpdateList(xpilot::NearbyControllers data);
+		void UpdateList(const nlohmann::json data);
 		void ClearList();
 	protected:
 		void buildInterface() override;

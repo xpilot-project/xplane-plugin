@@ -43,7 +43,7 @@
 
 namespace xpilot
 {
-	enum dataRefs
+	enum class dataRefs
 	{
 		DR_BULK_QUICK,
 		DR_BULK_EXPENSIVE,

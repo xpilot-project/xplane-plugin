@@ -35,22 +35,30 @@ namespace xpilot {
 		SetWindowResizingLimits(535, 300, 535, 300);
 	}
 
-	//void NearbyATCWindow::UpdateList(xpilot::NearbyControllers data)
-	//{
-	//	std::lock_guard<std::mutex> lock(m_mutex);
-	//	{
-	//		NearbyList.clear();
-	//		for (auto& el : data.list())
-	//		{
-	//			NearbyATCList l;
-	//			l.setCallsign(el.callsign());
-	//			l.setFrequency(el.frequency());
-	//			l.setXplaneFrequency(el.xplane_frequency());
-	//			l.setRealName(el.real_name());
-	//			NearbyList.push_back(l);
-	//		}
-	//	}
-	//}
+	void NearbyATCWindow::UpdateList(const nlohmann::json data)
+	{
+		std::lock_guard<std::mutex> lock(m_mutex);
+		{
+			NearbyList.clear();
+			if (data.find("data") != data.end())
+			{
+				for (auto& item : data["data"].items())
+				{
+					try {
+						NearbyATCList atc;
+						atc.setCallsign(item.value()["callsign"]);
+						atc.setFrequency(item.value()["frequency"]);
+						atc.setXplaneFrequency(item.value()["xplane_frequency"]);
+						atc.setRealName(item.value()["real_name"]);
+						NearbyList.push_back(atc);
+					}
+					catch (nlohmann::detail::type_error& e) {
+
+					}
+				}
+			}
+		}
+	}
 
 	void NearbyATCWindow::ClearList()
 	{
@@ -64,7 +72,7 @@ namespace xpilot {
 
 		ImGui::PushFont(0);
 
-		ImGui::Columns(4, "whosonline");
+		ImGui::Columns(4, "whosonline", false);
 		ImGui::SetColumnWidth(0, 150);
 		ImGui::SetColumnWidth(1, 200);
 		ImGui::SetColumnWidth(2, 100);
