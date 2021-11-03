@@ -72,6 +72,9 @@ namespace xpilot
 		void onNetworkConnected();
 		void forceDisconnect(std::string reason = "");
 		void requestStationInfo(std::string callsign);
+		void requestMetar(std::string station);
+		void setCom1Frequency(float frequency);
+		void setCom2Frequency(float frequency);
 
 		void SendReply(const std::string& message);
 
@@ -108,6 +111,8 @@ namespace xpilot
 		OwnedDataRef<int> m_pluginVersion;
 		DataRefAccess<int> m_xplaneAtisEnabled;
 		DataRefAccess<float> m_frameRatePeriod;
+		DataRefAccess<int> m_com1Frequency;
+		DataRefAccess<int> m_com2Frequency;
 
 	private:
 		static float DeferredStartup(float, float, int, void* ref);

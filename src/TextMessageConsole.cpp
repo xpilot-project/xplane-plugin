@@ -16,8 +16,11 @@
  * along with this program. If not, see http://www.gnu.org/licenses/.
 */
 
+#include <algorithm>
 #include <string>
 #include <list>
+#include <regex>
+
 #include "TextMessageConsole.h"
 #include "Utilities.h"
 #include "XPilot.h"
@@ -300,12 +303,78 @@ namespace xpilot
 									if (args.size() == 2)
 									{
 										m_env->requestStationInfo(args.at(1));
+										m_inputValue = "";
 									}
 									else
 									{
 										ShowErrorMessage("Invalid parameters. To request an ATIS, use the command .atis <callsign>");
+									}
+								}
+								break;
+							case xpilot::CommandOptions::MetarRequest:
+								if (!m_env->isNetworkConnected())
+								{
+									ShowErrorMessage("Not connected to the network.");
+								}
+								else
+								{
+									if (args.size() == 2)
+									{
+										m_env->requestMetar(args.at(1));
 										m_inputValue = "";
 									}
+									else
+									{
+										ShowErrorMessage("Invalid parameters. To request a METAR, use the command .metar <station>");
+									}
+								}
+								break;
+							case xpilot::CommandOptions::SetRadioFrequency:
+								if (args.size() == 2)
+								{
+									const std::regex regex("^1\\d\\d[\\.\\,]\\d{1,3}$");
+									if (args.at(0) == ".com1")
+									{
+										if (!std::regex_match(args.at(1), regex))
+										{
+											ShowErrorMessage("Invalid frequency format.");
+										}
+										else
+										{
+											std::string freq(args.at(1));
+											int freqInt = std::stod(freq) * 1000000;
+											if (freqInt < 118000000 || freqInt > 136975000)
+											{
+												ShowErrorMessage("Invalid frequency range.");
+												return;
+											}
+											m_env->setCom1Frequency(freqInt / 1000);
+											m_inputValue = "";
+										}
+									}
+									else if (args.at(0) == ".com2")
+									{
+										if (!std::regex_match(args.at(1), regex))
+										{
+											ShowErrorMessage("Invalid frequency format.");
+										}
+										else
+										{
+											std::string freq(args.at(1));
+											int freqInt = std::stod(freq) * 1000000;
+											if (freqInt < 118000000 || freqInt > 136975000)
+											{
+												ShowErrorMessage("Invalid frequency range.");
+												return;
+											}
+											m_env->setCom2Frequency(freqInt / 1000);
+											m_inputValue = "";
+										}
+									}
+								}
+								else
+								{
+									ShowErrorMessage("Invalid command format. To change the radio frequency, use the command .com1 123.45 or .com2 123.45");
 								}
 								break;
 							case xpilot::CommandOptions::Clear:

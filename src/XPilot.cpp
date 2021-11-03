@@ -31,6 +31,8 @@
 #include "XPMP2/XPMPMultiplayer.h"
 #include <nlohmann/json.hpp>
 
+#include <regex>
+
 using json = nlohmann::json;
 
 namespace xpilot
@@ -46,7 +48,9 @@ namespace xpilot
 		m_aiControlled("xpilot/ai_controlled", ReadOnly),
 		m_aircraftCount("xpilot/num_aircraft", ReadOnly),
 		m_pluginVersion("xpilot/version", ReadOnly),
-		m_frameRatePeriod("sim/operation/misc/frame_rate_period", ReadOnly)
+		m_frameRatePeriod("sim/operation/misc/frame_rate_period", ReadOnly),
+		m_com1Frequency("sim/cockpit2/radios/actuators/com1_frequency_hz_833", ReadWrite),
+		m_com2Frequency("sim/cockpit2/radios/actuators/com2_frequency_hz_833", ReadWrite)
 	{
 		ThisThreadIsXplane();
 
@@ -552,6 +556,30 @@ namespace xpilot
 		msg["type"] = "RequestStationInfo";
 		msg["data"]["callsign"] = callsign;
 		SendReply(msg.dump());
+	}
+
+	void XPilot::requestMetar(std::string station)
+	{
+		json msg;
+		msg["type"] = "RequestMetar";
+		msg["data"]["station"] = station;
+		SendReply(msg.dump());
+	}
+
+	void XPilot::setCom1Frequency(float frequency)
+	{
+		QueueCallback([=]
+			{
+				m_com1Frequency = frequency;
+			});
+	}
+
+	void XPilot::setCom2Frequency(float frequency)
+	{
+		QueueCallback([=]
+			{
+				m_com2Frequency = frequency;
+			});
 	}
 
 	bool XPilot::InitializeXPMP()
