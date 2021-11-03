@@ -75,6 +75,8 @@ namespace xpilot
 		void requestMetar(std::string station);
 		void setCom1Frequency(float frequency);
 		void setCom2Frequency(float frequency);
+		void setAudioComSelection(int radio);
+		void setAudioSelection(int radio, bool on);
 
 		void SendReply(const std::string& message);
 
@@ -113,6 +115,9 @@ namespace xpilot
 		DataRefAccess<float> m_frameRatePeriod;
 		DataRefAccess<int> m_com1Frequency;
 		DataRefAccess<int> m_com2Frequency;
+		DataRefAccess<int> m_audioComSelection;
+		DataRefAccess<int> m_audioSelectionCom1;
+		DataRefAccess<int> m_audioSelectionCom2;
 
 	private:
 		static float DeferredStartup(float, float, int, void* ref);

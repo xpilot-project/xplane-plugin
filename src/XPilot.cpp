@@ -50,7 +50,10 @@ namespace xpilot
 		m_pluginVersion("xpilot/version", ReadOnly),
 		m_frameRatePeriod("sim/operation/misc/frame_rate_period", ReadOnly),
 		m_com1Frequency("sim/cockpit2/radios/actuators/com1_frequency_hz_833", ReadWrite),
-		m_com2Frequency("sim/cockpit2/radios/actuators/com2_frequency_hz_833", ReadWrite)
+		m_com2Frequency("sim/cockpit2/radios/actuators/com2_frequency_hz_833", ReadWrite),
+		m_audioComSelection("sim/cockpit2/radios/actuators/audio_com_selection", ReadWrite),
+		m_audioSelectionCom1("sim/cockpit2/radios/actuators/audio_selection_com1", ReadWrite),
+		m_audioSelectionCom2("sim/cockpit2/radios/actuators/audio_selection_com2", ReadWrite)
 	{
 		ThisThreadIsXplane();
 
@@ -579,6 +582,29 @@ namespace xpilot
 		QueueCallback([=]
 			{
 				m_com2Frequency = frequency;
+			});
+	}
+
+	void XPilot::setAudioSelection(int radio, bool on)
+	{
+		QueueCallback([=]
+			{
+				switch (radio) {
+				case 1:
+					m_audioSelectionCom1 = (int)on;
+					break;
+				case 2:
+					m_audioSelectionCom2 = (int)on;
+					break;
+				}
+			});
+	}
+
+	void XPilot::setAudioComSelection(int radio)
+	{
+		QueueCallback([=]
+			{
+				m_audioComSelection = (radio == 1) ? 6 : 7;
 			});
 	}
 

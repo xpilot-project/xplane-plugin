@@ -377,6 +377,46 @@ namespace xpilot
 									ShowErrorMessage("Invalid command format. To change the radio frequency, use the command .com1 123.45 or .com2 123.45");
 								}
 								break;
+							case xpilot::CommandOptions::OverrideTx:
+								if (args.size() == 2)
+								{
+									if (str_tolower(args.at(1)) != "com1" && str_tolower(args.at(1)) != "com2")
+									{
+										ShowErrorMessage("Invalid command parameters. Expected .tx com<n>. For example, .tx com1");
+										return;
+									}
+									int radio = str_tolower(args.at(1)) == "com1" ? 1 : 2;
+									m_env->setAudioComSelection(radio);
+									m_inputValue = "";
+								}
+								else
+								{
+									ShowErrorMessage("Invalid command parameters. Expected .tx com<n>. For example, .tx com1");
+								}
+								break;
+							case xpilot::CommandOptions::OverrideRx:
+								if (args.size() == 3)
+								{
+									if (str_tolower(args.at(1)) != "com1" && str_tolower(args.at(1)) != "com2")
+									{
+										ShowErrorMessage("Invalid command parameters. Expected .rx com<n> on|off. For example, .rx com1 on");
+										return;
+									}
+									if (str_tolower(args.at(2)) != "on" && str_tolower(args.at(2)) != "off")
+									{
+										ShowErrorMessage("Invalid command parameters. Expected .rx com<n> on|off. For example, .rx com1 on");
+										return;
+									}
+									int radio = str_tolower(args.at(1)) == "com1" ? 1 : 2;
+									bool on = str_tolower(args.at(2)) == "on" ? true : false;
+									m_env->setAudioSelection(radio, on);
+									m_inputValue = "";
+								}
+								else
+								{
+									ShowErrorMessage("Invalid command parameters. Expected .rx com<n> on|off. For example, .rx com1 on");
+								}
+								break;
 							case xpilot::CommandOptions::Clear:
 								m_messageHistory.clear();
 								m_inputValue = "";
