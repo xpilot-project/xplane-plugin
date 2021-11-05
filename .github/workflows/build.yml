@@ -1,4 +1,4 @@
-name: Build xPilot Plugin
+name: macOS
 
 on:
   push:
@@ -10,19 +10,8 @@ concurrency:
 
 jobs:
   build:
-    name: Build
-    strategy:
-      matrix:
-        kind: ["linux", "windows", "macos"]
-        include:
-          - kind: linux
-            os: ubuntu-latest
-          - kind: windows
-            os: windows-latest
-          - kind: macos
-            os: macos-latest
 
-    runs-on: ${{ matrix.os }}
+    runs-on: macos-latest
 
     steps:
 
@@ -31,6 +20,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install conan
           pip install conan_package_tools
+
+      - name: install dependencies
+        run: |
+          sudo apt-get install ninja-build -y
+          sudo apt-get install xorg-dev
+          sudo apt-get install freeglut3-dev
 
       - uses: actions/checkout@v1
         with:
