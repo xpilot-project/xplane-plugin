@@ -25,11 +25,10 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    
-      - name: Checkout
-        uses: actions/checkout@v1
-          with:
-            submodules: "recursive"
+
+      - uses: actions/checkout@v1
+        with:
+          submodules: "recursive"
 
       - name: Create build environment
         run: cmake -E make_directory ${{ github.workspace }}/build
