@@ -96,7 +96,7 @@ endif()
 # Link the XPMP2 library
 find_library(XPMP2_LIBRARY XPMP2 REQUIRED)
 message ("   XPMP2_LIBRARY = ${XPMP2_LIBRARY}")
-target_link_libraries(LiveTraffic ${XPMP2_LIBRARY})
+target_link_libraries(xpilot ${XPMP2_LIBRARY})
 
 target_link_libraries(xpilot
 	CONAN_PKG::nlohmann_json
