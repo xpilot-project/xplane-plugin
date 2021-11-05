@@ -15,6 +15,11 @@ jobs:
 
     steps:
 
+      - name: Install ninja
+        env:
+          HOMEBREW_NO_INSTALL_CLEANUP: 1
+        run: brew install ninja
+
       - name: Install conan && conan package tools
         run: |
           python3 -m pip install --upgrade pip
