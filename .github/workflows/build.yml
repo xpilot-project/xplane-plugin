@@ -21,12 +21,6 @@ jobs:
           pip install conan
           pip install conan_package_tools
 
-      - name: install dependencies
-        run: |
-          sudo apt-get install ninja-build -y
-          sudo apt-get install xorg-dev
-          sudo apt-get install freeglut3-dev
-
       - uses: actions/checkout@v1
         with:
           submodules: "recursive"
