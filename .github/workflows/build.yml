@@ -25,6 +25,9 @@ jobs:
           pip3 install conan
           pip3 install conan_package_tools
 
+      - name: Create build environment
+        run: cmake -E make_directory ${{ github.workspace }}/build
+
       - name: CMake
         shell: bash
         working-directory: ${{ github.workspace }}/build
