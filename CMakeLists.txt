@@ -1,9 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
-project(xpilot LANGUAGES CXX)
+project(xpilot)
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(TARGETS)
 
 set(CMAKE_CXX_STANDARD 17)
+set_property(GLOBAL PROPERTY CXX_STANDARD_REQUIRED 17)
+set_property(GLOBAL PROPERTY CXX_STANDARD 17)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 if(MSVC)
