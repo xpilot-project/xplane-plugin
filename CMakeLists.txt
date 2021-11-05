@@ -93,13 +93,10 @@ elseif (WIN32)
     list(APPEND CMAKE_LIBRARY_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extern/sdk/Libraries/Win")
 endif()
 
-if (APPLE)
-    find_library(XPMP2_LIBRARY NAMES XPMP2)
-elseif (UNIX)
-    find_library(XPMP2_LIBRARY NAMES libXPMP2.a)
-elseif (WIN32)
-    find_library(XPMP2_LIBRARY NAMES XPMP2.lib)
-endif()
+# Link the XPMP2 library
+find_library(XPMP2_LIBRARY XPMP2 REQUIRED)
+message ("   XPMP2_LIBRARY = ${XPMP2_LIBRARY}")
+target_link_libraries(LiveTraffic ${XPMP2_LIBRARY})
 
 target_link_libraries(xpilot
 	CONAN_PKG::nlohmann_json
