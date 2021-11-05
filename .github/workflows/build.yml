@@ -15,10 +15,9 @@ jobs:
 
     steps:
 
-      - name: Install ninja
-        env:
-          HOMEBREW_NO_INSTALL_CLEANUP: 1
-        run: brew install ninja
+      - uses: actions/checkout@v1
+        with:
+          submodules: "recursive"
 
       - name: Install conan && conan package tools
         run: |
@@ -26,24 +25,17 @@ jobs:
           pip3 install conan
           pip3 install conan_package_tools
 
-      - uses: actions/checkout@v1
-        with:
-          submodules: "recursive"
+      - name: CMake
+        shell: bash
+        working-directory: ${{ github.workspace }}/build
+        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Release
 
-      - name: Create build environment
-        run: cmake -E make_directory ${{ github.workspace }}/build
-
-      - name: Initialize Conan
+      - name: Install conan packages
         shell: bash
         working-directory: ${{ github.workspace }}/build
         run: conan install $GITHUB_WORKSPACE --build missing
 
-      - name: Configure CMake
-        shell: bash
-        working-directory: ${{ github.workspace }}/build
-        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Release -G Ninja
-
       - name: Build
         shell: bash
         working-directory: ${{ github.workspace }}/build
-        run: ninja -v -C build
+        run: make
