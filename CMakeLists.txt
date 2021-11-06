@@ -30,7 +30,7 @@ include_directories("${CMAKE_SOURCE_DIR}/include")
 include_directories("${CMAKE_SOURCE_DIR}/extern/gmath")
 include_directories("${CMAKE_SOURCE_DIR}/extern/ImGui")
 include_directories("${CMAKE_SOURCE_DIR}/extern/ImgWindow")
-include_directories("${CMAKE_SOURCE_DIR}/extern/XPMP2/XPMP2.framework/Versions/Current/Headers")
+include_directories("${CMAKE_SOURCE_DIR}/extern/XPMP2")
 include_directories("${CMAKE_SOURCE_DIR}/extern/SDK/CHeaders/XPLM")
 
 set(Header_Files
@@ -61,9 +61,9 @@ set(Header_Files
     extern/ImgWindow/XPImgWindow.h
 	extern/Font/IconsFontAwesome5.h
 	extern/Font/fa-solid-900.inc
-    extern/XPMP2/XPMP2.framework/Versions/Current/Headers/XPCAircraft.h
-    extern/XPMP2/XPMP2.framework/Versions/Current/Headers/XPMPMultiplayer.h
-    extern/XPMP2/XPMP2.framework/Versions/Current/Headers/XPMPPlaneRenderer.h
+    extern/XPMP2/XPCAircraft.h
+    extern/XPMP2/XPMPMultiplayer.h
+    extern/XPMP2/XPMPPlaneRenderer.h
 )
 source_group("Header Files" FILES ${Header_Files})
 
