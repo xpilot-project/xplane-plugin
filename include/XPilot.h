@@ -143,7 +143,7 @@ namespace xpilot
 		
 		bool IsSocketConnected()const
 		{
-			return m_zmqSocket && m_zmqSocket->connected();
+			return m_zmqSocket != nullptr;
 		}
 		bool IsSocketReady()const
 		{

@@ -25,7 +25,7 @@
 
 #include "imgui.h"
 #include "Utilities.h"
-#include "Font/fa-solid-900.inc";
+#include "Font/fa-solid-900.inc"
 #include "Font/IconsFontAwesome5.h"
 #include "ImgWindow.h"
 #include "DataRefAccess.h"
