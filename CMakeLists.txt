@@ -26,6 +26,10 @@ if(MSVC)
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
 endif(MSVC)
 
+include_directories("${CMAKE_SOURCE_DIR}/include")
+include_directories("${CMAKE_SOURCE_DIR}/extern/XPMP2/XPMP2.framework/Versions/Current/Headers")
+include_directories("${CMAKE_SOURCE_DIR}/extern/SDK/CHeaders/XPLM")
+
 set(Header_Files
     include/AircraftManager.h
     include/Config.h
@@ -54,6 +58,9 @@ set(Header_Files
     extern/ImgWindow/XPImgWindow.h
 	extern/Font/IconsFontAwesome5.h
 	extern/Font/fa-solid-900.inc
+    extern/XPMP2/XPMP2.framework/Versions/Current/Headers/XPCAircraft.h
+    extern/XPMP2/XPMP2.framework/Versions/Current/Headers/XPMPMultiplayer.h
+    extern/XPMP2/XPMP2.framework/Versions/Current/Headers/XPMPPlaneRenderer.h
 )
 source_group("Header Files" FILES ${Header_Files})
 
@@ -98,7 +105,7 @@ if (APPLE)
     list(APPEND CMAKE_FRAMEWORK_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extern/XPMP2")
     list(APPEND CMAKE_FRAMEWORK_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extern/sdk/Libraries/Mac")
 elseif (WIN32)
-    list(APPEND CMAKE_LIBRARY_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extern/XPMP2")
+    list(APPEND CMAKE_LIBRARY_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extern/XPMP2/win")
     list(APPEND CMAKE_LIBRARY_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extern/sdk/Libraries/Win")
 endif()
 
