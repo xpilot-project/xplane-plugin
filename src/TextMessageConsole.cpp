@@ -166,7 +166,7 @@ namespace xpilot
 		case ConsoleTabType::Sent:
 		{
 			ConsoleMessage m;
-			m.setMessage(string_format("[%s] %s: %s", UtcTimestamp().c_str(), m_env->ourCallsign(), msg.c_str()));
+			m.setMessage(string_format("[%s] %s: %s", UtcTimestamp().c_str(), m_env->ourCallsign().c_str(), msg.c_str()));
 			m.setRed(0);
 			m.setGreen(255);
 			m.setBlue(255);

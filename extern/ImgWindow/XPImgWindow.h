@@ -30,6 +30,7 @@
 #include "ImgWindow.h"
 #include "DataRefAccess.h"
 #include "XPLMDisplay.h"
+#include <cmath>
 
 #define WND_STANDARD_FONT "Resources/fonts/DejaVuSans.ttf"
 constexpr int WND_FONT_SIZE = 15;
