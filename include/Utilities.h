@@ -62,6 +62,13 @@ inline std::string strAtMost(const std::string s, size_t m) {
 		s.substr(0, m - 3) + "...";
 }
 
+#if APL == 1 || LIN == 1
+inline void strncpy_s(char * dest, size_t destsz, const char * src, size_t count)
+{
+    strncpy(dest, src, std::min(destsz,count)); dest[destsz - 1] = 0;
+}
+#endif
+
 #define STRCPY_ATMOST(dest,src) strncpy_s(dest,sizeof(dest),strAtMost(src,sizeof(dest)-1).c_str(),sizeof(dest)-1)
 
 inline const auto str_tolower = [](std::string s) {
