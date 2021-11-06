@@ -27,6 +27,7 @@ if(MSVC)
 endif(MSVC)
 
 include_directories("${CMAKE_SOURCE_DIR}/include")
+include_directories("${CMAKE_SOURCE_DIR}/extern/Font")
 include_directories("${CMAKE_SOURCE_DIR}/extern/gmath")
 include_directories("${CMAKE_SOURCE_DIR}/extern/ImGui")
 include_directories("${CMAKE_SOURCE_DIR}/extern/ImgWindow")
@@ -94,9 +95,12 @@ set(ALL_FILES  ${Header_Files} ${Source_Files})
 
 add_library(xpilot MODULE ${ALL_FILES})
 
+target_include_directories(xpilot PUBLIC 
+    ${CMAKE_SOURCE_DIR}/extern)
+
 if (APPLE)
-    list(APPEND CMAKE_FRAMEWORK_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extern/XPMP2/macos")
-    list(APPEND CMAKE_FRAMEWORK_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extern/sdk/Libraries/Mac")
+    list(APPEND CMAKE_LIBRARY_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extern/XPMP2/macos")
+    list(APPEND CMAKE_LIBRARY_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extern/sdk/Libraries/Mac")
 elseif (WIN32)
     list(APPEND CMAKE_LIBRARY_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extern/XPMP2/win")
     list(APPEND CMAKE_LIBRARY_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extern/sdk/Libraries/Win")
