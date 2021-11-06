@@ -774,7 +774,7 @@ namespace xpilot
 	int XPilot::GetBulkData(void* inRefcon, void* outData, int inStartPos, int inNumBytes)
 	{
 		dataRefs dr = (dataRefs)reinterpret_cast<long long>(inRefcon);
-		assert(dr == DR_BULK_QUICK || dr == DR_BULK_EXPENSIVE);
+		assert(dr == xpilot::dataRefs::DR_BULK_QUICK || dr == xpilot::dataRefs::DR_BULK_EXPENSIVE);
 
 		static int size_quick = 0, size_expensive = 0;
 		if (!outData)
