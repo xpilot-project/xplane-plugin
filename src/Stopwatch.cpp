@@ -24,6 +24,11 @@
  */
 
 #include <cassert>
+
+#ifndef _WIN32
+#include <sys/time.h>
+#endif
+
 #include "Stopwatch.h"
 
 namespace xpilot
@@ -152,6 +157,8 @@ namespace xpilot
         return 0;
     }
 
+#endif
+
     Stopwatch::timestamp_t Stopwatch::get_timestamp()
     {
         struct timeval now;
@@ -159,7 +166,5 @@ namespace xpilot
         return (Stopwatch::timestamp_t) now.tv_usec
             + (Stopwatch::timestamp_t) now.tv_sec * Stopwatch::SECONDS;
     }
-
-#endif
 
 }
