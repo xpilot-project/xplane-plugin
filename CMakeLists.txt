@@ -27,6 +27,9 @@ if(MSVC)
 endif(MSVC)
 
 include_directories("${CMAKE_SOURCE_DIR}/include")
+include_directories("${CMAKE_SOURCE_DIR}/extern/gmath")
+include_directories("${CMAKE_SOURCE_DIR}/extern/ImGui")
+include_directories("${CMAKE_SOURCE_DIR}/extern/ImgWindow")
 include_directories("${CMAKE_SOURCE_DIR}/extern/XPMP2/XPMP2.framework/Versions/Current/Headers")
 include_directories("${CMAKE_SOURCE_DIR}/extern/SDK/CHeaders/XPLM")
 
@@ -90,16 +93,6 @@ source_group("Source Files" FILES ${Source_Files})
 set(ALL_FILES  ${Header_Files} ${Source_Files})
 
 add_library(xpilot MODULE ${ALL_FILES})
-
-target_include_directories(xpilot
-		PUBLIC
-		${CMAKE_SOURCE_DIR}/include
-		${CMAKE_SOURCE_DIR}/extern
-		${CMAKE_SOURCE_DIR}/extern/gmath
-		${CMAKE_SOURCE_DIR}/extern/ImGui
-		${CMAKE_SOURCE_DIR}/extern/ImgWindow
-		${CMAKE_SOURCE_DIR}/extern/SDK/CHeaders/XPLM
-		${CMAKE_SOURCE_DIR}/extern/XPMP2)
 
 if (APPLE)
     list(APPEND CMAKE_FRAMEWORK_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extern/XPMP2")
