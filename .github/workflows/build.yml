@@ -42,3 +42,4 @@ jobs:
         shell: bash
         working-directory: ${{ github.workspace }}/build
         run: make
+        
