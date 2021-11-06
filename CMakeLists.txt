@@ -4,6 +4,11 @@ project(xpilot LANGUAGES C CXX VERSION 2.0.0)
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(TARGETS)
 
+if(APPLE)
+    add_compile_options(-mmacosx-version-min=10.15)
+    add_link_options(-mmacosx-version-min=10.15)
+endif()
+
 set(CMAKE_CXX_STANDARD 17)
 set_property(GLOBAL PROPERTY CXX_STANDARD_REQUIRED 17)
 set_property(GLOBAL PROPERTY CXX_STANDARD 17)
@@ -99,7 +104,7 @@ endif()
 
 # Link the XPMP2 library
 find_library(XPMP2_LIBRARY XPMP2 REQUIRED)
-message ("   XPMP2_LIBRARY = ${XPMP2_LIBRARY}")
+message ("XPMP2_LIBRARY = ${XPMP2_LIBRARY}")
 target_link_libraries(xpilot ${XPMP2_LIBRARY})
 
 target_link_libraries(xpilot
@@ -114,48 +119,50 @@ if (WIN32 OR APPLE)
     target_link_libraries(xpilot ${XPLM_LIBRARY})
 endif()
 
-if (APPLE)
-    find_library(APPLICATION_SERVICES ApplicationServices)
-    find_library(CORE_FOUNDATION_LIBRARY CoreFoundation)
-    find_library(SECURITY_LIBRARY Security)
-    find_library(GSS_LIBRARY GSS)
-    find_library(Kerberos5_LIBRARY libgssapi_krb5.tbd)
-    find_library(Cocoa_LIBRARY Cocoa)
-    find_library(OpenGL_LIBRARY OpenGL)
+if (WIN32)
+    set_property(TARGET xpilot PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    target_link_libraries(xpilot ws2_32.lib wldap32.lib advapi32.lib crypt32.lib wsock32.lib opengl32.lib iphlpapi.lib)
+    target_link_options(xpilot PUBLIC /DEBUG)
+elseif (APPLE)
+    # Link OS X core system libraries.
+    find_library(CORE_FOUNDATION_LIBRARY CoreFoundation REQUIRED)
+    find_library(Cocoa_LIBRARY Cocoa REQUIRED)
+    find_library(Security_LIBRARY Security REQUIRED)
+    find_library(GSS_LIBRARY GSS REQUIRED)
+    find_library(OpenGL_LIBRARY OpenGL REQUIRED)
 
     target_link_libraries(xpilot
-        ${APPLICATION_SERVICES}
         ${CORE_FOUNDATION_LIBRARY}
-        ${SECURITY_LIBRARY}
-        ${GSS_LIBRARY}
-        ${Kerberos5_LIBRARY}
-        ${OpenGL_LIBRARY}
         ${Cocoa_LIBRARY}
-    )
-endif()
+        ${Security_LIBRARY}
+        ${GSS_LIBRARY}
+        ${OpenGL_LIBRARY})
 
-if (WIN32)
-    target_link_libraries(xpilot ws2_32.lib wldap32.lib advapi32.lib crypt32.lib wsock32.lib opengl32.lib iphlpapi.lib)
-elseif (APPLE)
-    target_compile_options(xpilot PUBLIC -mmacosx-version-min=10.15)
-    target_link_libraries(xpilot -mmacosx-version-min=10.15)
-    target_link_libraries(xpilot "-exported_symbols_list ${CMAKE_SOURCE_DIR}/src/xPilot.sym_mac")
+    # Restrict set of symbols exported from the plugin to the ones required by XPLM:
+    target_link_libraries(xpilot "-exported_symbols_list ${CMAKE_SOURCE_DIR}/src/Xpilot.sym_mac")
 elseif (UNIX)
-    target_link_libraries(xpilot -Wl,--version-script -Wl,${CMAKE_SOURCE_DIR}/src/xPilot.sym)
+    # Link library for dynamic loading of shared objects on UNIX systems.
+    find_library(DL_LIBRARY dl REQUIRED)
+    # Threads
+    set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
+    set(THREADS_PREFER_PTHREAD_FLAG TRUE)
+    find_package(Threads REQUIRED)
+    target_link_libraries(LiveTraffic ${DL_LIBRARY} Threads::Threads)
+    # Specify additional runtime search paths for dynamically-linked libraries.
+    # Restrict set of symbols exported from the plugin to the ones required by XPLM:
+    target_link_libraries(LiveTraffic -Wl,--version-script -Wl,${CMAKE_SOURCE_DIR}/src/Xpilot.sym)    
 endif ()
 
+# Link OpenGL
 set (OpenGL_GL_PREFERENCE GLVND)
 find_package(OpenGL REQUIRED)  # apt install freeglut3-dev
-if (OpenGL_FOUND)
-    include_directories(${OpenGL_INCLUDE_DIRS})
-    target_link_libraries(xpilot ${OpenGL_LIBRARIES})
-endif(OpenGL_FOUND)
+include_directories( ${OpenGL_INCLUDE_DIRS} )
+target_link_libraries( xpilot ${OpenGL_LIBRARIES} )
 
-if(MSVC)
-	set_property(TARGET xpilot PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-endif()
-
+# Enable all X-Plane SDK APIs up to the newest version.
 add_definitions(-DXPLM200=1 -DXPLM210=1 -DXPLM300=1 -DXPLM301=1 -DXPLM303=1)
+
+# Define platform macros.
 add_definitions(-DAPL=$<BOOL:${APPLE}> -DIBM=$<BOOL:${WIN32}> -DLIN=$<AND:$<BOOL:${UNIX}>,$<NOT:$<BOOL:${APPLE}>>>)
 
 if (UNIX OR APPLE)
@@ -176,10 +183,6 @@ elseif (APPLE)
    set_target_properties(xpilot PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/mac_x64")
 elseif (UNIX)
    set_target_properties(xpilot PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lin_x64")
-endif()
-
-if(MSVC)
-    target_link_options(xpilot PUBLIC /DEBUG)
 endif()
 
 set_target_properties(xpilot
