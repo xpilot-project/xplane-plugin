@@ -441,7 +441,7 @@ namespace xpilot
 							{
 								json reply;
 								reply["type"] = "ValidateCsl";
-								reply["data"]["is_valid"] = Config::Instance().hasValidPaths() && XPMPGetNumberOfInstalledModels() > 0;
+								reply["data"]["is_valid"] = XPMPGetNumberOfInstalledModels() > 0;
 								SendReply(reply.dump());
 							}
 

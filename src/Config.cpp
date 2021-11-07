@@ -207,7 +207,6 @@ namespace xpilot
         {
             m_cslPackages.push_back({});
         }
-        std::replace(path.begin(), path.end(), '/', '\\');
         m_cslPackages[idx].path = path;
     }
 
