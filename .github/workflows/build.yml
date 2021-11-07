@@ -42,12 +42,12 @@ jobs:
         run: make
 
       - name: Code sign
-        working-directory: ${{ github.workspace }}/build/mac_x64
+        working-directory: ${{ github.workspace }}/build/lib
         run: |
           codesign --sign "${{ secrets.APPLE_SIGNING_CERTIFICATE_IDENTITY }}" --timestamp xPilot.xpl
 
       - uses: actions/upload-artifact@master
         with:
           name: xPilot_MacOS
-          path: ${{ github.workspace }}/build/mac_x64/xPilot.xpl
+          path: ${{ github.workspace }}/build/lib/xPilot.xpl
         
