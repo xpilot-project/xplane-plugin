@@ -12,9 +12,7 @@ jobs:
   build:
 
     runs-on: macos-latest
-
     steps:
-
       - uses: actions/checkout@v1
         with:
           submodules: "recursive"
@@ -42,4 +40,14 @@ jobs:
         shell: bash
         working-directory: ${{ github.workspace }}/build
         run: make
+
+      - name: Code sign
+        working-directory: ${{ github.workspace }}/build/mac_x64
+        run: |
+          codesign --sign "${{ secrets.APPLE_SIGNING_CERTIFICATE_IDENTITY }}" --timestamp xPilot.xpl
+
+      - uses: actions/upload-artifact@master
+        with:
+          name: xPilot_MacOS
+          path: ${{ github.workspace }}/build/mac_x64/xPilot.xpl
         
