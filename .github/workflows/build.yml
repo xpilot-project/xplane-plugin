@@ -17,6 +17,12 @@ jobs:
         with:
           submodules: "recursive"
 
+      - name: Developer certificate
+        env:
+          CERTIFICATE: ${{ secrets.APPLE_SIGNING_CERTIFICATE }}
+          CERTIFICATE_PASSWORD: ${{ secrets.APPLE_SIGNING_CERTIFICATE_PASSWORD }}
+        run: ./scripts/make_keychain.sh
+
       - name: Install conan && conan package tools
         run: |
           python3 -m pip install --upgrade pip
