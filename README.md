@@ -1,3 +1,15 @@
+# Archived
+
+This repository is archived. No further updates will be made available for this version of xPilot. 
+
+Users are encouraged to upgrade to xPilot 2.0, which brings native support to macOS and Linux. 
+
+You can download and follow the progress on the new version here: https://github.com/xpilot-project/xpilot
+
+Happy flying! ✈️
+
+-----
+
 # xPilot - Plugin
 
 xPilot is an intuitive and easy to use X-Plane pilot client for the VATSIM network. The plugin is a C++ dynamically-linked library that manages the drawing of network aircraft in X-Plane using CSL models. The plugin uses [cppzmq](https://github.com/zeromq/cppzmq) to transport messages to and from the C# pilot client application through the use of a TCP socket.
